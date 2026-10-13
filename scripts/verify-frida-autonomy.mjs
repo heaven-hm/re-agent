@@ -185,10 +185,15 @@ async function acquireOfficialGadget() {
   );
   const licenseUrls = [
     "https://raw.githubusercontent.com/frida/frida-core/17.23.3/COPYING",
-    "https://raw.githubusercontent.com/frida/frida-core/17.23.3/COPYING.LIB",
+    "https://raw.githubusercontent.com/spdx/license-list-data/v3.27.0/text/LGPL-2.0-only.txt",
   ];
   for (const licenseUrl of licenseUrls) {
-    const notice = join(root, licenseUrl.split("/").at(-1));
+    const notice = join(
+      root,
+      licenseUrl.endsWith("LGPL-2.0-only.txt")
+        ? "COPYING.LIB"
+        : licenseUrl.split("/").at(-1),
+    );
     await exec(
       "curl",
       [
