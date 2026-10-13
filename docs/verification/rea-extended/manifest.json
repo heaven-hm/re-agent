@@ -5,17 +5,17 @@
   "reports": [
     {
       "file": "fixture-report.json",
-      "sha256": "906f5d5d23ddad1e0843c087e709aa6eae73fbeb57aab5d30818bd170b41b97c",
+      "sha256": "9425408917ec9ff84e9c0cced8b64de7ec8db6bc1f66951cbec72665fd965900",
       "recordedSource": "output/autonomy/cli-final-reviewed/report.json"
     },
     {
       "file": "frida-report.json",
-      "sha256": "869abb30b7874ccba25a518625fb7e92ae5e3de85afd8811477093c8e2f47d95",
+      "sha256": "90ba221ae0675c34a8ba57d633109bd3f19c5e6388fb09bda8dfd4186e5f179e",
       "recordedSource": "output/autonomy/frida-1791893562920/report.json"
     },
     {
       "file": "calculator-report.json",
-      "sha256": "95b82505c0517a96addafd487d7cdc2bd1c5d4c0bc68ef83e5d1c92041944761",
+      "sha256": "220c658c3b8f065c171999dae7408ba0c672dccad66694568b0e8e9f234c8cf9",
       "recordedSource": "output/autonomy/calculator-reconstruction-1791883588410/report.json"
     }
   ],
