@@ -1,0 +1,23 @@
+{
+  "target": "legacy-notepad",
+  "original": {
+    "name": "legacy-notepad v1.2.1 (ForLoopCodes/legacy-notepad, MIT; binary reports v1.2.0)",
+    "url": "https://github.com/forloopcodes/legacy-notepad/releases/download/v1.2.1/legacy-notepad-x64.exe",
+    "sha256": "00e67923f531e5590ab404aa5b906470b7c1505ec75cf69f22db99509de9fb56",
+    "bytes": 262656,
+    "format": "PE32+ x86-64 GUI, MSVC C++17, pure Win32 + GDI+ + RichEdit"
+  },
+  "analysis": {
+    "procedures": 895,
+    "strings": 587,
+    "winmain": "FUN_140004910: DPI PerMonitorV2, class NotepadClass, WndProc FUN_140003450, menu 0x65, icon 0x67, accelerators 0x66, saved window geometry, cmdline file open",
+    "wndproc": "FUN_140003450, 91 callees: WM_COMMAND 0x9c41-0x9c6c menu map, WM_CTLCOLOREDIT dark theme (0x2d2d2d), WM_DROPFILES, WM_MOUSEWHEEL+Ctrl zoom",
+    "menus": "File(New/Ctrl+N,Open/Ctrl+O,Save/Ctrl+S,SaveAs/Ctrl+Shift+S,Print/Ctrl+P,Recent), Edit(Undo/Ctrl+Z,Copy, Paste,Find/Ctrl+F,Next F3/Shift+F3,Font), View, Help",
+    "dialogs": "Find and Replace, save-changes prompt, file filters (images, ico), font panel (FontName/Size/Weight persisted)",
+    "about": "Legacy Notepad v1.2.0, fast lightweight editor, C++ Win32"
+  },
+  "replica_plan": "AppKit NSTextView + menu bar mirroring recovered labels/shortcuts + open/save dialogs + find/replace + font panel + dark theme + drag-drop + recent files",
+  "verification": {
+    "replica": "QUEUED next build"
+  }
+}
