@@ -3,6 +3,111 @@
 **Repository: [heaven-hm/rea-engine](https://github.com/heaven-hm/rea-engine).**
 Reverse Engineering Engine builds directly on [morluto/rea](https://github.com/morluto/rea), retaining its MIT license, attribution and working integrations. The package identity is `rea-engine`; compatible `rea` and `rea-agents` command aliases are retained. Registry metadata is configured for `io.github.heaven-hm/rea-engine`; this does not imply npm or MCP Registry publication.
 
+## Architecture at a glance
+
+REA Engine extends the existing [REA](https://github.com/morluto/rea) analysis ecosystem with a bounded investigation and reconstruction layer. The diagrams below distinguish inherited providers from engine-specific orchestration. They describe supported workflows, **not** a promise of fully automatic reconstruction for arbitrary binaries.
+
+```mermaid
+flowchart TB
+    U["Developer / coding agent"] --> I["CLI · MCP · local dashboard"]
+    I --> C["Autonomous investigation controller"]
+    C --> S["Durable workspace · checkpoints · stop/resume"]
+
+    subgraph EXISTING["Existing REA analysis capabilities"]
+        P["Static analysis providers<br/>Ghidra · managed assemblies · artifacts"]
+        R["Runtime and process evidence<br/>capture · instrumentation"]
+    end
+
+    subgraph ENGINE["REA Engine extensions"]
+        D["Evidence-led discovery"]
+        T["Owned Frida trace correlation"]
+        A["Bounded affine recovery"]
+        V["Conditional Z3 equivalence checks"]
+        B["Build · test · bounded repair"]
+    end
+
+    C --> D
+    D --> P
+    D --> R
+    R --> T
+    P --> A
+    T --> A
+    A --> V
+    V --> B
+    B --> S
+    B --> O["Scoped evidence · reports · benchmark results"]
+    O --> I
+
+    classDef entry fill:#1e293b,stroke:#64748b,color:#ffffff
+    classDef control fill:#1d4ed8,stroke:#60a5fa,color:#ffffff
+    classDef upstream fill:#f1f5f9,stroke:#94a3b8,color:#0f172a
+    classDef extension fill:#ecfeff,stroke:#0891b2,color:#164e63
+    classDef output fill:#ecfdf5,stroke:#059669,color:#065f46
+    class U,I entry
+    class C,S control
+    class P,R upstream
+    class D,T,A,V,B extension
+    class O output
+```
+
+### Bounded investigation and repair workflow
+
+Each iteration works from collected evidence and explicit constraints. Verification is conditional and target-dependent; an unsupported recovery or exhausted budget produces a recorded result rather than an equivalence claim.
+
+```mermaid
+flowchart TD
+    START["Select authorized target and investigation plan"] --> BASE["Collect baseline static/runtime evidence"]
+    BASE --> H["Form a candidate hypothesis"]
+    H --> REC["Recover or implement a bounded candidate"]
+    REC --> TEST["Build and execute declared tests"]
+    TEST --> MATCH{"Declared checks pass?"}
+    MATCH -- "Yes" --> VERIFY["Run applicable independent / Z3 checks"]
+    VERIFY --> OUT{"Evidence supports claim?"}
+    OUT -- "Yes" --> DONE["Record scoped result and artifacts"]
+    OUT -- "No" --> LIMIT{"Repair budget available?"}
+    MATCH -- "No" --> LIMIT
+    LIMIT -- "Yes" --> REPAIR["Record mismatch · checkpoint · repair or roll back"]
+    REPAIR --> TEST
+    LIMIT -- "No" --> STOP["Stop with limitations and preserved evidence"]
+    classDef start fill:#1e293b,stroke:#64748b,color:#ffffff
+    classDef step fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+    classDef decision fill:#fef3c7,stroke:#d97706,color:#78350f
+    classDef success fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef stopped fill:#fee2e2,stroke:#dc2626,color:#7f1d1d
+    class START start
+    class BASE,H,REC,TEST,VERIFY,REPAIR step
+    class MATCH,OUT,LIMIT decision
+    class DONE success
+    class STOP stopped
+```
+
+### Extension boundary and provenance
+
+```mermaid
+flowchart LR
+    subgraph UP["Upstream morluto/rea"]
+        REA["CLI / MCP and agent workflows"]
+        PROVIDERS["Ghidra · Frida · native / managed / web analysis"]
+    end
+    subgraph EXT["heaven-hm/rea-engine additions"]
+        AUTO["Persistent autonomy controller"]
+        PROOF["Affine recovery · constrained verification"]
+        TOOL["Verified tool bootstrap · offline bundle builder"]
+        UI["Investigation dashboard · reconstruction evidence"]
+    end
+    REA --> AUTO
+    PROVIDERS --> AUTO
+    AUTO --> PROOF
+    AUTO --> UI
+    TOOL -. "Optional local dependencies" .-> PROVIDERS
+    classDef inherited fill:#f1f5f9,stroke:#64748b,color:#0f172a
+    classDef added fill:#eff6ff,stroke:#2563eb,color:#1e40af
+    class REA,PROVIDERS inherited
+    class AUTO,PROOF,TOOL,UI added
+```
+
+For implementation details, see the [investigation controller](src/application/autonomy/AutonomousInvestigation.ts), [autonomous discovery](src/composition/autonomousDiscovery.ts), [Frida correlation adapter](src/native/FridaAutonomyTrace.ts), [affine recovery](src/application/autonomy/AffineRecovery.ts), [conditional proof implementation](src/application/autonomy/AffineEquivalenceProof.ts), and [dependency packaging limits](docs/autonomy-tool-bootstrap.md).
+
 ### What differs from upstream REA
 
 | Area                           | Reverse Engineering Engine addition                                                                                           | Source / reproducible evidence                                                                                                                          |
