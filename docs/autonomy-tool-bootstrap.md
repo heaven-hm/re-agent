@@ -33,7 +33,7 @@ An unsupported loader, denied local device or missing compatible wheel is report
 
 Use REA's existing MCP server rather than installing duplicate Ghidra, disassembler or computer-use MCP servers. The built local server can be configured with an absolute Node path and REA's `scripts/rea.mjs` entry, the `mcp` argument and existing target/provider environment variables. Consult the current README's MCP configuration for the entry point supported by the installed package.
 
-`node scripts/print-mcp-config.mjs /absolute/path/to/target` produces REA's existing public package configuration; it points at the published package, so it will not include unpublished local changes. Existing `autonomous_investigation` MCP actions remain the shared orchestration interface. Installing these Python dependencies makes them available to explicit adapters and experiments; it does not silently register new supported REA operations. `rea autonomy-tools --json` reports existing native executable probes separately from this Python dependency report.
+`node scripts/print-mcp-config.mjs /absolute/path/to/target --local` produces a configuration for this built source checkout. Use `--local` for the engine preview: the renamed npm package has not been published to the registry. Existing `autonomous_investigation` MCP actions remain the shared orchestration interface. Installing these Python dependencies makes them available to explicit adapters and experiments; it does not silently register new supported REA operations. `rea autonomy-tools --json` reports existing native executable probes separately from this Python dependency report.
 
 ## Verified execution on this development host
 
@@ -60,3 +60,9 @@ The companion report gives the final archive's checksum and size. Only PyPI arti
 **Public redistribution remains unapproved by this script.** Frida's retained wxWindows exception explicitly permits distributing binary object code, but that does not prove complete source and license coverage for embedded native dependencies. LIEF's wheel and source distribution omit notices, so the bundle adds exact upstream notices and records that gap. A source distribution's availability does not establish that it contains the complete corresponding native library source. These concrete issues remain in `manifest.json` for review before publication.
 
 No proprietary Apple binaries, Python environments, credentials or target applications enter this bundle. It omits angr and does not claim to supply every REA analysis, gameplay, graphics or platform integration.
+
+## Engine preview distributions
+
+The repository now includes a signature-verified ILSpy 9.1.0.7988 package with its collected dependency notices, plus an ARM64 X11-enabled libgdiplus build and the original source archive. The installer verifies the package hash and reuses a compatible healthy installation. See `third_party/ilspy/` and `third_party/libgdiplus/`.
+
+The preview release supplies the unmodified official Ghidra 12.1.2 ZIP as an optional release asset, with its embedded licenses preserved; `third_party/ghidra/manifest.json` records the publisher digest and runtime requirements. This is separate from the unapproved Python redistribution bundle above. It does not bundle every analysis tool, JDK, .NET, Mono, XQuartz, or all platform dependencies.
