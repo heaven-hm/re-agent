@@ -102,6 +102,16 @@ export const investigationStateSchema = z.object({
   pendingRollback: z.array(
     z.object({ path: z.string(), originalBase64: z.string().nullable() }),
   ),
+  iterationPhase: z
+    .object({ baselinePassed: z.array(z.string()) })
+    .nullable()
+    .default(null),
+  pendingCandidate: z
+    .object({
+      files: z.array(z.object({ path: z.string(), content: z.string() })),
+    })
+    .nullable()
+    .default(null),
   limitations: z.array(z.string()),
 });
 export type InvestigationState = z.infer<typeof investigationStateSchema>;

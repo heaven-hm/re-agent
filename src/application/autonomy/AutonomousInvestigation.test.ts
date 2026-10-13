@@ -162,6 +162,94 @@ describe("autonomous reconstruction checkpoint and workspace safety", () => {
   });
 });
 
+describe("autonomous reconstruction cancellation and resume", () => {
+  it("resumes an interrupted final iteration without consuming another attempt", async () => {
+    const f = await fixture();
+    await writeFile(
+      f.replica,
+      "const x=Number(process.argv[2]);console.log(x<0?x*3:x*2)",
+    );
+    const agent = await AutonomousInvestigation.create(f.checkpoint, {
+      ...f.config,
+      maxIterations: 1,
+      build: {
+        command: process.execPath,
+        arguments: ["-e", "setTimeout(()=>{},350)"],
+      },
+    });
+    const running = agent.run();
+    while (agent.state.iteration === 0)
+      await new Promise((resolve) => setTimeout(resolve, 5));
+    await agent.pause();
+    expect((await running).status).toBe("paused");
+    const resumed = await AutonomousInvestigation.open(f.checkpoint);
+    expect((await resumed.resume()).status).toBe("suite-passed");
+    expect(resumed.state.iteration).toBe(1);
+  }, 30000);
+
+  it("rolls back interrupted candidate bytes and replays them on resume", async () => {
+    const f = await fixture();
+    const before = await readFile(f.replica, "utf8");
+    const candidate =
+      "const x=Number(process.argv[2]);console.log(x<0?x*3:x*2)";
+    const agent = await AutonomousInvestigation.create(f.checkpoint, {
+      ...f.config,
+      maxIterations: 1,
+      build: {
+        command: process.execPath,
+        arguments: ["-e", "setTimeout(()=>{},350)"],
+      },
+    });
+    const running = agent.run({
+      reconstruct: async () => ({
+        files: [{ path: f.replica, content: candidate }],
+      }),
+    });
+    while (agent.state.iteration === 0)
+      await new Promise((resolve) => setTimeout(resolve, 5));
+    await agent.pause();
+    await running;
+    expect(await readFile(f.replica, "utf8")).toBe(before);
+    const resumed = await AutonomousInvestigation.open(f.checkpoint);
+    expect((await resumed.resume()).status).toBe("suite-passed");
+    expect(await readFile(f.replica, "utf8")).toBe(candidate);
+  }, 30000);
+
+  it("consumes a queued stop before invoking any execution hooks", async () => {
+    const f = await fixture();
+    const agent = await AutonomousInvestigation.create(f.checkpoint, f.config);
+    await writeFile(
+      `${f.checkpoint}.control.json`,
+      JSON.stringify({ action: "stop" }),
+    );
+    const state = await agent.run({
+      discover: async () => {
+        throw new Error("must not launch");
+      },
+    });
+    expect(state.status).toBe("stopped");
+    expect(state.iteration).toBe(0);
+    expect(state.evidence).toHaveLength(0);
+  });
+
+  it("persists inactive stop and rejects resume without launching hooks", async () => {
+    const f = await fixture();
+    const agent = await AutonomousInvestigation.create(f.checkpoint, f.config);
+    await agent.pause();
+    await AutonomousInvestigation.requestControl(f.checkpoint, "stop");
+    const resumed = await AutonomousInvestigation.open(f.checkpoint);
+    expect(resumed.state.status).toBe("stopped");
+    await expect(
+      resumed.resume({
+        discover: async () => {
+          throw new Error("must not launch");
+        },
+      }),
+    ).rejects.toThrow("cannot resume");
+    expect(resumed.state.evidence).toHaveLength(0);
+  });
+});
+
 describe("autonomous reconstruction differential controller", () => {
   it("rejects matching output with a different replica exit code", async () => {
     const f = await fixture();

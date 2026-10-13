@@ -80,6 +80,7 @@ export class InvestigationWorkspace {
         }
       }),
     );
+    this.state.pendingCandidate = { files };
     await this.save(
       "candidate-staged",
       "Rollback journal committed before modifying source files",
@@ -109,7 +110,7 @@ export class InvestigationWorkspace {
       "Source hashes and input Evidence links committed",
     );
   }
-  async rollback(): Promise<void> {
+  async rollback(preserveCandidate = false): Promise<void> {
     for (const file of this.state.pendingRollback) {
       await this.safePatchPath(file.path);
       if (file.originalBase64 === null)
@@ -130,6 +131,7 @@ export class InvestigationWorkspace {
         );
     }
     this.state.pendingRollback = [];
+    if (!preserveCandidate) this.state.pendingCandidate = null;
     await this.save("rollback", "Restored pre-candidate source bytes");
   }
   private async replace(path: string, content: string | Buffer): Promise<void> {

@@ -49,6 +49,7 @@ export {
 export class AutonomousInvestigation {
   #controller = new AbortController();
   #active = false;
+  #controlPoll: Promise<void> = Promise.resolve();
   #writes: Promise<void> = Promise.resolve();
   readonly #workspace: InvestigationWorkspace;
   readonly #processEvidence: InvestigationProcessEvidence;
@@ -119,6 +120,8 @@ export class AutonomousInvestigation {
       history: [],
       results: [],
       pendingRollback: [],
+      iterationPhase: null,
+      pendingCandidate: null,
       limitations: [
         "Passing means equality only in the declared cases and observation dimensions; universal equivalence is unproven.",
         "The process harness provides owned process cleanup and output/time bounds, not an operating-system security sandbox.",
@@ -149,7 +152,9 @@ export class AutonomousInvestigation {
         parseInvestigationState(JSON.parse(await readFile(storePath, "utf8"))),
       );
       await instance.#assertBinary();
-      if (instance.state.pendingRollback.length > 0) await instance.#rollback();
+      if (instance.state.pendingRollback.length > 0)
+        await instance.#rollbackForInterruption();
+      await instance.#consumeControl();
       if (instance.state.status === "running") instance.state.status = "paused";
       await instance.#save(
         "opened",
@@ -169,6 +174,26 @@ export class AutonomousInvestigation {
     const temporary = `${storePath}.control.${randomUUID()}.tmp`;
     await writeFile(temporary, JSON.stringify({ action }), { mode: 0o600 });
     await rename(temporary, `${storePath}.control.json`);
+    // A live owner consumes its sidecar. An inactive checkpoint can be stopped
+    // immediately under the same exclusive ownership protocol as resume.
+    try {
+      await AutonomousInvestigation.#checkLock(storePath);
+    } catch (cause) {
+      if (cause instanceof Error && cause.message.includes("live owner"))
+        return;
+      throw cause;
+    }
+    try {
+      await AutonomousInvestigation.open(storePath);
+    } catch (cause) {
+      if (
+        cause instanceof Error &&
+        (("code" in cause && cause.code === "EEXIST") ||
+          cause.message.includes("live owner"))
+      )
+        return;
+      throw cause;
+    }
   }
 
   static async #checkLock(storePath: string): Promise<void> {
@@ -243,14 +268,26 @@ export class AutonomousInvestigation {
           "Checkpoint advanced since it was opened; reload before running",
         );
       checkpointValidated = true;
+      await this.#consumeControl();
+      if (this.state.status === "stopped") return this.state;
       controlTimer = this.#pollControls();
       await this.#assertBinary();
       this.#controller.signal.throwIfAborted();
       this.state.status = "running";
       await this.#save("running", "Started bounded reconstruction loop");
-      await this.#prepare(hooks);
-      while (this.state.iteration < this.state.config.maxIterations) {
+      if (
+        this.state.pendingCandidate !== null &&
+        this.state.pendingRollback.length === 0
+      )
+        await this.#apply(this.state.pendingCandidate);
+      else await this.#prepare(hooks);
+      while (
+        this.state.iterationPhase !== null ||
+        this.state.iteration < this.state.config.maxIterations
+      ) {
         const outcome = await this.#iteration(hooks);
+        this.state.iterationPhase = null;
+        await this.#save("iteration-completed", String(this.state.iteration));
         if (outcome === "pass") return this.state;
         if (outcome === "break") break;
       }
@@ -258,7 +295,11 @@ export class AutonomousInvestigation {
       await this.#save("budget-exhausted", "Further investigation required");
     } catch (cause) {
       if (!checkpointValidated) throw cause;
-      if (this.state.pendingRollback.length > 0) await this.#rollback();
+      if (this.state.pendingRollback.length > 0) {
+        if (this.#controller.signal.aborted)
+          await this.#rollbackForInterruption();
+        else await this.#rollback();
+      }
       if (!this.#controller.signal.aborted) this.state.status = "failed";
       await this.#save(
         "interrupted",
@@ -267,6 +308,7 @@ export class AutonomousInvestigation {
       if (!this.#controller.signal.aborted) throw cause;
     } finally {
       clearInterval(controlTimer);
+      await this.#controlPoll;
       if (ownsLock) await unlink(`${this.storePath}.lock`);
       this.#active = false;
     }
@@ -299,13 +341,7 @@ export class AutonomousInvestigation {
     return setInterval(() => {
       if (pollingControl) return;
       pollingControl = true;
-      void readFile(`${this.storePath}.control.json`, "utf8")
-        .then(async (text) => {
-          const control = JSON.parse(text) as { action?: string };
-          if (control.action === "pause") await this.pause();
-          else if (control.action === "stop") await this.stop();
-          await unlink(`${this.storePath}.control.json`);
-        })
+      this.#controlPoll = this.#consumeControl()
         .catch((cause: unknown) => {
           if (
             !(
@@ -326,13 +362,16 @@ export class AutonomousInvestigation {
     hooks: InvestigationHooks,
   ): Promise<"next" | "break" | "pass"> {
     this.#controller.signal.throwIfAborted();
-    const baselinePassed = new Set(
-      this.state.results
-        .filter((item) => item.status === "pass")
-        .map((item) => item.caseId),
-    );
-    this.state.iteration += 1;
-    await this.#save("iteration", String(this.state.iteration));
+    if (this.state.iterationPhase === null) {
+      this.state.iterationPhase = {
+        baselinePassed: this.state.results
+          .filter((item) => item.status === "pass")
+          .map((item) => item.caseId),
+      };
+      this.state.iteration += 1;
+      await this.#save("iteration", String(this.state.iteration));
+    }
+    const baselinePassed = new Set(this.state.iterationPhase.baselinePassed);
     try {
       await this.#build();
       await this.#compare();
@@ -379,6 +418,7 @@ export class AutonomousInvestigation {
         await this.#compare();
       } else {
         this.state.pendingRollback = [];
+        this.state.pendingCandidate = null;
         await this.#save(
           "candidate-retained",
           "Build and regression suite accepted candidate",
@@ -405,6 +445,30 @@ export class AutonomousInvestigation {
     this.#controller.signal.throwIfAborted();
     await this.#apply(candidate);
     return "next";
+  }
+
+  async #consumeControl(): Promise<void> {
+    let text: string;
+    try {
+      text = await readFile(`${this.storePath}.control.json`, "utf8");
+    } catch (cause) {
+      if (cause instanceof Error && "code" in cause && cause.code === "ENOENT")
+        return;
+      throw cause;
+    }
+    const control = JSON.parse(text) as { action?: string };
+    if (control.action === "stop") await this.stop();
+    else if (control.action === "pause") await this.pause();
+    else throw new Error("Invalid investigation control action");
+    await unlink(`${this.storePath}.control.json`);
+  }
+
+  async #rollbackForInterruption(): Promise<void> {
+    await this.#workspace.rollback(true);
+    await this.#save(
+      "candidate-replayable",
+      "Interrupted source rolled back; candidate retained for resume",
+    );
   }
 
   async #invokeWithEvidence<T>(operation: () => Promise<T>): Promise<T> {

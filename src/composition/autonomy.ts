@@ -191,6 +191,7 @@ export const controlAutonomousInvestigation = async (
     await live[action]();
     return;
   }
-  // Persistent control requests are consumed by the owner; never reopen a live journal.
+  // Live owners consume persistent controls; inactive checkpoints persist the
+  // requested status under exclusive checkpoint ownership.
   await AutonomousInvestigation.requestControl(resolve(checkpointPath), action);
 };
