@@ -56,6 +56,8 @@ Setup registers REA with your agent and installs matching workflow instructions.
 
 > **[Visit the REA website](https://rea.tools/)** for setup instructions, illustrated guides, and real case studies.
 
+For bounded reconstruction, build/compare/repair workflows and checkpoints, see [Autonomous reconstruction](docs/autonomous-reconstruction.md) and the [executed benchmark report](docs/autonomous-reconstruction-benchmark.md).
+
 ## Quick start
 
 ### Set up your agent

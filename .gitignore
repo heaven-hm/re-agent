@@ -47,6 +47,8 @@ Thumbs.db
 
 # Local reference sources and analysis artifacts
 /_reference/
+/output/
+/.lavish/
 
 # Generated website download
 /website/public/examples/notes-example.zip

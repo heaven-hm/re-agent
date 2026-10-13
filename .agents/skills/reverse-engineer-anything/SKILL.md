@@ -2,7 +2,7 @@
 name: reverse-engineer-anything
 description: Reverse engineer native, managed, Electron/JavaScript, packaged, firmware, and browser targets with REA. Use shipped-artifact or requested runtime evidence to explain features, compare versions, decompile code, or guide a reconstruction. Skip REA for ordinary source-repository architecture analysis.
 metadata:
-  version: "39"
+  version: "40"
 ---
 
 # REA
@@ -39,6 +39,8 @@ and target-execution boundaries. REA setup never installs or upgrades unrelated
 software, including Node.js, npm, Homebrew, Java, Ghidra, IDA, JADX, Binwalk or Unblob.
 
 ## Route the target first
+
+For authorized autonomous reconstruction, read [autonomous reconstruction](references/autonomous-reconstruction.md). Use the shared `autonomous_investigation` workflow when it is advertised by the connected REA server. It retains original/replica captures, builds, mismatches, repairs and checkpoints. A passing finite suite is not complete application, game, visual or binary equivalence.
 
 Choose the first tool from the target the user supplied. Use `open_binary` for
 active-target native or archive workflows; target-free tools take their own

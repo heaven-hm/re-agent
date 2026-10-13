@@ -32,22 +32,30 @@ if (loaderArgs) env.HOPPER_LOADER_ARGS_JSON = loaderArgs;
 const config = {
   mcpServers: {
     rea: {
-      command: "npx",
-      args: [
-        "-y",
-        `${
-          JSON.parse(
-            await readFile(
-              resolve(
-                fileURLToPath(new URL("..", import.meta.url)),
-                "package.json",
-              ),
-              "utf8",
+      command: flags.includes("--local") ? process.execPath : "npx",
+      args: flags.includes("--local")
+        ? [
+            resolve(
+              fileURLToPath(new URL("..", import.meta.url)),
+              "scripts/rea.mjs",
             ),
-          ).name
-        }@latest`,
-        "mcp",
-      ],
+            "mcp",
+          ]
+        : [
+            "-y",
+            `${
+              JSON.parse(
+                await readFile(
+                  resolve(
+                    fileURLToPath(new URL("..", import.meta.url)),
+                    "package.json",
+                  ),
+                  "utf8",
+                ),
+              ).name
+            }@latest`,
+            "mcp",
+          ],
       env,
     },
   },
