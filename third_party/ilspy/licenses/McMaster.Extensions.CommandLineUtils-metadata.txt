@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>McMaster.Extensions.CommandLineUtils</id>
+    <version>4.1.1</version>
+    <authors>Nate McMaster</authors>
+    <license type="expression">Apache-2.0</license>
+    <licenseUrl>https://licenses.nuget.org/Apache-2.0</licenseUrl>
+    <icon>icon.png</icon>
+    <readme>README.md</readme>
+    <projectUrl>https://github.com/natemcmaster/CommandLineUtils</projectUrl>
+    <iconUrl>https://natemcmaster.github.io/CommandLineUtils/logo.png</iconUrl>
+    <description>Command-line parsing API and utilities for console applications.
+
+Commonly used types:
+
+McMaster.Extensions.CommandLineUtils.CommandLineApplication
+McMaster.Extensions.CommandLineUtils.CommandOption
+McMaster.Extensions.CommandLineUtils.IConsole
+McMaster.Extensions.CommandLineUtils.Prompt
+McMaster.Extensions.CommandLineUtils.ArgumentEscaper
+
+ A community-maintained fork of Microsoft.Extensions.CommandLineUtils, plus many enhancements.</description>
+    <releaseNotes>Changes since 4.0:
+
+* Drop support for .NET &lt; 4.6.
+* fix: find dotnet.exe correctly when DOTNET_ROOT is not set (@danmoseley)
+* fix: don't set DefaultValue to empty string for `string[]` options (@natemcmaster)
+    
+
+See more details here: https://github.com/natemcmaster/CommandLineUtils/blob/main/CHANGELOG.md#v411</releaseNotes>
+    <copyright>Copyright © Nate McMaster</copyright>
+    <tags>commandline parsing</tags>
+    <repository type="git" url="https://github.com/natemcmaster/CommandLineUtils.git" commit="10d01555a34802dc4c35add00278bd89f5ba001a" />
+    <dependencies>
+      <group targetFramework=".NETFramework4.6">
+        <dependency id="System.Runtime.InteropServices.RuntimeInformation" version="4.3.0" exclude="Build,Analyzers" />
+        <dependency id="System.ValueTuple" version="4.5.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="System.ComponentModel.Annotations" version="5.0.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.1">
+        <dependency id="System.ComponentModel.Annotations" version="5.0.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations" targetFramework=".NETFramework4.6" />
+    </frameworkAssemblies>
+  </metadata>
+</package>

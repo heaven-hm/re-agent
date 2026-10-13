@@ -1,0 +1,8 @@
+
+Verifying ilspycmd.9.1.0.7988
+Content hash: ubdq4X4q8yKCQ0ecXJSLr61E5FGka86y7sY/As0hWIFAtD58fM+OGzLF1SoNsOMzs7SVe2pL6Od7R8uG/3HhLg==
+
+Signature type: Repository
+  Subject Name: CN=NuGet.org Repository by Microsoft, O=NuGet.org Repository by Microsoft, L=Redmond, S=Washington, C=US
+  SHA256 hash: 1F4B311D9ACC115C8DC8018B5A49E00FCE6DA8E2855F9F014CA6F34570BC482D
+  Valid from: 23/02/2024 5:30:00 AM to 19/05/2027 5:29:59 AM

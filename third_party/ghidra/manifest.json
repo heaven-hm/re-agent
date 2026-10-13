@@ -1,0 +1,17 @@
+{
+  "tool": "Ghidra",
+  "version": "12.1.2",
+  "file": "ghidra_12.1.2_PUBLIC_20260605.zip",
+  "bytes": 572803866,
+  "sha256": "b62e81a0390618466c019c60d8c2f796ced2509c4c1aea4a37644a77272cf99d",
+  "officialRelease": "https://github.com/NationalSecurityAgency/ghidra/releases/tag/Ghidra_12.1.2_build",
+  "source": "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_12.1.2_build/ghidra_12.1.2_PUBLIC_20260605.zip",
+  "installation": "Existing working installation reused; archive retained for offline distribution.",
+  "distribution": "Unmodified official archive; supplied as GitHub release asset, not a tracked Git binary.",
+  "releaseUrl": "https://github.com/heaven-hm/rea-engine/releases/tag/engine-preview-2026-10-13",
+  "runtimeRequirements": [
+    "JDK 21 or newer",
+    "Platform-compatible native helper binaries; ARM64 may require compiling native helpers"
+  ],
+  "scope": "Archive integrity verified. Existing installed Ghidra reused; this is not proof of every integration or a complete license audit."
+}

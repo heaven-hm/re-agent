@@ -1,0 +1,41 @@
+		TIFFSetField(tiff, TIFFTAG_COPYRIGHT, bitmap_data->property[index].value);
+		gdip_bitmapdata_property_add_ASCII(bitmap_data, PropertyTagCopyright, text);
+	if (TIFFGetField(tiff, TIFFTAG_COPYRIGHT, &text)) {
+	if (gdip_bitmapdata_property_find_id(bitmap_data, PropertyTagCopyright, &index) == Ok) {
+#define PropertyTagCopyright           0x8298
+#define PropertyTagThumbnailCopyRight        0x503B
+> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> The GIFLIB distribution is Copyright (c) 1997  Eric S. Raymond
+> The above copyright notice and this permission notice shall be included in
+Copyright (C) 2003, 2006-2007 Novell, Inc (http://www.novell.com)
+Copyright (C) 2003,2006-2007 Novell, Inc. http://www.novell.com
+Copyright (C) 2003-2004, 2007 Novell, Inc (http://www.novell.com)
+Copyright (C) 2003-2004,2007 Novell, Inc (http://www.novell.com)
+Copyright (C) 2003-2004,2007 Novell, Inc. http://www.novell.com
+Copyright (C) 2003-2007 Novell, Inc (http://www.novell.com)
+Copyright (C) 2003-2007 Novell, Inc. http://www.novell.com
+Copyright (C) 2003-2007, Novell Inc. (http://www.novell.com)
+Copyright (C) 2004 Novell, Inc. http://www.novell.com
+Copyright (C) 2004 Ximian inc. http://www.ximian.com
+Copyright (C) 2004, 2007 Novell, Inc (http://www.novell.com)
+Copyright (C) 2004, 2007 Novell, Inc. http://www.novell.com
+Copyright (C) 2004,2006-2007 Novell Inc.
+Copyright (C) 2004,2006-2007 Novell Inc. http://www.novell.com
+Copyright (C) 2004,2006-2007 Novell, Inc. http://www.novell.com
+Copyright (C) 2006 Novell, Inc (http://www.novell.com)
+Copyright (C) 2006, 2007 Novell, Inc (http://www.novell.com)
+Copyright (C) 2006-2007 Novell, Inc (http://www.novell.com)
+Copyright (C) 2007 Novell, Inc (http://www.novell.com)
+Copyright (C) 2007 Novell, Inc. http://www.novell.com
+Copyright (C) 2008 Novell, Inc (http://www.novell.com)
+Copyright (C) Novell, Inc. 2003-2004, 2007.
+Copyright (C) Novell, Inc. 2003-2004.
+Copyright (c) 2003 Alexandre Pigolkine
+Copyright (c) 2003 Alexandre Pigolkine, Novell Inc.
+Copyright (c) 2004 Ximian
+Copyright (c) 2004-2005 Ximian
+Copyright (c) 2004-2007 Novell, Inc.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+The above copyright notice and this permission notice shall be
+The above copyright notice and this permission notice shall be included in all copies or substantial

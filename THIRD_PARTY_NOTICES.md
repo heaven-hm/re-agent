@@ -132,3 +132,7 @@ bundle an external engine or modify upstream code, review that actual
 distribution and retain its full applicable licenses, copyright notices,
 NOTICE files, modification notices, and source obligations. REA's inventory is
 not a substitute for those obligations.
+
+## Reverse Engineering Engine demonstration bundles
+
+The fork additionally retains the official [ILSpy package and dependency notices](third_party/ilspy/README.md), the [MIT libgdiplus binary/source records](third_party/libgdiplus/manifest.json), and a standalone [GPL-3.0 TicTacToe benchmark](benchmarks/README.md). The game original, recovered game source/assets and game images retain GPL-3.0 terms and accompanying source; they are aggregated separately from MIT engine code. The publisher's original Luhn utility is downloaded locally and is not redistributed. These additions do not establish an audited bundle of all engine dependencies.

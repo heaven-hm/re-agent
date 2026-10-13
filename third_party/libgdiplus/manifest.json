@@ -1,0 +1,19 @@
+{
+  "name": "libgdiplus",
+  "version": "6.1",
+  "platform": "macos-arm64",
+  "license": "MIT",
+  "source": "https://download.mono-project.com/sources/libgdiplus/libgdiplus-6.1.tar.gz",
+  "artifacts": {
+    "libgdiplus-6.1.tar.gz": "97d5a83d6d6d8f96c27fb7626f4ae11d3b38bc88a1726b4466aeb91451f3255b",
+    "LICENSE": "81317bf837e02a116dc20b032fa1d0cbf9ec357621f141ff2c2daf26c17cbb5d",
+    "libgdiplus.0.dylib": "ca89fbe31b58f84c06b3209930441cb315e95b26484fac7b8971803339675459"
+  },
+  "buildPatch": "configure: libpng14 replaced with libpng16; X11 enabled by omitting --without-x11 and --with-x11; make -C src only",
+  "health": "GdipCreateFromXDrawable_linux exported; original and rebuilt game ran 19683 board states and six image captures each",
+  "requiredExistingLibraries": "Homebrew cairo/pango/glib/fontconfig/freetype/libpng/jpeg/tiff/gif/libexif and their dependencies; X11 display",
+  "limitations": [
+    "This binary alone is not a self-contained runtime bundle.",
+    "The old upstream GoogleTest build failed under the current compiler; only the library build and real game integration were completed."
+  ]
+}

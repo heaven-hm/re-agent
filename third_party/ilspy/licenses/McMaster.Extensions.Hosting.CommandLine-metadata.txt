@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>McMaster.Extensions.Hosting.CommandLine</id>
+    <version>4.1.1</version>
+    <authors>Nate McMaster</authors>
+    <license type="expression">Apache-2.0</license>
+    <licenseUrl>https://licenses.nuget.org/Apache-2.0</licenseUrl>
+    <icon>icon.png</icon>
+    <projectUrl>https://github.com/natemcmaster/CommandLineUtils</projectUrl>
+    <iconUrl>https://natemcmaster.github.io/CommandLineUtils/logo.png</iconUrl>
+    <description>Provides command-line parsing API integration with the generic host API (Microsoft.Extensions.Hosting).</description>
+    <releaseNotes>See more details here: https://github.com/natemcmaster/CommandLineUtils/blob/main/CHANGELOG.md#v411</releaseNotes>
+    <copyright>Copyright © Nate McMaster</copyright>
+    <tags>commandline parsing hosting</tags>
+    <repository type="git" url="https://github.com/natemcmaster/CommandLineUtils.git" commit="10d01555a34802dc4c35add00278bd89f5ba001a" />
+    <dependencies>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="McMaster.Extensions.CommandLineUtils" version="4.1.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Hosting.Abstractions" version="6.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Logging.Abstractions" version="6.0.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.1">
+        <dependency id="McMaster.Extensions.CommandLineUtils" version="4.1.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Hosting.Abstractions" version="6.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Logging.Abstractions" version="6.0.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>
