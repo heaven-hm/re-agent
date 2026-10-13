@@ -3,7 +3,7 @@ import { managedBenchmarkCommand as exec } from "./lib/managed-benchmark-command
 /** Recover this published game binary through the existing REA managed workflow. */
 import assert from "node:assert/strict";
 import { mkdir, readFile, writeFile, readdir } from "node:fs/promises";
-import { join, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { createHash } from "node:crypto";
 const root = resolve(import.meta.dirname, "..");
 const original = join(root, "benchmarks/tictactoe/original/TicTacToe.exe");
@@ -16,6 +16,7 @@ assert.equal(
   "df4aec7299b1e002ca0e1008b20a889e0cfe5b482a19958399fab16ac6090402",
   "This scoped recovery admits only the declared published binary",
 );
+await mkdir(dirname(output), { recursive: true });
 await mkdir(output);
 const run = (cmd, args, cwd = root, env = process.env) =>
   exec(cmd, args, {

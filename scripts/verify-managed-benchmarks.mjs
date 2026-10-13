@@ -3,7 +3,7 @@
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
 import { mkdir, access, readFile, writeFile, chmod } from "node:fs/promises";
-import { join, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { createHash } from "node:crypto";
 import {
   spawnOwnedProviderProcess,
@@ -25,6 +25,7 @@ assert.equal(
   "arm64",
   "This bundled drawing library requires ARM64",
 );
+await mkdir(dirname(output), { recursive: true });
 await mkdir(output);
 const abort = new AbortController();
 const interrupt = () => abort.abort();
