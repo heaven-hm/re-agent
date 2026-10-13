@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { functionSearchResultSchema } from "../domain/functionSearch.js";
 import { evidenceBundleSummarySchema } from "../domain/evidenceRecordSummary.js";
 import { BINARY_ARCHITECTURES } from "../domain/binaryTargetTypes.js";
 import {
@@ -178,9 +179,7 @@ export const officialOutputSchemas: Readonly<Record<string, z.ZodObject>> = {
   ),
   procedure_pseudo_code: evidenceResultOf(nullableText),
   resolve_containing_procedure: evidenceResultOf(containingProcedureResolution),
-  search_procedures: evidenceResultOf(
-    z.array(z.object({ address: z.string(), value: z.string() })),
-  ),
+  search_procedures: evidenceResultOf(functionSearchResultSchema),
   search_strings: evidenceResultOf(z.array(analysisStringSchema)),
   set_address_name: evidenceResultOf(z.boolean()),
   set_addresses_names: evidenceResultOf(z.record(z.string(), z.boolean())),

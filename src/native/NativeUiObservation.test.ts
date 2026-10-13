@@ -36,6 +36,35 @@ const validPng = Buffer.from(
   "base64",
 );
 describe("native UI screenshot validation", () => {
+  it("preserves native descriptions and identifiers for buttons with no title", async () => {
+    const result = await observeNativeUi(target, "observe_native_ui", scope, {
+      environment: {},
+      invoke: async () => ({
+        ok: true,
+        result: {
+          ...snapshot,
+          nodes: [
+            {
+              path: [0, 2],
+              role: "AXButton",
+              title: null,
+              description: "All Clear",
+              identifier: "clear",
+              value: null,
+              actions: ["AXPress"],
+              children_count: 0,
+            },
+          ],
+        },
+      }),
+    });
+    if (!result.ok) throw result.error;
+    expect(result.value.initial.nodes[0]).toMatchObject({
+      title: null,
+      description: "All Clear",
+      identifier: "clear",
+    });
+  });
   it("rejects malformed or mismatched screenshot bytes from the helper", async () => {
     const screenshot = {
       mime_type: "image/png",

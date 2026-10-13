@@ -131,6 +131,8 @@ export const nativeUiSnapshotSchema = z.strictObject({
       path: z.array(z.number().int().nonnegative()),
       role: z.string().nullable(),
       title: z.string().nullable(),
+      description: z.string().nullable().optional(),
+      identifier: z.string().nullable().optional(),
       value: z.string().nullable(),
       actions: z.array(z.string()),
       children_count: z.number().int().nonnegative().nullable(),
