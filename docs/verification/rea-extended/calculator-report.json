@@ -1,0 +1,265 @@
+{
+  "kind": "proprietary-native-display-boundary",
+  "original": {
+    "path": "/System/Applications/Calculator.app/Contents/MacOS/Calculator",
+    "sha256": "0ebdae8618cd675bcf492d6fc8f48dd79c4712e0532c80f1a1cb59269fd76be9"
+  },
+  "replica": {
+    "path": "/Users/haseeb-mir/Documents/Code/rea/output/autonomy/calculator-reconstruction-1791883588410/Replica.app/Contents/MacOS/replica",
+    "sha256": "756ba320765073eff5f45a441defc7e73767a0307df876d8a039faf3555ab315"
+  },
+  "recovered": {
+    "+": {
+      "law": "add",
+      "support": ["probe-43-8-2", "probe-43-9-3"]
+    },
+    "-": {
+      "law": "subtract",
+      "support": ["probe-45-8-2", "probe-45-9-3"]
+    },
+    "*": {
+      "law": "multiply",
+      "support": ["probe-42-8-2", "probe-42-9-3"]
+    },
+    "/": {
+      "law": "divide",
+      "support": ["probe-47-8-2", "probe-47-9-3"]
+    }
+  },
+  "normalization": [
+    "Remove Unicode bidi controls",
+    "Remove English thousands separators",
+    "Normalize Unicode minus to ASCII minus"
+  ],
+  "comparisons": [
+    {
+      "id": "case-0",
+      "events": [
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "2",
+        "+",
+        "3",
+        "="
+      ],
+      "original": "5",
+      "replica": "5",
+      "status": "pass",
+      "evidenceId": "ev_4f4361f899f2e7b08a3091e0ce241c7dfe31139b62fd50d478ccfd596ee9543a"
+    },
+    {
+      "id": "case-1",
+      "events": [
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "1",
+        "7",
+        "+",
+        "2",
+        "4",
+        "="
+      ],
+      "original": "41",
+      "replica": "41",
+      "status": "pass",
+      "evidenceId": "ev_9253981da813292eb2c84f98acd6514f534ef04238a11a801c4b242776652e1d"
+    },
+    {
+      "id": "case-2",
+      "events": [
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "4",
+        "8",
+        "-",
+        "1",
+        "7",
+        "="
+      ],
+      "original": "31",
+      "replica": "31",
+      "status": "pass",
+      "evidenceId": "ev_a5429975cf78c92d314d7c32bdb377d0f07a47300d979c505179014c48a5a796"
+    },
+    {
+      "id": "case-3",
+      "events": [
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "3",
+        "-",
+        "8",
+        "="
+      ],
+      "original": "-5",
+      "replica": "-5",
+      "status": "pass",
+      "evidenceId": "ev_d0e951ae7d7fe5a39e30725b7b1420abc016dc28953a0c271635ddc98c70eeee"
+    },
+    {
+      "id": "case-4",
+      "events": [
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "6",
+        "*",
+        "7",
+        "="
+      ],
+      "original": "42",
+      "replica": "42",
+      "status": "pass",
+      "evidenceId": "ev_da8f630d21db7edd5c00d0e0326f0e8b2c785779631f9ff10717e231cfe4c9dd"
+    },
+    {
+      "id": "case-5",
+      "events": [
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "1",
+        "2",
+        "*",
+        "3",
+        "="
+      ],
+      "original": "36",
+      "replica": "36",
+      "status": "pass",
+      "evidenceId": "ev_6e321c177be5bda801cf6fcf2d6362f5ef9c27d58303ba4777de48d2e02789bc"
+    },
+    {
+      "id": "case-6",
+      "events": [
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "2",
+        "4",
+        "/",
+        "6",
+        "="
+      ],
+      "original": "4",
+      "replica": "4",
+      "status": "pass",
+      "evidenceId": "ev_ab76af0371dd0d726c11371048f4c49d72b40c1bb41fc7775b2a3a2d8e6a5d0b"
+    },
+    {
+      "id": "case-7",
+      "events": [
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "9",
+        "/",
+        "2",
+        "="
+      ],
+      "original": "4.5",
+      "replica": "4.5",
+      "status": "pass",
+      "evidenceId": "ev_a63ea6bea4938939e124a107304e25a33ccd1865fa7f1928f18b9ad8ed6d668e"
+    },
+    {
+      "id": "case-8",
+      "events": [
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "0",
+        "+",
+        "8",
+        "="
+      ],
+      "original": "8",
+      "replica": "8",
+      "status": "pass",
+      "evidenceId": "ev_75a614506fae58550579eda9583a05e895d18c4253e47f0ed5affaeff057120c"
+    },
+    {
+      "id": "case-9",
+      "events": [
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "clear",
+        "9",
+        "9",
+        "-",
+        "9",
+        "9",
+        "="
+      ],
+      "original": "0",
+      "replica": "0",
+      "status": "pass",
+      "evidenceId": "ev_291e89060c189592d79fd4dfc0309b42505c1040bb35ce78a175ef17e75a436e"
+    }
+  ],
+  "passed": 10,
+  "total": 10,
+  "claim": "Finite basic two-operand arithmetic result-display equivalence under identical abstract button event scripts",
+  "limitations": [
+    "No claim of full Calculator reconstruction or universal equivalence",
+    "Arithmetic laws inferred from real UI probes under a declared four-law hypothesis class",
+    "Original button paths discovered from native AX descriptions; replica paths discovered by AX title",
+    "Only final displayed result is compared; intermediate display rendering and reset/backspace semantics excluded",
+    "Static Calculator inventory separately recorded; arithmetic resides partly in imported Calculate framework and no internal arithmetic function equivalence established",
+    "No runtime hooking, game, audio, memory, timing, or formal proof claim"
+  ]
+}

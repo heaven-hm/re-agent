@@ -1,0 +1,21 @@
+{
+  "status": "suite-passed",
+  "passed": 25,
+  "total": 25,
+  "iterations": 2,
+  "functions": 8,
+  "regressions": 10,
+  "evidence": 217,
+  "operations": {
+    "search_procedures": 1,
+    "analyze_function": 2,
+    "affine_runtime_probe": 9,
+    "affine_reconstruction_hypothesis": 2,
+    "apply_reconstruction_candidate": 2,
+    "build_reconstruction": 1,
+    "capture_process_scenario": 100,
+    "compare_process_captures": 50,
+    "compare_process_exit_outcomes": 50
+  },
+  "claim": "Finite declared terminal and interaction observations with mandatory exit outcome comparison; no universal equivalence"
+}

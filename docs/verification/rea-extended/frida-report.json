@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "scope": "Five actually instrumented calls to one automatically enumerated authored native fixture function",
+  "instrumentation_profile": "owned-gadget-preload",
+  "function": "sym._rea_hidden_transform",
+  "static_address": "0x100003e84",
+  "binary_sha256": "28b989d99bc15fe6b4480ad7252f573aaed16ae96eee8087d5a27e581ff34df3",
+  "source_evidence_id": "ev_75673d16b78dc37e1c3c00b859774646f9d57fbe5dae57cb5e0cc0f145c8fecb",
+  "runtime_evidence_id": "ev_d5a836231c99282f567369fe76f7fedb708f5381e34ca2bcc6275adb60f4197e",
+  "inputs": [-17, -1, 0, 1, 17],
+  "outputs": [-92, -12, 11, 14, 62],
+  "observed_stdout": "[Frida INFO] Listening on 127.0.0.1 TCP port 49752\n-92\n-12\n11\n14\n62\n",
+  "expected_gadget_startup_diagnostic": "[Frida INFO] Listening on 127.0.0.1 TCP port 49752",
+  "cleanup": {
+    "exit_code": 0,
+    "gadget_connection_removed": true,
+    "owned_child_only": true,
+    "private_gadget_removed": true,
+    "reaped": true,
+    "session_detached": true
+  },
+  "limitations": [
+    "Does not instrument Apple Calculator or bypass hardened runtime.",
+    "Optional Gadget changes the fixture instrumentation environment; no claim of original protected-application support.",
+    "Register interpretation assumes signed 64-bit fixture ABI; no universal equivalence claim."
+  ]
+}
