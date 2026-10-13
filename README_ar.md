@@ -9,7 +9,6 @@
 **وجدت ميزة تعجبك؟ افهم طريقة عملها حتى مستوى الشيفرة الثنائية.**
 
 [![npm version](https://img.shields.io/npm/v/rea-agents?style=flat-square&color=cb3837)](https://www.npmjs.com/package/rea-agents)
-[![CI](https://img.shields.io/github/actions/workflow/status/morluto/rea/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/morluto/rea/actions/workflows/ci.yml)
 [![MCP tool catalog](https://img.shields.io/badge/MCP-tool_catalog-5c4ee5?style=flat-square)](docs/mcp-contracts.md#generated-catalog)
 [![Node.js requirements](https://img.shields.io/badge/Node.js-requirements-339933?style=flat-square&logo=nodedotjs&logoColor=white)](#current-status)
 [![skills.sh](https://skills.sh/b/morluto/rea?style=flat-square)](https://skills.sh/morluto/rea/reverse-engineer-anything)
@@ -140,12 +139,16 @@ npx rea-agents@latest setup
 | JavaScript / Electron           | الوحدات، وعمليات الاستيراد، وخرائط المصدر، والمسارات، وIPC، وعلاقات إضافات الشيفرة الأصلية                    | Node.js وnpm؛ [تحليل التطبيقات](https://rea.tools/ar/guides/javascript/)                                                          |
 | المواقع                         | بنية الصفحة، والسكربتات، وملاحظات الشبكة، ولقطات الشاشة المطلوبة                                            | متصفح من عائلة Chrome؛ [تحليل المتصفح](https://rea.tools/ar/guides/browser/)                                                      |
 | تسجيلات الشبكة المحفوظة          | الطلبات، والاستجابات، ومحتويات الحمولة المتاحة، ومواضعها في المصدر                                          | HAR؛ وmitmdump على Linux لتسجيلات mitmproxy بصيغتها الأصلية؛ [دليل تسجيلات الشبكة](docs/web-network-captures.md)                     |
+| التقاط الحزم                    | نقاط النهاية وDNS وTLS SNI وتوزيع البروتوكولات وطلبات HTTP                                                  | tshark وcapinfos يوفّرهما المُستدعي؛ [دليل pcap](docs/pcap-analysis.md)                                                             |
 | تجميعات .NET                    | البيانات الوصفية، وتعليمات CIL، واعتماديات الشيفرة الأصلية المعلنة، ومقارنات البناء                         | فحص ثابت؛ [دليل الشيفرة المُدارة](docs/managed-code-analysis.md)                                                                   |
 | حزم Android APK                 | تصريحات ملف manifest، والأصناف، والدوال الناتجة عن فك الترجمة، والمراجع                                     | JADX دون واجهة رسومية وJDK كامل على Linux/macOS/Windows x64؛ [دليل Android](docs/android-analysis.md)                             |
 | أجهزة Android                   | الأجهزة والحزم والعمليات والسجلات والدامبات ولقطات الشاشة ونقل APK/الملفات                                   | adb يوفّره المُستدعي (محاكي أو جهاز)؛ [دليل ADB](docs/adb-device-analysis.md)                                                       |
 | مشاريع JEB                      | وحدات المشروع من المحرك وبصمات المصنّفات والكود الزائف للأنواع/الدوال                                        | عميل JEB يبدأه المُستدعي ويقدّم MCP، ويُختار عبر REA_JEB_MCP_URL؛ [دليل JEB](docs/jeb-analysis.md)                                   |
 | موارد Android                   | البيان المفكوك الترميز وجداول السلاسل واللغات وحقائق الإصدار                                                 | مُشغّل Apktool يوفّره المُستدعي؛ [دليل الموارد](docs/apktool-resource-analysis.md)                                                    |
+| تطبيقات Flutter                 | بصمة لقطة Dart وهشوش المكتبات لكل ABI وأصل بناء المحرك                                                     | لا شيء (تحليل APK ساكن)؛ [دليل Flutter](docs/flutter-analysis.md)                                                                  |
 | البرامج الثابتة                 | المناطق، ونتائج الاستخراج، وما يُمرّر إلى تحليل الشيفرة الأصلية                                                | Binwalk / Unblob على Linux؛ [دليل البرامج الثابتة](docs/firmware-analysis.md)                                                     |
+| الحزم المسجلة                   | حقول مختارة وقيم متكررة ومرشحات وقواعد فك الترميز                                                          | Linux: TShark 4.x + prlimit; [دليل التقاط الحزم](docs/packet-captures.md)                                                         |
+| الإشارات المنطقية المسجلة        | تعليقات مفكك الترميز ونطاقات العينات ومعلومات التشخيص                                                      | Linux: sigrok-cli 0.7.2 + prlimit; [دليل الإشارات](docs/signal-recordings.md)                                                      |
 | الحزم والموارد                  | قوائم الملفات، والبصمات، وملفات plist، وبنية حزم Apple، والموارد المستخرجة                                 | [دليل تحليل الملفات وJavaScript](docs/javascript-artifact-reconstruction.md)، [تطبيقات Apple](docs/apple-application-analysis.md) |
 | سلوك العمليات                   | مخرجات الطرفية، والتفاعلات، وملاحظات الخروج ونظام الملفات، ومقارنات التشغيل                                  | Linux/macOS مع PTY أصلي؛ [تسجيل سلوك العمليات](docs/process-capture.md)                                                           |
 
@@ -261,7 +264,7 @@ npx rea-agents@latest setup
 
 ## سجل النجوم
 
-🎉 **90,000 نجمة على GitHub — شكرًا لكم!**
+🎉 **170,000 نجمة على GitHub — شكرًا لكم!**
 
 شكرًا لكل من يستخدم REA، ويبلّغ عن الأخطاء، ويقترح ميزات، ويختبر إصدارات البناء، ويساهم بالإصلاحات.
 
@@ -275,7 +278,13 @@ npx rea-agents@latest setup
 
 ## إخلاء المسؤولية
 
-يوفّر REA أدوات لأبحاث الهندسة العكسية والتحليل وإعادة البناء المشروعة. أنت مسؤول عن الحصول على أي تفويض مطلوب والالتزام بالقوانين المعمول بها. لا يؤيد المشروع الاستخدام غير القانوني أو غير المصرّح به.
+راجع [DISCLAIMER.md](DISCLAIMER.md) للحصول على إرشادات الاستخدام المسؤول.
+
+REA مخصص للبحث والتعليم والتشغيل البيني وحفظ البرمجيات بشكل قانوني، ولتحليل البرمجيات التي تملكها أو لديك تفويض لفحصها.
+
+The project's position on illegal or unauthorized use covers all REA
+versions, distribution channels, and platforms; each copy retains its
+applicable licenses.
 
 ## المساهمة
 
@@ -286,3 +295,15 @@ npx rea-agents@latest setup
 ## الترخيص
 
 [MIT](LICENSE)
+
+REA-authored code is licensed under MIT. Third-party material retains its own
+licenses and copyright notices; see [Third-party notices](THIRD_PARTY_NOTICES.md)
+for the dependency inventory, preserved license texts, and external-tool terms.
+
+**You must legally obtain and be authorized to use commercial tools**, including
+IDA Pro / Hex-Rays decompilers, Hopper, and JEB, under their applicable licenses.
+REA grants no tool license, key, or activation entitlement. Trials and demos
+remain subject to vendor terms, including user, feature, automation, and output
+sharing restrictions. Cracked copies, stolen keys, unauthorized key sharing,
+and bypassing license restrictions are not authorized. This guidance does not
+amend MIT or third-party licenses.

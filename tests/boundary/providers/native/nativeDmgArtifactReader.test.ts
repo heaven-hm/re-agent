@@ -7,14 +7,19 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { join } from "node:path";
+import type { Readable } from "node:stream";
 
 import { build } from "plist";
-import { describe, expect, it, onTestFinished } from "vitest";
+import { describe, expect, it, onTestFinished, vi } from "vitest";
 
 import { createTestTempDirectory } from "../../../fixtures/temporaryDirectory.js";
 import { execFileOutput } from "../../../../src/process/ExecFileOutput.js";
-import { ArtifactReaderFailure } from "../../../../src/artifacts/ArtifactReader.js";
+import {
+  ArtifactReaderFailure,
+  type ArtifactEntry,
+} from "../../../../src/artifacts/ArtifactReader.js";
 import { ArtifactResourceScope } from "../../../../src/artifacts/ArtifactResourceScope.js";
+import { DirectoryArtifactReader } from "../../../../src/artifacts/DirectoryArtifactReader.js";
 import {
   NativeDmgArtifactReader,
   type NativeDmgHost,
@@ -376,6 +381,186 @@ describe("native DMG lazy initialization", () => {
   });
 });
 
+describe("native DMG directory ownership", () => {
+  it("closes unread member streams and suspended traversal handles before detach", async () => {
+    const calls: string[][] = [];
+    const mount = createMountFixture();
+    let attached = false;
+    let mountPoint: string | undefined;
+    let unread: Readable | undefined;
+    let unreadHandleRejectedAtDetach = false;
+    const host: NativeDmgHost = {
+      async run(arguments_) {
+        calls.push([...arguments_]);
+        if (arguments_[0] === "info")
+          return {
+            stdout:
+              !attached || mountPoint === undefined
+                ? emptyInfoPlist
+                : infoPlist("/tmp/image.dmg", [
+                    {
+                      "dev-entry": "/dev/disk-unread",
+                      "mount-point": mountPoint,
+                    },
+                  ]),
+            exitCode: 0,
+          };
+        if (arguments_[0] === "detach") {
+          if (unread !== undefined) {
+            try {
+              await unread[Symbol.asyncIterator]().next();
+            } catch {
+              unreadHandleRejectedAtDetach = true;
+            }
+          }
+          attached = false;
+          return { stdout: "", exitCode: 0 };
+        }
+        if (arguments_[0] !== "attach") return { stdout: "", exitCode: 0 };
+        ({ mountPoint } = await mount.createVolume(arguments_, "unread bytes"));
+        attached = true;
+        return {
+          stdout: attachPlist([
+            { "dev-entry": "/dev/disk-unread", "mount-point": mountPoint },
+          ]),
+          exitCode: 0,
+        };
+      },
+    };
+    const reader = await createAttachedReader(
+      "/tmp/image.dmg",
+      process.env,
+      undefined,
+      host,
+    );
+    let fileEntry: ArtifactEntry | undefined;
+    for await (const entry of reader.entries())
+      if (entry.path.endsWith("/hello.txt")) fileEntry = entry;
+    if (fileEntry === undefined) throw new Error("expected hello.txt");
+    unread = await reader.open(fileEntry);
+    const iterator = reader.entries()[Symbol.asyncIterator]();
+    const first = await iterator.next();
+    if (first.done) throw new Error("expected a mounted directory entry");
+    await reader.close();
+    expect(calls.filter(([operation]) => operation === "detach")).toEqual([
+      ["detach", "/dev/disk-unread"],
+    ]);
+    expect(unreadHandleRejectedAtDetach).toBe(true);
+    await expect(realpath(mount.root() ?? "")).rejects.toMatchObject({
+      code: "ENOENT",
+    });
+    expect((await iterator.next()).done).toBe(true);
+  });
+});
+
+describe("native DMG traversal shutdown", () => {
+  it("waits for a pending directory advance before detaching", async () => {
+    const { host, state } = createOmittedInventoryHost();
+    state.inventoryMode = "listed";
+    state.detachAttempts = 4;
+    const originalEntries = DirectoryArtifactReader.prototype.entries;
+    let gateAdvance = false;
+    let markAdvanceStarted = (): void => {};
+    const advanceStarted = new Promise<void>((resolve) => {
+      markAdvanceStarted = resolve;
+    });
+    let releaseAdvance = (): void => {};
+    const advanceGate = new Promise<void>((resolve) => {
+      releaseAdvance = resolve;
+    });
+    const entriesSpy = vi
+      .spyOn(DirectoryArtifactReader.prototype, "entries")
+      .mockImplementation(async function* (
+        this: DirectoryArtifactReader,
+        signal?: AbortSignal,
+        descendInto?: (path: string) => boolean,
+      ) {
+        const iterator = originalEntries
+          .call(this, signal, descendInto)
+          [Symbol.asyncIterator]();
+        try {
+          for (;;) {
+            const next = await iterator.next();
+            if (next.done) return;
+            if (gateAdvance) {
+              markAdvanceStarted();
+              await advanceGate;
+            }
+            yield next.value;
+          }
+        } finally {
+          await iterator.return?.();
+        }
+      });
+    try {
+      const reader = await createAttachedReader(
+        "/tmp/image.dmg",
+        process.env,
+        undefined,
+        host,
+      );
+      gateAdvance = true;
+      const iterator = reader.entries()[Symbol.asyncIterator]();
+      const advancing = iterator.next();
+      await advanceStarted;
+      const closing = reader.close();
+      await Promise.resolve();
+      expect(state.detachAttempts).toBe(4);
+      releaseAdvance();
+      expect((await advancing).done).toBe(true);
+      await closing;
+      expect(state.detachAttempts).toBe(5);
+      await expect(realpath(state.mountRoot ?? "")).rejects.toMatchObject({
+        code: "ENOENT",
+      });
+    } finally {
+      entriesSpy.mockRestore();
+    }
+  });
+});
+
+describe("native DMG directory close recovery", () => {
+  it("retains a mounted directory after its close fails and retries before detach", async () => {
+    const { host, state } = createOmittedInventoryHost();
+    state.inventoryMode = "listed";
+    state.detachAttempts = 4;
+    const closeDirectory = vi
+      .spyOn(DirectoryArtifactReader.prototype, "close")
+      .mockImplementationOnce(async () => {
+        throw new Error("injected directory close failure");
+      });
+    try {
+      const reader = await createAttachedReader(
+        "/tmp/image.dmg",
+        process.env,
+        undefined,
+        host,
+      );
+      const failure = await reader.close().catch((cause: unknown) => cause);
+      expect(failure).toMatchObject({
+        reason: "io",
+        cleanup: {
+          resources: expect.arrayContaining([
+            expect.stringMatching(/^DMG mounted directory at /u),
+            expect.stringMatching(/^DMG mount root /u),
+          ]),
+        },
+      });
+      expect(state.detachAttempts).toBe(4);
+      expect(await realpath(state.mountRoot ?? "")).toBe(state.mountRoot);
+
+      await reader.close();
+      expect(closeDirectory).toHaveBeenCalledTimes(2);
+      expect(state.detachAttempts).toBe(5);
+      await expect(realpath(state.mountRoot ?? "")).rejects.toMatchObject({
+        code: "ENOENT",
+      });
+    } finally {
+      closeDirectory.mockRestore();
+    }
+  });
+});
+
 describe("native DMG artifact reader", () => {
   it("uses plist attachment metadata and detaches returned devices", async () => {
     const calls: string[][] = [];
@@ -434,23 +619,31 @@ describe("native DMG artifact reader", () => {
     expect(calls).toContainEqual(["detach", "/dev/disk-fixture"]);
   });
 
-  it("rejects non-zero verification results", async () => {
-    await expect(
-      createAttachedReader("/tmp/image.dmg", process.env, undefined, {
-        run: () =>
-          Promise.resolve({
-            stdout: "verify output",
-            stderr: "hdiutil: verify failed - image not recognized",
-            exitCode: 1,
-          }),
-      }),
-    ).rejects.toMatchObject({
-      reason: "format",
-      message: expect.stringMatching(
-        /"arguments":\["verify","\/tmp\/image\.dmg"\].*"exitCode":1.*"stderr":"hdiutil: verify failed - image not recognized"/u,
-      ),
-    });
-  });
+  // hdiutil localizes its diagnostics; en-GB and other English locales spell
+  // the refusal "recognised".
+  it.each(["recognized", "recognised"])(
+    "rejects non-zero verification results (image not %s)",
+    async (spelling) => {
+      await expect(
+        createAttachedReader("/tmp/image.dmg", process.env, undefined, {
+          run: () =>
+            Promise.resolve({
+              stdout: "verify output",
+              stderr: `hdiutil: verify failed - image not ${spelling}`,
+              exitCode: 1,
+            }),
+        }),
+      ).rejects.toMatchObject({
+        reason: "format",
+        message: expect.stringMatching(
+          new RegExp(
+            `"arguments":\\["verify","/tmp/image\\.dmg"\\].*"exitCode":1.*"stderr":"hdiutil: verify failed - image not ${spelling}"`,
+            "u",
+          ),
+        ),
+      });
+    },
+  );
 
   it("retains the root and reports unknown ownership when recovery discovery fails", async () => {
     const mount = createMountFixture();
@@ -1004,6 +1197,138 @@ describe("native DMG command diagnostics", () => {
       reason: "io",
       message: expect.stringContaining('"code":"EACCES"'),
     });
+  });
+});
+
+describe("native DMG verification resource availability", () => {
+  const transientFailure = {
+    stdout: "",
+    stderr:
+      'hdiutil: verify: unable to recognize "/tmp/image.dmg" as a disk image. (Resource temporarily unavailable)\nhdiutil: verify failed - Resource temporarily unavailable\n',
+    exitCode: 1,
+  };
+
+  it("retries the explicit transient refusal before attachment and retains both attempts", async () => {
+    const { host, state } = createOmittedInventoryHost();
+    state.inventoryMode = "listed";
+    state.detachAttempts = 4;
+    const delays = vi.fn(async () => {});
+    const timeouts: number[] = [];
+    let attempts = 0;
+    const reader = await createAttachedReader(
+      "/tmp/image.dmg",
+      process.env,
+      undefined,
+      {
+        ...host,
+        delay: delays,
+        async run(arguments_, signal, options) {
+          if (arguments_[0] === "verify") {
+            attempts += 1;
+            if (options === undefined)
+              throw new Error("missing verify deadline");
+            timeouts.push(options.timeoutMs);
+            if (attempts === 1) return transientFailure;
+          }
+          return host.run(arguments_, signal, options);
+        },
+      },
+    );
+    onTestFinished(() => reader.close());
+    expect(attempts).toBe(2);
+    expect(delays.mock.calls).toEqual([[250]]);
+    expect(timeouts[0]).toBeLessThanOrEqual(120_000);
+    expect(timeouts[1]).toBeLessThanOrEqual(timeouts[0]!);
+    expect(reader.provenance().slice(0, 2)).toMatchObject([
+      {
+        arguments: ["verify", "/tmp/image.dmg"],
+        exit_code: 1,
+        effects: ["read"],
+      },
+      {
+        arguments: ["verify", "/tmp/image.dmg"],
+        exit_code: 0,
+        effects: ["read"],
+      },
+    ]);
+    await reader.close();
+    expect(state.attached).toBe(false);
+  });
+
+  it("bounds repeated transient refusals and never attaches an unverified image", async () => {
+    const run = vi.fn(async () => transientFailure);
+    const delay = vi.fn(async () => {});
+    const reader = new NativeDmgArtifactReader("/tmp/image.dmg", process.env, {
+      run,
+      delay,
+    });
+    await expect(entryPaths(reader)).rejects.toMatchObject({
+      reason: "unavailable",
+      message: expect.stringContaining("Resource temporarily unavailable"),
+    });
+    await reader.close();
+    expect(run.mock.calls).toHaveLength(3);
+    expect(delay.mock.calls).toEqual([[250], [500]]);
+    expect(reader.provenance().map(({ exit_code }) => exit_code)).toEqual([
+      1, 1, 1,
+    ]);
+  });
+
+  it("honors cancellation during the wait without starting another command", async () => {
+    const controller = new AbortController();
+    const run = vi.fn(async () => transientFailure);
+    await expect(
+      createAttachedReader("/tmp/image.dmg", process.env, controller.signal, {
+        run,
+        async delay() {
+          controller.abort(new Error("cancel verification"));
+        },
+      }),
+    ).rejects.toMatchObject({ reason: "cancelled" });
+    expect(run).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not start another verification after the shared deadline", async () => {
+    const clock = vi.spyOn(performance, "now").mockReturnValue(0);
+    const run = vi.fn(async () => transientFailure);
+    try {
+      await expect(
+        createAttachedReader("/tmp/image.dmg", process.env, undefined, {
+          run,
+          async delay() {
+            clock.mockReturnValue(120_001);
+          },
+        }),
+      ).rejects.toMatchObject({
+        reason: "unavailable",
+        message: expect.stringContaining("Resource temporarily unavailable"),
+      });
+      expect(run).toHaveBeenCalledTimes(1);
+    } finally {
+      clock.mockRestore();
+    }
+  });
+
+  it.each([
+    ["image data corrupted", "integrity"],
+    ["image not recognized", "format"],
+    ["Permission denied", "io"],
+    ["an unknown failure", "unavailable"],
+  ])("does not retry %s", async (diagnostic, reason) => {
+    const run = vi.fn(async () => ({
+      stdout: "",
+      stderr: `hdiutil: verify failed - ${diagnostic}\n`,
+      exitCode: 1,
+    }));
+    const delay = vi.fn(async () => {});
+    await expect(
+      createAttachedReader("/tmp/image.dmg", process.env, undefined, {
+        run,
+        delay,
+      }),
+    ).rejects.toMatchObject({ reason });
+    expect(run).toHaveBeenCalledTimes(1);
+    expect(delay).not.toHaveBeenCalled();
   });
 });
 

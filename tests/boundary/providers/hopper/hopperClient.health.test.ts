@@ -1,4 +1,5 @@
 import { EventEmitter } from "node:events";
+import { PassThrough } from "node:stream";
 
 import { describe, expect, it, onTestFinished, vi } from "vitest";
 
@@ -12,15 +13,18 @@ import { HopperClient } from "../../../../src/hopper/HopperClient.js";
 import { HopperFixtureLauncher } from "./hopperClient.fixture.js";
 
 class ObservedProcess extends EventEmitter {
-  readonly stdout = null;
-  readonly stderr = null;
+  readonly stdout = new PassThrough();
+  readonly stderr = new PassThrough();
   exitCode: number | null = null;
-  readonly signalCode = null;
+  signalCode: NodeJS.Signals | null = null;
 
-  exit(code: number): void {
+  exit(code: number | null, signal: NodeJS.Signals | null = null): void {
     this.exitCode = code;
-    this.emit("exit", code, null);
-    this.emit("close", code, null);
+    this.signalCode = signal;
+    this.emit("exit", code, signal);
+    this.stdout.end();
+    this.stderr.end();
+    this.emit("close", code, signal);
   }
 
   kill(): boolean {
@@ -66,7 +70,7 @@ describe("Hopper provider lifecycle health", () => {
     launcher.observed.exit(0);
     const pending = client.callTool("hang");
     await launcher.fixture.waitForRequest("hang");
-    launcher.fixture.processes.at(-1)?.kill("SIGKILL");
+    launcher.fixture.processes.at(-1)?.send({ disconnect: true });
     await vi.waitFor(() =>
       expect(client.operationHealth().state).toBe("unreachable"),
     );
@@ -92,6 +96,7 @@ describe("Hopper provider lifecycle health", () => {
         operation: "procedure_pseudo_code",
       },
     });
+    expect((await client.close()).ok).toBe(true);
   });
 
   it("projects the exit code when the owned process exit is observed before disconnection", async () => {
@@ -120,6 +125,7 @@ describe("Hopper provider lifecycle health", () => {
           stage: "analysis",
           operation: "hang",
           request_id: request.id,
+          launcher: { exit_code: 7, signal: null, output_closed: false },
         },
       });
   });
@@ -164,5 +170,54 @@ describe("Hopper provider lifecycle health", () => {
     await client.close();
     expect((await client.start()).ok).toBe(true);
     expect(client.operationHealth().state).toBe("idle");
+  });
+});
+
+it("preserves an owned signal exit and diagnostics for active, queued and later callers", async () => {
+  const { client, launcher } = await start(true);
+  const active = client.callTool("hang");
+  const request = await launcher.fixture.waitForRequest("hang");
+  const queued = client.callTool("echo");
+  await vi.waitFor(() =>
+    expect(client.requestActivity()?.queuedRequests).toBe(1),
+  );
+  const token = launcher.fixture.tokens[0];
+  launcher.observed.stderr.write(`API_KEY=local-evidence-kept ${token}\n`);
+  launcher.observed.exit(null, "SIGTERM");
+  const results = await Promise.all([active, queued]);
+  for (const [index, result] of results.entries()) {
+    if (result.ok) throw new Error("Expected an observed provider exit");
+    const projected = projectAnalysisError(result.error);
+    expect(projected).toMatchObject({
+      code: "provider_unavailable",
+      message: expect.stringContaining("signal SIGTERM"),
+      details: {
+        provider_state: "exited",
+        operation: index === 0 ? "hang" : "echo",
+        request_id: request.id + index,
+        launcher: {
+          exit_code: null,
+          signal: "SIGTERM",
+          output_closed: false,
+          stderr: {
+            text: "API_KEY=local-evidence-kept [redacted transport credential]\n",
+          },
+        },
+      },
+    });
+    expect(JSON.stringify(projected)).not.toContain(token);
+  }
+  const later = await client.callTool("procedure_pseudo_code", {
+    procedure: "main",
+  });
+  if (later.ok) throw new Error("An exited provider must reject later queries");
+  expect(projectAnalysisError(later.error)).toMatchObject({
+    code: "provider_unavailable",
+    details: {
+      provider_state: "exited",
+      stage: "decompilation",
+      operation: "procedure_pseudo_code",
+      launcher: { signal: "SIGTERM", output_closed: true },
+    },
   });
 });

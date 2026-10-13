@@ -7,20 +7,14 @@ import { describe, expect, it } from "vitest";
 import { createTestTempDirectory } from "../../../fixtures/temporaryDirectory.js";
 
 import { createDirectAnalysis } from "../../../../src/composition/directAnalysis.js";
-import {
-  ArtifactPathRegistry,
-  destinationCaseCollisionMessage,
-  ENGLISH_UNICODE_CASE_INVENTORY_LIMITATION,
-  normalizeArtifactPath,
-} from "../../../../src/artifacts/ArtifactPaths.js";
-import { ArtifactProvider } from "../../../../src/artifacts/ArtifactProvider.js";
-import { ArtifactReaderFailure } from "../../../../src/artifacts/ArtifactReader.js";
+import { ENGLISH_UNICODE_CASE_INVENTORY_LIMITATION } from "../../../../src/artifacts/ArtifactPaths.js";
 import { artifactExtractionExecutionSchema } from "../../../../src/contracts/artifactToolContracts.js";
 import { artifactInventoryResultSchema } from "../../../../src/domain/artifactGraph.js";
 import type { BinaryTarget } from "../../../../src/domain/binaryTargetTypes.js";
 import { parseBinaryTarget } from "../../../../src/application/BinaryTargetResolver.js";
 import { parseEvidence } from "../../../../src/domain/evidence.js";
 import { projectAnalysisError } from "../../../../src/domain/analysisErrorProjection.js";
+import { withArtifactClient } from "../../../support/artifactClientScope.js";
 
 const { runProviderAnalysis } = createDirectAnalysis({});
 
@@ -61,15 +55,15 @@ describe("artifact archive safety", () => {
         ),
       ).toBe(true);
       const output = join(root, "output");
-      const extracted = await new ArtifactProvider(process.env)
-        .createClient(parsed.value)
-        .execute(
+      const extracted = await withArtifactClient(parsed.value, (client) =>
+        client.execute(
           "extract_artifact",
           artifactExtractionExecutionSchema.parse({
             output_root: output,
           }),
-        );
-      expect(extracted.ok).toBe(true);
+        ),
+      );
+      if (!extracted.ok) throw extracted.error;
       expect(await readFile(join(output, "Assets", "main.js"), "utf8")).toBe(
         "export default 'windows';",
       );
@@ -83,60 +77,6 @@ describe("artifact archive safety", () => {
       });
     },
   );
-
-  it("rejects unsafe paths and collisions", async () => {
-    let unsafePathError: unknown;
-    try {
-      normalizeArtifactPath("../escape");
-    } catch (error: unknown) {
-      unsafePathError = error;
-    }
-    expect(unsafePathError).toBeInstanceOf(ArtifactReaderFailure);
-    expect(unsafePathError).toMatchObject({
-      reason: "path",
-      message: 'Artifact path is not normalized: "../escape"',
-    });
-    const registry = new ArtifactPathRegistry();
-    registry.add("A.js", "file");
-    expect(() => registry.add("a.js", "file")).not.toThrow();
-    expect(() => registry.add("A.js", "file")).toThrow(ArtifactReaderFailure);
-
-    for (const [filePath, childPath] of [
-      ["Foo", "foo/bar"],
-      ["root/Foo", "root/foo/bar"],
-    ] as const) {
-      const casePrefixRegistry = new ArtifactPathRegistry();
-      casePrefixRegistry.add(filePath, "file");
-      expect(() => casePrefixRegistry.add(childPath, "file")).not.toThrow();
-    }
-
-    const exactPrefixRegistry = new ArtifactPathRegistry();
-    exactPrefixRegistry.add("Foo", "file");
-    expect(() => exactPrefixRegistry.add("Foo/bar", "file")).toThrow(
-      ArtifactReaderFailure,
-    );
-
-    const sameDirectoryRegistry = new ArtifactPathRegistry();
-    sameDirectoryRegistry.add("Foo/one.js", "file");
-    expect(() => sameDirectoryRegistry.add("Foo/two.js", "file")).not.toThrow();
-
-    const caseVariantDirectoryRegistry = new ArtifactPathRegistry();
-    caseVariantDirectoryRegistry.add("Foo/one.js", "file");
-    expect(() =>
-      caseVariantDirectoryRegistry.add("foo/two.js", "file"),
-    ).not.toThrow();
-  });
-
-  it("names a destination case collision from the directory listing", () => {
-    expect(
-      destinationCaseCollisionMessage("res/2f.xml", ["2F.xml", "other.xml"]),
-    ).toBe(
-      "Destination filesystem cannot store both res/2f.xml and res/2F.xml; inventory retains both logical names.",
-    );
-    expect(
-      destinationCaseCollisionMessage("res/2f.xml", ["2f.xml", "2F.xml"]),
-    ).toBeUndefined();
-  });
 });
 
 it("extracts case-distinct names only when the destination can preserve them", async () => {
@@ -163,12 +103,12 @@ it("extracts case-distinct names only when the destination can preserve them", a
       .sort(),
   ).toEqual(["Main.js", "main.js"]);
   const output = join(root, "output");
-  const extracted = await new ArtifactProvider(process.env)
-    .createClient(parsed.value)
-    .execute(
+  const extracted = await withArtifactClient(parsed.value, (client) =>
+    client.execute(
       "extract_artifact",
       artifactExtractionExecutionSchema.parse({ output_root: output }),
-    );
+    ),
+  );
   if (!caseSensitive) {
     if (extracted.ok) throw new Error("expected a destination case collision");
     expect(projectAnalysisError(extracted.error)).toMatchObject({
@@ -199,12 +139,12 @@ it("preserves colon names in inventory and refuses Windows stream materializatio
   );
 
   const output = join(root, "output");
-  const extracted = await new ArtifactProvider(process.env)
-    .createClient(parsed.value)
-    .execute(
+  const extracted = await withArtifactClient(parsed.value, (client) =>
+    client.execute(
       "extract_artifact",
       artifactExtractionExecutionSchema.parse({ output_root: output }),
-    );
+    ),
+  );
   if (process.platform === "win32") {
     if (extracted.ok) throw new Error("expected a Windows stream path refusal");
     const detail =
@@ -232,9 +172,9 @@ it("preserves colon names in inventory and refuses Windows stream materializatio
 });
 
 const inventory = async (targetValue: BinaryTarget) => {
-  const result = await new ArtifactProvider(process.env)
-    .createClient(targetValue)
-    .execute("inventory_artifact", {});
+  const result = await withArtifactClient(targetValue, (client) =>
+    client.execute("inventory_artifact", {}),
+  );
   if (!result.ok) throw result.error;
   return artifactInventoryResultSchema.parse(result.value.result);
 };

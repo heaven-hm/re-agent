@@ -16,6 +16,10 @@ import { integrityContradictionSchema } from "../artifactGraph.js";
 import { artifactIntegrityPolicySchema } from "../artifactIntegrityPolicy.js";
 import { localPathStringSchema } from "../localPath.js";
 import { javaScriptAnalysisResourceControlsSchema } from "./javascriptAnalysisResourceControls.js";
+import {
+  javaScriptSourcePathsSchema,
+  javaScriptSourceSelectionSchema,
+} from "./javascriptSourceSelection.js";
 
 const countSchema = z.number().int().min(0);
 
@@ -24,6 +28,7 @@ export const analyzeJavaScriptApplicationInputSchema = z.strictObject({
   input_path: localPathStringSchema,
   format: z.enum(["auto", "asar", "directory"]).default("auto"),
   integrity_policy: artifactIntegrityPolicySchema,
+  source_paths: javaScriptSourcePathsSchema.optional(),
   ...javaScriptAnalysisResourceControlsSchema.shape,
 });
 
@@ -71,6 +76,7 @@ const applicationAnalysisResultShape = z.strictObject({
   inventory_manifest_id: prefixedDigestSchema("agm"),
   inventory_graph_sha256: digestSchema,
   integrity_contradictions: z.array(integrityContradictionSchema),
+  source_selection: javaScriptSourceSelectionSchema.exactOptional(),
   graph: javascriptApplicationGraphSchema,
   summary: electronBoundarySummarySchema,
   statistics: reconstructionStatisticsSchema,

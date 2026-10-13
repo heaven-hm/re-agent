@@ -1,5 +1,6 @@
 import { constants } from "node:fs";
 import { access, readdir, stat } from "node:fs/promises";
+import { ArtifactResourceScope } from "../artifacts/ArtifactResourceScope.js";
 import { homeDirectoryFromEnvironment } from "../config/homeDirectory.js";
 import { join } from "node:path";
 
@@ -100,6 +101,7 @@ export interface DoctorHost {
   installedSkillIdentity?(
     clientIds: readonly string[],
   ): Promise<InstalledSkillIdentity | undefined>;
+  close?(): Promise<string | undefined>;
   clientRegistrations?(): Promise<readonly ClientRegistrationStatus[]>;
   ilspyCmdVersion?(path: string): Promise<string | undefined>;
 }
@@ -120,6 +122,7 @@ export interface DoctorReport {
 /** Caller-selected readiness boundary; omitted values retain audit semantics. */
 export interface DoctorScope {
   readonly clients?: readonly string[];
+  readonly skillClients?: readonly string[];
   readonly providers?: readonly string[];
   readonly skill?: boolean;
 }
@@ -154,7 +157,41 @@ interface DoctorIdentity {
  */
 export const runDoctor = async (
   target?: string,
-  host: DoctorHost = systemDoctorHost(),
+  selectedHost?: DoctorHost,
+  requestedScope?: DoctorScope,
+): Promise<DoctorReport> =>
+  selectedHost === undefined
+    ? runDoctorOwned(target, systemDoctorHost(), requestedScope)
+    : inspectDoctor(target, selectedHost, requestedScope);
+
+/** Inspect with a host whose lifetime belongs to this operation. */
+export const runDoctorOwned = async (
+  target: string | undefined,
+  host: DoctorHost,
+  requestedScope?: DoctorScope,
+): Promise<DoctorReport> => {
+  let report: DoctorReport;
+  try {
+    report = await inspectDoctor(target, host, requestedScope);
+  } catch (cause: unknown) {
+    const cleanup = await closeDoctorHost(host);
+    if (cleanup !== undefined)
+      throw new AggregateError(
+        [cause, new Error(cleanup)],
+        "Doctor failed and its resource cleanup remains incomplete.",
+        { cause },
+      );
+    throw cause;
+  }
+  const cleanup = await closeDoctorHost(host);
+  return cleanup === undefined
+    ? report
+    : doctorReportWithCleanup(report, cleanup);
+};
+
+const inspectDoctor = async (
+  target: string | undefined,
+  host: DoctorHost,
   requestedScope?: DoctorScope,
 ): Promise<DoctorReport> => {
   const scope = normalizeDoctorScope(requestedScope, target);
@@ -196,6 +233,36 @@ export const runDoctor = async (
   };
 };
 
+const closeDoctorHost = async (
+  host: DoctorHost,
+): Promise<string | undefined> => {
+  try {
+    return await host.close?.();
+  } catch (cause: unknown) {
+    return `Doctor host cleanup failed: ${cause instanceof Error ? cause.message : String(cause)}`;
+  }
+};
+
+const doctorReportWithCleanup = (
+  report: DoctorReport,
+  detail: string,
+): DoctorReport => {
+  const check: DoctorCheck = {
+    name: "doctor-resource-cleanup",
+    ok: false,
+    classification: "config_drift",
+    detail,
+    remediation: "Resolve the reported cleanup failure, then rerun rea doctor.",
+  };
+  return {
+    ...report,
+    healthy: false,
+    environment_healthy: false,
+    checks: [...report.checks, check],
+    scope_checks: [...report.scope_checks, check],
+  };
+};
+
 const collectDoctorIdentity = async (
   host: DoctorHost,
   scope: DoctorScopeReport,
@@ -206,9 +273,10 @@ const collectDoctorIdentity = async (
   const installationPaths = (await host.installationPaths?.()) ?? [];
   const registrations = (await host.clientRegistrations?.()) ?? [];
   const skillClientIds =
-    scope.mode === "audit-wide"
+    scope.skill_clients ??
+    (scope.mode === "audit-wide"
       ? registrations.map(({ client }) => client)
-      : scope.clients;
+      : scope.clients);
   const installedSkillIdentity =
     await host.installedSkillIdentity?.(skillClientIds);
   const skillAligned = skillIdentityAligned(installedSkillIdentity);
@@ -305,6 +373,7 @@ export interface SystemDoctorHostOptions {
 export const systemDoctorHost = (
   options: SystemDoctorHostOptions = {},
 ): DoctorHost => {
+  const resources = new ArtifactResourceScope();
   const platform = options.platform ?? process.platform;
   const architecture = options.architecture ?? process.arch;
   const environment = options.environment ?? process.env;
@@ -352,7 +421,7 @@ export const systemDoctorHost = (
         name: "target",
         ok: false,
         classification:
-          targetError?.constraint === "directory_requires_file"
+          targetError?.constraint !== undefined
             ? "unsupported_target"
             : "config_drift",
         detail: path,
@@ -444,11 +513,21 @@ export const systemDoctorHost = (
         clientIds,
         environment,
         platform,
+        resources,
       ),
+    close: async () => {
+      try {
+        await resources.close();
+        return undefined;
+      } catch (cause: unknown) {
+        return `Doctor resource cleanup failed: ${cause instanceof Error ? cause.message : String(cause)}`;
+      }
+    },
     clientRegistrations: () =>
       readClientRegistrationStatuses(homeDirectory, undefined, {
         platform,
         environment,
+        resources,
       }),
   };
 };

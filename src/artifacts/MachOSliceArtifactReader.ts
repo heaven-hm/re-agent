@@ -12,6 +12,7 @@ import {
   type LipoArchitecture,
 } from "../native/parsers/lipo.js";
 import type { MachoSlice } from "../domain/apple/dylibResolution.js";
+import { machoCpuSubtypeBase } from "../domain/apple/machoCpuIdentity.js";
 import { OwnedFileHandle } from "../filesystem/OwnedFileHandle.js";
 import { readMachoImage, type ReadAt } from "./apple/MachoLoadCommandReader.js";
 import {
@@ -80,7 +81,9 @@ export class MachOSliceArtifactReader implements ArtifactReader {
     if (!captured.ok)
       throw new ArtifactReaderFailure(
         captured.error.reason === "cancelled" ? "cancelled" : "unavailable",
-        "lipo could not enumerate universal Mach-O slices",
+        captured.error.detail === null
+          ? "lipo could not enumerate universal Mach-O slices"
+          : `lipo could not enumerate universal Mach-O slices: ${captured.error.detail}`,
         {
           cause: captured.error,
           ...(captured.error.cleanupFailure === null &&
@@ -451,11 +454,26 @@ const lipoMatchesSlice = (
     (reported.size === null || reported.size === observed.slice_size) &&
     (reported.cpu_type_code === null ||
       reported.cpu_type_code === observedCpuType) &&
-    (reported.cpu_subtype_code === null ||
-      reported.cpu_subtype_code === observedCpuSubtype) &&
+    lipoSubtypeMatches(reported, observedCpuSubtype) &&
     (reported.alignment === null ||
       observed.fat_alignment_exponent === null ||
       reported.alignment === 2 ** observed.fat_alignment_exponent)
+  );
+};
+
+/**
+ * Compare the complete subtype when lipo printed its capability byte, and
+ * otherwise only the subtype bits its record names.
+ */
+const lipoSubtypeMatches = (
+  reported: LipoArchitecture,
+  observedCpuSubtype: number,
+): boolean => {
+  if (reported.cpu_subtype_code !== null)
+    return reported.cpu_subtype_code === observedCpuSubtype;
+  return (
+    reported.cpu_subtype_base === null ||
+    reported.cpu_subtype_base === machoCpuSubtypeBase(observedCpuSubtype)
   );
 };
 

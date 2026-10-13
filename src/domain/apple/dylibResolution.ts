@@ -220,7 +220,10 @@ interface LoadedImage {
 interface ProcessContext {
   readonly view: DylibTreeView;
   readonly root: string;
-  readonly architecture: string;
+  readonly processIdentity: Pick<
+    MachoSlice,
+    "architecture" | "cpu_type" | "cpu_subtype"
+  >;
   readonly searchOverrides: readonly DyldSearchOverride[];
   readonly environmentRoots: Set<string>;
   readonly platforms: readonly number[];
@@ -304,7 +307,7 @@ const evaluateCandidate = async (
   let outcome: Candidate["outcome"];
   if (facts.status !== "parsed") outcome = facts.status;
   else {
-    const slice = compatibleSlice(facts.slices, context.architecture);
+    const slice = compatibleSlice(facts.slices, context.processIdentity);
     if (slice === undefined) outcome = "architecture-missing";
     // Dependency commands require a dylib; generic dyld image loadability
     // also admits main executables and bundles for different operations.
@@ -314,7 +317,7 @@ const evaluateCandidate = async (
         context.platforms,
         slice.platforms,
         slice.file_type_code,
-        context.architecture,
+        context.processIdentity.architecture,
       );
       outcome =
         platformResult === "compatible"
@@ -424,7 +427,9 @@ const resolveDependency = async (
 ): Promise<Edge> => {
   const current = context.loaded.get(loader);
   const chain = current?.chain ?? [loader];
-  const loaded = context.byInstallName.get(dependency.install_name);
+  const loaded = dependency.install_name.startsWith("@rpath/")
+    ? context.byInstallName.get(dependency.install_name)
+    : undefined;
   const candidates: Candidate[] = [];
   if (loaded !== undefined)
     candidates.push({
@@ -470,11 +475,11 @@ const resolveDependency = async (
     resolved.image === null ? undefined : context.images.get(resolved.image);
   const slice =
     image?.status === "parsed"
-      ? compatibleSlice(image.slices, context.architecture)
+      ? compatibleSlice(image.slices, context.processIdentity)
       : undefined;
   return {
     root: context.root,
-    architecture: context.architecture,
+    architecture: context.processIdentity.architecture,
     loader,
     via: [...chain],
     ...dependency,
@@ -503,7 +508,10 @@ const traceProcess = async (
     chain: [context.root],
     conditional: false,
   });
-  if (rootSlice.install_name !== null)
+  if (
+    rootSlice.install_name !== null &&
+    rootSlice.install_name.startsWith("@rpath/")
+  )
     context.byInstallName.set(rootSlice.install_name, context.root);
   const pending = [context.root];
   while (pending.length > 0) {
@@ -522,7 +530,7 @@ const traceProcess = async (
       const facts = context.images.get(image);
       const slice =
         facts?.status === "parsed"
-          ? compatibleSlice(facts.slices, context.architecture)
+          ? compatibleSlice(facts.slices, context.processIdentity)
           : undefined;
       if (slice === undefined) continue;
       context.loaded.set(image, {
@@ -534,6 +542,7 @@ const traceProcess = async (
       });
       if (
         slice.install_name !== null &&
+        slice.install_name.startsWith("@rpath/") &&
         !context.byInstallName.has(slice.install_name)
       )
         context.byInstallName.set(slice.install_name, image);
@@ -593,7 +602,11 @@ export const traceDylibLoading = async (
           {
             view,
             root,
-            architecture: slice.architecture,
+            processIdentity: {
+              architecture: slice.architecture,
+              cpu_type: slice.cpu_type,
+              cpu_subtype: slice.cpu_subtype,
+            },
             searchOverrides,
             environmentRoots,
             platforms: slice.platforms,

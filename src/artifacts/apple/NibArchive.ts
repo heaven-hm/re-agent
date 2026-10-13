@@ -1,11 +1,11 @@
 import type { JsonValue } from "../../domain/jsonValue.js";
+import { hasNibArchiveSignature } from "../../domain/apple/appleArchiveFormat.js";
 import { TextDecoder } from "node:util";
 import {
   InterfaceBuilderDecodeBudget,
   InterfaceBuilderDecodeBudgetExceeded,
 } from "./InterfaceBuilderDecodeBudget.js";
 
-const MAGIC = Buffer.from("NIBArchive", "ascii");
 const DEFAULT_DECODE_BUDGET_BYTES = 128 * 1024 * 1024;
 
 interface NibObjectRecord {
@@ -39,7 +39,7 @@ export const decodeNibArchive = (
   bytes: Buffer,
   budget = new InterfaceBuilderDecodeBudget(DEFAULT_DECODE_BUDGET_BYTES),
 ): NibArchiveDocument => {
-  if (bytes.length < 50 || !bytes.subarray(0, MAGIC.length).equals(MAGIC))
+  if (bytes.length < 50 || !hasNibArchiveSignature(bytes))
     throw new TypeError("NIBArchive magic or header is invalid");
 
   const formatVersion = readU32(bytes, 10);

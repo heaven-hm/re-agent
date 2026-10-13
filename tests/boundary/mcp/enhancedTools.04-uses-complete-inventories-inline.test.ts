@@ -94,6 +94,7 @@ describe("enhanced MCP tools", () => {
                   name: "__TEXT",
                   start: "0x1000",
                   end: "0x1800",
+                  image_base: "0x1000",
                   readable: null,
                   writable: null,
                   executable: null,
@@ -102,6 +103,7 @@ describe("enhanced MCP tools", () => {
                   name: "__DATA",
                   start: "0x1800",
                   end: "0x2000",
+                  image_base: "0x1000",
                   readable: null,
                   writable: null,
                   executable: null,
@@ -130,7 +132,7 @@ describe("enhanced MCP tools", () => {
             );
           }
           default:
-            return Promise.resolve(ok(null));
+            throw new Error(`Unexpected analysis operation: ${name}`);
         }
       },
     });
@@ -149,6 +151,7 @@ describe("enhanced MCP tools", () => {
       segment_count: 2,
       procedure_count: 2,
       string_count: 700,
+      image_base: "0x1000",
     });
   });
 
@@ -174,26 +177,29 @@ describe("enhanced MCP tools", () => {
 
   it("rejects a segment with omitted coordinates instead of reporting zero length", async () => {
     const client = await connect({
-      execute: (name) =>
-        Promise.resolve(
-          name === "list_segments"
-            ? ok([
-                {
-                  name: "__TEXT",
-                  end: "0x2000",
-                  readable: null,
-                  writable: null,
-                  executable: null,
-                },
-              ])
-            : ok(name === "current_document" ? "fixture" : []),
-        ),
+      execute: (name) => {
+        if (name === "list_segments")
+          return Promise.resolve(
+            ok([
+              {
+                name: "__TEXT",
+                end: "0x2000",
+                readable: null,
+                writable: null,
+                executable: null,
+              },
+            ]),
+          );
+        if (name === "current_document") return Promise.resolve(ok("fixture"));
+        if (name === "list_procedures" || name === "list_strings")
+          return Promise.resolve(ok([]));
+        throw new Error(`Unexpected analysis operation: ${name}`);
+      },
     });
     const result = await client.callTool({
       name: "binary_overview",
       arguments: {},
     });
-
     expect(result.isError).toBe(true);
     expect(result.content).toContainEqual({
       type: "text",
@@ -225,8 +231,11 @@ const overviewPort = (
             },
           ]),
         );
-      default:
+      case "list_procedures":
+      case "list_strings":
         return Promise.resolve(ok([]));
+      default:
+        throw new Error(`Unexpected analysis operation: ${name}`);
     }
   },
 });

@@ -5,6 +5,7 @@ import {
   mkdir,
   mkdtemp,
   readFile,
+  readdir,
   rm,
   symlink,
   writeFile,
@@ -22,9 +23,17 @@ import {
   createSystemProcessOwnershipHost,
   systemProcessOwnershipHost,
 } from "../../../src/process/ProcessOwnershipObservation.js";
-import { createDarwinProcessRunTokenReader } from "../../../src/process/DarwinProcessRunTokenReader.js";
+import {
+  createDarwinProcessRunTokenReader,
+  DarwinProcessOwnershipInspectionError,
+  SWIFTC_INTERRUPT,
+} from "../../../src/process/DarwinProcessRunTokenReader.js";
 import { execFileOutput } from "../../../src/process/ExecFileOutput.js";
-import { normalizeCaptureFailure } from "../../../src/process/capture/ProcessCaptureError.js";
+import {
+  normalizeCaptureFailure,
+  ProcessCaptureError,
+} from "../../../src/process/capture/ProcessCaptureError.js";
+import { projectAnalysisError } from "../../../src/domain/analysisErrorProjection.js";
 import { PlaywrightElectronActiveProvider } from "../../../src/browser/PlaywrightElectronActiveProvider.js";
 import { electronActiveObservationInputSchema } from "../../../src/domain/javascript/electronActiveObservation.js";
 
@@ -149,7 +158,10 @@ type ElectronCaptureOutcome =
 
 it("reports an actionable missing Swift compiler without installing it", async () => {
   const reader = createDarwinProcessRunTokenReader({
-    xcrun: join(tmpdir(), "rea-no-such-xcrun"),
+    compiler: {
+      kind: "xcrun",
+      executable: join(tmpdir(), "rea-no-such-xcrun"),
+    },
   });
   try {
     await expect(
@@ -168,8 +180,19 @@ it("reports an actionable missing Swift compiler without installing it", async (
   }
 });
 
+const preparationFailure = async (
+  reader: ReturnType<typeof createDarwinProcessRunTokenReader>,
+): Promise<DarwinProcessOwnershipInspectionError> => {
+  const cause = await reader.prepare().then(
+    () => undefined,
+    (failure: unknown) => failure,
+  );
+  expect(cause).toBeInstanceOf(DarwinProcessOwnershipInspectionError);
+  return cause as DarwinProcessOwnershipInspectionError;
+};
+
 it.skipIf(process.platform === "win32")(
-  "preserves compiler diagnostics when Swift preparation fails",
+  "reports the compiler exit code with its diagnostics when preparation fails",
   async () => {
     const directory = await createTestTempDirectory(
       "rea-process-token-compiler-failure-test-",
@@ -177,13 +200,142 @@ it.skipIf(process.platform === "win32")(
     const executable = join(directory, "failing-xcrun");
     await writeFile(
       executable,
-      '#!/usr/bin/env node\nprocess.stderr.write("module cache is not writable\\n"); process.exitCode = 1;\n',
+      '#!/usr/bin/env node\nprocess.stderr.write("module cache is not writable\\n" + "x".repeat(12000)); process.exitCode = 1;\n',
     );
     await chmod(executable, 0o755);
-    const reader = createDarwinProcessRunTokenReader({ xcrun: executable });
+    const reader = createDarwinProcessRunTokenReader({
+      compiler: { kind: "xcrun", executable: executable },
+    });
     try {
-      await expect(reader.prepare()).rejects.toThrow(
-        /compilation failed.*module cache is not writable/su,
+      const failure = await preparationFailure(reader);
+      expect(failure.compilerOutcome).toMatchObject({
+        outcome: "exited",
+        code: 1,
+        signal: null,
+        stderr: expect.stringMatching(/^module cache is not writable\n/u),
+        stderrTruncated: true,
+        killed: false,
+      });
+      expect(failure.message).toContain(
+        "(compiler result: exit code 1): module cache is not writable",
+      );
+      expect(failure.message).toContain("[diagnostics truncated]");
+      const normalized = normalizeCaptureFailure(failure, undefined);
+      if (!(normalized instanceof ProcessCaptureError))
+        throw new Error("Expected a normalized process capture error");
+      expect(projectAnalysisError(normalized)).toMatchObject({
+        code: "process_capture_failed",
+        details: {
+          execution_failure: expect.stringContaining(
+            "compiler result: exit code 1",
+          ),
+          captured_output: {
+            stderr: expect.stringContaining("module cache is not writable"),
+            exit_code: 1,
+            truncated: true,
+          },
+        },
+      });
+    } finally {
+      await reader.close();
+    }
+  },
+);
+
+it.skipIf(process.platform === "win32")(
+  "reports compiler diagnostics captured before the compilation deadline",
+  async () => {
+    const directory = await createTestTempDirectory(
+      "rea-process-token-compiler-timeout-test-",
+    );
+    const executable = join(directory, "hanging-xcrun");
+    await writeFile(
+      executable,
+      '#!/usr/bin/env node\nprocess.stderr.write("error: PCH was compiled with module cache path that differs\\n", () => { setInterval(() => {}, 1000); });\n',
+    );
+    await chmod(executable, 0o755);
+    const reader = createDarwinProcessRunTokenReader({
+      compiler: { kind: "xcrun", executable: executable },
+      // Headroom for the child interpreter's cold start under suite load.
+      compileTimeoutMs: 3_000,
+    });
+    try {
+      await expect(preparationFailure(reader)).resolves.toMatchObject({
+        message:
+          "macOS process ownership helper compilation failed via xcrun (compiler result: timed out after 3000 ms): error: PCH was compiled with module cache path that differs",
+        compilerOutcome: {
+          outcome: "timed_out",
+          code: "ETIMEDOUT",
+          timeoutMs: 3_000,
+        },
+      });
+    } finally {
+      await reader.close();
+    }
+  },
+);
+
+it.skipIf(process.platform === "win32")(
+  "reports the stop signal when the compiler dies without an exit code",
+  async () => {
+    const directory = await createTestTempDirectory(
+      "rea-process-token-compiler-signal-test-",
+    );
+    const executable = join(directory, "segv-xcrun");
+    await writeFile(
+      executable,
+      '#!/usr/bin/env node\nprocess.stderr.write("fatal: segmentation fault during type checking\\n");\nprocess.kill(process.pid, "SIGSEGV");\n',
+    );
+    await chmod(executable, 0o755);
+    const reader = createDarwinProcessRunTokenReader({
+      compiler: { kind: "xcrun", executable: executable },
+    });
+    try {
+      await expect(preparationFailure(reader)).resolves.toMatchObject({
+        message:
+          "macOS process ownership helper compilation failed via xcrun (compiler result: stopped by signal SIGSEGV): fatal: segmentation fault during type checking",
+        compilerOutcome: {
+          outcome: "signaled",
+          code: null,
+          signal: "SIGSEGV",
+        },
+      });
+    } finally {
+      await reader.close();
+    }
+  },
+);
+
+it.skipIf(process.platform === "win32")(
+  "bounds embedded compiler diagnostics and marks the truncation",
+  async () => {
+    const directory = await createTestTempDirectory(
+      "rea-process-token-compiler-verbose-test-",
+    );
+    const executable = join(directory, "verbose-xcrun");
+    const diagnostic = "x".repeat(600);
+    await writeFile(
+      executable,
+      `#!/usr/bin/env node\nprocess.stderr.write(${JSON.stringify(`${diagnostic}\n`)}); process.exitCode = 1;\n`,
+    );
+    await chmod(executable, 0o755);
+    const reader = createDarwinProcessRunTokenReader({
+      compiler: { kind: "xcrun", executable: executable },
+    });
+    try {
+      const failure = await preparationFailure(reader);
+      const outcome = failure.compilerOutcome;
+      if (outcome === undefined) throw new Error("Expected compiler outcome");
+      expect(outcome.stderrBytes).toBe(601);
+      expect(outcome.stderrTruncated).toBe(false);
+      expect(failure.message).toContain(
+        `: ${"x".repeat(512)}… [diagnostics truncated]`,
+      );
+      const excerpt = failure.message.split("): ")[1]?.split("…")[0];
+      expect(excerpt).toBe("x".repeat(512));
+      expect(Buffer.byteLength(excerpt ?? "", "utf8")).toBeLessThanOrEqual(512);
+      expect(Buffer.byteLength(outcome.stderr, "utf8")).toBeLessThanOrEqual(
+        8 * 1024,
       );
     } finally {
       await reader.close();
@@ -235,7 +387,7 @@ it.skipIf(process.platform === "win32")(
     );
     const fakeCompiler = await writeBlockingCompiler(directory);
     const reader = createDarwinProcessRunTokenReader({
-      xcrun: fakeCompiler.executable,
+      compiler: { kind: "xcrun", executable: fakeCompiler.executable },
     });
     const preparation = reader.prepare();
     try {
@@ -249,6 +401,242 @@ it.skipIf(process.platform === "win32")(
   },
 );
 
+const writeCacheRecordingCompiler = async (directory: string) => {
+  const executable = join(directory, "fake-cache-xcrun");
+  const statePath = join(directory, "cache-compile-state.json");
+  const source = `#!/usr/bin/env node
+const fs = process.getBuiltinModule("node:fs");
+const path = process.getBuiltinModule("node:path");
+const flagIndex = process.argv.indexOf("-module-cache-path");
+const cache = flagIndex === -1 ? undefined : process.argv[flagIndex + 1];
+fs.writeFileSync(${JSON.stringify(statePath)}, JSON.stringify({
+  arguments: process.argv.slice(2),
+  moduleCacheEnvironment: process.env.CLANG_MODULE_CACHE_PATH ?? null,
+}));
+if (cache !== undefined) {
+  fs.mkdirSync(cache, { recursive: true });
+  fs.writeFileSync(path.join(cache, "written-into-cache"), "kept");
+}
+const output = process.argv[process.argv.indexOf("-o") + 1];
+fs.writeFileSync(output, "#!/bin/sh\\nexit 0\\n");
+fs.chmodSync(output, 0o755);
+`;
+  await writeFile(executable, source);
+  await chmod(executable, 0o755);
+  return { executable, statePath };
+};
+
+const readCacheCompileState = async (statePath: string) =>
+  JSON.parse(await readFile(statePath, "utf8")) as {
+    arguments: string[];
+    moduleCacheEnvironment: string | null;
+  };
+
+const existsPath = async (target: string) =>
+  access(target).then(
+    () => true,
+    () => false,
+  );
+
+it.skipIf(process.platform === "win32")(
+  "forwards a caller-owned module cache and keeps it after the helper root is removed",
+  async () => {
+    const directory = await createTestTempDirectory(
+      "rea-process-token-caller-cache-test-",
+    );
+    const cachePath = join(directory, "caller", " modules ");
+    const fakeCompiler = await writeCacheRecordingCompiler(directory);
+    const reader = createDarwinProcessRunTokenReader({
+      compiler: { kind: "xcrun", executable: fakeCompiler.executable },
+      moduleCachePath: cachePath,
+    });
+    let executable: string;
+    try {
+      executable = await reader.prepare();
+    } finally {
+      await reader.close();
+    }
+    const state = await readCacheCompileState(fakeCompiler.statePath);
+    const flagIndex = state.arguments.indexOf("-module-cache-path");
+    expect(state.arguments[0]).toBe("swiftc");
+    expect(flagIndex).toBe(1);
+    expect(state.arguments[flagIndex + 1]).toBe(cachePath);
+    expect(state.moduleCacheEnvironment).toBe(cachePath);
+    expect(await existsPath(join(cachePath, "written-into-cache"))).toBe(true);
+    expect(await existsPath(executable)).toBe(false);
+  },
+);
+
+it.skipIf(process.platform === "win32")(
+  "selects the caller module cache through REA_DARWIN_MODULE_CACHE_PATH",
+  async () => {
+    const directory = await createTestTempDirectory(
+      "rea-process-token-host-cache-test-",
+    );
+    const cachePath = join(directory, "from-environment", "modules");
+    const fakeCompiler = await writeCacheRecordingCompiler(directory);
+    const host = createSystemProcessOwnershipHost(
+      "darwin",
+      { ...process.env, REA_DARWIN_MODULE_CACHE_PATH: cachePath },
+      {
+        darwinCompiler: { kind: "xcrun", executable: fakeCompiler.executable },
+      },
+    );
+    try {
+      await host.prepare?.(AbortSignal.timeout(15_000));
+      const state = await readCacheCompileState(fakeCompiler.statePath);
+      const flagIndex = state.arguments.indexOf("-module-cache-path");
+      expect(state.arguments[flagIndex + 1]).toBe(cachePath);
+    } finally {
+      await host.close?.();
+    }
+  },
+);
+
+it.skipIf(process.platform === "win32")(
+  "keeps the shared module cache for the system host without the setting",
+  async () => {
+    const directory = await createTestTempDirectory(
+      "rea-process-token-host-default-test-",
+    );
+    vi.stubEnv("CLANG_MODULE_CACHE_PATH", join(directory, "ambient-cache"));
+    const hostEnvironment = { ...process.env };
+    delete hostEnvironment.REA_DARWIN_MODULE_CACHE_PATH;
+    const fakeCompiler = await writeCacheRecordingCompiler(directory);
+    const host = createSystemProcessOwnershipHost("darwin", hostEnvironment, {
+      darwinCompiler: { kind: "xcrun", executable: fakeCompiler.executable },
+    });
+    try {
+      await host.prepare?.(AbortSignal.timeout(15_000));
+      const state = await readCacheCompileState(fakeCompiler.statePath);
+      expect(state.arguments).not.toContain("-module-cache-path");
+      expect(state.moduleCacheEnvironment).toBeNull();
+    } finally {
+      await host.close?.();
+    }
+  },
+);
+
+it.skipIf(process.platform === "win32")(
+  "bypasses xcrun for an explicitly selected Swift compiler and SDK",
+  async () => {
+    const directory = await createTestTempDirectory(
+      "rea-process-token-direct-compiler-",
+    );
+    const fakeCompiler = await writeCacheRecordingCompiler(directory);
+    const sdkRoot = join(directory, "MacOSX.sdk");
+    const cachePath = join(directory, "modules");
+    const host = createSystemProcessOwnershipHost("darwin", {
+      ...process.env,
+      REA_DARWIN_SWIFTC_PATH: fakeCompiler.executable,
+      SDKROOT: sdkRoot,
+      REA_DARWIN_MODULE_CACHE_PATH: cachePath,
+    });
+    try {
+      await host.prepare?.(AbortSignal.timeout(15_000));
+      const state = await readCacheCompileState(fakeCompiler.statePath);
+      expect(state.arguments.slice(0, 2)).toEqual(["-sdk", sdkRoot]);
+      expect(state.arguments).not.toContain("swiftc");
+      expect(state.arguments).toContain(cachePath);
+    } finally {
+      await host.close?.();
+    }
+  },
+);
+
+it.skipIf(process.platform === "win32")(
+  "reports the missing SDK prerequisite before starting a direct compiler",
+  async () => {
+    const directory = await createTestTempDirectory(
+      "rea-process-token-direct-no-sdk-",
+    );
+    const fakeCompiler = await writeCacheRecordingCompiler(directory);
+    const host = createSystemProcessOwnershipHost("darwin", {
+      ...process.env,
+      REA_DARWIN_SWIFTC_PATH: fakeCompiler.executable,
+      SDKROOT: "",
+    });
+    try {
+      await expect(
+        host.prepare?.(AbortSignal.timeout(15_000)),
+      ).rejects.toMatchObject({
+        name: "DarwinProcessOwnershipInspectionError",
+        message: expect.stringContaining("REA_DARWIN_SWIFTC_PATH and SDKROOT"),
+      });
+      expect(await existsPath(fakeCompiler.statePath)).toBe(false);
+    } finally {
+      await host.close?.();
+    }
+  },
+);
+
+it.skipIf(process.platform === "win32")(
+  "identifies a missing selected Swift compiler rather than xcrun",
+  async () => {
+    const directory = await createTestTempDirectory(
+      "rea-process-token-direct-missing-",
+    );
+    const host = createSystemProcessOwnershipHost("darwin", {
+      ...process.env,
+      REA_DARWIN_SWIFTC_PATH: join(directory, "missing-swiftc"),
+      SDKROOT: join(directory, "MacOSX.sdk"),
+    });
+    try {
+      await expect(
+        host.prepare?.(AbortSignal.timeout(15_000)),
+      ).rejects.toMatchObject({
+        message: expect.stringContaining(
+          "selected Swift compiler (REA_DARWIN_SWIFTC_PATH)",
+        ),
+        compilerOutcome: expect.objectContaining({
+          outcome: "spawn_failed",
+          code: "ENOENT",
+        }),
+      });
+    } finally {
+      await host.close?.();
+    }
+  },
+);
+
+it.skipIf(!onDarwin)(
+  "compiles the helper against the caller cache with the host compiler",
+  async () => {
+    const directory = await createTestTempDirectory(
+      "rea-process-token-real-cache-test-",
+    );
+    const cachePath = join(directory, "caller", "modules");
+    const { stdout: compilerPath } = await execFileAsync("/usr/bin/xcrun", [
+      "--find",
+      "swiftc",
+    ]);
+    const { stdout: sdkRoot } = await execFileAsync("/usr/bin/xcrun", [
+      "--show-sdk-path",
+    ]);
+    const host = createSystemProcessOwnershipHost("darwin", {
+      ...process.env,
+      REA_DARWIN_MODULE_CACHE_PATH: cachePath,
+      REA_DARWIN_SWIFTC_PATH: compilerPath.trim(),
+      SDKROOT: sdkRoot.trim(),
+    });
+    try {
+      await host.prepare?.(AbortSignal.timeout(180_000));
+      const entries = await readdir(cachePath);
+      expect(
+        entries.some(
+          (name) =>
+            name.endsWith(".swiftmodule") ||
+            name.endsWith(".pcm") ||
+            name === "Modules",
+        ),
+      ).toBe(true);
+    } finally {
+      await host.close?.();
+    }
+    expect(await existsPath(join(directory, "caller"))).toBe(true);
+  },
+);
+
 it.skipIf(process.platform === "win32")(
   "rethrows compile cancellation, removes its temporary root, and permits retry",
   async () => {
@@ -257,7 +645,7 @@ it.skipIf(process.platform === "win32")(
     );
     const fakeCompiler = await writeBlockingCompiler(directory);
     const reader = createDarwinProcessRunTokenReader({
-      xcrun: fakeCompiler.executable,
+      compiler: { kind: "xcrun", executable: fakeCompiler.executable },
     });
     const controller = new AbortController();
     const compilation = reader.prepare(controller.signal).then(
@@ -342,7 +730,7 @@ it.skipIf(process.platform === "win32")(
     );
     const compiler = await writeTemporaryObjectCompiler(directory);
     const reader = createDarwinProcessRunTokenReader({
-      xcrun: compiler.executable,
+      compiler: { kind: "xcrun", executable: compiler.executable },
     });
     const controller = new AbortController();
     const preparation = reader.prepare(controller.signal).then(
@@ -391,7 +779,7 @@ it.skipIf(process.platform === "win32").each(["first", "second"] as const)(
     );
     const fakeCompiler = await writeBlockingCompiler(directory);
     const reader = createDarwinProcessRunTokenReader({
-      xcrun: fakeCompiler.executable,
+      compiler: { kind: "xcrun", executable: fakeCompiler.executable },
     });
     const firstController = new AbortController();
     const secondController = new AbortController();
@@ -449,7 +837,7 @@ it.skipIf(process.platform === "win32" || process.getuid?.() === 0)(
     );
     const fakeCompiler = await writeBlockingCompiler(directory);
     const reader = createDarwinProcessRunTokenReader({
-      xcrun: fakeCompiler.executable,
+      compiler: { kind: "xcrun", executable: fakeCompiler.executable },
     });
     const controller = new AbortController();
     const preparation = reader.prepare(controller.signal).then(
@@ -490,7 +878,7 @@ it.skipIf(process.platform === "win32")(
     );
     const fakeCompiler = await writeBlockingCompiler(directory);
     const reader = createDarwinProcessRunTokenReader({
-      xcrun: fakeCompiler.executable,
+      compiler: { kind: "xcrun", executable: fakeCompiler.executable },
     });
     const preparation = reader.prepare().then(
       () => ({ state: "fulfilled" as const }),
@@ -516,14 +904,14 @@ it.skipIf(process.platform === "win32")(
 );
 
 it.skipIf(process.platform === "win32")(
-  "maps cancellation during native preparation before Electron path resolution",
+  "maps cancellation during native preparation before Electron launch",
   async () => {
     const directory = await mkdtemp(
       join(tmpdir(), "rea-electron-token-abort-test-"),
     );
     const fakeCompiler = await writeBlockingCompiler(directory);
     const reader = createDarwinProcessRunTokenReader({
-      xcrun: fakeCompiler.executable,
+      compiler: { kind: "xcrun", executable: fakeCompiler.executable },
     });
     const prepareSpy = vi
       .spyOn(systemProcessOwnershipHost, "prepare")
@@ -539,7 +927,10 @@ it.skipIf(process.platform === "win32")(
         application_path: "/missing/application.js",
       });
       captureOutcome = new PlaywrightElectronActiveProvider({})
-        .capture(input, { signal: controller.signal })
+        .capture(
+          { ...input, application_root: process.cwd() },
+          { signal: controller.signal },
+        )
         .then(
           (value) => ({ state: "result" as const, value }),
           (cause: unknown) => ({ state: "rejected" as const, cause }),
@@ -575,7 +966,7 @@ it.skipIf(process.platform === "win32").each(["baseline", "tokens"] as const)(
     );
     const fakeCompiler = await writeBlockingIdentityCompiler(directory);
     const host = createSystemProcessOwnershipHost("darwin", process.env, {
-      darwinXcrun: fakeCompiler.executable,
+      darwinCompiler: { kind: "xcrun", executable: fakeCompiler.executable },
     });
     const controller = new AbortController();
     let helperRoot: string | undefined;
@@ -634,7 +1025,7 @@ it.skipIf(process.platform === "win32")(
     );
     const fakeCompiler = await writeBlockingIdentityCompiler(directory);
     const reader = createDarwinProcessRunTokenReader({
-      xcrun: fakeCompiler.executable,
+      compiler: { kind: "xcrun", executable: fakeCompiler.executable },
     });
     const prepareSpy = vi
       .spyOn(systemProcessOwnershipHost, "prepare")
@@ -666,7 +1057,10 @@ it.skipIf(process.platform === "win32")(
         application_root: process.cwd(),
       });
       captureOutcome = new PlaywrightElectronActiveProvider({})
-        .capture(input, { signal: controller.signal })
+        .capture(
+          { ...input, application_root: process.cwd() },
+          { signal: controller.signal },
+        )
         .then(
           (value) => ({ state: "result" as const, value }),
           (cause: unknown) => ({ state: "rejected" as const, cause }),
@@ -717,16 +1111,8 @@ it.skipIf(!onDarwin)(
     try {
       await execFileOutput(
         "/usr/bin/xcrun",
-        [
-          "swiftc",
-          "-module-cache-path",
-          join(root, "modules"),
-          core,
-          fixture,
-          "-o",
-          executable,
-        ],
-        { timeout: 60_000 },
+        ["swiftc", core, fixture, "-o", executable],
+        { timeout: 120_000, stopSignal: SWIFTC_INTERRUPT },
       );
       const { stdout } = await execFileAsync(executable, [], {
         encoding: "utf8",
@@ -734,6 +1120,38 @@ it.skipIf(!onDarwin)(
       });
       expect(JSON.parse(stdout)).toEqual({
         argvDecoyIgnored: true,
+        readableEnvironmentWithoutToken: {
+          runId: null,
+          environmentEntryCount: 1,
+        },
+        restrictedReadableEnvironmentWithoutToken: {
+          state: "readable",
+          reason: null,
+        },
+        restrictedEmptyEnvironment: {
+          state: "unavailable",
+          reason: "restricted_process_environment_withheld",
+        },
+        platformEmptyEnvironment: {
+          state: "unavailable",
+          reason: "platform_binary_environment_withheld",
+        },
+        restrictedUnavailableEnvironment: {
+          state: "unavailable",
+          reason: "restricted_process_environment_withheld",
+        },
+        restrictedAmbiguousEnvironment: {
+          state: "unavailable",
+          reason: "restricted_process_environment_withheld",
+        },
+        ordinaryAmbiguousEnvironment: {
+          state: "unavailable",
+          reason: "ambiguous_environment_boundary",
+        },
+        ordinaryUnavailableEnvironment: {
+          state: "unavailable",
+          reason: "environment_unavailable",
+        },
         alternatePaddingRead: true,
         appleVectorTokenFailsClosed: true,
         clearedAppleVectorTokenFailsClosed: true,
@@ -754,6 +1172,7 @@ it.skipIf(!onDarwin)(
       await rm(root, { recursive: true, force: true });
     }
   },
+  150_000,
 );
 
 it.skipIf(!onDarwin)(
@@ -778,16 +1197,8 @@ it.skipIf(!onDarwin)(
     try {
       await execFileOutput(
         "/usr/bin/xcrun",
-        [
-          "swiftc",
-          "-module-cache-path",
-          join(root, "modules"),
-          core,
-          fixture,
-          "-o",
-          executable,
-        ],
-        { timeout: 60_000 },
+        ["swiftc", core, fixture, "-o", executable],
+        { timeout: 120_000, stopSignal: SWIFTC_INTERRUPT },
       );
       const { stdout } = await execFileAsync(executable, [], {
         encoding: "utf8",
@@ -801,6 +1212,7 @@ it.skipIf(!onDarwin)(
       await rm(root, { recursive: true, force: true });
     }
   },
+  150_000,
 );
 
 it.skipIf(!onDarwin)(

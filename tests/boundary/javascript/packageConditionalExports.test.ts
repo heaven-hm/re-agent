@@ -741,6 +741,51 @@ describe("nested and array package export targets", () => {
     },
   );
 });
+describe("package export target URL normalization compared with Node", () => {
+  it.each([
+    [["./.\t./outside.cjs", "./array.cjs"]],
+    [["./.%\n2e/outside.cjs", "./array.cjs"]],
+    [["./.\r./outside.cjs", "./array.cjs"]],
+    ["./arr\tay.cjs"],
+    ["./array.cjs \t"],
+    ["./array.cjs?selected=one#fragment"],
+    ["./.\t./example/array.cjs"],
+  ] as const)(
+    "resolves normalized target %j through both loaders",
+    async (target) => {
+      for (const moduleKind of ["import", "require"] as const) {
+        const { node, outcome } = await compareWithNode(target, moduleKind);
+        expect(node).toBe("array.cjs");
+        expect(outcome).toMatchObject({
+          resolution_status: "resolved",
+          resolved_path: "node_modules/example/array.cjs",
+        });
+      }
+    },
+  );
+
+  it.each([
+    [["./arr%2fay.cjs", "./array.cjs"], "rejected"],
+    [["./miss\ting.cjs", "./array.cjs"], "not-found"],
+  ] as const)(
+    "retains the first selected target failure in %j",
+    async (target, status) => {
+      for (const moduleKind of ["import", "require"] as const) {
+        const { node, node_error, outcome } = await compareWithNode(
+          target,
+          moduleKind,
+        );
+        expect(node).toBeNull();
+        expect(node_error).not.toBeNull();
+        expect(outcome).toMatchObject({
+          resolution_status: status,
+          resolved_path: null,
+        });
+      }
+    },
+  );
+});
+
 describe("unmatched package export conditions", () => {
   it.each([
     [[{ browser: "./default.cjs" }], "browser"],

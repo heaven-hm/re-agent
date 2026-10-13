@@ -1,6 +1,7 @@
-import type {
-  AnalysisClient,
-  AnalysisProvider,
+import {
+  createAnalysisExecution,
+  type AnalysisClient,
+  type AnalysisProvider,
 } from "../../../src/application/AnalysisProvider.js";
 import type { BinarySession } from "../../../src/application/binary/BinarySession.js";
 import { parseBinaryTarget } from "../../../src/application/BinaryTargetResolver.js";
@@ -373,9 +374,7 @@ describe("evidence metadata imports and snapshot cache", () => {
     expect(session.exportAnalysisSnapshot()).toMatchObject({
       ok: false,
       error: {
-        message: expect.stringContaining(
-          "Analysis snapshots are unavailable after analysis metadata mutations",
-        ),
+        _tag: "EvidenceIntegrityError",
       },
     });
     expect((await session.open(target)).ok).toBe(true);
@@ -383,9 +382,7 @@ describe("evidence metadata imports and snapshot cache", () => {
     expect(session.importAnalysisSnapshot(baseline.value)).toMatchObject({
       ok: false,
       error: {
-        userMessage: expect.stringContaining(
-          "Close the active target without saving a snapshot",
-        ),
+        _tag: "EvidenceIntegrityError",
       },
     });
     expect(session.exportEvidenceBundle().records).toContainEqual(relocated);
@@ -405,6 +402,108 @@ describe("evidence metadata imports and snapshot cache", () => {
     );
     expect(session.exportAnalysisSnapshot().ok).toBe(true);
     await session.close();
+  });
+});
+
+describe("snapshot invalidation at mutation dispatch", () => {
+  it.each(["provider failure", "invalid reply identity"] as const)(
+    "does not replay metadata after a write followed by %s",
+    async (failure) => {
+      const [target] = await createBinarySessionTargets();
+      const provider = createCacheProvider([]);
+      let name = "before";
+      provider.createClient = () => ({
+        execute: (operation) => {
+          if (operation === "health") return Promise.resolve(ok(null));
+          if (operation === "address_name") return Promise.resolve(ok(name));
+          if (operation !== "set_address_name")
+            throw new Error(`Unexpected operation: ${operation}`);
+          name = "after";
+          return Promise.resolve(
+            failure === "provider failure"
+              ? err(new ProviderAdapterError("fixture", operation))
+              : resultOk(
+                  createAnalysisExecution(true, {
+                    id: "wrong",
+                    name: "Wrong",
+                    version: "1",
+                  }),
+                ),
+          );
+        },
+        close: () => Promise.resolve(resultOk(null)),
+      });
+      const session = createTestBinarySession(provider);
+      try {
+        const opened = await session.open(target);
+        if (!opened.ok) throw opened.error;
+        const parameters = { address: "0x1000", document: "first" };
+        const before = await session.execute("address_name", parameters);
+        if (!before.ok) throw before.error;
+        expect(before.value.result).toBe("before");
+        const baseline = session.exportAnalysisSnapshot();
+        if (!baseline.ok) throw baseline.error;
+
+        const written = await session.execute("set_address_name", {
+          ...parameters,
+          name: "after",
+        });
+        expect(written).toMatchObject({ ok: false });
+        const after = await session.execute("address_name", parameters);
+        if (!after.ok) throw after.error;
+        expect(after.value.result).toBe("after");
+        expect(session.exportAnalysisSnapshot()).toMatchObject({ ok: false });
+        expect(session.importAnalysisSnapshot(baseline.value)).toMatchObject({
+          ok: false,
+        });
+      } finally {
+        expect(await session.close()).toEqual({ ok: true, value: null });
+      }
+    },
+  );
+
+  it("stops replay while a dispatched write is still awaiting its reply", async () => {
+    const [target] = await createBinarySessionTargets();
+    const provider = createCacheProvider([]);
+    const started = createDeferred<void>();
+    const reply = createDeferred<ReturnType<typeof ok>>();
+    let name = "before";
+    provider.createClient = () => ({
+      execute: (operation) => {
+        if (operation === "health") return Promise.resolve(ok(null));
+        if (operation === "address_name") return Promise.resolve(ok(name));
+        if (operation !== "set_address_name")
+          throw new Error(`Unexpected operation: ${operation}`);
+        name = "after";
+        started.resolve();
+        return reply.promise;
+      },
+      close: () => Promise.resolve(resultOk(null)),
+    });
+    const session = createTestBinarySession(provider);
+    try {
+      const opened = await session.open(target);
+      if (!opened.ok) throw opened.error;
+      const parameters = { address: "0x1000", document: "first" };
+      const before = await session.execute("address_name", parameters);
+      if (!before.ok) throw before.error;
+      const writing = session.execute("set_address_name", {
+        ...parameters,
+        name: "after",
+      });
+      await started.promise;
+      try {
+        const during = await session.execute("address_name", parameters);
+        if (!during.ok) throw during.error;
+        expect(during.value.result).toBe("after");
+        expect(session.exportAnalysisSnapshot()).toMatchObject({ ok: false });
+      } finally {
+        reply.resolve(ok(true));
+        expect(await writing).toMatchObject({ ok: true });
+      }
+    } finally {
+      expect(await session.close()).toEqual({ ok: true, value: null });
+    }
   });
 });
 
@@ -597,10 +696,19 @@ describe("provider health and availability", () => {
     expect(session.status()).toMatchObject({
       capabilities: expect.arrayContaining([
         expect.objectContaining({
-          operation: "address_name",
-          available: false,
-          reason:
-            "ProviderAdapterError: Provider fixture adapter failed during address_name",
+          provider: {
+            id: "fixture",
+            name: "Fixture analysis provider",
+            version: "1",
+          },
+          groups: expect.arrayContaining([
+            expect.objectContaining({
+              operations: expect.arrayContaining(["address_name"]),
+              available: false,
+              reason:
+                "ProviderAdapterError: Provider fixture adapter failed during address_name",
+            }),
+          ]),
         }),
       ]),
     });
@@ -609,9 +717,18 @@ describe("provider health and availability", () => {
     expect(session.status()).toMatchObject({
       capabilities: expect.arrayContaining([
         expect.objectContaining({
-          operation: "address_name",
-          available: true,
-          reason: null,
+          provider: {
+            id: "fixture",
+            name: "Fixture analysis provider",
+            version: "1",
+          },
+          groups: expect.arrayContaining([
+            expect.objectContaining({
+              operations: expect.arrayContaining(["address_name"]),
+              available: true,
+              reason: null,
+            }),
+          ]),
         }),
       ]),
     });
@@ -657,9 +774,18 @@ describe("provider health and availability", () => {
     expect(session.status()).toMatchObject({
       capabilities: expect.arrayContaining([
         expect.objectContaining({
-          operation: "address_name",
-          available: true,
-          reason: null,
+          provider: {
+            id: "fixture",
+            name: "Fixture analysis provider",
+            version: "1",
+          },
+          groups: expect.arrayContaining([
+            expect.objectContaining({
+              operations: expect.arrayContaining(["address_name"]),
+              available: true,
+              reason: null,
+            }),
+          ]),
         }),
       ]),
     });

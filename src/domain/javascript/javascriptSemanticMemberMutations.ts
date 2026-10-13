@@ -6,7 +6,7 @@ import {
   type JavaScriptSemanticAnalysisState,
 } from "./javascriptSemanticState.js";
 import {
-  clearSemanticPrimitiveBindingValues,
+  clearSemanticValueCaches,
   evaluateSemanticBinding,
   evaluateSemanticExpression,
 } from "./javascriptSemanticValues.js";
@@ -256,7 +256,7 @@ export function* collectSemanticMemberMutationsSteps(
           if (effect === "escape")
             binding.escapedPaths.push({ path, node: mutation });
           else binding.mutatedPaths.push(path);
-          clearSemanticPrimitiveBindingValues(state);
+          clearSemanticValueCaches(state);
           for (const initializer of origins.initializers)
             pending.push({
               node: initializer.node,
@@ -548,7 +548,7 @@ export function* collectSemanticMemberMutationsSteps(
   }
   // Gathering effects can evaluate a primitive projection before its object
   // escapes. Final values must use the completed mutation state.
-  clearSemanticPrimitiveBindingValues(state);
+  clearSemanticValueCaches(state);
 }
 
 interface ReferencedValue {
@@ -718,6 +718,9 @@ const referencedValues = (
 type MutationObservableOrigin =
   | t.ObjectExpression
   | t.ArrayExpression
+  | t.ClassDeclaration
+  | t.ClassExpression
+  | t.NewExpression
   | "ambient"
   | "array"
   | "array-prototype"
@@ -808,11 +811,6 @@ const observableMutationPaths = (
     const observer = bindingNodes.get(binding.bindingId);
     if (observer === undefined) continue;
     for (const initializer of binding.initializers) {
-      const expression = unwrapJavaScriptExpression(initializer.node).node;
-      // Preserve member paths through class values and local instances so
-      // getter-result aliases can be resolved at the accessor boundary.
-      if (t.isClass(expression) || t.isNewExpression(expression))
-        (observer.origins ??= new Set()).add("opaque");
       link(
         project(expressionNode(initializer.node), initializer.projection),
         observer,
@@ -837,7 +835,14 @@ const observableMutationPaths = (
         const selected = pendingExpressions.pop();
         if (selected === undefined) break;
         const { expression, observer } = selected;
-        if (t.isObjectExpression(expression) || t.isArrayExpression(expression))
+        // Keep class/getter projections distinct so cycle pruning does not
+        // discard observable escapes through a shared getter result.
+        if (
+          t.isObjectExpression(expression) ||
+          t.isArrayExpression(expression) ||
+          t.isClass(expression) ||
+          t.isNewExpression(expression)
+        )
           (observer.origins ??= new Set()).add(expression);
         else if (t.isIdentifier(expression)) {
           const binding = resolveSemanticBindingState(

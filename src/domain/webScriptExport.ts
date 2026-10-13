@@ -3,21 +3,16 @@ import { z } from "zod";
 import { browserCompletenessSchema } from "./browserCompleteness.js";
 import { browserScenarioCompletenessSchema } from "./browserScenarioCaptureValues.js";
 import { digestSchema, prefixedDigestSchema } from "./digests.js";
+import { localPathStringSchema } from "./localPath.js";
 
 /** Export already captured scripts into one absent, caller-selected directory. */
 export const exportWebScriptsInputSchema = z.strictObject({
-  capture_path: z
-    .string()
-    .min(1)
-    .describe(
-      "Absolute filesystem path to saved inspect_web_page or capture_browser_scenario JSON, normalized result or complete Evidence",
-    ),
-  output_directory: z
-    .string()
-    .min(1)
-    .describe(
-      "Absolute absent filesystem directory for verified scripts and manifest; parent directory must exist",
-    ),
+  capture_path: localPathStringSchema.describe(
+    "Absolute filesystem path to saved inspect_web_page or capture_browser_scenario JSON, normalized result or complete Evidence",
+  ),
+  output_directory: localPathStringSchema.describe(
+    "Absolute absent filesystem directory for verified scripts and manifest; parent directory must exist",
+  ),
 });
 export type ExportWebScriptsInput = z.output<
   typeof exportWebScriptsInputSchema
@@ -57,6 +52,9 @@ export const exportedWebScriptSchema = z.strictObject({
       redacted: z.boolean().nullable(),
       representation: z.enum([
         "debugger-source-utf8",
+        "playwright-response-body-bytes",
+        // Accept already-saved exports from before the response representation
+        // was narrowed to the Playwright API result.
         "browser-decoded-response-bytes",
       ]),
     }),
@@ -121,9 +119,10 @@ export interface CapturedWebScript {
         readonly sha256: string;
         readonly media_type: string | null;
         readonly redacted: boolean | null;
-        readonly representation:
-          | "debugger-source-utf8"
-          | "browser-decoded-response-bytes";
+        readonly representation: Extract<
+          ExportedWebScript["content"],
+          { readonly state: "exported" }
+        >["representation"];
       }
     | Extract<ExportedWebScript["content"], { state: "unavailable" }>;
 }

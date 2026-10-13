@@ -62,7 +62,7 @@ export const ENHANCED_TOOL_CONTRACTS = [
   ),
   enhanced(
     "binary_overview",
-    "Return native-binary metadata, every segment with its length, and exhaustive procedure/string counts. Use search_procedures, list_procedures, or analyze_function directly when you already know which procedure to inspect.",
+    "Return native-binary metadata, every segment with its length, and exhaustive procedure/string counts. When every provider-reported segment agrees on an analysis image base, return it as image_base so callers can relate provider addresses to their loader coordinates. Use search_procedures, list_procedures, or analyze_function directly when you already know which procedure to inspect.",
     enhancedInputSchemas.binary_overview,
   ),
   ...FUNCTION_WORKFLOW_TOOL_CONTRACTS,
@@ -73,7 +73,7 @@ export const ENHANCED_TOOL_CONTRACTS = [
   ),
   enhanced(
     "trace_call_path",
-    "Resolve start and optional goal symbols or addresses to canonical procedure entries, then trace direct callers or callees until the graph is exhausted or the goal is reached. Results use canonical addresses; Evidence preserves supplied selectors. Returns visited nodes, direct-call edges, a shortest traversal path, provider failures, and residual unknowns; unresolved indirect calls remain unknown.",
+    "Resolve start and optional goal symbols or addresses to canonical procedure entries, then trace direct callers or callees until the graph is exhausted or the goal is reached. Results use canonical addresses; Evidence preserves supplied selectors. Returns visited nodes, direct-call edges, a shortest traversal path, provider failures, and residual unknowns. A requested goal is unknown when unresolved expansions prevent proving it absent; unresolved indirect calls remain unknown.",
     enhancedInputSchemas.trace_call_path,
   ),
   enhanced(

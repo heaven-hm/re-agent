@@ -15,7 +15,7 @@ const INSTALL = "/opt/ghidra_12.1.4_PUBLIC";
 const installationHost = (
   overrides: Partial<GhidraInstallationHost> = {},
 ): GhidraInstallationHost => ({
-  readText: () => "application.version=12.1.4\n",
+  readText: () => "application.version=12.1.4\napplication.java.min=21\n",
   executable: () => true,
   probeJava: () => ({
     version: "21.0.11",
@@ -111,7 +111,9 @@ describe("Ghidra doctor integration", () => {
       "wrong version",
       inspection(
         { installDir: INSTALL },
-        { readText: () => "application.version=11.4\n" },
+        {
+          readText: () => "application.version=11.4\napplication.java.min=21\n",
+        },
       ),
       "ghidra-version",
     ],
@@ -133,6 +135,14 @@ describe("Ghidra doctor integration", () => {
             runtime: "jdk",
           }),
         },
+      ),
+      "ghidra-java",
+    ],
+    [
+      "missing Java minimum",
+      inspection(
+        { installDir: INSTALL },
+        { readText: () => "application.version=12.1.4\n" },
       ),
       "ghidra-java",
     ],

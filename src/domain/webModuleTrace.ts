@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { digestSchema } from "./digests.js";
+import { localPathStringSchema } from "./localPath.js";
 import {
   exportedWebScriptSchema,
   webScriptExportManifestSchema,
@@ -8,10 +9,9 @@ import {
 
 /** Inspect one captured script's native ES module relationships. */
 export const webModuleTraceInputSchema = z.strictObject({
-  manifest_path: z
-    .string()
-    .min(1)
-    .describe("Absolute path to an export_web_scripts manifest"),
+  manifest_path: localPathStringSchema.describe(
+    "Absolute path to an export_web_scripts manifest",
+  ),
   script_index: z
     .number()
     .int()
@@ -26,10 +26,9 @@ export const webModuleTraceInputSchema = z.strictObject({
     ),
   import_map: z
     .strictObject({
-      path: z
-        .string()
-        .min(1)
-        .describe("Absolute local import-map JSON path; no fetch"),
+      path: localPathStringSchema.describe(
+        "Absolute local import-map JSON path; no fetch",
+      ),
       base_url: z
         .string()
         .min(1)

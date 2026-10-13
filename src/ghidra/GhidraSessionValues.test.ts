@@ -52,6 +52,40 @@ describe("Ghidra DOS import commitment", () => {
   });
 });
 
+describe("Ghidra MIPS soft-float storage report", () => {
+  const valid = {
+    policy: "o32-soft-float-prototype-v1",
+    functions: 2,
+    definitions: 1,
+  };
+  it("accepts the exact committed policy outcome", () => {
+    const parsed = parseGhidraSessionInfo(
+      { ...session(), mips_soft_float_storage: valid },
+      expected,
+    );
+    if (!parsed.ok) throw parsed.error;
+    expect(parsed.value.mips_soft_float_storage).toEqual(valid);
+  });
+  it.each([
+    [
+      "the superseded storage policy",
+      { policy: "o32-integer-registers-v1", remapped: 2, retyped: 1 },
+    ],
+    ["a negative count", { ...valid, definitions: -1 }],
+    ["a fractional count", { ...valid, functions: 1.5 }],
+    ["a missing count", { policy: valid.policy, functions: 2 }],
+    ["an undeclared field", { ...valid, skipped: 0 }],
+    ["a non-object report", "functions"],
+  ])("rejects %s", (_label, report) => {
+    expect(
+      parseGhidraSessionInfo(
+        { ...session(), mips_soft_float_storage: report },
+        expected,
+      ).ok,
+    ).toBe(false);
+  });
+});
+
 describe("Ghidra mutation handshake", () => {
   it("requires the exact mutation authority and rejects duplicate capabilities", () => {
     const value = session();

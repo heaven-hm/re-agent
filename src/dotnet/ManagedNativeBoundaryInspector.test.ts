@@ -280,7 +280,11 @@ describe("managed native boundary inspection", () => {
 
 describe("independent managed metadata facets", () => {
   it("preserves identity, members, and imports when embedded resources are malformed", () => {
-    const bytes = buildManagedPeFixture({ pinvoke: {}, readyToRun: true });
+    const bytes = buildManagedPeFixture({
+      mvid: Buffer.from("3aebc60edc4a544b1f458b4ed40b33b1", "hex"),
+      pinvoke: {},
+      readyToRun: true,
+    });
     bytes.writeUInt32LE(0x7fff_0000, 0x0200 + 24);
     const target = managedPeFixtureTarget(bytes);
     const artifact = inspectManagedArtifactBytes(bytes, target);
@@ -288,7 +292,7 @@ describe("independent managed metadata facets", () => {
     const native = inspectManagedNativeBoundariesBytes(bytes, target);
 
     for (const result of [artifact, members, native]) {
-      expect(result.module?.mvid).toBeTruthy();
+      expect(result.module?.mvid).toBe("0ec6eb3a-4adc-4b54-1f45-8b4ed40b33b1");
       expect(result.metadata.status).toBe("partial");
       expect(result.coverage).toMatchObject({
         state: "partial",

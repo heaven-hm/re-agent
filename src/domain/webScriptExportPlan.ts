@@ -4,6 +4,7 @@ import type {
   CapturedWebScript,
   ExportedWebScript,
 } from "./webScriptExport.js";
+import { urlDeclaresQueryOrFragment } from "./urlComponents.js";
 
 const hash = (text: string): string =>
   createHash("sha256").update(text).digest("hex");
@@ -94,8 +95,7 @@ const candidatePath = (script: CapturedWebScript): CandidatePath => {
   return {
     path: `origins/${hash(url.origin)}/${parts.join("/")}`,
     reason:
-      url.search !== "" ||
-      url.hash !== "" ||
+      urlDeclaresQueryOrFragment(url) ||
       url.username !== "" ||
       url.password !== ""
         ? "URL query, fragment, or credentials cannot select a canonical local module."

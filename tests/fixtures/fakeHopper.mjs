@@ -10,8 +10,13 @@ const [
 ] = process.argv.slice(2);
 let diagnosticOutputEmitted = false;
 const heldReplies = new Map();
+const sockets = new Set();
 if (process.send !== undefined)
   process.on("message", (message) => {
+    if (message?.disconnect === true) {
+      for (const socket of sockets) socket.destroy();
+      return;
+    }
     const reply = heldReplies.get(message?.release);
     if (reply === undefined) return;
     heldReplies.delete(message.release);
@@ -173,6 +178,8 @@ const sendEchoWithProgress = (send, request) => {
 };
 
 const server = createServer((socket) => {
+  sockets.add(socket);
+  socket.once("close", () => sockets.delete(socket));
   socket.on("error", () => undefined);
   socket.setEncoding("utf8");
   let buffer = "";

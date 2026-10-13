@@ -17,6 +17,7 @@ export default defineConfig({
         text: "Getting started",
         items: [
           { text: "Installation and setup", link: "/installation" },
+          { text: "Client configuration", link: "/client-configuration" },
           { text: "CLI and Evidence", link: "/cli" },
           { text: "Agent prompts", link: "/mcp-prompts" },
           { text: "Roadmap", link: "/roadmap" },
@@ -26,6 +27,7 @@ export default defineConfig({
         text: "Investigation guides",
         items: [
           { text: "Native binaries", link: "/native-investigation" },
+          { text: "Go build metadata", link: "/go-binaries" },
           {
             text: "JavaScript and Electron",
             link: "/javascript-artifact-reconstruction",
@@ -35,16 +37,19 @@ export default defineConfig({
             link: "/javascript-application-workflows",
           },
           { text: "Browser observation", link: "/browser-observation" },
+          {
+            text: "Web network captures",
+            link: "/web-network-captures",
+          },
           { text: "Electron observation", link: "/electron-observation" },
           { text: "Process capture", link: "/process-capture" },
           { text: ".NET assemblies", link: "/managed-code-analysis" },
           { text: "Android applications", link: "/android-analysis" },
           { text: "Apple applications", link: "/apple-application-analysis" },
           { text: "Firmware", link: "/firmware-analysis" },
-          {
-            text: "Reconstruction readiness",
-            link: "/reconstruction-readiness",
-          },
+          { text: "SQLite databases", link: "/sqlite-databases" },
+          { text: "Packet captures", link: "/packet-captures" },
+          { text: "Signal recordings", link: "/signal-recordings" },
         ],
       },
       {
@@ -66,6 +71,11 @@ export default defineConfig({
           { text: "MCP contracts", link: "/mcp-contracts" },
           { text: "Tool design", link: "/tool-design" },
           { text: "Testing", link: "/testing" },
+          { text: "Client verification", link: "/client-verification" },
+          {
+            text: "Reconstruction readiness",
+            link: "/reconstruction-readiness",
+          },
           { text: "Releasing", link: "/releasing" },
         ],
       },

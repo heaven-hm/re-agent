@@ -22,6 +22,7 @@ import {
 } from "../../domain/analysisView/analysisView.js";
 import { jsonValueSchema } from "../../domain/jsonValue.js";
 import { err, ok, type Result } from "../../domain/result.js";
+import { WebNetworkApiSurfaceAccumulator } from "../../domain/analysisView/WebNetworkApiSurfaceAccumulator.js";
 
 /** Authenticate a selected-view request and project already completed Evidence. */
 export const inspectAnalysisView = (
@@ -41,11 +42,19 @@ export const inspectAnalysisView = (
   return inspectAnalysisViewValidated(parsed.data, lookup);
 };
 
-/** Project a view from input already parsed by a trusted adapter. */
+/** Authenticate borrowed inline Evidence after adapter envelope validation. */
 export const inspectAnalysisViewValidated = (
   input: InspectAnalysisViewInput,
   lookup?: EvidenceLookup,
 ): Result<Evidence, AnalysisError> => {
+  const accumulator =
+    input.view.kind === "api-surface"
+      ? new WebNetworkApiSurfaceAccumulator()
+      : undefined;
+  if (input.source.kind === "inline" && accumulator !== undefined) {
+    const admitted = accumulator.admitInlineEvidence(input.source.evidence);
+    if (!admitted.ok) return admitted;
+  }
   const resolved = resolveAnalysisViewSource(input.source, lookup);
   if (!resolved.ok) return resolved;
   const parent = resolved.value;
@@ -54,7 +63,9 @@ export const inspectAnalysisViewValidated = (
       evidenceId: parent.evidence_id,
       operation: parent.operation,
       normalizedResult: parent.normalized_result,
+      subject: parent.subject,
       limitations: parent.limitations,
+      parameters: parent.parameters,
       artifact:
         parent.subject === null
           ? null
@@ -64,6 +75,7 @@ export const inspectAnalysisViewValidated = (
             },
     },
     input.view,
+    accumulator,
   );
   if (!projected.ok) return projected;
   if (
@@ -84,6 +96,38 @@ export interface AnalysisViewRetention {
   readonly recordEvidence: EvidenceWriter["recordEvidence"] | undefined;
 }
 
+/** Fail before analysis when selected delivery cannot keep its complete source. */
+export const requireAnalysisViewRetention = (
+  operation: string,
+  retention: AnalysisViewRetention,
+): Result<
+  {
+    readonly evidenceById: EvidenceLookup;
+    readonly recordEvidence: EvidenceWriter["recordEvidence"];
+  },
+  AnalysisError
+> => {
+  if (
+    retention.recordEvidence === undefined ||
+    retention.evidenceById === undefined
+  )
+    return err(
+      new AnalysisCapabilityUnavailableError(
+        ANALYSIS_VIEW_PROVIDER.id,
+        operation,
+        "summary detail requires a server session that retains Evidence for later views",
+        {
+          userMessage:
+            "This server does not retain Evidence. Select detail complete to receive the complete analysis inline.",
+        },
+      ),
+    );
+  return ok({
+    evidenceById: retention.evidenceById,
+    recordEvidence: retention.recordEvidence,
+  });
+};
+
 /**
  * Retain complete analysis Evidence in the session, then project its summary
  * view from the retained record. Callers page or select the rest through
@@ -93,29 +137,16 @@ export const summarizeRetainedAnalysis = (
   evidence: Evidence,
   retention: AnalysisViewRetention,
 ): Result<Evidence, AnalysisError> => {
-  if (
-    retention.recordEvidence === undefined ||
-    retention.evidenceById === undefined
-  )
-    return err(
-      new AnalysisCapabilityUnavailableError(
-        ANALYSIS_VIEW_PROVIDER.id,
-        evidence.operation,
-        "summary detail requires a server session that retains Evidence for later views",
-        {
-          userMessage:
-            "This server does not retain Evidence. Select detail complete to receive the complete analysis inline.",
-        },
-      ),
-    );
-  const recorded = retention.recordEvidence(evidence);
+  const ready = requireAnalysisViewRetention(evidence.operation, retention);
+  if (!ready.ok) return ready;
+  const recorded = ready.value.recordEvidence(evidence);
   if (!recorded.ok) return recorded;
   return inspectAnalysisViewValidated(
     {
       source: { kind: "retained-evidence", evidence_id: evidence.evidence_id },
       view: { kind: "summary" },
     },
-    retention.evidenceById,
+    ready.value.evidenceById,
   );
 };
 
@@ -176,7 +207,11 @@ const createAnalysisViewEvidence = (
     },
     result: jsonValueSchema.parse(result),
     rawResult: null,
-    confidence: "derived",
+    confidence:
+      // Paging follows the full grouping, so any templated group makes every page inferred.
+      result.kind === "api-surface" && result.templated_groups > 0
+        ? "inferred"
+        : "derived",
     authority: parent.authority,
     limitations: result.limitations,
     locations: [

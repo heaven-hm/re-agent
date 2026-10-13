@@ -10,11 +10,18 @@ import { z } from "zod";
 import { createTestBinarySession } from "../../fixtures/binarySession.js";
 import { createTestTempDirectory } from "../../fixtures/temporaryDirectory.js";
 import { machoImage } from "../../../src/artifacts/apple/MachoImage.fixture.js";
-import { CATALOG_IDENTITY } from "../../../src/catalogIdentity.js";
+import {
+  CATALOG_IDENTITY,
+  createCatalogDigests,
+} from "../../../src/catalogIdentity.js";
 import { CLI_COMMAND_NAMES } from "../../../src/cliCommandNames.js";
 import { PACKAGE_METADATA } from "../../../src/generatedPackageMetadata.js";
 import { PRODUCT_IDENTITY, SDK_IDENTITY } from "../../../src/identity.js";
 import { TOOL_CONTRACTS } from "../../../src/contracts/toolContracts.js";
+import {
+  expandToolAvailability,
+  sessionProvider,
+} from "../../../src/contracts/toolOutputSchemaPrimitives.js";
 import { PROMPT_CONTRACTS } from "../../../src/contracts/promptContracts.js";
 import { createServer } from "../../../src/server/createServer.js";
 import { createServerIdentity } from "../../../src/serverIdentity.js";
@@ -70,20 +77,18 @@ const statusCapability = (
         readonly reason: string;
       } = { available: true },
 ) => ({
-  operation,
-  effects: {
-    mutates_artifact: false,
-    launches_process: false,
-    may_show_ui: false,
-    may_access_network: false,
-    may_write_filesystem: false,
-    changes_permissions: false,
-    requires_root: false,
-  },
-  limitations: [],
-  ...(availability.available
-    ? { available: true as const, reason: null, availability_code: null }
-    : availability),
+  provider: { id: "status-fixture", name: "Status fixture", version: null },
+  shared_limitations: [],
+  groups: [
+    {
+      operations: [operation],
+      effects: [],
+      limitations: [],
+      ...(availability.available
+        ? { available: true as const, reason: null, availability_code: null }
+        : availability),
+    },
+  ],
 });
 
 describe("server and catalog identity", () => {
@@ -111,6 +116,27 @@ describe("server and catalog identity", () => {
       mcp_prompts: PROMPT_CONTRACTS.length,
     });
     expect(CATALOG_IDENTITY.digests.combined_sha256).toMatch(/^[a-f0-9]{64}$/u);
+  });
+
+  it("covers each tool's target-content policy in the catalog digest", () => {
+    expect(createCatalogDigests()).toEqual(CATALOG_IDENTITY.digests);
+    const [first] = TOOL_CONTRACTS;
+    if (first === undefined) throw new Error("expected a tool contract");
+    const toggled = TOOL_CONTRACTS.map((contract) =>
+      contract === first
+        ? { ...contract, returnsTargetContent: !contract.returnsTargetContent }
+        : contract,
+    );
+    const digests = createCatalogDigests(toggled);
+    expect(digests.combined_sha256).not.toBe(
+      CATALOG_IDENTITY.digests.combined_sha256,
+    );
+    expect(digests.tools_sha256).not.toBe(
+      CATALOG_IDENTITY.digests.tools_sha256,
+    );
+    expect(digests.prompts_sha256).toBe(
+      CATALOG_IDENTITY.digests.prompts_sha256,
+    );
   });
 
   it("reports unknown without a live comparison and distinguishes aligned from stale", () => {
@@ -326,15 +352,10 @@ const activeTargetReasons = async (
     name: "binary_session",
     arguments: {},
   });
-  const availability = z
-    .object({
-      result: z.object({
-        tool_availability: z.array(
-          z.object({ name: z.string(), reason: z.string() }).loose(),
-        ),
-      }),
-    })
-    .parse(status.structuredContent).result.tool_availability;
+  const availability = expandToolAvailability(
+    z.object({ result: sessionProvider }).parse(status.structuredContent).result
+      .tool_availability,
+  );
   return Object.fromEntries(
     ["inspect_macho", "inspect_artifact", "inspect_managed_artifact"].map(
       (name) => [name, availability.find((tool) => tool.name === name)?.reason],
@@ -347,6 +368,32 @@ const assertLiveIdentity = async (client: Client): Promise<void> => {
     name: "binary_session",
     arguments: {},
   });
+  const status = z
+    .object({ result: sessionProvider })
+    .parse(identity.structuredContent).result;
+  expect(Object.keys(status.server_identity.catalog).sort()).toEqual([
+    "counts",
+    "digests",
+  ]);
+  const availability = expandToolAvailability(status.tool_availability);
+  expect(availability.map(({ name }) => name).sort()).toEqual(
+    TOOL_CONTRACTS.map(({ name }) => name).sort(),
+  );
+  for (const contract of TOOL_CONTRACTS) {
+    expect(availability).toContainEqual(
+      expect.objectContaining({
+        name: contract.name,
+        surface: contract.kind,
+        effects: contract.effects,
+        annotations: {
+          read_only: contract.annotations.readOnlyHint ?? false,
+          destructive: contract.annotations.destructiveHint ?? false,
+          idempotent: contract.annotations.idempotentHint ?? false,
+          open_world: contract.annotations.openWorldHint ?? true,
+        },
+      }),
+    );
+  }
   expect(identity.structuredContent).toMatchObject({
     result: {
       server_identity: {
@@ -370,7 +417,17 @@ const assertSessionIdentity = async (client: Client): Promise<void> => {
     name: "binary_session",
     arguments: { expected_package_version: "1.2.0" },
   });
-  expect(status.structuredContent).toMatchObject({
+  const parsed = z
+    .object({ result: sessionProvider })
+    .parse(status.structuredContent);
+  expect({
+    result: {
+      ...parsed.result,
+      tool_availability: expandToolAvailability(
+        parsed.result.tool_availability,
+      ),
+    },
+  }).toMatchObject({
     result: {
       server_identity: {
         catalog: {

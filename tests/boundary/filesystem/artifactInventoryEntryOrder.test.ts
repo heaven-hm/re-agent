@@ -129,6 +129,7 @@ describe("entry-order validation and reader controls", () => {
     ["pkg/data.txt", "pkg/data.txt/"],
     ["pkg/data.txt/", "pkg/data.txt"],
     ["pkg/data.txt", "pkg"],
+    ["pkg", "pkg/data.txt"],
     ["../escape.txt"],
   ])("keeps invalid/colliding paths rejected for %j", async (...entries) => {
     const root = await createTestTempDirectory("rea-entry-order-invalid-");
@@ -155,6 +156,27 @@ describe("entry-order validation and reader controls", () => {
       expect(artifactParentPaths(await inventoryArtifact(archive))).toEqual(
         parents,
       );
+    }
+  });
+
+  it("retains case-distinct file prefixes without inventing a directory", async () => {
+    const root = await createTestTempDirectory("rea-entry-order-case-prefix-");
+    const archive = join(root, "case-prefix.zip");
+    for (const entries of [
+      ["Foo", "foo/bar"],
+      ["foo/bar", "Foo"],
+    ]) {
+      await writeOrderedZip(archive, entries);
+      const inventory = await inventoryArtifact(archive);
+      expect(artifactParentPaths(inventory)).toEqual({
+        ".": null,
+        Foo: ".",
+        "foo/bar": ".",
+      });
+      for (const path of entries)
+        expect(artifactOccurrenceAt(inventory, path).hash_status).toBe(
+          "verified",
+        );
     }
   });
 

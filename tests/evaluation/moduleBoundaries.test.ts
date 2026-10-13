@@ -161,21 +161,17 @@ describe("incremental module import boundaries", () => {
     ["src/application/probe.ts", "../browser/CdpCaptureValues.js", true],
     ["src/ghidra/probe.ts", "../generatedPackageMetadata.js", true],
     ["src/hopper/probe.ts", "../contracts/officialToolContracts.js", true],
-  ])("checks %s importing %s", async (file, dependency, allowed) => {
-    const temporary = await createTestTempDirectory("rea-module-boundary-");
-    const fixture = join(temporary, file);
-    await mkdir(dirname(fixture), { recursive: true });
-    await writeFile(
-      fixture,
+  ])("checks %s importing %s", (file, dependency, allowed) => {
+    const violations = inspectModuleBoundaries(
+      file,
       `import { value } from ${JSON.stringify(dependency)}; export { value };\n`,
+      process.cwd(),
     );
-    const result = spawnSync(process.execPath, [verifier, file], {
-      cwd: temporary,
-      encoding: "utf8",
-    });
-    if (result.error !== undefined) throw result.error;
-    expect(result.status).toBe(allowed ? 0 : 1);
-    if (!allowed) expect(result.stderr).toContain("resolves to src/");
+    if (allowed) expect(violations).toEqual([]);
+    else
+      expect(violations).toMatchObject([
+        { file, boundary: expect.any(String) },
+      ]);
   });
 });
 
@@ -282,21 +278,25 @@ describe("module import syntax and source discovery", () => {
 });
 
 describe("test lane import boundaries", () => {
-  it.each([
+  const cases: Array<[string, string, boolean]> = [
     ["src/application/probe.test.ts", "../server/createServer.js", false],
-    ["tests/composition/probe.test.ts", "node:child_process", false],
-    ["tests/composition/probe.test.ts", "node:net", false],
-    ["tests/composition/probe.test.ts", "playwright", false],
-    ["tests/composition/probe.test.ts", "../../src/domain/result.js", true],
-  ])("checks %s importing %s", async (file, dependency, allowed) => {
+    ["tests/composition/process.test.ts", "node:child_process", false],
+    ["tests/composition/net.test.ts", "node:net", false],
+    ["tests/composition/browser.test.ts", "playwright", false],
+    ["tests/composition/domain.test.ts", "../../src/domain/result.js", true],
+  ];
+
+  it("checks the test-lane import matrix in one lint invocation", async () => {
     const temporary = await createTestTempDirectory("rea-test-lane-");
     const config = join(temporary, ".oxlintrc.json");
     await copyFile(resolve(".oxlintrc.json"), config);
-    await mkdir(dirname(join(temporary, file)), { recursive: true });
-    await writeFile(
-      join(temporary, file),
-      `import { value } from ${JSON.stringify(dependency)}; export { value };\n`,
-    );
+    for (const [file, dependency] of cases) {
+      await mkdir(dirname(join(temporary, file)), { recursive: true });
+      await writeFile(
+        join(temporary, file),
+        `import { value } from ${JSON.stringify(dependency)}; export { value };\n`,
+      );
+    }
     const result = spawnSync(
       process.execPath,
       [
@@ -305,13 +305,22 @@ describe("test lane import boundaries", () => {
         config,
         "--format",
         "json",
-        file,
+        ...cases.map(([file]) => file),
       ],
       { cwd: temporary, encoding: "utf8" },
     );
     if (result.error !== undefined) throw result.error;
-    expect(result.status).toBe(allowed ? 0 : 1);
-    if (!allowed) expect(result.stdout).toContain("no-restricted-imports");
+    const report = JSON.parse(result.stdout) as {
+      diagnostics: Array<{ filename: string; code: string }>;
+    };
+    const violations = new Set(
+      report.diagnostics
+        .filter(({ code }) => code === "eslint(no-restricted-imports)")
+        .map(({ filename }) => filename.replaceAll("\\", "/")),
+    );
+    for (const [file, , allowed] of cases)
+      expect(violations.has(file)).toBe(!allowed);
+    expect(result.status).toBe(cases.some(([, , allowed]) => !allowed) ? 1 : 0);
   });
 });
 

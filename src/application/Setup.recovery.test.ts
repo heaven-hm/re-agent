@@ -6,6 +6,7 @@ import { ConfigurationError } from "../domain/configurationErrors.js";
 import { SUPPORTED_NODE_VERSION_PROSE } from "../domain/runtimeVersion.js";
 import { FakeSetupHost, options } from "./Setup.fixture.js";
 import { runSetup } from "./Setup.js";
+import type { SetupProgressEvent } from "./SetupTypes.js";
 
 describe("setup workflow", () => {
   it("rejects Node 25 before applying setup actions", async () => {
@@ -53,18 +54,65 @@ describe("setup workflow", () => {
     expect(result.remediation).toContain("could not be updated");
   });
 
+  it("reports a failed config rollback with its destination and recovery backup", async () => {
+    const host = new FakeSetupHost();
+    host.hopper = "/Applications/Hopper";
+    host.clients = [{ name: "codex", configPath: "/fixture/codex.json" }];
+    host.clientResults.set("codex", {
+      status: "failed",
+      reason: "rollback",
+      backupPath: "/fixture/codex.json.rea.backup",
+      failure: {
+        kind: "restore",
+        path: "/fixture/codex.json",
+        detail: "permission denied",
+      },
+    });
+
+    const result = await runSetup(
+      { ...options(true), clientIds: ["codex"] },
+      host,
+    );
+
+    expect(result.clients.codex).toEqual({
+      status: "failed",
+      reason: "rollback",
+      backupPath: "/fixture/codex.json.rea.backup",
+      failure: {
+        kind: "restore",
+        path: "/fixture/codex.json",
+        detail: "permission denied",
+      },
+    });
+    expect(result.remediation).toContain("permission denied");
+    expect(result.remediation).toContain("/fixture/codex.json.rea.backup");
+  });
+
   it("explains skill installation recovery", async () => {
     const host = new FakeSetupHost();
     host.hopper = "/Applications/Hopper";
     host.skill = "failed";
+    const progress: SetupProgressEvent[] = [];
     const result = await runSetup(
-      { ...options(true), installSkill: true, clientIds: [] },
+      {
+        ...options(true),
+        installSkill: true,
+        clientIds: [],
+        onProgress: (event) => {
+          if (event.actionId === "install_skill") progress.push(event);
+        },
+      },
       host,
     );
     expect(result.status).toBe("needs_human");
-    expect(result.remediation).toBe(
-      "REA analysis skill could not be installed or verified. Check permissions for its planned skill directories, then rerun setup.",
-    );
+    expect(result.code).toBe("skill_install_failed");
+    expect(result.remediation).toContain("REA skill write failed at");
+    expect(result.remediation).toContain("injected skill write failure");
+    expect(result.remediation).toContain("Check permissions and rerun setup.");
+    expect(progress.at(-1)).toMatchObject({
+      state: "failed",
+      detail: expect.stringContaining("injected skill write failure"),
+    });
   });
 
   it("delegates remaining unhealthy checks to doctor remediation", async () => {
@@ -232,6 +280,7 @@ describe("setup scoped readiness", () => {
       clients: ["codex"],
       providers: [],
       skill: true,
+      skillClients: ["codex"],
     });
   });
 

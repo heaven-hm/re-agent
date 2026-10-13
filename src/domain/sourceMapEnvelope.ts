@@ -1,27 +1,25 @@
-/**
- * Structural walk over indexed source-map envelopes. Both the browser
- * source-map fetcher and the artifact source-map reader accept version-3
- * maps with recursively indexed `sections`; this module owns that walk so
- * the two validators cannot drift. Leaf content checks (mappings, sources,
- * names, contents) stay with the callers, which enforce different
- * strictness.
- */
+/** Artifact source declarations do not require generated-position decoding. */
 type SourceMapRecord = Readonly<Record<string, unknown>>;
+
+/**
+ * Return the JSON parsing view of retained source-map text. ECMA-426 permits
+ * HTTP responses to start with `)]}'`; the first line is transport framing.
+ * Keep the original text for artifact identity and Evidence provenance.
+ * https://tc39.es/ecma426/#sec-fetchsourcemap
+ */
+export const sourceMapJsonText = (text: string): string => {
+  const withoutBom = text.replace(/^\uFEFF/u, "");
+  if (!withoutBom.startsWith(")]}'")) return withoutBom;
+  const newline = withoutBom.search(/[\r\n]/u);
+  return newline === -1 ? "" : withoutBom.slice(newline);
+};
 
 const isRecord = (value: unknown): value is SourceMapRecord =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
 /** Whether a parsed value has the version-3 map shape. */
-export const isVersion3Map = (value: unknown): value is SourceMapRecord =>
+const isVersion3Map = (value: unknown): value is SourceMapRecord =>
   isRecord(value) && value.version === 3;
-
-const isValidOffset = (value: unknown): boolean =>
-  typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
-
-export interface FlattenSourceMapOptions {
-  /** Require each section offset to carry safe-integer line/column. */
-  readonly validateOffsets?: boolean;
-}
 
 /**
  * Collect leaf maps from an indexed source-map envelope, or undefined when
@@ -31,7 +29,6 @@ export interface FlattenSourceMapOptions {
  */
 export const flattenSourceMapLeaves = (
   root: unknown,
-  options?: FlattenSourceMapOptions,
 ): readonly SourceMapRecord[] | undefined => {
   if (!isVersion3Map(root)) return undefined;
   const leaves: SourceMapRecord[] = [];
@@ -40,16 +37,9 @@ export const flattenSourceMapLeaves = (
     const map = pending.pop();
     if (!isVersion3Map(map)) return undefined;
     if (Array.isArray(map.sections)) {
-      for (const section of map.sections) {
+      for (let index = map.sections.length - 1; index >= 0; index -= 1) {
+        const section = map.sections[index];
         if (!isRecord(section) || !isRecord(section.map)) return undefined;
-        if (options?.validateOffsets === true) {
-          if (!isRecord(section.offset)) return undefined;
-          if (
-            !isValidOffset(section.offset.line) ||
-            !isValidOffset(section.offset.column)
-          )
-            return undefined;
-        }
         pending.push(section.map);
       }
     } else leaves.push(map);

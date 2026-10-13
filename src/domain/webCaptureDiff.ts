@@ -249,10 +249,37 @@ const networkIdentity = (
 ): string =>
   `net_${digestCanonicalValue({ method: request.method, url: request.url, resource_type: request.resource_type })}`;
 
+const networkResponseFields = [
+  "status",
+  "mime_type",
+  "encoded_data_length",
+] as const;
+type NetworkResponseField = (typeof networkResponseFields)[number];
+
+const sharedNetworkResponseFields = (
+  before: WebPageInspection,
+  after: WebPageInspection,
+): ReadonlyMap<string, ReadonlySet<NetworkResponseField>> => {
+  const shared = new Map<string, Set<NetworkResponseField>>();
+  for (const inspection of [before, after])
+    for (const request of inspection.network.requests) {
+      const identity = networkIdentity(request);
+      const fields = shared.get(identity) ?? new Set(networkResponseFields);
+      for (const field of networkResponseFields)
+        if (request[field] === null) fields.delete(field);
+      shared.set(identity, fields);
+    }
+  return shared;
+};
+
 const networkDimension = (
   before: WebPageInspection,
   after: WebPageInspection,
 ): Dimension => {
+  const responseFields = sharedNetworkResponseFields(before, after);
+  const responseFieldsComplete = [...responseFields.values()].every(
+    (fields) => fields.size === networkResponseFields.length,
+  );
   const selected = bodyShapesSelected(before) && bodyShapesSelected(after);
   const webSocketShapes =
     webSocketShapesSelected(before) && webSocketShapesSelected(after);
@@ -313,14 +340,14 @@ const networkDimension = (
     afterWebSockets,
     webSocketShapes,
   );
-  return compareDimension(
+  const compared = compareDimension(
     new Map([
-      ...networkMap(before, sources),
+      ...networkMap(before, sources, responseFields),
       ...webSocketMetadataMap(beforeWebSockets),
       ...beforeWebSocketPayload,
     ]),
     new Map([
-      ...networkMap(after, sources),
+      ...networkMap(after, sources, responseFields),
       ...webSocketMetadataMap(afterWebSockets),
       ...afterWebSocketPayload,
     ]),
@@ -336,21 +363,31 @@ const networkDimension = (
       webSocketShapesComplete,
     "Network capture or selected HTTP/WebSocket payload-shape coverage is attach-window limited, unavailable, or incomplete.",
   );
+  return compared.status === "unchanged" && !responseFieldsComplete
+    ? {
+        ...compared,
+        status: "unknown",
+        reason:
+          "HTTP response status, MIME type, or byte-count evidence is incomplete.",
+      }
+    : compared;
 };
 
 const networkMap = (
   inspection: WebPageInspection,
   sources: ReadonlyMap<string, BodyShapeSources>,
+  responseFields: ReadonlyMap<string, ReadonlySet<NetworkResponseField>>,
 ): ReadonlyMap<string, string> => {
   const grouped = new Map<string, unknown[]>();
   for (const request of inspection.network.requests) {
     const identity = networkIdentity(request);
     const shapes = sources.get(identity);
     const values = grouped.get(identity) ?? [];
+    const response: Record<string, unknown> = {};
+    for (const field of responseFields.get(identity) ?? [])
+      response[field] = request[field];
     values.push({
-      status: request.status,
-      mime_type: request.mime_type,
-      encoded_data_length: request.encoded_data_length,
+      ...response,
       redirects: (request.redirects ?? []).map(
         ({
           request_timestamp: _requestTimestamp,

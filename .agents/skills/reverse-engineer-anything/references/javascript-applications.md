@@ -9,7 +9,19 @@ provenance; inputs and recovered code are never executed. Recovery requires a
 caller-supplied Wakaru on Linux x64; see [the recovery guide](https://github.com/morluto/rea/blob/main/docs/javascript-recovery.md).
 
 Use `analyze_javascript_application` directly on the operator-supplied ASAR or
-extracted tree. Exact `#alias` specifiers resolve through the importer's
+extracted tree. When the question concerns known source paths and the connected
+schema advertises `source_paths`, select exact inventoried paths such as
+`["package.json", "main.js", "preload.js"]`. Include supporting manifests or
+source maps explicitly; dependencies are not implicitly analyzed. REA retains
+the complete artifact inventory and identity but reads source text and analyzes
+only selected files. The result and summary record `source_selection`; files
+outside scope and their relationships remain unknown, so partial application
+coverage does not mean the selected source failed. Use repeated `--source-path`
+on either static application CLI route. Omit the selection when the question
+requires complete application analysis. `detail: "summary"` reduces delivery
+and does not by itself reduce analysis work.
+
+Exact `#alias` specifiers resolve through the importer's
 enclosing package `imports` map to package-local files; nested `node_modules`
 packages use their own map. Wildcard, recursive, and external-package import
 targets stay unresolved with that limitation. When size is unknown or large and the connected schema advertises

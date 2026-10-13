@@ -1,12 +1,13 @@
 import { mkdir, mkdtemp, rm } from "node:fs/promises";
 import { rmSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { isAbsolute, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { z } from "zod";
 
 import { safeParseJson } from "../domain/safeJson.js";
-import { execFileOutput } from "./ExecFileOutput.js";
+import { boundedUtf8Text } from "./boundedUtf8Text.js";
+import { execFileOutput, execFileOutputFailure } from "./ExecFileOutput.js";
 import type {
   ProcessIdentityObservation,
   ProcessRunTokenObservation,
@@ -72,13 +73,130 @@ const sourceFiles = [
  */
 export const SWIFTC_INTERRUPT = "SIGINT";
 
+/** Deadline for the one-shot helper compilation. */
+// A fresh Swift SDK cache took 88 seconds on the supported Intel macOS VM.
+// Keep compilation bounded independently of short provider version probes.
+const COMPILER_TIMEOUT_MS = 120_000;
+
+/** Bound on compiler diagnostics embedded in the inspection failure text. */
+const STDERR_EXCERPT_LIMIT = 512;
+
 /** The native Darwin process-ownership reader could not be prepared. */
 export class DarwinProcessOwnershipInspectionError extends Error {
-  constructor(message: string, options?: ErrorOptions) {
-    super(message, options);
+  constructor(
+    message: string,
+    options?: ErrorOptions & {
+      readonly compilerOutcome?: DarwinCompilerOutcome;
+    },
+  ) {
+    const { compilerOutcome, ...errorOptions } = options ?? {};
+    super(message, errorOptions);
     this.name = "DarwinProcessOwnershipInspectionError";
+    this.compilerOutcome = compilerOutcome;
   }
+
+  readonly compilerOutcome: DarwinCompilerOutcome | undefined;
 }
+
+/** Explicit, bounded outcome from compiling REA's Darwin ownership helper. */
+export interface DarwinCompilerOutcome {
+  readonly outcome:
+    | "exited"
+    | "signaled"
+    | "timed_out"
+    | "spawn_failed"
+    | "failed";
+  readonly code: string | number | null;
+  readonly signal: string | null;
+  readonly stderr: string;
+  readonly stderrBytes: number;
+  readonly stderrTruncated: boolean;
+  readonly outputTruncated: boolean;
+  readonly killed: boolean;
+  readonly timeoutMs?: number;
+}
+
+const MAX_COMPILER_STDERR_BYTES = 8 * 1024;
+
+const compilerOutcome = (
+  cause: unknown,
+  timeoutMs: number,
+): DarwinCompilerOutcome | undefined => {
+  const failure = execFileOutputFailure(cause);
+  if (failure === undefined) return undefined;
+  const stderr = boundedUtf8Text(failure.stderr, MAX_COMPILER_STDERR_BYTES);
+  const outcome =
+    failure.code === "ETIMEDOUT"
+      ? "timed_out"
+      : typeof failure.code === "number"
+        ? "exited"
+        : failure.signal !== null
+          ? "signaled"
+          : failure.code === "ENOENT"
+            ? "spawn_failed"
+            : "failed";
+  return {
+    outcome,
+    code: failure.code,
+    signal: failure.signal,
+    stderr: stderr.text,
+    stderrBytes: Buffer.byteLength(failure.stderr, "utf8"),
+    stderrTruncated: stderr.truncated,
+    outputTruncated: failure.outputTruncated,
+    killed: failure.killed,
+    ...(outcome === "timed_out" ? { timeoutMs } : {}),
+  };
+};
+
+const compilerOutcomeDescription = (
+  outcome: DarwinCompilerOutcome | undefined,
+  fallbackCode: string | number,
+): string => {
+  if (outcome === undefined) return `compiler result: ${String(fallbackCode)}`;
+  if (outcome.outcome === "exited")
+    return `compiler result: exit code ${String(outcome.code)}`;
+  if (outcome.outcome === "timed_out")
+    return `compiler result: timed out after ${String(outcome.timeoutMs)} ms`;
+  if (outcome.outcome === "signaled")
+    return `compiler result: stopped by signal ${outcome.signal ?? "an unknown signal"}`;
+  return `compiler result: ${String(outcome.code)}`;
+};
+
+const compilerInspectionError = (
+  cause: unknown,
+  timeoutMs: number,
+  compiler: DarwinProcessReaderCompiler,
+): DarwinProcessOwnershipInspectionError => {
+  const outcome = compilerOutcome(cause, timeoutMs);
+  const code = outcome?.code ?? "unknown";
+  const description = compilerOutcomeDescription(outcome, code);
+  const launcher =
+    compiler.kind === "xcrun"
+      ? "xcrun"
+      : "the selected Swift compiler (REA_DARWIN_SWIFTC_PATH)";
+  const prefix =
+    code === "ENOENT"
+      ? `macOS process ownership inspection requires the Apple Swift compiler via ${launcher}`
+      : `macOS process ownership helper compilation failed via ${launcher}`;
+  const stderr = boundedUtf8Text(outcome?.stderr ?? "", STDERR_EXCERPT_LIMIT);
+  const diagnostics = stderr.text.trim();
+  const truncated =
+    stderr.truncated ||
+    outcome?.stderrTruncated === true ||
+    outcome?.outputTruncated === true;
+  const suffix = diagnostics
+    ? `: ${diagnostics}${truncated ? "… [diagnostics truncated]" : ""}`
+    : outcome === undefined
+      ? `: ${cause instanceof Error ? cause.message : String(cause)}`
+      : ": no compiler diagnostics were captured";
+  return new DarwinProcessOwnershipInspectionError(
+    `${prefix} (${description})${suffix}`,
+    {
+      cause,
+      ...(outcome === undefined ? {} : { compilerOutcome: outcome }),
+    },
+  );
+};
 
 interface ProcessReaderCompilation {
   readonly controller: AbortController;
@@ -124,10 +242,35 @@ const waitForCompilation = async (
   });
 };
 
+/** Explicit tool selection; direct Swift compilation also needs its matching SDK. */
+export type DarwinProcessReaderCompiler =
+  | { readonly kind: "xcrun"; readonly executable: string }
+  | {
+      readonly kind: "swiftc";
+      readonly executable: string;
+      readonly sdkRoot: string;
+    };
+
 /** Compile and retain the narrow Darwin sysctl reader for this REA process. */
 export const createDarwinProcessRunTokenReader = (
-  options: { readonly xcrun?: string } = {},
+  options: {
+    readonly compiler?: DarwinProcessReaderCompiler;
+    /** Deadline for helper compilation, independent of provider execution. */
+    readonly compileTimeoutMs?: number;
+    /**
+     * Caller-owned directory holding the compiler's module cache. Unset keeps
+     * Swift's reusable default cache; a supplied directory outlives this
+     * reader because cleanup only removes the per-run helper root.
+     */
+    readonly moduleCachePath?: string;
+  } = {},
 ) => {
+  const compiler = options.compiler ?? {
+    kind: "xcrun",
+    executable: "/usr/bin/xcrun",
+  };
+  const compilerTimeoutMs = options.compileTimeoutMs ?? COMPILER_TIMEOUT_MS;
+  const moduleCachePath = options.moduleCachePath ?? "";
   let root: string | undefined;
   let executable: string | undefined;
   let compilation: ProcessReaderCompilation | undefined;
@@ -150,6 +293,14 @@ export const createDarwinProcessRunTokenReader = (
   const runCompilation = async (signal: AbortSignal): Promise<string> => {
     let operationRoot: string | undefined;
     try {
+      if (
+        compiler.kind === "swiftc" &&
+        (!isAbsolute(compiler.executable) || !isAbsolute(compiler.sdkRoot))
+      ) {
+        throw new DarwinProcessOwnershipInspectionError(
+          "Direct Darwin helper compilation requires absolute REA_DARWIN_SWIFTC_PATH and SDKROOT paths selecting a compatible installed Swift compiler and macOS SDK.",
+        );
+      }
       operationRoot = await mkdtemp(join(tmpdir(), "rea-process-token-"));
       root = operationRoot;
       process.once("exit", cleanupAtExit);
@@ -164,32 +315,30 @@ export const createDarwinProcessRunTokenReader = (
         ...process.env,
         TMPDIR: compilerTemporary,
       };
-      // Use Swift's reusable default cache for REA's internal helper compilation.
-      delete compilerEnvironment.CLANG_MODULE_CACHE_PATH;
+      const compilerArguments =
+        compiler.kind === "xcrun" ? ["swiftc"] : ["-sdk", compiler.sdkRoot];
+      if (compiler.kind === "swiftc")
+        compilerEnvironment.SDKROOT = compiler.sdkRoot;
+      if (moduleCachePath === "") {
+        // Use Swift's reusable default cache for REA's internal helper compilation.
+        delete compilerEnvironment.CLANG_MODULE_CACHE_PATH;
+      } else {
+        await mkdir(moduleCachePath, { recursive: true });
+        compilerArguments.push("-module-cache-path", moduleCachePath);
+        compilerEnvironment.CLANG_MODULE_CACHE_PATH = moduleCachePath;
+      }
+      compilerArguments.push(...sourceFiles, "-o", output);
       try {
-        await execFileOutput(
-          options.xcrun ?? "/usr/bin/xcrun",
-          ["swiftc", ...sourceFiles, "-o", output],
-          {
-            timeout: 60_000,
-            maxBuffer: 1024 * 1024,
-            signal,
-            stopSignal: SWIFTC_INTERRUPT,
-            env: compilerEnvironment,
-          },
-        );
+        await execFileOutput(compiler.executable, compilerArguments, {
+          timeout: compilerTimeoutMs,
+          maxBuffer: 1024 * 1024,
+          signal,
+          stopSignal: SWIFTC_INTERRUPT,
+          env: compilerEnvironment,
+        });
       } catch (cause: unknown) {
         if (isExpectedAbort(cause, signal)) throw cause;
-        const code =
-          cause instanceof Error && "code" in cause
-            ? String(cause.code)
-            : "unknown";
-        throw new DarwinProcessOwnershipInspectionError(
-          code === "ENOENT"
-            ? `macOS process ownership inspection requires the Apple Swift compiler via xcrun (compiler result: ${code})`
-            : `macOS process ownership helper compilation failed via xcrun (compiler result: ${code}): ${cause instanceof Error ? cause.message : String(cause)}`,
-          { cause },
-        );
+        throw compilerInspectionError(cause, compilerTimeoutMs, compiler);
       }
       if (signal.aborted || closed) throw abortReason(signal);
       executable = output;

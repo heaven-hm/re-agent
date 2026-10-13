@@ -88,7 +88,7 @@ existing analysis families directly, for example
 | `list_adb_packages`     | read               | `pm list packages -f` with scope; base APK device paths                                                                                                                   |
 | `resolve_adb_packages`  | read               | Case-insensitive package-name substring search with exact-match flag                                                                                                      |
 | `inspect_adb_package`   | read               | `dumpsys package` projection: versions, install times, installer, flags, permission count                                                                                 |
-| `list_adb_directory`    | read               | `ls -la`: kinds, permissions, owner, group, sizes, symlink targets                                                                                                        |
+| `list_adb_directory`    | read               | NUL-framed immediate children, including hidden entries: kinds, permissions, owner, group, sizes, symlink targets                                                         |
 | `pull_adb_package`      | read               | Complete split APK set from `pm path`, each file digested                                                                                                                 |
 | `pull_adb_file`         | read               | One absolute device path pulled and digested                                                                                                                              |
 | `capture_adb_screen`    | read               | One `screencap -p` frame (exec-out, no device-side file) with dimensions                                                                                                  |
@@ -102,13 +102,22 @@ existing analysis families directly, for example
 
 ## Interpret the result
 
+- **Directory names retain whitespace and newlines.** Symlink targets do too,
+  including trailing newlines. Records containing invalid UTF-8 remain as
+  labelled hex in `unparsed_lines` and make directory coverage partial.
 - **Inferences carry their basis.** Device `kind` reports
   `kind_basis` (serial prefix or USB transport); APK `role` reports
   `role_basis: file_name`; `emulator_observed` is the build's own
   `ro.kernel.qemu` value, `null` when absent.
 - **Device paths are not host paths.** `base_apk_device_path` values live on
   the device filesystem. Only pulls and captures produce host-local paths,
-  each paired with byte size and SHA-256 digest.
+  each paired with byte size and SHA-256 digest. A pulled file's host name is
+  the device path's final POSIX segment. REA preserves the original device
+  path and filename; a missing final segment or `.`/`..` is refused before
+  output creation. Windows hosts follow [Windows filename rules](https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-file),
+  while POSIX hosts retain valid POSIX filenames such as names with spaces or
+  colons. A package pull checks reported names against the destination
+  filesystem before pulling, and refuses names that would share a local path.
 - **Splits are part of the answer.** `pm path` enumerates the base APK and
   every installed split; pulls cover the whole set. System packages whose
   APKs keep other names report the `unknown` role rather than guessing.
@@ -127,8 +136,8 @@ existing analysis families directly, for example
 ## Resource and lifecycle limits
 
 - Caller values reach adb only as positional arguments in fixed vectors;
-  no tool accepts an arbitrary shell command line, and UI interaction
-  (`input`, `am`, `monkey`) is deliberately not exposed.
+  no tool accepts an arbitrary shell command line, `input`, or `monkey`.
+  The app/activity lifecycle tools use `am start -W` and `am force-stop`.
 - Per-invocation budgets: client/devices 10-20 s, shell reads 20-60 s with
   64 KiB-8 MiB capture caps (logcat 4 MiB, screen 32 MiB), transfers and
   bugreports 600 s. Exceeded budgets report `resource_constraint`; stopped
@@ -139,6 +148,11 @@ existing analysis families directly, for example
 - Cancellation during a package pull preserves caller-selected output. The
   error includes partial observations identifying completed artifacts and the
   interrupted local path; remaining APKs were not attempted.
+- Bugreports collect into isolated staging and publish with exclusive creation;
+  filename collisions select the next numeric suffix. If publication fails, the
+  completed archive remains in staging. The error's partial observation gives
+  its recoverable `local_path`, the original `adb_reported_path`, and an unknown
+  digest status. Later operations and shutdown preserve this retained evidence.
 - Failed package acquisition rollback retains its directory identity and retries
   cleanup before later work and during shutdown. Cleanup refuses a replacement
   directory. Terminal shutdown stops admission and drains active operations.

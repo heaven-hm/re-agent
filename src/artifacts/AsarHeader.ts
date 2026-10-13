@@ -1,3 +1,4 @@
+import type { Stats } from "node:fs";
 import type { FileHandle } from "node:fs/promises";
 
 import { ArtifactReaderFailure } from "./ArtifactReader.js";
@@ -7,7 +8,7 @@ export const MAX_ASAR_HEADER_BYTES = 16 * 1024 * 1024;
 
 /** Admit both Chromium pickle extents before an upstream decoder allocates them. */
 export const admitAsarHeader = async (
-  handle: FileHandle,
+  handle: Pick<FileHandle, "read"> & { stat(): Promise<Stats> },
 ): Promise<{
   readonly archiveBytes: number;
   readonly headerBytes: number;

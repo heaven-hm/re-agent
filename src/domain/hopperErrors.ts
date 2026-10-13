@@ -1,4 +1,7 @@
-import { AnalysisError } from "./analysisErrorBase.js";
+import {
+  AnalysisError,
+  type AnalysisErrorOptions,
+} from "./analysisErrorBase.js";
 import type {
   HopperProcessProviderState,
   ProviderFailureStage,
@@ -73,10 +76,10 @@ export type HopperDiagnosticType =
   | "bridge_exception";
 
 /** Hopper's JSON-RPC endpoint returned an expected remote error response. */
-export interface HopperRemoteErrorContext {
-  readonly diagnosticType?: HopperDiagnosticType;
-  readonly operation?: string;
-  readonly requestId?: number;
+export interface HopperRemoteErrorContext extends AnalysisErrorOptions {
+  readonly diagnosticType?: HopperDiagnosticType | undefined;
+  readonly operation?: string | undefined;
+  readonly requestId?: number | undefined;
 }
 
 export class HopperRemoteError extends HopperError {
@@ -90,7 +93,7 @@ export class HopperRemoteError extends HopperError {
     readonly safeMessage: string,
     context: HopperRemoteErrorContext = {},
   ) {
-    super(`Hopper request failed (${String(code)}): ${safeMessage}`);
+    super(`Hopper request failed (${String(code)}): ${safeMessage}`, context);
     this.diagnosticType = context.diagnosticType ?? "remote";
     this.operation = context.operation;
     this.requestId = context.requestId;
@@ -98,35 +101,50 @@ export class HopperRemoteError extends HopperError {
 }
 
 /** The owned Hopper bridge stopped before its client was closed. */
+export interface HopperProcessErrorContext extends AnalysisErrorOptions {
+  readonly diagnostic?: HopperStartupFailureDiagnostic | undefined;
+  readonly operation?: string | undefined;
+  readonly requestId?: number | undefined;
+  readonly providerState?: HopperProcessProviderState | undefined;
+  readonly stage?: ProviderFailureStage | undefined;
+  readonly launcherFailure?: HopperLauncherOutcome | undefined;
+}
+
 export class HopperProcessError extends HopperError {
   readonly _tag = "HopperProcessError";
   readonly failureCode: HopperStartupFailureCode | undefined;
   override readonly userMessage: string | undefined;
   readonly providerState: HopperProcessProviderState;
   readonly stage: ProviderFailureStage;
+  readonly diagnostic: HopperStartupFailureDiagnostic | undefined;
+  readonly operation: string | undefined;
+  readonly requestId: number | undefined;
+  readonly launcherFailure: HopperLauncherOutcome | undefined;
 
   constructor(
     readonly exitCode: number | null,
-    readonly diagnostic?: HopperStartupFailureDiagnostic,
-    readonly operation?: string,
-    readonly requestId?: number,
-    providerState?: HopperProcessProviderState,
-    stage?: ProviderFailureStage,
-    readonly launcherFailure?: HopperLauncherOutcome,
+    context: HopperProcessErrorContext = {},
   ) {
-    super(`Hopper bridge stopped unexpectedly with code ${String(exitCode)}`);
+    super(
+      `Hopper bridge stopped unexpectedly with code ${String(exitCode)}`,
+      context,
+    );
+    this.diagnostic = context.diagnostic;
+    this.operation = context.operation;
+    this.requestId = context.requestId;
+    this.launcherFailure = context.launcherFailure;
     const failure = hopperStartupFailure(exitCode);
     this.stage =
-      stage ??
+      context.stage ??
       (failure === undefined
-        ? operation === undefined
+        ? context.operation === undefined
           ? "connection"
           : "analysis"
         : "launch");
     this.failureCode = failure?.code;
     this.userMessage = failure?.message;
     this.providerState =
-      providerState ?? (exitCode === null ? "unknown" : "exited");
+      context.providerState ?? (exitCode === null ? "unknown" : "exited");
   }
 }
 

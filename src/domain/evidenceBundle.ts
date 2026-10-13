@@ -16,24 +16,27 @@ import {
 } from "./residualUnknown.js";
 import { freezeJsonSnapshot } from "./immutableJson.js";
 
-const artifactManifestSchema = evidenceSchema.shape.subject.unwrap().pick({
-  digest: true,
-  format: true,
-  architecture: true,
-});
+const artifactManifestSchema = evidenceSchema.shape.subject
+  .unwrap()
+  .pick({
+    digest: true,
+    format: true,
+    architecture: true,
+  })
+  .strict();
 const providerManifestSchema = providerSchema;
 const environmentManifestSchema = evidenceSchema.shape.environment.unwrap();
-const scenarioManifestSchema = z.object({
+const scenarioManifestSchema = z.strictObject({
   evidence_id: evidenceSchema.shape.evidence_id,
   operation: z.string().min(1),
   authority: z.literal("controlled-replay"),
 });
-const captureManifestSchema = z.object({
+const captureManifestSchema = z.strictObject({
   evidence_id: evidenceSchema.shape.evidence_id,
   predicate_type: z.string().min(1),
 });
 
-export const evidenceBundleSchema = z.object({
+export const evidenceBundleSchema = z.strictObject({
   artifacts: z.array(artifactManifestSchema),
   providers: z.array(providerManifestSchema),
   environments: z.array(environmentManifestSchema),
@@ -208,16 +211,29 @@ const referencedEvidenceIds = (unknown: ResidualUnknown): readonly string[] => [
  * Name the bundle constraint that failed and how to recover. A single
  * Evidence record, such as one command result, is not a bundle.
  */
+export type EvidenceBundleFailureDescription =
+  | { readonly kind: "single-record"; readonly message: string }
+  | { readonly kind: "invalid-bundle"; readonly message: string };
+
 export const describeEvidenceBundleFailure = (
   input: unknown,
   cause: unknown,
-): string => {
-  const record = evidenceSchema.safeParse(input);
-  if (record.success)
-    return `Expected an Evidence bundle with records and manifest arrays, but this JSON is one Evidence record (${record.data.evidence_id}). Export a session bundle with the MCP export_evidence_bundle tool and supply that file.`;
-  return cause instanceof z.ZodError
-    ? `Evidence bundle does not match the bundle schema ${describeValidationFailure(cause)}. Supply an unmodified bundle written by export_evidence_bundle or rea evidence-export.`
-    : `Evidence bundle validation failed: ${describeValidationFailure(cause)}. Recreate or re-export the bundle, then try again.`;
+): EvidenceBundleFailureDescription => {
+  try {
+    const record = parseEvidence(input);
+    return {
+      kind: "single-record",
+      message: `Expected an Evidence bundle with records and manifest arrays, but this JSON is one Evidence record (${record.evidence_id}). Export a session bundle with the MCP export_evidence_bundle tool and supply that file.`,
+    };
+  } catch {
+    return {
+      kind: "invalid-bundle",
+      message:
+        cause instanceof z.ZodError
+          ? `Evidence bundle does not match the bundle schema ${describeValidationFailure(cause)}. Supply an unmodified bundle written by export_evidence_bundle or rea evidence-export.`
+          : `Evidence bundle validation failed: ${describeValidationFailure(cause)}. Recreate or re-export the bundle, then try again.`,
+    };
+  }
 };
 
 /** Locate the first schema issue, or keep a thrown constraint message. */

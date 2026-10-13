@@ -11,6 +11,7 @@ import { homeDirectoryFromEnvironment } from "../config/homeDirectory.js";
 import { isUpdateFailure } from "../application/UpdateFailure.js";
 import {
   confirmInteractiveSetup,
+  renderSetupDryRun,
   renderInteractiveSetupResult,
   renderSetupProgress,
 } from "./interactiveSetup.js";
@@ -120,11 +121,12 @@ const registerDoctorCommand = (
     }),
     run: ({ options }) =>
       logCliCommand(logger, "doctor", async () => {
-        const [{ runDoctor }, { createSystemDoctorHost }] = await Promise.all([
-          import("../application/Doctor.js"),
-          import("../doctorRuntime.js"),
-        ]);
-        return runDoctor(
+        const [{ runDoctorOwned }, { createSystemDoctorHost }] =
+          await Promise.all([
+            import("../application/Doctor.js"),
+            import("../doctorRuntime.js"),
+          ]);
+        return runDoctorOwned(
           options.target,
           createSystemDoctorHost(environment),
           doctorScope(options),
@@ -224,6 +226,8 @@ const runSetupCommand = async (
       : undefined,
   );
   if (interactive) renderInteractiveSetupResult(result, environment);
+  else if (options.dryRun && !input.formatExplicit && hasInteractiveTerminal())
+    renderSetupDryRun(result.plannedActions);
   return result;
 };
 
@@ -263,6 +267,9 @@ const setupRunOptions = (
       ? {
           readinessScope: {
             clients: options.client,
+            ...(options.skillClient.length > 0
+              ? { skillClients: options.skillClient }
+              : {}),
             providers: options.installHopper ? ["hopper"] : [],
             skill: options.skill ?? agentIntegrationSelected,
           },
@@ -278,6 +285,9 @@ const setupIsInteractive = (
   !options.yes &&
   !options.dryRun &&
   !formatExplicit &&
+  hasInteractiveTerminal();
+
+const hasInteractiveTerminal = (): boolean =>
   process.stdin.isTTY === true &&
   process.stdout.isTTY === true &&
   process.stderr.isTTY === true;

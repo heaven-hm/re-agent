@@ -9,7 +9,6 @@
 **Melihat fitur yang Anda sukai. Pahami cara kerjanya hingga ke tingkat biner.**
 
 [![npm version](https://img.shields.io/npm/v/rea-agents?style=flat-square&color=cb3837)](https://www.npmjs.com/package/rea-agents)
-[![CI](https://img.shields.io/github/actions/workflow/status/morluto/rea/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/morluto/rea/actions/workflows/ci.yml)
 [![MCP tool catalog](https://img.shields.io/badge/MCP-tool_catalog-5c4ee5?style=flat-square)](docs/mcp-contracts.md#generated-catalog)
 [![Node.js requirements](https://img.shields.io/badge/Node.js-requirements-339933?style=flat-square&logo=nodedotjs&logoColor=white)](#current-status)
 [![skills.sh](https://skills.sh/b/morluto/rea?style=flat-square)](https://skills.sh/morluto/rea/reverse-engineer-anything)
@@ -147,12 +146,16 @@ Alat tambahan dan dukungan sistem host bergantung pada target yang dianalisis:
 | JavaScript / Electron      | Modul, impor, source map, rute, IPC, dan hubungan add-on native                                       | Node.js dan npm; [analisis aplikasi](https://rea.tools/id/guides/javascript/)                                                      |
 | Situs web                  | Struktur halaman, skrip, pengamatan jaringan, dan tangkapan layar yang diminta                        | Peramban berbasis Chrome; [analisis peramban](https://rea.tools/id/guides/browser/)                                                |
 | Rekaman jaringan tersimpan | Permintaan, respons, payload yang terekspos, dan lokasi sumber                                        | HAR; mitmdump di Linux untuk rekaman native mitmproxy; [panduan rekaman](docs/web-network-captures.md)                             |
+| Capturan paket             | Endpoint, DNS, TLS SNI, distribusi protokol, dan permintaan HTTP                                      | tshark dan capinfos buatan pemanggil; [panduan pcap](docs/pcap-analysis.md)                                                        |
 | Assembly .NET              | Metadata, instruksi CIL, dependensi native yang dideklarasikan, dan perbandingan build                | Tidak ada (hanya analisis statis); [panduan kode terkelola](docs/managed-code-analysis.md)                                         |
 | APK Android                | Deklarasi manifest, kelas, metode hasil dekompilasi, dan referensi                                    | JADX mode headless dan JDK lengkap di Linux/macOS/Windows x64; [panduan Android](docs/android-analysis.md)                         |
 | Perangkat Android          | Perangkat, paket, proses, log, dump, tangkapan layar, serta transfer APK/berkas                       | adb buatan pemanggil (emulator atau perangkat); [panduan ADB](docs/adb-device-analysis.md)                                         |
 | Proyek JEB                 | Unit proyek bertenaga mesin, hash artefak, dan pseudokode tipe/metode                                 | Klien JEB yang dijalankan pemanggil dan menyajikan MCP, dipilih dengan REA_JEB_MCP_URL; [panduan JEB](docs/jeb-analysis.md)        |
 | Resource Android           | Manifest terdekode, tabel string, lokal, dan fakta versi                                              | Peluncur Apktool buatan pemanggil; [panduan resource](docs/apktool-resource-analysis.md)                                           |
+| Aplikasi Flutter           | Hash snapshot Dart, hash pustaka per ABI, dan asal build engine                                       | Tidak ada (parsing APK statis); [panduan Flutter](docs/flutter-analysis.md)                                                        |
 | Firmware                   | Wilayah, hasil ekstraksi, dan pengalihan ke analisis native                                           | Binwalk / Unblob di Linux; [panduan firmware](docs/firmware-analysis.md)                                                           |
+| Paket rekaman              | Kolom terpilih, nilai berulang, filter, dan aturan decode-as                                          | Linux: TShark 4.x + prlimit; [panduan tangkapan](docs/packet-captures.md)                                                          |
+| Sinyal logika terekam      | Anotasi dekoder, rentang sampel, dan diagnostik                                                       | Linux: sigrok-cli 0.7.2 + prlimit; [panduan sinyal](docs/signal-recordings.md)                                                     |
 | Paket dan sumber daya      | Inventaris berkas, digest, plist, struktur paket Apple, dan sumber daya yang diekstrak                | [Panduan artefak dan JavaScript](docs/javascript-artifact-reconstruction.md), [aplikasi Apple](docs/apple-application-analysis.md) |
 | Perilaku proses            | Keluaran terminal, interaksi, pengamatan proses keluar dan sistem berkas, serta perbandingan eksekusi | Linux/macOS dengan PTY native; [perekaman proses](docs/process-capture.md)                                                         |
 
@@ -284,7 +287,7 @@ Laporkan kerentanan melalui [SECURITY.md](SECURITY.md).
 
 ## Riwayat Bintang
 
-🎉 **90.000 bintang GitHub, terima kasih!**
+🎉 **170.000 bintang GitHub, terima kasih!**
 
 Terima kasih kepada semua orang yang menggunakan REA, melaporkan bug, meminta fitur, menguji build, dan berkontribusi dalam perbaikan.
 
@@ -298,9 +301,13 @@ Terima kasih kepada semua orang yang menggunakan REA, melaporkan bug, meminta fi
 
 ## Penafian
 
-REA menyediakan alat untuk penelitian, analisis, dan rekonstruksi rekayasa balik yang sah. Anda bertanggung jawab untuk memperoleh otorisasi yang diperlukan dan mematuhi hukum yang berlaku. Proyek ini tidak mendukung penggunaan ilegal atau tanpa izin.
+Lihat [DISCLAIMER.md](DISCLAIMER.md) untuk panduan penggunaan yang bertanggung jawab.
 
-REA adalah proyek perangkat lunak sumber terbuka. Kami tidak menerbitkan atau mendukung mata uang kripto maupun token apa pun. Token yang menggunakan nama REA tidak berafiliasi dengan proyek ini.
+REA ditujukan untuk penelitian, pendidikan, interoperabilitas, pelestarian perangkat lunak, dan analisis perangkat lunak yang Anda miliki atau diizinkan untuk Anda periksa, sesuai hukum.
+
+The project's position on illegal or unauthorized use covers all REA
+versions, distribution channels, and platforms; each copy retains its
+applicable licenses.
 
 ## Kontribusi
 
@@ -311,3 +318,15 @@ Lihat [CONTRIBUTING.md](CONTRIBUTING.md) untuk penyiapan pengembangan dan pemeri
 ## Lisensi
 
 [MIT](LICENSE)
+
+REA-authored code is licensed under MIT. Third-party material retains its own
+licenses and copyright notices; see [Third-party notices](THIRD_PARTY_NOTICES.md)
+for the dependency inventory, preserved license texts, and external-tool terms.
+
+**You must legally obtain and be authorized to use commercial tools**, including
+IDA Pro / Hex-Rays decompilers, Hopper, and JEB, under their applicable licenses.
+REA grants no tool license, key, or activation entitlement. Trials and demos
+remain subject to vendor terms, including user, feature, automation, and output
+sharing restrictions. Cracked copies, stolen keys, unauthorized key sharing,
+and bypassing license restrictions are not authorized. This guidance does not
+amend MIT or third-party licenses.

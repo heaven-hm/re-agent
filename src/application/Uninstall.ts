@@ -1,4 +1,5 @@
 import {
+  ClientConfigurationShapeError,
   parseClientConfiguration,
   serializeClientConfiguration,
   clientServerPath,
@@ -6,7 +7,7 @@ import {
   withClientServers,
   type ClientConfigurationDocument,
 } from "./ClientConfigurationDocument.js";
-import { copyFile, lstat, realpath, rm } from "node:fs/promises";
+import { copyFile, lstat, realpath, rm, rmdir } from "node:fs/promises";
 import { constants as fsConstants } from "node:fs";
 import { homeDirectoryFromEnvironment } from "../config/homeDirectory.js";
 import { join } from "node:path";
@@ -22,8 +23,14 @@ import {
   skillDestinations,
 } from "./SetupSkill.js";
 import { isOwnedClientRegistrationCommand } from "./ClientRegistrationIdentity.js";
+import { dshDocument } from "./DshCordisPatch.js";
 import { resolveClientConfigTransactionPath } from "./ClientConfigPath.js";
-import { readRegularFileText } from "./RegularFileRead.js";
+import {
+  InvalidUtf8FileError,
+  RegularFileCleanupFailure,
+  readRegularFileText,
+} from "./RegularFileRead.js";
+import { ArtifactResourceScope } from "../artifacts/ArtifactResourceScope.js";
 import {
   manualRegistrationRemediation,
   supportedClients,
@@ -48,11 +55,15 @@ export interface UninstallFileSystem {
   stat(path: string): Promise<ManagedPathStats>;
   realpath?(path: string): Promise<string>;
   remove(path: string, recursive?: boolean): Promise<void>;
+  /** Remove a directory only if it is empty; a non-empty one is kept. */
+  removeEmptyDirectory?(path: string): Promise<void>;
 }
 
-const systemFileSystem: UninstallFileSystem = {
-  readText: (path) => readRegularFileText(path),
-  readRegularText: readSkillFile,
+const systemFileSystem = (
+  resources: ArtifactResourceScope,
+): UninstallFileSystem => ({
+  readText: (path) => readRegularFileText(path, { resources }),
+  readRegularText: (path) => readSkillFile(path, resources),
   copy: (source, destination) =>
     copyFile(source, destination, fsConstants.COPYFILE_EXCL),
   writeText: (path, contents) =>
@@ -60,7 +71,8 @@ const systemFileSystem: UninstallFileSystem = {
   stat: (path) => lstat(path),
   realpath: (path) => realpath(path),
   remove: (path, recursive = true) => rm(path, { recursive }),
-};
+  removeEmptyDirectory: (path) => rmdir(path),
+});
 
 /** One explicitly classified uninstall action. */
 export interface UninstallItem {
@@ -83,6 +95,7 @@ export interface UninstallHost {
   removeClient(client: SetupClient): Promise<UninstallItem>;
   removeSkill(): Promise<UninstallItem>;
   purgeData(): Promise<readonly UninstallItem[]>;
+  close?(): Promise<string | undefined>;
 }
 
 /**
@@ -95,35 +108,66 @@ export const runUninstall = async (
   purgeData: boolean,
   host: UninstallHost = systemUninstallHost(),
 ): Promise<UninstallResult> => {
-  const clients = await host.clients();
-  const blocked: UninstallItem[] = [];
-  for (const client of clients) {
-    const blocking = await host.inspectClient(client);
-    if (blocking !== undefined) blocked.push(blocking);
+  let result: UninstallResult | undefined;
+  let primaryFailure: unknown;
+  let failed = false;
+  try {
+    const clients = await host.clients();
+    const blocked: UninstallItem[] = [];
+    for (const client of clients) {
+      const blocking = await host.inspectClient(client);
+      if (blocking !== undefined) blocked.push(blocking);
+    }
+    const items: UninstallItem[] =
+      blocked.length > 0
+        ? [
+            ...blocked,
+            item(
+              "uninstall",
+              "skipped",
+              "No REA registration, skill, or data was removed. Repair each failed configuration, then rerun uninstall.",
+            ),
+          ]
+        : await removeAll(clients, purgeData, host);
+    items.push({
+      name: "analysis_engine",
+      status: "retained",
+      detail: "Hopper is not owned by REA uninstall.",
+    });
+    const reported = collapseUninstallItems(items);
+    result = {
+      status: reported.some(({ status }) => status === "failed")
+        ? "failed"
+        : "complete",
+      items: reported,
+    };
+  } catch (cause: unknown) {
+    failed = true;
+    primaryFailure = cause;
   }
-  const items: UninstallItem[] =
-    blocked.length > 0
-      ? [
-          ...blocked,
-          item(
-            "uninstall",
-            "skipped",
-            "No REA registration, skill, or data was removed. Repair each failed configuration, then rerun uninstall.",
-          ),
-        ]
-      : await removeAll(clients, purgeData, host);
-  items.push({
-    name: "analysis_engine",
-    status: "retained",
-    detail: "Hopper is not owned by REA uninstall.",
-  });
-  const reported = collapseUninstallItems(items);
-  return {
-    status: reported.some(({ status }) => status === "failed")
-      ? "failed"
-      : "complete",
-    items: reported,
-  };
+  let cleanupFailure: string | undefined;
+  try {
+    cleanupFailure = await host.close?.();
+  } catch (cause: unknown) {
+    cleanupFailure = `Uninstall resource cleanup failed: ${cause instanceof Error ? cause.message : String(cause)}`;
+  }
+  if (failed) {
+    if (cleanupFailure !== undefined)
+      throw new AggregateError(
+        [primaryFailure, new Error(cleanupFailure)],
+        "Uninstall failed and its resource cleanup remains incomplete.",
+        { cause: primaryFailure },
+      );
+    throw primaryFailure;
+  }
+  if (result === undefined)
+    throw new Error("Uninstall result was not produced.");
+  if (cleanupFailure === undefined) return result;
+  const items = collapseUninstallItems([
+    ...result.items,
+    item("uninstall_cleanup", "failed", cleanupFailure),
+  ]);
+  return { status: "failed", items };
 };
 
 /**
@@ -157,12 +201,14 @@ const removeAll = async (
 /** Create uninstall effects contained to detected client configs and REA-owned paths. */
 export const systemUninstallHost = (
   selectedHome: string | undefined = undefined,
-  fileSystem: UninstallFileSystem = systemFileSystem,
+  selectedFileSystem: UninstallFileSystem | undefined = undefined,
   environment: Readonly<NodeJS.ProcessEnv> = process.env,
   platform: NodeJS.Platform = process.platform,
 ): UninstallHost => {
   const home =
     selectedHome ?? homeDirectoryFromEnvironment(environment, platform);
+  const resources = new ArtifactResourceScope();
+  const fileSystem = selectedFileSystem ?? systemFileSystem(resources);
   return {
     clients: () =>
       Promise.resolve(
@@ -185,6 +231,14 @@ export const systemUninstallHost = (
     removeSkill: () =>
       removeManagedSkills(home, fileSystem, environment, platform),
     purgeData: () => purgeManagedData(join(home, ".rea"), fileSystem),
+    close: async () => {
+      try {
+        await resources.close();
+        return undefined;
+      } catch (cause: unknown) {
+        return `Uninstall resource cleanup failed: ${cause instanceof Error ? cause.message : String(cause)}`;
+      }
+    },
   };
 };
 
@@ -219,13 +273,17 @@ const readClientConfiguration = async (
   try {
     original = await fileSystem.readText(transactionPath);
   } catch (cause: unknown) {
+    const readFailure =
+      cause instanceof RegularFileCleanupFailure ? cause.cause : cause;
     return itemRead(
       isMissing(cause)
         ? item(client.name, "skipped", "Configuration does not exist.")
         : item(
             client.name,
             "failed",
-            "Configuration could not be read. Check file permissions, then rerun uninstall.",
+            readFailure instanceof InvalidUtf8FileError
+              ? "Configuration is not valid UTF-8 and was not changed. Repair it, then rerun uninstall."
+              : "Configuration could not be read. Check file permissions, then rerun uninstall.",
           ),
     );
   }
@@ -233,12 +291,13 @@ const readClientConfiguration = async (
     const parsed = parseClientConfiguration(original, client.format);
     return { kind: "configuration", transactionPath, original, parsed };
   } catch (cause: unknown) {
-    void cause;
     return itemRead(
       item(
         client.name,
         "failed",
-        `Configuration is not valid ${client.format === "toml" || client.format === "grok" ? "TOML" : client.format === "opencode" ? "JSONC" : "JSON"} and was not changed. Repair it, then rerun uninstall.`,
+        cause instanceof ClientConfigurationShapeError
+          ? `Configuration was not changed: ${cause.message}. Repair it, then rerun uninstall.`
+          : `Configuration is not valid ${client.format === "toml" || client.format === "grok" ? "TOML" : client.format === "opencode" ? "JSONC" : client.format === "hermes" || client.format === "dsh" ? "YAML" : "JSON"} and was not changed. Repair it, then rerun uninstall.`,
       ),
     );
   }
@@ -260,10 +319,24 @@ const removeClient = async (
   // Beside a native OpenCode V2 table, OpenCode also loads a V1 `mcp.rea`.
   const legacyPath = legacyClientServerPath(parsed, name);
   const hasNative = Object.hasOwn(parsed.servers, name);
-  if (!hasNative && legacyPath === undefined)
+  // Harness ownership is the stable entry id. A stale or malformed launcher
+  // still belongs to that id, and so does a direct patch that projects no row.
+  const carriesDshEntry =
+    parsed.dialect === "dsh" && dshDocument(parsed.document).carriesEntry;
+  if (
+    parsed.dialect === "dsh" &&
+    dshDocument(parsed.document).hasUnknownStructure
+  )
+    return item(
+      client.name,
+      "retained",
+      "A Cordis expression may produce registration rows, so the patch was retained without changes.",
+    );
+  if (!hasNative && legacyPath === undefined && !carriesDshEntry)
     return item(client.name, "skipped", "REA registration is absent.");
   const removeNative =
-    hasNative && isOwnedRegistration(parsed.servers[name], client);
+    carriesDshEntry ||
+    (hasNative && isOwnedRegistration(parsed.servers[name], client));
   const removeLegacy =
     legacyPath !== undefined &&
     isOwnedRegistration(parsed.legacyServers[name], client);
@@ -311,6 +384,8 @@ const removeClient = async (
     );
     if (
       (removeNative && Object.hasOwn(readback.servers, name)) ||
+      (readback.dialect === "dsh" &&
+        dshDocument(readback.document).carriesEntry) ||
       (removeLegacy && Object.hasOwn(readback.legacyServers, name))
     )
       throw new Error("registration readback mismatch");
@@ -442,14 +517,11 @@ const removeManagedSkills = async (
   environment: Readonly<NodeJS.ProcessEnv>,
   platform: NodeJS.Platform,
 ): Promise<UninstallItem> => {
+  // Every destination shares one summary item, so each result is labeled by
+  // the directory it refers to.
   const results = await Promise.all(
-    skillDestinations(home, undefined, environment, platform).map(
-      ({ client, path }) =>
-        removeManagedSkill(
-          path,
-          client === "claude_code" ? "Claude Code skill" : "skill",
-          fileSystem,
-        ),
+    skillDestinations(home, undefined, environment, platform).map(({ path }) =>
+      removeManagedSkill(path, path, fileSystem),
     ),
   );
   const failed = results.find(({ status }) => status === "failed");
@@ -541,10 +613,20 @@ const removeManagedSkill = async (
         "REA ownership manifest was retained because a managed file could not be safely removed.",
       ),
     );
-  else
-    results.push(
-      await removeManagedSkillFile(path, manifestName, name, fileSystem),
+  else {
+    const manifest = await removeManagedSkillFile(
+      path,
+      manifestName,
+      name,
+      fileSystem,
     );
+    results.push(manifest);
+    const directories =
+      manifest.status === "removed"
+        ? await removeEmptyManagedDirectories(path, name, fileSystem)
+        : undefined;
+    if (directories !== undefined) results.push(directories);
+  }
   const failed = results.find(({ status }) => status === "failed");
   if (failed !== undefined)
     return item(name, "failed", results.map(({ detail }) => detail).join(" "));
@@ -555,6 +637,46 @@ const removeManagedSkill = async (
     "REA-managed skill files were removed; other files were preserved.",
   );
 };
+
+/** Directories setup creates for managed files, deepest first, then the root. */
+const MANAGED_SKILL_DIRECTORIES = [
+  ...new Set(
+    MANAGED_SKILL_FILES.map((relativePath) =>
+      relativePath.split("/").slice(0, -1).join("/"),
+    ).filter((directory) => directory.length > 0),
+  ),
+].sort((left, right) => right.split("/").length - left.split("/").length);
+
+/** Remove managed directories left empty; any remaining user file keeps them. */
+const removeEmptyManagedDirectories = async (
+  root: string,
+  name: string,
+  fileSystem: UninstallFileSystem,
+): Promise<UninstallItem | undefined> => {
+  if (fileSystem.removeEmptyDirectory === undefined) return undefined;
+  for (const directory of [
+    ...MANAGED_SKILL_DIRECTORIES.map((relative) => join(root, relative)),
+    root,
+  ]) {
+    try {
+      await fileSystem.removeEmptyDirectory(directory);
+    } catch (cause: unknown) {
+      // User files, an absent directory, or a non-directory keep it as is.
+      if (!isKeptDirectory(cause))
+        return item(
+          name,
+          "failed",
+          `Managed skill directory could not be removed: ${directory}.`,
+        );
+    }
+  }
+  return undefined;
+};
+
+const isKeptDirectory = (cause: unknown): boolean =>
+  cause instanceof Error &&
+  "code" in cause &&
+  ["ENOTEMPTY", "EEXIST", "ENOENT", "ENOTDIR"].includes(String(cause.code));
 
 const removeManagedSkillFile = async (
   root: string,

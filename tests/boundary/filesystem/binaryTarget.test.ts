@@ -20,11 +20,47 @@ import {
 } from "../../../src/application/AppBundleExecutable.js";
 import {
   dosMz,
+  elf,
+  fat,
   pe,
   thinMach,
 } from "../../../src/domain/binaryTarget.fixture.js";
 import { projectAnalysisError } from "../../../src/domain/analysisErrorProjection.js";
+import { createEvidence, parseEvidence } from "../../../src/domain/evidence.js";
 import { createTestTempDirectory } from "../../fixtures/temporaryDirectory.js";
+
+it.each([{ cpus: [0x0100000c] }, { cpus: [0x01000007, 0x0100000c] }])(
+  "preserves a FAT container's format in the resolved target and Evidence ($cpus)",
+  async ({ cpus }) => {
+    const directory = await createTestTempDirectory("rea-universal-target-");
+    const path = join(directory, "image");
+    await writeFile(path, fat(cpus));
+    const resolved = await parseBinaryTarget(path, {
+      hostArchitecture: "arm64",
+    });
+    if (!resolved.ok) throw resolved.error;
+    expect(resolved.value).toMatchObject({
+      kind: "executable",
+      format: "mach-o-universal",
+      architecture: "arm64",
+    });
+    const evidence = createEvidence(
+      resolved.value,
+      { id: "fixture", name: "Fixture", version: "1" },
+      {
+        operation: "inspect_macho",
+        parameters: {},
+        result: null,
+      },
+    );
+    expect(
+      parseEvidence(JSON.parse(JSON.stringify(evidence))).subject,
+    ).toMatchObject({
+      format: "mach-o-universal",
+      architecture: "arm64",
+    });
+  },
+);
 
 describe("binary target I/O: app plist permissions and decoding", () => {
   it.each([
@@ -207,6 +243,17 @@ describe("binary target I/O: package classification", () => {
     expect(javascript.ok && javascript.value).toMatchObject({
       kind: "artifact",
       format: "javascript",
+    });
+  });
+
+  it("classifies a binary plist by its magic under any extension", async () => {
+    const directory = await createTestTempDirectory("rea-bplist-target-");
+    const path = join(directory, "Model.archive");
+    await writeFile(path, buildBinary({ $archiver: "NSKeyedArchiver" }));
+    const result = await parseBinaryTarget(path);
+    expect(result.ok && result.value).toMatchObject({
+      kind: "artifact",
+      format: "plist",
     });
   });
 
@@ -758,6 +805,32 @@ describe("binary Info.plist app bundle targets", () => {
 });
 
 describe("DOS binary target I/O", () => {
+  it("resolves a short-header PE signature beyond the bounded prefix", async () => {
+    const directory = await createTestTempDirectory(
+      "rea-short-stub-pe-target-",
+    );
+    const path = join(directory, "short-stub.dll");
+    const offset = 8192;
+    const stub = dosMz(64);
+    stub.writeUInt32LE(offset, 60);
+    const peRecord = pe(0x8664, offset, 0x2002).subarray(offset);
+    const bytes = Buffer.concat([
+      stub,
+      Buffer.alloc(offset - stub.length),
+      peRecord,
+    ]);
+    await writeFile(path, bytes);
+
+    expect(await parseBinaryTarget(path)).toMatchObject({
+      ok: true,
+      value: {
+        format: "pe",
+        architecture: "x86_64",
+        executableRole: "shared-library",
+      },
+    });
+  });
+
   it("validates a complete DOS file beyond the initial metadata probe", async () => {
     const directory = await createTestTempDirectory("rea-dos-target-");
     const path = join(directory, "legacy.exe");
@@ -774,3 +847,40 @@ describe("DOS binary target I/O", () => {
     });
   });
 });
+
+it.each([
+  [
+    "EI_VERSION",
+    (bytes: Buffer) => {
+      bytes[6] = 0;
+    },
+  ],
+  [
+    "e_version",
+    (bytes: Buffer) => {
+      bytes.writeUInt32LE(0, 20);
+    },
+  ],
+  [
+    "e_ehsize",
+    (bytes: Buffer) => {
+      bytes.writeUInt16LE(51, 40);
+    },
+  ],
+])(
+  "rejects an ELF with malformed %s during public target opening",
+  async (_name, corrupt) => {
+    const directory = await createTestTempDirectory("rea-invalid-elf-header-");
+    const path = join(directory, "invalid.elf");
+    const bytes = elf(1, 1, 3);
+    corrupt(bytes);
+    await writeFile(path, bytes);
+    expect(await parseBinaryTarget(path)).toMatchObject({
+      ok: false,
+      error: {
+        _tag: "BinaryTargetError",
+        constraint: "file_format_rejected",
+      },
+    });
+  },
+);

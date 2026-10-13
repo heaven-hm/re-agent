@@ -1,3 +1,4 @@
+import { moduleResolutionModeForJavaScriptReference } from "../domain/javascript/javascriptModuleResolutionMode.js";
 import { parseJavaScriptSource } from "../domain/javascript/javascriptSourceParser.js";
 import { analyzeParsedJavaScriptStaticSourceSteps } from "../domain/javascript/javascriptStaticAnalysis.js";
 import {
@@ -6,7 +7,10 @@ import {
 } from "../domain/javascript/javascriptSemanticAnalysis.js";
 import { failedJavaScriptStaticAnalysis } from "../domain/javascript/javascriptStaticAnalysisHelpers.js";
 import { projectJavaScriptModuleSemantics } from "../domain/javascript/javascriptModuleSemanticIr.js";
-import { measureJavaScriptModuleTransfer } from "../javascript/analysis/JavaScriptAnalysisTransfer.js";
+import {
+  javaScriptTransferByteBudget,
+  measureJavaScriptModuleTransfer,
+} from "../javascript/analysis/JavaScriptAnalysisTransfer.js";
 import { AnalysisResourceConstraintError } from "../domain/analysisErrorCore.js";
 import { projectJavaScriptSemanticFileSteps } from "../application/javascript/JavaScriptSemanticGraphBuilder.js";
 import { completeJavaScriptAnalysisSteps } from "../application/javascript/JavaScriptAnalysisControl.js";
@@ -50,11 +54,17 @@ const analyze: JavaScriptSourceWorkerAnalyzer = async (
     );
   await callbacks.phase("semantic");
   const ir = await completeJavaScriptAnalysisSteps(
-    analyzeParsedJavaScriptSemanticsSteps(parsed),
+    analyzeParsedJavaScriptSemanticsSteps(
+      parsed,
+      moduleResolutionModeForJavaScriptReference(file.path, "static-import"),
+    ),
   );
   parsed = null;
   const module = projectJavaScriptModuleSemantics(ir);
-  const measured = measureJavaScriptModuleTransfer(module);
+  const measured = measureJavaScriptModuleTransfer(
+    module,
+    javaScriptTransferByteBudget(resultBudgetBytes),
+  );
   if (measured.retentionBytes > resultBudgetBytes)
     throw new AnalysisResourceConstraintError(
       "analyze_javascript_application",
@@ -67,7 +77,12 @@ const analyze: JavaScriptSourceWorkerAnalyzer = async (
     );
   await callbacks.phase("projection");
   const projection = await completeJavaScriptAnalysisSteps(
-    projectJavaScriptSemanticFileSteps(file, ir, nodeBudget),
+    projectJavaScriptSemanticFileSteps(
+      file,
+      ir,
+      nodeBudget,
+      facts.electron.call_paths,
+    ),
   );
   return { module, projection };
 };

@@ -45,6 +45,12 @@ export const androidInputSchemas = {
   }),
 } as const;
 
+/** Optional retained delivery is separate from the engine's APK request. */
+export const androidPackageInspectionInputSchema =
+  androidInputSchemas.inspect_android_package.extend({
+    detail: z.enum(["complete", "summary"]).optional(),
+  });
+
 /** Supported static Android operations. */
 export type AndroidOperation = keyof typeof androidInputSchemas;
 /** Validated Android requests carry their selected operation. */
@@ -121,6 +127,12 @@ export const androidResultSchemas = {
     query: z.string(),
     total_classes: z.number().int().nonnegative(),
     matches: z.array(z.string()),
+    duplicate_names: z.array(
+      z.strictObject({
+        name: z.string(),
+        occurrences: z.number().int().min(2),
+      }),
+    ),
     coverage: z.literal("complete"),
   }),
   inspect_android_class: z.strictObject({

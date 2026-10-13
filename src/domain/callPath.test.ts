@@ -1,21 +1,22 @@
 import { describe, expect, it } from "vitest";
 
-import { enhancedInputSchemas } from "../contracts/enhancedInputs.js";
 import { buildCallPath } from "./callPath.js";
-import {
-  callPathInputSchema,
-  callPathResultSchema,
-} from "./callPathSchemas.js";
+import { callPathResultSchema, type CallPathInput } from "./callPathSchemas.js";
 import { createEvidence, type Evidence } from "./evidence.js";
-import { functionDossierSchema } from "./hopperValues.js";
-import { jsonValueSchema } from "./jsonValue.js";
+import type { JsonValue } from "./jsonValue.js";
+import type { RelationshipCoverage } from "./relationshipCoverage.js";
 
 const observe = (
   address: string,
   callees: readonly string[],
   provider = "rea-workflow",
+  options: {
+    readonly evidenceLimitations?: readonly string[];
+    readonly dossierLimitations?: readonly string[];
+    readonly relationshipCoverage?: RelationshipCoverage;
+  } = {},
 ): Evidence => {
-  const value = functionDossierSchema.parse({
+  const value = {
     procedure: {
       address,
       name: `fn_${address.slice(2)}`,
@@ -49,32 +50,37 @@ const observe = (
     native_api: null,
     native_value_flow: null,
     basic_blocks: [],
-    limitations: [],
-  });
+    limitations: [...(options.dossierLimitations ?? [])],
+  } satisfies JsonValue;
   return createEvidence(
     { path: "/tmp/a", sha256: "a".repeat(64), format: "mach-o" },
     { id: provider, name: provider, version: "1" },
     {
       operation: "analyze_function",
-      parameters: enhancedInputSchemas.analyze_function.parse({
-        procedure: address,
-      }),
-      result: jsonValueSchema.parse(value),
+      parameters: { procedure: address },
+      result: value,
       confidence: "derived",
       authority: "shipped-artifact",
+      ...(options.evidenceLimitations === undefined
+        ? {}
+        : { limitations: options.evidenceLimitations }),
+      ...(options.relationshipCoverage === undefined
+        ? {}
+        : { relationshipCoverage: options.relationshipCoverage }),
     },
   );
 };
 
-const run = (functions: Evidence[], overrides: Record<string, unknown> = {}) =>
-  buildCallPath(
-    callPathInputSchema.parse({
-      functions,
-      start: { address: "0x1000" },
-      goal: { address: "0x4000" },
-      ...overrides,
-    }),
-  );
+const run = (
+  functions: Evidence[],
+  overrides: Partial<Pick<CallPathInput, "start" | "goal">> = {},
+) =>
+  buildCallPath({
+    functions,
+    start: { address: "0x1000" },
+    goal: { address: "0x4000" },
+    ...overrides,
+  });
 
 describe("call path reconstruction", () => {
   it("returns deterministic shortest-first cited paths", () => {
@@ -126,6 +132,22 @@ describe("call path reconstruction", () => {
     expect(unknown.limitations).toContain(
       "No analyze_function Evidence covers reachable function 0x2000",
     );
+
+    const limitedEmpty = run([
+      observe("0x1000", [], "rea-workflow", {
+        dossierLimitations: ["Call relationships are incomplete."],
+      }),
+      observe("0x4000", []),
+    ]);
+    expect(limitedEmpty).toMatchObject({
+      status: "unknown",
+      search_scope: { exhaustive: false },
+      shortest_hops: null,
+      paths: [],
+    });
+    expect(limitedEmpty.limitations).toContain(
+      "Call relationships are incomplete.",
+    );
   });
 
   it("searches the complete supplied graph", () => {
@@ -148,6 +170,21 @@ describe("call path reconstruction", () => {
 });
 
 describe("call path topology and capacity", () => {
+  it("retains every distinct generic limitation beyond the push argument limit", () => {
+    const limitations = Array.from(
+      { length: 150_000 },
+      (_, index) => `context-${index.toString().padStart(7, "0")}`,
+    );
+    const result = run([
+      observe("0x1000", [], "rea-workflow", {
+        evidenceLimitations: [...limitations].reverse(),
+      }),
+    ]);
+    expect(result.status).toBe("unknown");
+    expect(result.search_scope.exhaustive).toBe(false);
+    expect(result.limitations).toEqual(limitations);
+  }, 30_000);
+
   it("retains every shortest path through merging branches and cycles", () => {
     const result = run([
       observe("0x1000", ["0x3000", "0x2000", "0x1000"]),
@@ -178,6 +215,53 @@ describe("call path topology and capacity", () => {
       explored: { nodes: 4, edges: 3, depth_reached: 2 },
     });
     expect(result.limitations).toContain(
+      "No analyze_function Evidence covers reachable function 0x5000",
+    );
+  });
+
+  it("keeps reached function limitations and marks expanded coverage incomplete", () => {
+    const evidenceLimitation = "Call graph output was truncated.";
+    const dossierLimitation = "One call target could not be resolved.";
+    const result = run([
+      observe("0x1000", ["0x4000"], "rea-workflow", {
+        evidenceLimitations: [evidenceLimitation],
+        dossierLimitations: [dossierLimitation],
+      }),
+      observe("0x4000", []),
+    ]);
+
+    expect(result).toMatchObject({
+      status: "found",
+      shortest_hops: 1,
+      search_scope: { exhaustive: false },
+      paths: [
+        {
+          nodes: [{ address: "0x1000" }, { address: "0x4000" }],
+        },
+      ],
+    });
+    expect(result.limitations).toEqual(
+      expect.arrayContaining([evidenceLimitation, dossierLimitation]),
+    );
+  });
+
+  it("retains goal dossier limitations without expanding the goal", () => {
+    const goalLimitation = "The goal dossier has partial outgoing references.";
+    const result = run([
+      observe("0x1000", ["0x4000"]),
+      observe("0x4000", ["0x5000"], "rea-workflow", {
+        dossierLimitations: [goalLimitation],
+      }),
+    ]);
+
+    expect(result).toMatchObject({
+      status: "found",
+      shortest_hops: 1,
+      search_scope: { exhaustive: true },
+    });
+    expect(result.limitations).toContain(goalLimitation);
+    expect(result.explored.nodes).toBe(2);
+    expect(result.limitations).not.toContain(
       "No analyze_function Evidence covers reachable function 0x5000",
     );
   });
@@ -241,6 +325,93 @@ describe("call path topology and capacity", () => {
     ).toEqual([
       Array.from({ length: stages + 2 }, (_, index) => address(index + 1)),
     ]);
+  });
+});
+
+describe("explicit call relationship coverage", () => {
+  it("accumulates 150,000 partial reasons without argument-stack exhaustion", () => {
+    const result = run([
+      observe("0x1000", [], "rea-workflow", {
+        relationshipCoverage: {
+          status: "partial",
+          limitations: Array<string>(150_000).fill("omitted"),
+        },
+        evidenceLimitations: [],
+        dossierLimitations: [],
+      }),
+    ]);
+    expect(result).toMatchObject({
+      status: "unknown",
+      search_scope: { exhaustive: false },
+      limitations: ["omitted"],
+    });
+  });
+
+  it("retains contextual limits on a found path without reducing complete coverage", () => {
+    const limitation = "Provider results reflect the current database state.";
+    const result = run([
+      observe("0x1000", ["0x4000"], "rea-workflow", {
+        relationshipCoverage: { status: "complete" },
+        evidenceLimitations: [limitation],
+      }),
+    ]);
+    expect(result).toMatchObject({
+      status: "found",
+      shortest_hops: 1,
+      search_scope: { exhaustive: true },
+    });
+    expect(result.limitations).toContain(limitation);
+  });
+
+  it("retains a found path while its expanded relationship coverage remains partial", () => {
+    const limitation = "Other callees were omitted by the provider cap.";
+    const result = run([
+      observe("0x1000", ["0x4000"], "rea-workflow", {
+        relationshipCoverage: { status: "partial", limitations: [limitation] },
+      }),
+    ]);
+    expect(result).toMatchObject({
+      status: "found",
+      shortest_hops: 1,
+      search_scope: { exhaustive: false },
+    });
+    expect(result.limitations).toContain(limitation);
+  });
+
+  it("retains an unknown goal coverage reason without expanding the terminal goal", () => {
+    const reason = "The goal's outgoing relationship coverage is unknown.";
+    const result = run([
+      observe("0x1000", ["0x4000"], "rea-workflow", {
+        relationshipCoverage: { status: "complete" },
+      }),
+      observe("0x4000", ["0x5000"], "rea-workflow", {
+        relationshipCoverage: { status: "unknown", reason },
+      }),
+    ]);
+    expect(result).toMatchObject({
+      status: "found",
+      search_scope: { exhaustive: true },
+      explored: { nodes: 2 },
+    });
+    expect(result.limitations).toEqual([reason]);
+  });
+
+  it("ignores incomplete relationship coverage outside the reachable search closure", () => {
+    const reason = "An unrelated function's callees were not observed.";
+    const result = run([
+      observe("0x1000", [], "rea-workflow", {
+        relationshipCoverage: { status: "complete" },
+      }),
+      observe("0x2000", ["0x5000"], "rea-workflow", {
+        relationshipCoverage: { status: "unknown", reason },
+      }),
+    ]);
+    expect(result).toMatchObject({
+      status: "not_found",
+      search_scope: { exhaustive: true },
+      explored: { nodes: 1 },
+    });
+    expect(result.limitations).toEqual([]);
   });
 });
 

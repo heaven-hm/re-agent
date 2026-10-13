@@ -81,3 +81,32 @@ it("publishes valid SDK schemas and records the named module trace without a bin
   });
   expect(invalid.isError).toBe(true);
 });
+
+it("retains the module resolver cleanup owner across failed server shutdown", async () => {
+  let closes = 0;
+  const service = new WebModuleTraceService(
+    { load: () => Promise.resolve(ok(webModuleArtifactsFixture())) },
+    {
+      ...webModuleResolverFixture,
+      close: async () => {
+        closes += 1;
+        if (closes === 1) throw new Error("fixture browser close failed");
+      },
+    },
+  );
+  const session = createTestBinarySession(() => {
+    throw new Error("binary provider must not start");
+  });
+  const server = createServer(
+    { kind: "session", session },
+    { webModuleTrace: service },
+  );
+  onTestFinished(async () => {
+    await server.close();
+    await session.close();
+  });
+  await expect(server.close()).rejects.toBeInstanceOf(AggregateError);
+  await server.close();
+  await server.close();
+  expect(closes).toBe(2);
+});

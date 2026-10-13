@@ -37,7 +37,28 @@ const INTRINSIC_MUTATIONS = [
     'const change = Object.defineProperty.bind(null,Object,"create"); change({value:customCreate});',
   ],
   ["receiver.cjs", 'Reflect.set({},"create",customCreate,Object);'],
+  [
+    "deep-call.cjs",
+    'Function.prototype.call.call.call(Object.defineProperty,null,Object,"create",{value:customCreate});',
+  ],
+  [
+    "deep-apply.cjs",
+    'Function.prototype.apply.apply(Object.defineProperty,[null,[Object,"create",{value:customCreate}]]);',
+  ],
 ] as const;
+
+const writePoisonedModules = async (root: string): Promise<void> => {
+  for (const [name, mutation] of INTRINSIC_MUTATIONS)
+    await writeFile(
+      join(root, name),
+      `${mutation}
+       ${ROLLDOWN_MODULE_INTEROP}
+       let poisoned = require("electron");
+       poisoned = __toESM(poisoned, 1);
+       new poisoned.BrowserWindow({});
+       throw new Error("must not execute poisoned source");`,
+    );
+};
 
 cliTest.for(["CLI", "stdio MCP"] as const)(
   "retains converted Electron windows and preload evidence through %s",
@@ -51,20 +72,13 @@ cliTest.for(["CLI", "stdio MCP"] as const)(
       join(root, "preload.js"),
       'throw new Error("must stay inert");',
     );
-    for (const [name, mutation] of INTRINSIC_MUTATIONS)
-      await writeFile(
-        join(root, name),
-        `${mutation}
-       ${ROLLDOWN_MODULE_INTEROP}
-       let poisoned = require("electron");
-       poisoned = __toESM(poisoned, 1);
-       new poisoned.BrowserWindow({});
-       throw new Error("must not execute poisoned source");`,
-      );
+    await writePoisonedModules(root);
     const source = `const metadata = {};
       Object.defineProperty(metadata,"x",{value:1});
       const decorateMetadata = Object.defineProperty.bind(null,metadata,"bound");
       decorateMetadata({value:1});
+      const decorateViaCall = Function.prototype.call.bind(Object.defineProperty);
+      decorateViaCall(null,metadata,"uncurried",{value:1});
       const localFunction = () => {};
       Object.defineProperty(localFunction,"x",{value:1});
       const localClass = class {};
@@ -105,6 +119,8 @@ cliTest.for(["CLI", "stdio MCP"] as const)(
       require("./generic-bind.cjs");
       require("./replaced-apply.cjs");
       require("./receiver.cjs");
+      require("./deep-call.cjs");
+      require("./deep-apply.cjs");
       throw new Error("must not execute main");
     `;
     await writeFile(join(root, "main.cjs"), source);
@@ -131,7 +147,7 @@ cliTest.for(["CLI", "stdio MCP"] as const)(
       preload_entrypoints: 1,
     });
     expect(result.statistics.parse_failures).toBe(0);
-    expect(result.statistics.parsed_javascript_files).toBe(10);
+    expect(result.statistics.parsed_javascript_files).toBe(12);
     const windows = result.graph.nodes.filter(
       ({ kind }) => kind === "browser-window",
     );

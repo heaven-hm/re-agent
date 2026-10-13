@@ -63,6 +63,32 @@ export const TOOL_EFFECTS: Readonly<Record<string, ToolEffects>> = {
     mayDiscardData: true,
     idempotent: false,
   }),
+  inspect_go_binary: evidence,
+  inspect_sqlite_database: effects({
+    mutatesSession: true,
+    writesFilesystem: true,
+    launchesProcess: true,
+  }),
+  inspect_packet_fields: effects({
+    mutatesSession: true,
+    launchesProcess: true,
+    writesFilesystem: true,
+  }),
+  inspect_packet_capture: effects({
+    mutatesSession: true,
+    launchesProcess: true,
+    writesFilesystem: true,
+  }),
+  inspect_signal_decoders: effects({
+    mutatesSession: true,
+    launchesProcess: true,
+    writesFilesystem: true,
+  }),
+  decode_signal_recording: effects({
+    mutatesSession: true,
+    launchesProcess: true,
+    writesFilesystem: true,
+  }),
   inspect_wasm_artifact: effects({
     mutatesSession: true,
     writesFilesystem: true,
@@ -107,6 +133,57 @@ export const TOOL_EFFECTS: Readonly<Record<string, ToolEffects>> = {
     writesFilesystem: true,
     launchesProcess: true,
   }),
+  list_frida_devices: effects({ launchesProcess: true, accessesNetwork: true }),
+  list_frida_processes: effects({
+    launchesProcess: true,
+    accessesNetwork: true,
+  }),
+  start_frida_session: effects({
+    mutatesTarget: true,
+    mutatesSession: true,
+    launchesProcess: true,
+    accessesNetwork: true,
+    idempotent: false,
+  }),
+  load_frida_script: effects({
+    mutatesTarget: true,
+    mutatesSession: true,
+    launchesProcess: true,
+    accessesNetwork: true,
+    executesForeignCode: true,
+    idempotent: false,
+  }),
+  resume_frida_session: effects({
+    mutatesTarget: true,
+    mutatesSession: true,
+    launchesProcess: true,
+    accessesNetwork: true,
+    executesForeignCode: true,
+    idempotent: false,
+  }),
+  unload_frida_script: effects({
+    mutatesTarget: true,
+    mutatesSession: true,
+    launchesProcess: true,
+    accessesNetwork: true,
+    idempotent: false,
+  }),
+  frida_session_status: effects(),
+  close_frida_session: effects({
+    mutatesTarget: true,
+    mutatesSession: true,
+    launchesProcess: true,
+    accessesNetwork: true,
+    idempotent: false,
+  }),
+  instrument_with_frida: effects({
+    mutatesTarget: true,
+    mutatesSession: true,
+    launchesProcess: true,
+    accessesNetwork: true,
+    executesForeignCode: true,
+    idempotent: false,
+  }),
   inspect_pe_resources: evidence,
   inspect_analysis_view: evidence,
   inspect_firmware_regions: effects({
@@ -123,6 +200,24 @@ export const TOOL_EFFECTS: Readonly<Record<string, ToolEffects>> = {
   inspect_android_package: effects({
     mutatesSession: true,
     launchesProcess: true,
+    writesFilesystem: true,
+  }),
+  inspect_pcap_client: effects({
+    mutatesSession: true,
+    launchesProcess: true,
+    writesFilesystem: true,
+  }),
+  inspect_pcap_capture: effects({
+    mutatesSession: true,
+    launchesProcess: true,
+    writesFilesystem: true,
+  }),
+  identify_flutter_build: effects({
+    mutatesSession: true,
+    writesFilesystem: true,
+  }),
+  inspect_dart_aot: effects({
+    mutatesSession: true,
     writesFilesystem: true,
   }),
   inspect_apktool_client: effects({
@@ -573,6 +668,31 @@ export const annotationsFromEffects = (
   openWorldHint: value.launchesProcess || value.accessesNetwork,
 });
 
+/**
+ * Tools whose results, successful or failed, carry only REA-authored session
+ * state or caller-supplied values, never text originating from an analysis
+ * target, a provider, a launcher or a device. Every other tool can return
+ * such text (strings, symbols, code, page text, scripts, captures, logs, file
+ * listings, provider diagnostics or captured process output), so a newly
+ * added tool is marked untrusted until it is audited into this set. A tool
+ * stays out when any error path can project external process output, as
+ * close_binary (provider cleanup diagnostics), binary_session (provider
+ * failure reasons and availability diagnostics) and the adb and apktool
+ * client probes (version output and stderr excerpts) can.
+ */
+export const TARGET_CONTENT_FREE_TOOLS: ReadonlySet<string> = new Set([
+  "export_evidence_bundle",
+  "record_unknown",
+]);
+
+/**
+ * Whether results of the named tool, successful or failed, can carry text that
+ * originates from the analysis target. Unknown names are treated as target
+ * content so an unaudited path never loses the untrusted marker.
+ */
+export const toolReturnsTargetContent = (name: string): boolean =>
+  !TARGET_CONTENT_FREE_TOOLS.has(name);
+
 /** Resolve the audited metadata for one public tool. */
 export const toolContractMetadata = (name: string) => {
   const audited = TOOL_EFFECTS[name];
@@ -585,5 +705,6 @@ export const toolContractMetadata = (name: string) => {
       .join(" "),
     effects: audited,
     annotations: annotationsFromEffects(audited),
+    returnsTargetContent: toolReturnsTargetContent(name),
   };
 };

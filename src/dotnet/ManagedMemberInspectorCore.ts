@@ -19,6 +19,10 @@ import {
   readMetadataString,
   sha256Bytes,
 } from "./ManagedMetadataHeaps.js";
+import {
+  memberListIndexSize,
+  memberListTable,
+} from "./ManagedMemberPointers.js";
 
 export type ManagedType = ManagedMemberInspection["types"][number];
 export type ManagedExportedType = NonNullable<
@@ -93,8 +97,8 @@ const readTypeRange = (
   row: number,
   issues: ManagedParseIssue[],
 ): TypeRange => {
-  const methods = layout.table(6);
-  const fields = layout.table(4);
+  const methods = memberListTable(layout, 6);
+  const fields = memberListTable(layout, 4);
   const cursor = metadataRowCursor(bytes, layout, 2, row);
   cursor.readUInt32();
   const nameIndex = cursor.readIndex(layout.stringIndexSize);
@@ -114,8 +118,8 @@ const readTypeRange = (
       issues,
     ) ?? null;
   cursor.readIndex(layout.codedIndexSize("TypeDefOrRef"));
-  const fieldStart = cursor.readIndex(layout.tableIndexSize(4));
-  const methodStart = cursor.readIndex(layout.tableIndexSize(6));
+  const fieldStart = cursor.readIndex(memberListIndexSize(layout, 4));
+  const methodStart = cursor.readIndex(memberListIndexSize(layout, 6));
   let nextField = (fields?.rowCount ?? 0) + 1;
   let nextMethod = (methods?.rowCount ?? 0) + 1;
   const typeTable = layout.table(2);
@@ -125,8 +129,8 @@ const readTypeRange = (
     next.readIndex(layout.stringIndexSize);
     next.readIndex(layout.stringIndexSize);
     next.readIndex(layout.codedIndexSize("TypeDefOrRef"));
-    nextField = next.readIndex(layout.tableIndexSize(4));
-    nextMethod = next.readIndex(layout.tableIndexSize(6));
+    nextField = next.readIndex(memberListIndexSize(layout, 4));
+    nextMethod = next.readIndex(memberListIndexSize(layout, 6));
   }
   return {
     token: metadataToken(2, row),
@@ -150,56 +154,6 @@ export const typeRanges = (
   return ranges;
 };
 
-export const declaringType = (
-  ranges: readonly TypeRange[],
-  table: "field" | "method",
-  row: number,
-): { readonly token: string; readonly fullName: string | null } | null => {
-  for (const range of ranges) {
-    const start = table === "field" ? range.fieldStart : range.methodStart;
-    const end = table === "field" ? range.fieldEnd : range.methodEnd;
-    if (row >= start && row < end)
-      return { token: range.token, fullName: range.fullName };
-  }
-  return null;
-};
-
-/** Resolve member ownership without rescanning ordered type ranges per row. */
-export const createDeclaringTypeLookup = (
-  ranges: readonly TypeRange[],
-  table: "field" | "method",
-): ((row: number) => ReturnType<typeof declaringType>) => {
-  const entries = ranges.map((range) => ({
-    range,
-    start: table === "field" ? range.fieldStart : range.methodStart,
-    end: table === "field" ? range.fieldEnd : range.methodEnd,
-  }));
-  const ordered = entries.every((entry, index) => {
-    const previous = entries[index - 1];
-    return (
-      entry.start <= entry.end &&
-      (previous === undefined || previous.end <= entry.start)
-    );
-  });
-  // Malformed metadata can overlap or reverse ranges. Retain the original
-  // first-match interpretation rather than guessing a different owner.
-  if (!ordered) return (row) => declaringType(ranges, table, row);
-  return (row) => {
-    let first = 0;
-    let end = entries.length;
-    while (first < end) {
-      const middle = first + Math.floor((end - first) / 2);
-      const entry = entries[middle];
-      if (entry === undefined) return null;
-      if (row >= entry.start && row < entry.end)
-        return { token: entry.range.token, fullName: entry.range.fullName };
-      if (row < entry.start) end = middle;
-      else first = middle + 1;
-    }
-    return null;
-  };
-};
-
 export const parseTypes = (
   bytes: Buffer,
   layout: ManagedMetadataLayout,
@@ -209,8 +163,8 @@ export const parseTypes = (
   readonly issues: readonly ManagedParseIssue[];
 } => {
   const typeTable = layout.table(2);
-  const fields = layout.table(4);
-  const methods = layout.table(6);
+  const fields = memberListTable(layout, 4);
+  const methods = memberListTable(layout, 6);
   const items: ManagedType[] = [];
   const issues: ManagedParseIssue[] = [];
   for (let row = 1; row <= (typeTable?.rowCount ?? 0); row += 1) {
@@ -233,8 +187,8 @@ export const parseTypes = (
       const extendsRaw = cursor.readIndex(
         layout.codedIndexSize("TypeDefOrRef"),
       );
-      const fieldStart = cursor.readIndex(layout.tableIndexSize(4));
-      const methodStart = cursor.readIndex(layout.tableIndexSize(6));
+      const fieldStart = cursor.readIndex(memberListIndexSize(layout, 4));
+      const methodStart = cursor.readIndex(memberListIndexSize(layout, 6));
       const nextRange = ranges[row] ?? null;
       const fieldRange = rowRange(
         fields,

@@ -18,6 +18,7 @@ it("preserves an already captured response shape without marking it unavailable"
     method: "Network.requestWillBeSent",
     params: {
       requestId: "request-1",
+      initiator: { type: "other" },
       request: {
         url: `${origin}/prior`,
         method: "POST",
@@ -38,11 +39,14 @@ it("preserves an already captured response shape without marking it unavailable"
       },
     },
   });
-  events.ingestResponseBody("request-1", {
+  const candidate = events.responseBodyRequests()[0];
+  expect(candidate).toBeDefined();
+  events.ingestResponseBody(candidate!, {
     body: '{"response":true}',
     base64Encoded: false,
   });
   const capturedShape = events.network.get("request-1")?.body_shapes.response;
+  expect(capturedShape).toBeDefined();
   expect(capturedShape).not.toBeNull();
 
   events.ingest({
@@ -50,6 +54,7 @@ it("preserves an already captured response shape without marking it unavailable"
     params: {
       requestId: "request-1",
       request: { url: `${origin}/continuation`, method: "GET" },
+      initiator: { type: "other" },
       redirectResponse: null,
       timestamp: 2,
     },
@@ -59,7 +64,7 @@ it("preserves an already captured response shape without marking it unavailable"
     capturedShape,
   );
   expect(events.network.get("request-1")?.body_shapes.status).toBe("included");
-  expect(events.responseBodyRequestIds()).toEqual([]);
+  expect(events.responseBodyRequests()).toEqual([]);
   expect(events.completeness.snapshot().unavailable_sections).not.toContain(
     "json_body_shapes",
   );

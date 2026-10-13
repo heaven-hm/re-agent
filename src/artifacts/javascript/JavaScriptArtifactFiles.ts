@@ -18,6 +18,7 @@ import { streamChunkToBuffer } from "../StreamBytes.js";
 import { hashReadable } from "../ArtifactHash.js";
 import type { ArtifactOccurrence } from "../../domain/artifactGraph.js";
 import type { ArtifactInventorySnapshot } from "../../domain/artifactInventorySnapshot.js";
+import { AnalysisInputError } from "../../domain/analysisErrorCore.js";
 
 import type {
   JavaScriptArtifactFileKind,
@@ -47,6 +48,7 @@ interface ReadContext {
   readonly files: JavaScriptArtifactFile[];
   readonly containers: JavaScriptArtifactContainer[];
   readonly signal: AbortSignal | undefined;
+  readonly selectedPaths: ReadonlyMap<string, number> | undefined;
   textBytes: number;
   invalidUtf8: number;
 }
@@ -57,13 +59,49 @@ interface ReadTextInput {
   readonly expected: ExpectedFile;
 }
 
-/** Read all relevant textual entries through an already-inventoried reader. */
+/** Verify inventoried entries; acquire text only inside the caller's scope. */
 export const readJavaScriptArtifactFiles = async (
   reader: ArtifactReader,
   snapshot: ArtifactInventorySnapshot,
   resources: ArtifactResourceScope,
   signal?: AbortSignal,
+  sourcePaths?: readonly string[],
 ): Promise<JavaScriptArtifactFileSet> => {
+  const inventory = expectedInventory(snapshot);
+  const expected = inventory.files;
+  const selectedPaths =
+    sourcePaths === undefined
+      ? undefined
+      : new Map([...new Set(sourcePaths)].map((path, index) => [path, index]));
+  const issues = (sourcePaths ?? []).flatMap((path, index) =>
+    expected.has(path) || inventory.unavailableFiles.has(path)
+      ? []
+      : [
+          {
+            path: ["source_paths", index],
+            reason: "invalid_value" as const,
+            message:
+              "Select an exact relevant file path from the artifact inventory; no globs or path aliases.",
+          },
+        ],
+  );
+  if (issues.length > 0)
+    throw new AnalysisInputError(
+      "analyze_javascript_application",
+      undefined,
+      issues,
+    );
+  const unavailablePath = sourcePaths?.find((path) =>
+    inventory.unavailableFiles.has(path),
+  );
+  if (unavailablePath !== undefined)
+    throw new ArtifactReaderFailure(
+      "unavailable",
+      `Selected inventoried source bytes are unavailable: ${unavailablePath}`,
+      {
+        partialObservation: { kind: "artifact-inventory", inventory: snapshot },
+      },
+    );
   if (reader instanceof AsarArtifactReader) {
     const root = snapshot.nodes.find(
       ({ artifact_id }) => artifact_id === snapshot.manifest.root_artifact_id,
@@ -79,8 +117,6 @@ export const readJavaScriptArtifactFiles = async (
       signal,
     );
   }
-  const inventory = expectedInventory(snapshot);
-  const expected = inventory.files;
   const context: ReadContext = {
     resources,
     expected,
@@ -89,13 +125,17 @@ export const readJavaScriptArtifactFiles = async (
     files: [],
     containers: [],
     signal,
+    selectedPaths,
     textBytes: 0,
     invalidUtf8: 0,
   };
   await visitReader(reader, "", snapshot.manifest.root_sha256, context);
-  const files = context.files.sort((left, right) =>
-    compareUnicodeCodePoints(left.path, right.path),
-  );
+  const files = context.files.sort((left, right) => {
+    const leftPriority = selectedPaths?.get(left.path) ?? Infinity;
+    const rightPriority = selectedPaths?.get(right.path) ?? Infinity;
+    if (leftPriority !== rightPriority) return leftPriority - rightPriority;
+    return compareUnicodeCodePoints(left.path, right.path);
+  });
   assertExpectedFilesWereVisited(expected, files);
   return {
     files,
@@ -104,6 +144,17 @@ export const readJavaScriptArtifactFiles = async (
     ),
     text_bytes_read: context.textBytes,
     invalid_utf8_files: context.invalidUtf8,
+    ...(sourcePaths === undefined
+      ? {}
+      : {
+          source_selection: {
+            requested_paths: [...sourcePaths],
+            unselected_files: files.filter(
+              ({ text }) =>
+                !text.included && text.reason === "outside-analysis-scope",
+            ).length,
+          },
+        }),
   };
 };
 
@@ -251,6 +302,19 @@ const readText = async (
   context: ReadContext,
   input: ReadTextInput,
 ): Promise<JavaScriptArtifactFile["text"]> => {
+  if (
+    context.selectedPaths !== undefined &&
+    !context.selectedPaths.has(input.expected.path)
+  ) {
+    // Keep the inventory/acquisition identity check without allocating or
+    // decoding an unrelated source's text.
+    await verifyEntryBytes(
+      await input.reader.open(input.entry, context.signal),
+      input.expected,
+      context.signal,
+    );
+    return { included: false, reason: "outside-analysis-scope" };
+  }
   if (input.expected.kind === "native-addon") {
     await verifyEntryBytes(
       await input.reader.open(input.entry, context.signal),
@@ -311,16 +375,23 @@ const expectedInventory = (
 ): {
   readonly files: ReadonlyMap<string, ExpectedFile>;
   readonly containers: ReadonlyMap<string, ExpectedContainer>;
+  readonly unavailableFiles: ReadonlySet<string>;
 } => {
   const nodes = new Map(snapshot.nodes.map((node) => [node.artifact_id, node]));
   const files = new Map<string, ExpectedFile>();
   const containers = new Map<string, ExpectedContainer>();
+  const unavailableFiles = new Set<string>();
   for (const occurrence of snapshot.occurrences) {
     if (occurrence.logical_path === ".") continue;
     const isNestedAsar =
       occurrence.entry_kind === "file" &&
       occurrence.logical_path.toLowerCase().endsWith(".asar");
     if (occurrence.artifact_id === null) {
+      if (
+        occurrence.entry_kind === "file" &&
+        relevantKind(occurrence.logical_path) !== undefined
+      )
+        unavailableFiles.add(occurrence.logical_path);
       if (isNestedAsar)
         containers.set(occurrence.logical_path, {
           hash_status: occurrence.hash_status,
@@ -358,7 +429,7 @@ const expectedInventory = (
       kind,
     });
   }
-  return { files, containers };
+  return { files, containers, unavailableFiles };
 };
 
 const readAll = async (

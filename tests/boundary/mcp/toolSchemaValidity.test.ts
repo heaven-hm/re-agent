@@ -19,13 +19,30 @@ interface ToolSchemas {
 }
 
 function schemaErrors(tools: readonly ToolSchemas[]): string[] {
-  const ajv = new Ajv2020({ strict: false, validateFormats: false });
+  // Reuse Ajv's meta-schema validators, then clear each root's reference
+  // namespace, including nested IDs, before validating the next schema.
+  const ajv = new Ajv2020({
+    strict: false,
+    validateFormats: false,
+    addUsedSchema: false,
+  });
   return tools.flatMap((tool) =>
     ["inputSchema", "outputSchema"].flatMap((kind) => {
       const schema =
         kind === "inputSchema" ? tool.inputSchema : tool.outputSchema;
-      if (schema === undefined || ajv.validateSchema(schema)) return [];
-      return [`${tool.name}.${kind}: ${ajv.errorsText(ajv.errors)}`];
+      if (schema === undefined) return [];
+      try {
+        if (!ajv.validateSchema(schema))
+          return [`${tool.name}.${kind}: ${ajv.errorsText(ajv.errors)}`];
+        ajv.compile(schema);
+        return [];
+      } catch (cause: unknown) {
+        return [
+          `${tool.name}.${kind}: ${cause instanceof Error ? cause.message : String(cause)}`,
+        ];
+      } finally {
+        ajv.removeSchema();
+      }
     }),
   );
 }
@@ -437,6 +454,35 @@ describe("MCP root input schemas", () => {
 
       expectStrictInputSchemaParity(tools, ajv);
 
+      for (const name of ["inspect_web_page", "analyze_web_bundle"]) {
+        const contract = TOOL_CONTRACTS.find((tool) => tool.name === name);
+        const tool = advertised.get(name);
+        if (contract === undefined || tool === undefined)
+          throw new Error(`${name} was not advertised`);
+        const validate = ajv.compile(tool.inputSchema);
+        const base = {
+          cdp_endpoint: "http://127.0.0.1:9222",
+          target_id: "target",
+        };
+        for (const flag of [undefined, false, true, "false", null]) {
+          const input =
+            flag === undefined
+              ? base
+              : { ...base, include_script_sources: flag };
+          const accepted =
+            flag === undefined ||
+            flag === true ||
+            (name === "inspect_web_page" && flag === false);
+          const parsed = contract.inputSchema.safeParse(input);
+          expect(parsed.success, `${name}: ${String(flag)}`).toBe(accepted);
+          expect(validate(input), `${name}: ${String(flag)}`).toBe(accepted);
+          if (parsed.success && flag === undefined)
+            expect(parsed.data).toMatchObject({
+              include_script_sources: name === "analyze_web_bundle",
+            });
+        }
+      }
+
       const nativeObservation = TOOL_CONTRACTS.find(
         ({ name }) => name === "observe_native_ui",
       );
@@ -627,6 +673,69 @@ it("ships nonrecursive input and output schemas in the generated catalog", () =>
   expect(schemaErrors(GENERATED_MCP_TOOL_CATALOG)).toEqual([]);
   expect(recursiveReferences(GENERATED_MCP_TOOL_CATALOG)).toEqual([]);
 });
+
+it("rejects unresolved output-schema references even for uncalled tools", () => {
+  const errors = schemaErrors([
+    {
+      name: "dangling",
+      inputSchema: { type: "object" },
+      outputSchema: { $ref: "#/$defs/missing" },
+    },
+  ]);
+  expect(errors).toHaveLength(1);
+  expect(errors[0]).toContain("dangling.outputSchema");
+});
+
+it("validates each tool independently when output schema IDs repeat", () => {
+  const outputSchema = { $id: "urn:rea:test:shared-output", type: "string" };
+  const errors = schemaErrors([
+    { name: "first", inputSchema: { type: "object" }, outputSchema },
+    {
+      name: "second",
+      inputSchema: { type: "object" },
+      outputSchema: { ...outputSchema },
+    },
+    {
+      name: "broken",
+      inputSchema: { type: "object" },
+      outputSchema: { $id: outputSchema.$id, $ref: "#/$defs/missing" },
+    },
+  ]);
+  expect(errors).toHaveLength(1);
+  expect(errors[0]).toContain("broken.outputSchema");
+  expect(errors[0]).toContain("missing");
+});
+
+it.each([false, true])(
+  "rejects references to another tool's nested IDs (earlier compilation fails: %s)",
+  (invalidPrevious) => {
+    const nestedId = "urn:rea:test:nested-output";
+    const errors = schemaErrors([
+      {
+        name: "first",
+        inputSchema: { type: "object" },
+        outputSchema: {
+          $defs: { shared: { $id: nestedId, type: "string" } },
+          ...(invalidPrevious ? { pattern: "[" } : {}),
+        },
+      },
+      {
+        name: "broken",
+        inputSchema: { type: "object" },
+        outputSchema: {
+          $ref: nestedId,
+          $defs: { shared: { type: "number" } },
+        },
+      },
+    ]);
+    expect(errors).toHaveLength(invalidPrevious ? 2 : 1);
+    const brokenErrors = errors.filter((error) =>
+      error.startsWith("broken.outputSchema:"),
+    );
+    expect(brokenErrors).toHaveLength(1);
+    expect(brokenErrors[0]).toContain(nestedId);
+  },
+);
 
 it("distinguishes recursive references from shared definitions", () => {
   const diamond = {

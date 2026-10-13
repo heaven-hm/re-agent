@@ -19,6 +19,63 @@ const TARGET: BinaryTarget = {
 const PROVIDER = { id: "fixture", name: "Fixture provider", version: "1" };
 const PROFILE = createAnalysisProfile(PROVIDER, { loader: "default" });
 
+it("preserves omitted relationship diagnostics and authenticates reported diagnostics", () => {
+  const observation = {
+    operation: "procedure_callees",
+    parameters: { procedure: "0x1000" },
+    result: ["0x2000"],
+  };
+  const historical = createEvidence(TARGET, PROVIDER, {
+    ...observation,
+    relationshipCoverage: { status: "complete" },
+  });
+  expect(historical.relationship_coverage).toEqual({ status: "complete" });
+  expect(parseEvidence(JSON.parse(JSON.stringify(historical)))).toEqual(
+    historical,
+  );
+  const diagnosed = createEvidence(TARGET, PROVIDER, {
+    ...observation,
+    relationshipCoverage: {
+      status: "complete",
+      diagnostics: ["Only resolved direct call references are observed."],
+    },
+  });
+  expect(parseEvidence(JSON.parse(JSON.stringify(diagnosed)))).toEqual(
+    diagnosed,
+  );
+  expect(diagnosed.evidence_id).not.toBe(historical.evidence_id);
+  expect(() =>
+    parseEvidence({
+      ...historical,
+      relationship_coverage: diagnosed.relationship_coverage,
+    }),
+  ).toThrow("semantic identifier");
+});
+
+it("projects known provider fields and preserves open JSON payloads", () => {
+  const liveProvider = { ...PROVIDER, transient_status: "starting" };
+  const evidence = createEvidence(TARGET, liveProvider, {
+    operation: "inspect",
+    parameters: { caller_metadata: { note: "kept" } },
+    result: { producer_extension: { value: "kept" } },
+    analysisProfile: PROFILE,
+    environment: {
+      id: "fixture",
+      platform: "linux",
+      architecture: "x86_64",
+      isolation: "process",
+    },
+    locations: [{ kind: "address", address: "0x1000" }],
+  });
+
+  expect(evidence.provider).toEqual(PROVIDER);
+  expect(evidence.parameters).toEqual({ caller_metadata: { note: "kept" } });
+  expect(evidence.normalized_result).toEqual({
+    producer_extension: { value: "kept" },
+  });
+  expect(parseEvidence(evidence)).toEqual(evidence);
+});
+
 it("preserves identity and bytes when reusing an owned immutable result", () => {
   const value = { nested: { values: ["observed", 1] } };
   const mutable = createEvidence(TARGET, PROVIDER, {

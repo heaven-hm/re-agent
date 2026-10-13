@@ -6,6 +6,7 @@ import type {
 } from "../../domain/process/processCapture.js";
 import { execFileOutput } from "../ExecFileOutput.js";
 import { readProcessRunId } from "../ProcessOwnership.js";
+import { monotonicProcessCaptureClock } from "./ProcessCaptureClock.js";
 const PROC_READ_CONCURRENCY = 64;
 
 interface ProcessRow {
@@ -358,7 +359,7 @@ const inspectInitializedPtyRoot = async (
     return undefined;
   let observedRunId: string | undefined;
   try {
-    observedRunId = await readProcessRunId(rootPid);
+    observedRunId = await readProcessRunId(rootPid, undefined, signal);
   } catch (cause: unknown) {
     // Unreadable run identity means the root cannot be attributed.
     void cause;
@@ -491,7 +492,7 @@ export const startProcessSampler = (options: {
       }
       return sampleProcesses({
         rootPid,
-        elapsedMs: Date.now() - started,
+        elapsedMs: monotonicProcessCaptureClock() - started,
         limit: limit + 1,
         identities,
         signal: controller.signal,

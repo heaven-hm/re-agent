@@ -225,7 +225,13 @@ const processEntry = async (
   if (isAborted(state.signal)) return { ok: false, error: cancelled() };
   if (kind === "symlink")
     state.entries.push(
-      await describeSymlink(state.root, absolute, path, state.signal),
+      await readStableSymlinkTarget(
+        absolute,
+        path,
+        metadata.value,
+        state.signal,
+        () => readSymlinkTarget(state.root, absolute, path),
+      ),
     );
   else if (kind === "directory") {
     directories.push({ path: absolute });
@@ -278,84 +284,89 @@ const processFileEntry = async (
   return ok(undefined);
 };
 
-const describeSymlink = async (
-  root: string,
+/** Bracket target observation with the symlink identity captured at enumeration. */
+export const readStableSymlinkTarget = async (
   absolute: string,
   path: string,
-  signal?: AbortSignal,
+  expected: BigIntStats,
+  signal: AbortSignal | undefined,
+  readTarget: () => Promise<ReferenceSourceEntry>,
 ): Promise<ReferenceSourceEntry> => {
   try {
-    const rawTarget = await readlink(absolute);
-    const lexicalTarget = resolve(dirname(absolute), rawTarget);
-    if (!isPathWithinRoot(root, lexicalTarget))
-      return {
-        status: "read",
-        kind: "symlink",
-        path,
-        target: lexicalTarget,
-        targetState: "external",
-      };
-    try {
-      const canonicalTarget = await realpath(lexicalTarget);
-      return isPathWithinRoot(root, canonicalTarget)
-        ? {
-            status: "read",
-            kind: "symlink",
-            path,
-            target: pathFromRoot(root, canonicalTarget),
-            targetState: "internal",
-          }
-        : {
-            status: "read",
-            kind: "symlink",
-            path,
-            target: canonicalTarget,
-            targetState: "external",
-          };
-    } catch (cause: unknown) {
-      if (isAborted(signal))
-        return entryFailure(
-          path,
-          "symlink",
-          "cancelled",
-          "Symlink inspection cancelled",
-        );
-      const code =
-        cause instanceof Error ? Reflect.get(cause, "code") : undefined;
-      if (code !== "ENOENT") {
-        const message = filesystemFailureDetail(
-          cause,
-          "Symbolic link target could not be resolved",
-        );
-        if (message === undefined) throw cause;
-        return entryFailure(path, "symlink", "io", message);
-      }
-      const missingOutsideRoot = !isPathWithinRoot(root, lexicalTarget);
-      return {
-        status: "read",
-        kind: "symlink",
-        path,
-        target: missingOutsideRoot
-          ? lexicalTarget
-          : pathFromRoot(root, lexicalTarget),
-        targetState: "missing",
-      };
-    }
+    const before = await bigLstat(absolute);
+    if (isAborted(signal)) return cancelledSymlink(path);
+    if (!before.isSymbolicLink() || !sameFile(expected, before))
+      return changedSymlink(path);
+    const observed = await readTarget();
+    if (isAborted(signal)) return cancelledSymlink(path);
+    const after = await bigLstat(absolute);
+    if (isAborted(signal)) return cancelledSymlink(path);
+    if (!after.isSymbolicLink() || !sameFile(expected, after))
+      return changedSymlink(path);
+    return observed;
   } catch (cause: unknown) {
-    if (isAborted(signal))
-      return entryFailure(
-        path,
-        "symlink",
-        "cancelled",
-        "Symlink inspection cancelled",
-      );
+    if (isAborted(signal)) return cancelledSymlink(path);
+    const code =
+      cause instanceof Error ? Reflect.get(cause, "code") : undefined;
+    if (code === "ENOENT" || code === "ENOTDIR") return changedSymlink(path);
     const message = filesystemFailureDetail(
       cause,
-      "Symbolic link target could not be read",
+      "Symbolic link target could not be read safely",
     );
     if (message === undefined) throw cause;
     return entryFailure(path, "symlink", "io", message);
   }
+};
+
+const cancelledSymlink = (path: string) =>
+  entryFailure(path, "symlink", "cancelled", "Symlink inspection cancelled");
+
+const changedSymlink = (path: string) =>
+  entryFailure(
+    path,
+    "symlink",
+    "changed",
+    "Symbolic link changed while its target was read",
+  );
+
+const readSymlinkTarget = async (
+  root: string,
+  absolute: string,
+  path: string,
+): Promise<ReferenceSourceEntry> => {
+  const rawTarget = await readlink(absolute);
+  const lexicalTarget = resolve(dirname(absolute), rawTarget);
+  if (!isPathWithinRoot(root, lexicalTarget))
+    return {
+      status: "read",
+      kind: "symlink",
+      path,
+      target: lexicalTarget,
+      targetState: "external",
+    };
+  let canonicalTarget: string;
+  try {
+    canonicalTarget = await realpath(lexicalTarget);
+  } catch (cause: unknown) {
+    const code =
+      cause instanceof Error ? Reflect.get(cause, "code") : undefined;
+    if (code !== "ENOENT") throw cause;
+    return {
+      status: "read",
+      kind: "symlink",
+      path,
+      target: pathFromRoot(root, lexicalTarget),
+      targetState: "missing",
+    };
+  }
+  const internal = isPathWithinRoot(root, canonicalTarget);
+  return {
+    status: "read",
+    kind: "symlink",
+    path,
+    target: internal ? pathFromRoot(root, canonicalTarget) : canonicalTarget,
+    targetState: internal ? "internal" : "external",
+  };
 };
 
 const applyExclusion = (

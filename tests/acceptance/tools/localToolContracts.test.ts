@@ -19,6 +19,25 @@ const electron = {
   executable_path: "/tmp/Electron",
   application_path: "/tmp/main.js",
 };
+
+const runCliExpectingInputError = async (
+  scenarioPath: string,
+): Promise<unknown> => {
+  const failure = await execute(process.execPath, [
+    cli,
+    "capture-process",
+    scenarioPath,
+    "--json",
+  ]).then(
+    () => undefined,
+    (cause: unknown) => cause,
+  );
+  expect(failure).toMatchObject({ code: 1 });
+  if (!(failure instanceof Error) || !("stdout" in failure))
+    throw new Error("Expected the CLI to report an input error on stdout");
+  return JSON.parse(String(failure.stdout)) as unknown;
+};
+
 const pathRequests: readonly [string, Record<string, unknown>][] = [
   ["open_binary", { path: nul }],
   ["open_binary", { path: process.execPath, snapshot_path: nul }],
@@ -91,6 +110,52 @@ const pathRequests: readonly [string, Record<string, unknown>][] = [
   ),
   ["capture_electron_scenario", { ...electron, args: ["a\0b"] }],
   ["demangle_swift", { symbols: ["abc\0def"] }],
+  ["inspect_web_network_capture", { capture_path: nul, format: "har" }],
+  [
+    "export_web_scripts",
+    { capture_path: nul, output_directory: "/tmp/exported-scripts" },
+  ],
+  ["inspect_pe_resources", { path: nul }],
+  ["inspect_binary_layout", { path: nul }],
+  ["inspect_recorded_crash", { path: nul }],
+  ["inspect_wasm_artifact", { path: nul }],
+  ["inspect_wasm_artifact", { path: "/tmp/sample.wasm", glue_paths: [nul] }],
+  [
+    "inspect_wasm_artifact",
+    { path: "/tmp/sample.wasm", candidate_paths: [nul] },
+  ],
+  ["inspect_evm_interface", { path: nul, encoding: "raw" }],
+  [
+    "export_web_scripts",
+    { capture_path: "/tmp/capture.json", output_directory: nul },
+  ],
+  [
+    "trace_web_source_location",
+    {
+      manifest_path: nul,
+      script_index: 0,
+      source_map: { path: "/tmp/source.map", url: "http://127.0.0.1/a" },
+      generated_position: { line: 1, column: 0 },
+    },
+  ],
+  [
+    "trace_web_source_location",
+    {
+      manifest_path: "/tmp/manifest.json",
+      script_index: 0,
+      source_map: { path: nul, url: "http://127.0.0.1/a" },
+      generated_position: { line: 1, column: 0 },
+    },
+  ],
+  ["trace_web_module_imports", { manifest_path: nul, script_index: 0 }],
+  [
+    "trace_web_module_imports",
+    {
+      manifest_path: "/tmp/manifest.json",
+      script_index: 0,
+      import_map: { path: nul, base_url: "http://127.0.0.1/a" },
+    },
+  ],
 ];
 
 it("rejects OS-invalid local inputs through the real advertised MCP contracts", async () => {
@@ -189,25 +254,80 @@ captureTest(
     });
     expect(parseMcpToolError(failed)).toMatchObject({
       error: {
-        code: "process_capture_failed",
-        message: expect.stringContaining(missing),
-        details: { execution_failure: expect.stringContaining(missing) },
+        code: "invalid_request",
+        details: {
+          operation: "capture_process_scenario",
+          issues: [
+            {
+              path: ["executable"],
+              message: expect.stringContaining(`${missing} (ENOENT)`),
+            },
+          ],
+        },
       },
     });
     await writeFile(
       join(root, "scenario.json"),
       JSON.stringify({ executable: missing }),
     );
-    await expect(
-      execute(process.execPath, [
-        cli,
-        "capture-process",
-        join(root, "scenario.json"),
-        "--json",
-      ]),
-    ).rejects.toMatchObject({
-      code: 1,
-      stdout: expect.stringContaining(missing),
+    const executableCliFailure = await runCliExpectingInputError(
+      join(root, "scenario.json"),
+    );
+    expect(executableCliFailure).toMatchObject({
+      code: "invalid_request",
+      details: {
+        operation: "capture_process_scenario",
+        issues: [
+          {
+            path: ["executable"],
+            message: expect.stringContaining(`${missing} (ENOENT)`),
+          },
+        ],
+      },
+    });
+
+    const missingWorkingDirectory = join(root, "missing-working-directory");
+    const cwdFailure = await call("capture_process_scenario", {
+      executable: process.execPath,
+      working_directory: missingWorkingDirectory,
+    });
+    expect(parseMcpToolError(cwdFailure)).toMatchObject({
+      error: {
+        code: "invalid_request",
+        details: {
+          operation: "capture_process_scenario",
+          issues: [
+            {
+              path: ["working_directory"],
+              message: expect.stringContaining(
+                `${missingWorkingDirectory} (ENOENT)`,
+              ),
+            },
+          ],
+        },
+      },
+    });
+    const cwdScenario = join(root, "missing-working-directory.json");
+    await writeFile(
+      cwdScenario,
+      JSON.stringify({
+        executable: process.execPath,
+        working_directory: missingWorkingDirectory,
+      }),
+    );
+    expect(await runCliExpectingInputError(cwdScenario)).toMatchObject({
+      code: "invalid_request",
+      details: {
+        operation: "capture_process_scenario",
+        issues: [
+          {
+            path: ["working_directory"],
+            message: expect.stringContaining(
+              `${missingWorkingDirectory} (ENOENT)`,
+            ),
+          },
+        ],
+      },
     });
   },
   60_000,

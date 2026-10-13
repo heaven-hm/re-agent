@@ -155,7 +155,7 @@ const readAttributes = (
 } => {
   const attributes = readRows(layout.table(12), (row) =>
     readManagedValue(
-      () => readCustomAttribute(bytes, layout, row, heapExtent(layout)),
+      () => readCustomAttribute(bytes, layout, row, heapExtent(layout), issues),
       issues,
     ),
   );

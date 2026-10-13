@@ -202,9 +202,7 @@ const shutdownRequestFailure = (
   operation: "shutdown" | "shutdown_document",
   cause: unknown,
 ): HopperProcessError => {
-  const failure = new HopperProcessError(null, undefined, operation);
-  failure.cause = cause;
-  return failure;
+  return new HopperProcessError(null, { operation, cause });
 };
 
 const shutdownFailureDetails = (

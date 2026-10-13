@@ -1,6 +1,6 @@
 import type { DoctorReport, DoctorScope, runDoctor } from "./Doctor.js";
 import type { LinuxDistribution } from "./LinuxHopper.js";
-import type { SkillDestination } from "./SetupSkill.js";
+import type { SkillDestination, SkillInstallResult } from "./SetupSkill.js";
 import type { SetupClient } from "./SupportedClients.js";
 import type {
   SetupFailureCode,
@@ -26,6 +26,16 @@ export type ClientConfigurationResult =
   | {
       readonly status: "failed";
       readonly reason: "path" | "backup" | "write" | "readback";
+    }
+  | {
+      readonly status: "failed";
+      readonly reason: "rollback";
+      readonly backupPath?: string;
+      readonly failure: {
+        readonly kind: "restore";
+        readonly path: string;
+        readonly detail: string;
+      };
     };
 
 /** Read-only state used to block unsafe setup plans before any mutation. */
@@ -70,9 +80,7 @@ export interface SetupHost {
     command: readonly string[],
   ): Promise<ClientConfigurationInspection>;
   skillNeedsInstall(clientIds: readonly string[]): Promise<boolean>;
-  installSkill(
-    clientIds: readonly string[],
-  ): Promise<"installed" | "unchanged" | "failed">;
+  installSkill(clientIds: readonly string[]): Promise<SkillInstallResult>;
   doctor(scope?: DoctorScope): Promise<Awaited<ReturnType<typeof runDoctor>>>;
 }
 /** Structured setup outcome carrying remediation instead of prompting. */

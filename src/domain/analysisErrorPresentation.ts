@@ -1,6 +1,7 @@
 import {
   AnalysisAccessDeniedError,
   AnalysisArtifactChangedError,
+  AnalysisCapabilityUnavailableError,
   AnalysisInputError,
   AnalysisUnsupportedTargetError,
   AnalysisResourceConstraintError,
@@ -33,6 +34,10 @@ import type { AnalysisErrorProjection } from "./analysisErrorProjection.js";
 export const analysisErrorRemediationAction = (
   error: AnalysisError,
 ): string => {
+  if (error instanceof AnalysisCapabilityUnavailableError && error.retryable)
+    return "Review details.reason, then retry the same analysis after the condition clears.";
+  if (error instanceof EvidenceFileError && error.published !== undefined)
+    return "Use the published file at details.published_path and resolve the reported staging cleanup failure.";
   if (error instanceof AnalysisSnapshotMismatchError)
     return "Run analysis without this snapshot, then save a fresh snapshot using the intended artifact, provider, and analysis profile.";
   if (error instanceof AnalysisUnsupportedTargetError)
@@ -43,13 +48,15 @@ export const analysisErrorRemediationAction = (
   if (error instanceof AnalysisResourceConstraintError)
     return (
       error.remediationAction ??
-      (error.resource === "transport"
-        ? "Discover retained records with get_evidence_bundle and detail: summary, then inspect compatible records through inspect_analysis_view using an exact Evidence reference. Export complete retained session evidence through export_evidence_bundle to a caller-selected path, or use complete CLI JSON output. The connection remains usable."
-        : error.resource === "cpu"
-          ? "Review the reported worker CPU limits and observed signal. Retry with sufficient CPU time or a smaller artifact; REA retains tighter inherited limits."
-          : error.resource === "file-size"
-            ? "Review the reported worker file-size limits and write failure. Retry with a sufficient file-size allowance for the evidence reply; REA retains tighter inherited limits."
-            : "Review the reported worker memory limits and available host memory. Retry with sufficient memory or a smaller artifact; REA retains tighter inherited limits.")
+      (error.resource === "capacity"
+        ? "Wait for an active analysis to complete, then retry within the reported admission limits."
+        : error.resource === "transport"
+          ? "Discover retained records with get_evidence_bundle and detail: summary, then inspect compatible records through inspect_analysis_view using an exact Evidence reference. Export complete retained session evidence through export_evidence_bundle to a caller-selected path, or use complete CLI JSON output. The connection remains usable."
+          : error.resource === "cpu"
+            ? "Review the reported worker CPU limits and observed signal. Retry with sufficient CPU time or a smaller artifact; REA retains tighter inherited limits."
+            : error.resource === "file-size"
+              ? "Review the reported worker file-size limits and write failure. Retry with a sufficient file-size allowance for the evidence reply; REA retains tighter inherited limits."
+              : "Review the reported worker memory limits and available host memory. Retry with sufficient memory or a smaller artifact; REA retains tighter inherited limits.")
     );
   if (error instanceof HopperTimeoutError)
     return error.operation === undefined
@@ -75,6 +82,21 @@ export const analysisErrorRemediationAction = (
   )
     return "For a JavaScript/Electron application directory, call analyze_javascript_application with input_path or run `rea analyze <directory>`. For binary analysis, select its executable file.";
   if (
+    error instanceof BinaryTargetError &&
+    error.constraint === "load_selection_rejected"
+  )
+    return "Correct the reported load argument (--target-format, --architecture, or --entry-point on the CLI; format, architecture, or entry_point through MCP) and retry.";
+  if (
+    error instanceof BinaryTargetError &&
+    error.constraint === "file_format_rejected"
+  )
+    return "Review the reported file-format reason and select a supported, well-formed target.";
+  if (
+    error instanceof BinaryTargetError &&
+    error.constraint === "wasm_requires_static_inspection"
+  )
+    return `For static inspection, call inspect_wasm_artifact with ${JSON.stringify({ path: error.path })} or run \`rea inspect-wasm-artifact <path> --format json\`. This separate lane requires caller-supplied WABT 1.0.42 via absolute REA_WABT_BIN_DIRECTORY; check its availability in binary_session. REA does not execute WASM or install tools, and the header alone does not establish that the complete module is valid.`;
+  if (
     error instanceof AnalysisAccessDeniedError ||
     (error instanceof BinaryTargetError && error.systemCode !== undefined)
   )
@@ -93,6 +115,19 @@ export const analysisErrorRemediationAction = (
 export const analysisErrorCategory = (
   error: AnalysisError,
 ): AnalysisErrorProjection["category"] => {
+  if (error instanceof AnalysisCapabilityUnavailableError && error.retryable)
+    return "unavailable";
+  if (
+    error instanceof BinaryTargetError &&
+    error.constraint === "load_selection_rejected"
+  )
+    return "invalid_input";
+  if (
+    error instanceof BinaryTargetError &&
+    (error.constraint === "wasm_requires_static_inspection" ||
+      error.constraint === "file_format_rejected")
+  )
+    return "unsupported_target";
   if (
     error instanceof ProviderSelectionError &&
     error.reason === "provider_unavailable"
@@ -120,6 +155,7 @@ export const analysisErrorCategory = (
     error instanceof EvidenceFileError &&
     (error.reason === "missing" ||
       error.reason === "not-file" ||
+      error.reason === "wrong-kind" ||
       error.reason === "exists")
   )
     return "invalid_input";
@@ -156,6 +192,7 @@ const artifactErrorCategory = (
 const STATIC_ERROR_CATEGORIES: Readonly<
   Partial<Record<AnalysisErrorTag, AnalysisErrorProjection["category"]>>
 > = {
+  ConfigurationError: "invalid_input",
   AnalysisInputError: "invalid_input",
   AnalysisAccessDeniedError: "unavailable",
   AnalysisArtifactChangedError: "integrity_mismatch",
@@ -181,10 +218,15 @@ export const analysisErrorUserMessage = (error: AnalysisError): string => {
   if (error instanceof AnalysisArtifactChangedError)
     return "The selected artifact changed during acquisition; no stable snapshot was decoded.";
   if (error instanceof AnalysisInputError)
-    return "Analysis input is invalid. Check the arguments and try again.";
+    return (
+      error.userMessage ??
+      "Analysis input is invalid. Check the arguments and try again."
+    );
   const hopperMessage = hopperErrorUserMessage(error);
   if (hopperMessage !== undefined) return hopperMessage;
   if (error.userMessage !== undefined) return error.userMessage;
+  if (error instanceof AnalysisCapabilityUnavailableError && error.retryable)
+    return "Required runtime controls are unavailable for this attempt.";
   const standardMessage = standardErrorMessage(error._tag);
   if (standardMessage !== undefined) return standardMessage;
   if (error instanceof ArtifactOperationError) return artifactMessage(error);
@@ -210,10 +252,18 @@ export const analysisErrorUserMessage = (error: AnalysisError): string => {
           )
           .join("; ")}.`;
   if (error instanceof NoBinaryOpenError) return error.message;
+  if (
+    error instanceof BinaryTargetError &&
+    error.constraint === "wasm_requires_static_inspection"
+  )
+    return `${error.message}. Static WebAssembly inspection uses a separate optional WABT lane, not a native analysis engine.`;
   if (error instanceof BinaryTargetError)
     return error.constraint === "directory_requires_file"
       ? "open_binary accepts files and macOS app bundles. This target is a directory; JavaScript/Electron application directories can be analyzed directly with analyze_javascript_application or `rea analyze <directory>`."
-      : `${error.message}. Check that the path exists, is readable, and points to a supported file.`;
+      : error.constraint === "file_format_rejected" ||
+          error.constraint === "load_selection_rejected"
+        ? `${error.message}.`
+        : `${error.message}. Check that the path exists, is readable, and points to a supported file.`;
   if (error._tag === "ProcessCaptureError")
     return (
       error.userMessage ??
@@ -265,9 +315,12 @@ const hopperProcessMessage = (error: HopperProcessError): string => {
   const startup =
     error.userMessage === undefined ? "" : ` ${error.userMessage}`;
   if (error.providerState === "exited") {
+    const signal = error.launcherFailure?.signal;
     const exit =
       error.exitCode === null
-        ? "no exit code was observed"
+        ? signal === undefined || signal === null
+          ? "no exit code was observed"
+          : `signal ${signal}`
         : `exit code ${String(error.exitCode)}`;
     const recovery =
       error.failureCode === undefined && stage !== "launch"
@@ -365,7 +418,10 @@ const artifactMessage = ({
 const evidenceFileMessage = ({
   operation,
   reason,
+  published,
 }: EvidenceFileError): string => {
+  if (published !== undefined)
+    return "The output file was published, but staging cleanup remains incomplete.";
   if (reason === "missing")
     return operation === "read"
       ? "Evidence file does not exist at the selected path. Check the path and try again."

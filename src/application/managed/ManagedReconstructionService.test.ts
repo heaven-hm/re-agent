@@ -22,6 +22,26 @@ const exampleMethod = () => {
 };
 
 describe("managed decompiler reconstruction import", () => {
+  it("reports UTF-8 byte totals while preserving UTF-16 text lengths", () => {
+    const text = 'return "é"; // 😀';
+    const method = exampleMethod();
+    const result = importManagedReconstructionEvidence({
+      ...MANAGED_RECONSTRUCTION_IMPORT_EXAMPLE,
+      methods: [
+        {
+          ...method,
+          reconstruction: { ...method.reconstruction, text },
+        },
+      ],
+    });
+    if (!result.ok) throw result.error;
+
+    expect(result.value.normalized_result).toMatchObject({
+      summary: { total_text_bytes: 20 },
+      methods: [{ reconstruction: { text, text_length: 17 } }],
+    });
+  });
+
   it("rejects reconstruction text hash drift", () => {
     expect(() =>
       importManagedReconstruction({
@@ -51,6 +71,33 @@ describe("managed decompiler reconstruction import", () => {
         ],
       }),
     ).toThrow(/does not match/u);
+  });
+
+  it("rejects static Evidence with a token MVID but no module identity", () => {
+    const input = exampleInput();
+    const members = managedMemberInspectionSchema.parse(
+      input.static_members.normalized_result,
+    );
+    if (members.module === null || members.module.mvid === null)
+      throw new Error("Expected fixture module identity and MVID");
+    const inconsistentEvidence = createEvidence(
+      undefined,
+      input.static_members.provider,
+      {
+        operation: "inspect_managed_members",
+        parameters: {},
+        result: { ...members, module: null },
+        rawResult: null,
+        limitations: members.limitations,
+      },
+    );
+
+    expect(() =>
+      importManagedReconstruction({
+        ...input,
+        static_members: inconsistentEvidence,
+      }),
+    ).toThrow(/token scope MVID/u);
   });
 
   it("rejects reconstruction locks for partial CIL without normalized identity", () => {

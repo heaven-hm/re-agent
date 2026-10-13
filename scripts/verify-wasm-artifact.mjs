@@ -122,15 +122,44 @@ try {
       new URL("../tests/fixtures/wasm/custom-names.wat", import.meta.url),
       "utf8",
     ),
-  ];
-  for (const [index, source] of sources.entries()) {
+    `(module
+  (memory 1)
+  (data "x")
+  (func (export "init")
+    i32.const 0
+    i32.const 0
+    i32.const 1
+    memory.init 0
+    data.drop 0))\n`,
+  ].map((source) => ({ source, debugNames: false }));
+  sources.push(
+    {
+      source:
+        '(module $named (func (export "answer") (result i32) i32.const 42))\n',
+      debugNames: true,
+    },
+    {
+      source: await readFile(
+        new URL("../tests/fixtures/wasm/module-names.wat", import.meta.url),
+        "utf8",
+      ),
+      debugNames: false,
+    },
+  );
+  for (const [index, { source, debugNames }] of sources.entries()) {
     const fixtureRoot = join(root.path, `fixture-${index}`);
     await mkdir(fixtureRoot);
     const path = join(fixtureRoot, "module.wasm");
     await writeFile(join(fixtureRoot, "source.wat"), source);
     await tool(
       "wat2wasm",
-      ["--enable-all", "source.wat", "-o", "module.wasm"],
+      [
+        "--enable-all",
+        ...(debugNames ? ["--debug-names"] : []),
+        "source.wat",
+        "-o",
+        "module.wasm",
+      ],
       fixtureRoot,
     );
     await tool("wasm-validate", ["--enable-all", "module.wasm"], fixtureRoot);
@@ -218,8 +247,33 @@ try {
           '"test\nline"',
           '"fake"\nSection Details:\n   Type start=0x0000000a end=0x0000000b (size=0x00000001) count: 0\n"end"',
           '"unicode-é\\\t"',
+          '"visible"',
+          '"\uFEFFsection"',
+          '"\uFEFFname"',
+          '"\uFEFF"',
+          '""',
         ],
       );
+    if (debugNames) {
+      assert.ok(report.headers.includes("\nmodule name: <named>\n"));
+      assert.deepEqual(report.exports, ['(export "answer" (func 0))']);
+    }
+    if (index === 4) {
+      assert.match(
+        headers,
+        /^DataCount start=0x[\da-f]+ end=0x[\da-f]+ \(size=0x[\da-f]+\) count: 1$/m,
+      );
+      assert.deepEqual(
+        report.sections.find(({ kind }) => kind === "DataCount"),
+        {
+          kind: "DataCount",
+          start: 0x23,
+          end: 0x24,
+          bytes: 1,
+          description: "count: 1",
+        },
+      );
+    }
     const bundleReply = await client.callTool({
       name: "get_evidence_bundle",
       arguments: {},

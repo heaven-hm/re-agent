@@ -14,6 +14,7 @@ import type {
 export interface DoctorScopeReport {
   readonly mode: "audit-wide" | "explicit";
   readonly clients: readonly string[];
+  readonly skill_clients?: readonly string[];
   readonly providers: readonly string[];
   readonly skill: boolean;
   readonly target: string | null;
@@ -40,6 +41,9 @@ export const normalizeDoctorScope = (
 ): DoctorScopeReport => ({
   mode: requested === undefined ? "audit-wide" : "explicit",
   clients: uniqueSorted(requested?.clients ?? []),
+  ...(requested?.skillClients === undefined
+    ? {}
+    : { skill_clients: uniqueSorted(requested.skillClients) }),
   providers: uniqueSorted(requested?.providers ?? []),
   skill: requested?.skill === true,
   target: target ?? null,

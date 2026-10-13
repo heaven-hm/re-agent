@@ -1,6 +1,6 @@
 import { constants } from "node:fs";
 import type { BigIntStats, Stats } from "node:fs";
-import { open, type FileHandle } from "node:fs/promises";
+import { lstat, open, type FileHandle } from "node:fs/promises";
 
 import { OwnedFileHandle } from "./OwnedFileHandle.js";
 
@@ -74,6 +74,16 @@ export const openRegularFile = async (
     options.signal?.throwIfAborted();
     if (!metadata.isFile())
       throw new NonRegularFileReadError(path, metadata.isDirectory());
+    // O_NOFOLLOW is unavailable on Windows. Recheck the name only on hosts
+    // where open could have followed a symlink, while the descriptor is owned.
+    if (options.symlinks === "reject" && (constants.O_NOFOLLOW ?? 0) === 0) {
+      const named = await lstat(path);
+      options.signal?.throwIfAborted();
+      if (named.isSymbolicLink())
+        throw new NonRegularFileReadError(path, false);
+      if (!sameRegularFileState(metadata, named))
+        throw new RegularFileChangedError(path);
+    }
     return handle;
   } catch (cause: unknown) {
     try {
@@ -95,5 +105,8 @@ export const sameRegularFileState = (
   expected.ino === observed.ino &&
   expected.size === observed.size &&
   expected.mode === observed.mode &&
-  expected.mtimeMs === observed.mtimeMs &&
-  expected.ctimeMs === observed.ctimeMs;
+  ("mtimeNs" in expected && "mtimeNs" in observed
+    ? expected.mtimeNs === observed.mtimeNs &&
+      expected.ctimeNs === observed.ctimeNs
+    : expected.mtimeMs === observed.mtimeMs &&
+      expected.ctimeMs === observed.ctimeMs);

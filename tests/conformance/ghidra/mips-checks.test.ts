@@ -3,6 +3,7 @@ import {
   assertMipsGlobal,
   assertMipsLoadedImage,
   assertMipsProbe,
+  assertMipsSoftFloatStorage,
   parseMipsReadelf,
 } from "./mips-checks.mjs";
 
@@ -225,5 +226,119 @@ describe("MIPS real-verifier independent expectations", () => {
     assertMipsGlobal("00000007", "big");
     expect(() => assertMipsGlobal("00000007", "little")).toThrow();
     expect(() => assertMipsGlobal("0700", "little")).toThrow();
+  });
+});
+
+describe("MIPS soft-float real-verifier expectations", () => {
+  const softReadelf = readelf
+    .replace("CPR1 size: 32", "CPR1 size: 0")
+    .replace("Hard float (32-bit CPU, Any FPU)", "Soft float")
+    .replace(
+      "     8: 00020240    32 FUNC    GLOBAL DEFAULT    4 rea_mips_probe\n",
+      [
+        "     8: 00020240    32 FUNC    GLOBAL DEFAULT    4 rea_mips_probe",
+        "     9: 00020300    64 FUNC    GLOBAL DEFAULT    4 rea_mips_soft_pick",
+        "    10: 00020340    64 FUNC    GLOBAL DEFAULT    4 rea_mips_soft_wide",
+        "    11: 00020380    96 FUNC    GLOBAL DEFAULT    4 rea_mips_soft_mixed",
+        "    12: 000203e0    96 FUNC    GLOBAL DEFAULT    4 rea_mips_soft_struct",
+        "    13: 00020440   160 FUNC    GLOBAL DEFAULT    4 rea_mips_soft_caller",
+        "",
+      ].join("\n"),
+    );
+
+  it("reads the soft-float ABI record and its fixture symbols", () => {
+    const parsed = parseMipsReadelf(softReadelf, "little", "soft");
+    expect(parsed.mips.abiFlags).toMatchObject({ cpr1Size: 0, fpAbi: 3 });
+    expect(parsed.symbols.rea_mips_soft_mixed).toBe("0x20380");
+  });
+
+  it("rejects a float ABI that differs from the build intent", () => {
+    expect(() => parseMipsReadelf(softReadelf, "little", "hard")).toThrow(
+      /build intent/u,
+    );
+    expect(() => parseMipsReadelf(readelf, "little", "soft")).toThrow(
+      /build intent/u,
+    );
+  });
+
+  const boundaries = (byteOrder: "little" | "big") => {
+    const pair = (low: string, high: string) =>
+      byteOrder === "little" ? `${high}:4,${low}:4` : `${low}:4,${high}:4`;
+    const item = (
+      ordinal: number,
+      name: string,
+      dataType: string,
+      storage: string,
+    ) => ({ ordinal, name, data_type: dataType, storage });
+    return {
+      rea_mips_soft_pick: {
+        return_type: { data_type: "float", storage: "v0:4" },
+        parameters: [
+          item(2, "sel", "int", "a2:4"),
+          item(0, "a", "float", "a0:4"),
+          item(1, "b", "float", "a1:4"),
+        ],
+      },
+      rea_mips_soft_wide: {
+        return_type: { data_type: "double", storage: pair("v0", "v1") },
+        parameters: [
+          item(0, "a", "double", pair("a0", "a1")),
+          item(1, "sel", "int", "a2:4"),
+        ],
+      },
+      rea_mips_soft_mixed: {
+        return_type: { data_type: "double", storage: pair("v0", "v1") },
+        parameters: [
+          item(0, "i", "int", "a0:4"),
+          item(1, "d", "double", pair("a2", "a3")),
+          item(2, "f", "float", "Stack[0x10]:4"),
+          item(3, "e", "double", "Stack[0x18]:8"),
+        ],
+      },
+      rea_mips_soft_struct: {
+        return_type: { data_type: "rea_mips_soft_pair *", storage: "v0:4" },
+        parameters: [
+          item(
+            0,
+            "__return_storage_ptr__",
+            "rea_mips_soft_pair *",
+            "a0:4 (auto)",
+          ),
+          item(1, "scale", "float", "a1:4"),
+          item(2, "sel", "int", "a2:4"),
+        ],
+      },
+    };
+  };
+
+  it("checks soft-float o32 storage, including pair order, alignment and spill", () => {
+    assertMipsSoftFloatStorage(boundaries("little"), "little");
+    assertMipsSoftFloatStorage(boundaries("big"), "big");
+    expect(() =>
+      assertMipsSoftFloatStorage(boundaries("big"), "little"),
+    ).toThrow();
+    const hardFloat = boundaries("little");
+    const pickA = hardFloat.rea_mips_soft_pick.parameters.find(
+      (item) => item.ordinal === 0,
+    );
+    if (pickA === undefined) throw new Error("fixture lacks pick parameter a");
+    pickA.storage = "f12:4";
+    expect(() => assertMipsSoftFloatStorage(hardFloat, "little")).toThrow();
+    const unaligned = boundaries("little");
+    const mixedD = unaligned.rea_mips_soft_mixed.parameters.find(
+      (item) => item.ordinal === 1,
+    );
+    if (mixedD === undefined)
+      throw new Error("fixture lacks mixed parameter d");
+    mixedD.storage = "a2:4,a1:4";
+    expect(() => assertMipsSoftFloatStorage(unaligned, "little")).toThrow();
+    const lostHiddenReturn = boundaries("little");
+    lostHiddenReturn.rea_mips_soft_struct.parameters = [
+      { ordinal: 0, name: "scale", data_type: "float", storage: "a0:4" },
+      { ordinal: 1, name: "sel", data_type: "int", storage: "a1:4" },
+    ];
+    expect(() =>
+      assertMipsSoftFloatStorage(lostHiddenReturn, "little"),
+    ).toThrow();
   });
 });

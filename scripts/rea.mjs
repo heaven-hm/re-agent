@@ -16,6 +16,12 @@ const isMcpMode =
 const isMcpDoctorMode = args[0] === "mcp" && args[1] === "doctor";
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
+// Windows home lookup throws for an empty USERPROFILE. Dependencies resolve
+// home during import, before REA's own resolver can apply its account fallback.
+if (process.platform === "win32" && process.env.USERPROFILE === "") {
+  delete process.env.USERPROFILE;
+}
+
 // Playwright's registry assumes one of its three desktop host platforms when
 // it chooses the browser cache directory. Termux reports `android`, although
 // its Node runtime and filesystem are POSIX-compatible. Keep the cache path
@@ -33,8 +39,12 @@ if (
 const runtimeFiles = isMcpMode
   ? ["dist/mcp/main.js"]
   : isMcpDoctorMode
-    ? ["dist/mcp/main.js", "dist/mcpDoctor.js"]
-    : ["dist/cli.js", "dist/cliOutput.js", "dist/cli/streamedJsonOutput.js"];
+    ? ["dist/mcp/main.js", "dist/cli-runtime/mcpDoctor.js"]
+    : [
+        "dist/cli-runtime/cli.js",
+        "dist/cli-runtime/cliOutput.js",
+        "dist/cli-runtime/cliResultOutput.js",
+      ];
 
 if (!(await compiledRuntimeExists(runtimeFiles))) {
   process.stderr.write(
@@ -45,7 +55,8 @@ if (!(await compiledRuntimeExists(runtimeFiles))) {
   const { runEntrypoint } = await import("../dist/mcp/main.js");
   await runEntrypoint();
 } else if (isMcpDoctorMode) {
-  const { runProductionMcpDoctorCli } = await import("../dist/mcpDoctor.js");
+  const { runProductionMcpDoctorCli } =
+    await import("../dist/cli-runtime/mcpDoctor.js");
   const result = await runProductionMcpDoctorCli(args.slice(2), {
     dispatcherPath: fileURLToPath(import.meta.url),
     packageRoot,
@@ -53,21 +64,26 @@ if (!(await compiledRuntimeExists(runtimeFiles))) {
   process.stdout.write(result.output);
   process.exitCode = result.exitCode;
 } else {
-  const { createCli } = await import("../dist/cli.js");
-  const { createStreamedCliJsonOutput } =
-    await import("../dist/cli/streamedJsonOutput.js");
+  const { cliConfigurationError, createCli } =
+    await import("../dist/cli-runtime/cli.js");
+  const { createCliResultOutput } =
+    await import("../dist/cli-runtime/cliResultOutput.js");
   const {
     renderCliOutputArgumentError,
     renderEmptyFilteredCliOutput,
     validateCliOutputArguments,
-  } = await import("../dist/cliOutput.js");
+  } = await import("../dist/cli-runtime/cliOutput.js");
   const outputArguments = validateCliOutputArguments(args);
-  if (!outputArguments.ok) {
+  const configurationError = cliConfigurationError(process.env);
+  if (configurationError !== undefined) {
+    process.stderr.write(`${configurationError}\n`);
+    process.exitCode = 1;
+  } else if (!outputArguments.ok) {
     process.stdout.write(renderCliOutputArgumentError(outputArguments));
     process.exitCode = 1;
   } else {
     let wroteOutput = false;
-    const resultOutput = createStreamedCliJsonOutput(args, process.stdout);
+    const resultOutput = createCliResultOutput(args, process.stdout);
     await createCli(process.env, resultOutput).serve(args, {
       stdout: (output) => {
         if (resultOutput?.handled) {

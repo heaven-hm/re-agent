@@ -13,7 +13,7 @@ const registeredCommands: WeakMap<object, CommandMap> = Cli.toCommands;
 
 const advertisedGroupSchema = z
   .object({
-    properties: z.record(z.string(), z.unknown()).optional(),
+    properties: z.record(z.string(), z.unknown()),
     required: z.array(z.string()).optional(),
   })
   .loose();
@@ -70,8 +70,27 @@ describe("CLI advertised input schemas", () => {
     for (const command of createCliInventory(cli).primary) {
       const advertised = await advertisedSchema(cli, command);
       for (const group of INPUT_GROUPS) {
-        const required = (advertised[group]?.required ?? []).toSorted();
-        const rejected = omissionRejected(parserSchema(cli, command, group));
+        const parser = parserSchema(cli, command, group);
+        const advertisedGroup = advertised[group];
+        if (parser === undefined) {
+          if (advertisedGroup !== undefined)
+            mismatches.push(`${command} ${group}: advertised without parser`);
+          continue;
+        }
+        if (advertisedGroup === undefined) {
+          mismatches.push(`${command} ${group}: parser group not advertised`);
+          continue;
+        }
+        const parserProperties = Object.keys(parser.shape).toSorted();
+        const advertisedProperties = Object.keys(
+          advertisedGroup.properties,
+        ).toSorted();
+        if (advertisedProperties.join() !== parserProperties.join())
+          mismatches.push(
+            `${command} ${group}: advertised properties [${advertisedProperties.join()}], parser properties [${parserProperties.join()}]`,
+          );
+        const required = (advertisedGroup.required ?? []).toSorted();
+        const rejected = omissionRejected(parser);
         if (required.join() !== rejected.join())
           mismatches.push(
             `${command} ${group}: advertised [${required.join()}], parser rejects [${rejected.join()}]`,
@@ -112,3 +131,73 @@ describe("CLI advertised input schemas", () => {
     );
   });
 });
+
+describe("firmware CLI advertised input schema", () => {
+  it("keeps limits and defaults from its shared input contract", async () => {
+    const cli = createCli({});
+    const advertised = await advertisedSchema(cli, "extract-firmware");
+    const ajv = new Ajv2020({ strict: false });
+    const args = ajv.compile(advertised.args ?? {});
+    const options = ajv.compile(advertised.options ?? {});
+
+    expect(args({ path: "firmware.bin", outputDirectory: "output" })).toBe(
+      true,
+    );
+    expect(args({ path: "", outputDirectory: "output" })).toBe(false);
+    expect(args({ path: "firmware.bin", outputDirectory: "" })).toBe(false);
+    expect(options({})).toBe(true);
+    expect(options({ maxDepth: 0 })).toBe(false);
+    expect(options({ maxDepth: 11 })).toBe(false);
+    expect(options({ maxOutputBytes: 0 })).toBe(false);
+    expect(options({ maxOutputBytes: 512 * 1024 * 1024 + 1 })).toBe(false);
+    expect(options({ maxOutputFiles: 100_001 })).toBe(false);
+    expect(advertised.options?.properties?.["maxDepth"]).toMatchObject({
+      default: 3,
+    });
+    expect(advertised.options?.properties?.["maxOutputBytes"]).toMatchObject({
+      default: 256 * 1024 * 1024,
+    });
+    expect(advertised.options?.properties?.["maxOutputFiles"]).toMatchObject({
+      default: 10_000,
+    });
+
+    const maxOffset = Number.MAX_SAFE_INTEGER;
+    expect(options({ offset: maxOffset + 1 })).toBe(false);
+    expect(options({ length: maxOffset + 1 })).toBe(false);
+
+    expect(
+      parserSchema(cli, "extract-firmware", "options")?.parse({}),
+    ).toMatchObject({
+      maxDepth: 3,
+      maxOutputBytes: 256 * 1024 * 1024,
+      maxOutputFiles: 10_000,
+    });
+  });
+});
+
+describe("web module CLI advertised input schema", () => {
+  it("advertises the shared path and URL constraints", async () => {
+    const cli = createCli({});
+    const advertised = await advertisedSchema(cli, "trace-web-module-imports");
+    const ajv = new Ajv2020({ strict: false });
+    const args = ajv.compile(advertised.args ?? {});
+    const options = ajv.compile(advertised.options ?? {});
+
+    expect(
+      args({ manifestPath: resolve("manifest.json"), scriptIndex: 0 }),
+    ).toBe(true);
+    expect(args({ manifestPath: "", scriptIndex: 0 })).toBe(false);
+    expect(args({ manifestPath: "manifest\u0000.json", scriptIndex: 0 })).toBe(
+      false,
+    );
+    expect(args({ manifestPath: "./manifest.json", scriptIndex: -1 })).toBe(
+      false,
+    );
+    expect(options({})).toBe(true);
+    expect(options({ importerUrl: "" })).toBe(false);
+    expect(options({ importMapPath: "" })).toBe(false);
+    expect(options({ importMapPath: "map\u0000.json" })).toBe(false);
+    expect(options({ importMapBaseUrl: "" })).toBe(false);
+  });
+});
+import { resolve } from "node:path";

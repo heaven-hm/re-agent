@@ -27,10 +27,8 @@ import { ProviderAdapterError } from "../../domain/providerAdapterError.js";
 import { ProviderCleanupError } from "../../domain/providerCleanupError.js";
 import { ok, err, type Result } from "../../domain/result.js";
 import { javaScriptRuntime } from "../../domain/runtimeVersion.js";
-import {
-  PrivateRuntimeRoot,
-  PrivateRuntimeRootUnavailableError,
-} from "../../process/PrivateRuntimeRoot.js";
+import { PrivateRuntimeRoot } from "../../process/PrivateRuntimeRoot.js";
+import { PrivateRuntimeRootUnavailableError } from "../../process/PrivateRuntimeRootUnavailableError.js";
 import { javaScriptWorkerMemoryLimitBytes } from "../../process/JavaScriptWorkerMemoryLimit.js";
 import {
   ProviderProcessSupervisor,
@@ -59,6 +57,7 @@ import {
 const OPERATION = "analyze_javascript_application";
 const PROVIDER = "javascript-static-analysis";
 const MIB = 1024 * 1024;
+const STATIC_CHECKPOINT_RETENTION_EXPANSION = 6;
 const pendingCleanup = new Set<JavaScriptAnalysisWorker>();
 /** The worker runs on this executable; Bun accepts but ignores V8 heap flags. */
 const WORKER_HEAP_FLAGS_ENFORCED =
@@ -80,7 +79,6 @@ export class JavaScriptAnalysisWorker {
   #estimatedRetainedBytes = 0;
   #applicationProjectionFailure: AnalysisResourceConstraintError | undefined;
   #parentCapacityExhausted = false;
-  #retainedStaticBytes = 0;
   #sourcesRemaining: number | undefined;
   readonly #resultBudgetBytes: number;
   /** Null when the runtime enforces the V8 heap flags instead. */
@@ -326,7 +324,13 @@ export class JavaScriptAnalysisWorker {
               {
                 ...this.#limits(),
                 parent_result_budget_bytes: this.#resultBudgetBytes,
+                parent_available_result_budget_bytes: remaining,
                 module_transfer_bytes: descriptor.module_bytes,
+                module_retention_estimate_bytes: moduleEstimate,
+              },
+              {
+                remediationAction:
+                  "Use the retained static facts or analyze fewer source files. This limit belongs to the parent result budget; increasing the worker heap alone does not increase it.",
               },
             ),
           });
@@ -358,8 +362,15 @@ export class JavaScriptAnalysisWorker {
                 {
                   ...this.#limits(),
                   parent_result_budget_bytes: this.#resultBudgetBytes,
+                  parent_available_result_budget_bytes: remaining,
+                  module_retention_estimate_bytes: moduleEstimate,
+                  graph_retention_estimate_bytes: graphEstimate,
                   graph_transfer_bytes: descriptor.graph_bytes,
                   graph_records: descriptor.graph_records,
+                },
+                {
+                  remediationAction:
+                    "Use the retained static and module facts or analyze fewer source files. This limit belongs to the parent result budget; increasing the worker heap alone does not increase it.",
                 },
               ),
             });
@@ -582,16 +593,16 @@ export class JavaScriptAnalysisWorker {
     const value: unknown = JSON.parse(text);
     const facts = javaScriptWorkerStaticAnalysisSchema.parse(value);
     const remaining = this.#remainingTotalResultBudget();
-    const retainedBytes = bytes * 6;
+    const retainedBytes = bytes * STATIC_CHECKPOINT_RETENTION_EXPANSION;
     this.#parentCapacityExhausted = retainedBytes > remaining;
     this.#estimatedRetainedBytes += retainedBytes;
-    this.#retainedStaticBytes += retainedBytes;
     const expandedBytes = estimateJavaScriptStaticApplicationProjection(
       facts,
       bytes,
       sourcePath,
     );
-    if (expandedBytes <= this.#remainingResultBudget())
+    const availableResultBudget = this.#remainingResultBudget();
+    if (expandedBytes <= availableResultBudget)
       this.#estimatedRetainedBytes += expandedBytes;
     else
       this.#applicationProjectionFailure = new AnalysisResourceConstraintError(
@@ -600,7 +611,12 @@ export class JavaScriptAnalysisWorker {
         `Expanded application relationships for ${sourcePath} exceed the parent's result budget; complete static facts were retained on the file node`,
         {
           parent_result_budget_bytes: this.#resultBudgetBytes,
+          parent_available_result_budget_bytes: availableResultBudget,
           application_projection_required_bytes: expandedBytes,
+        },
+        {
+          remediationAction:
+            "Read the complete static facts on the file node or analyze fewer source files. Expanded application relationships exceed the parent result budget; increasing the worker heap alone does not increase it.",
         },
       );
     return facts;
@@ -638,16 +654,17 @@ export class JavaScriptAnalysisWorker {
     );
   }
   #remainingResultBudget(): number {
-    // Future sources need their compact observations before current modules
-    // consume capacity with expanded relationships. A final or sole source
-    // can use the unused reserve as well.
+    // One sequential worker produces one next checkpoint at a time. Reserve
+    // its maximum protocol size at the same retained expansion used on receipt;
+    // earlier checkpoints are already charged to estimatedRetainedBytes.
+    // Reserving every unexamined source's maximum would reject useful results
+    // merely because many small files remain. Actual retained growth and live
+    // heap capacity are checked again for every checkpoint and transfer.
+    const checkpointReserve =
+      DEFAULTS.checkpointBytes * STATIC_CHECKPOINT_RETENTION_EXPANSION;
     const staticReserve =
       this.#sourcesRemaining !== undefined && this.#sourcesRemaining > 0
-        ? Math.max(
-            0,
-            Math.floor((this.#resultBudgetBytes * 4) / 5) -
-              this.#retainedStaticBytes,
-          )
+        ? checkpointReserve
         : 0;
     return Math.max(0, this.#remainingTotalResultBudget() - staticReserve);
   }
@@ -716,7 +733,7 @@ export class JavaScriptAnalysisWorker {
           PROVIDER,
           OPERATION,
           cause.message,
-          { cause },
+          { cause, retryable: cause.retryable },
         )
       : new ProviderAdapterError(PROVIDER, OPERATION, {
           cause,

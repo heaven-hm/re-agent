@@ -199,7 +199,15 @@ export const addJavaScriptArtifactFiles = (
         }),
       });
     }
-    if (analyzed.analysis_failure !== undefined)
+    if (!file.text.included && file.text.reason === "outside-analysis-scope")
+      addUnavailableStaticParseScope(context, {
+        file,
+        asset: target,
+        operation: "select-javascript-sources",
+        limitation:
+          "Source is outside the caller-selected source_paths; it was inventoried but not analyzed.",
+      });
+    else if (analyzed.analysis_failure !== undefined)
       addUnavailableStaticParseScope(context, {
         file,
         asset: target,

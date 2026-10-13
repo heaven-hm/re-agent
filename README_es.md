@@ -9,7 +9,6 @@
 **¿Ves una función que te gusta? Entiende cómo funciona, hasta el nivel binario.**
 
 [![npm version](https://img.shields.io/npm/v/rea-agents?style=flat-square&color=cb3837)](https://www.npmjs.com/package/rea-agents)
-[![CI](https://img.shields.io/github/actions/workflow/status/morluto/rea/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/morluto/rea/actions/workflows/ci.yml)
 [![MCP tool catalog](https://img.shields.io/badge/MCP-tool_catalog-5c4ee5?style=flat-square)](docs/mcp-contracts.md#generated-catalog)
 [![Node.js requirements](https://img.shields.io/badge/Node.js-requirements-339933?style=flat-square&logo=nodedotjs&logoColor=white)](#current-status)
 [![skills.sh](https://skills.sh/b/morluto/rea?style=flat-square)](https://skills.sh/morluto/rea/reverse-engineer-anything)
@@ -140,12 +139,16 @@ REA requiere Node.js 22.x (>=22.19), 24.x (>=24.11) o 26+, además de npm. Las h
 | JavaScript / Electron       | Módulos, importaciones, mapas de código fuente, rutas, IPC y relaciones con complementos nativos                               | Node.js y npm; [análisis de aplicaciones](https://rea.tools/es/guides/javascript/)                                                         |
 | Sitios web                  | Estructura de la página, scripts, observaciones de red y capturas de pantalla solicitadas                                      | Un navegador de la familia Chrome; [análisis del navegador](https://rea.tools/es/guides/browser/)                                          |
 | Capturas de red guardadas   | Solicitudes, respuestas, contenido accesible de las cargas útiles y ubicaciones de origen                                      | HAR; mitmdump en Linux para capturas en formato nativo de mitmproxy; [guía de capturas](docs/web-network-captures.md)                      |
+| Capturas de paquetes        | Endpoints, DNS, TLS SNI, distribución de protocolos y solicitudes HTTP                                                         | tshark y capinfos suministrados por el autor de la llamada; [guía pcap](docs/pcap-analysis.md)                                             |
 | Ensamblados .NET            | Metadatos, instrucciones CIL, dependencias nativas declaradas y comparaciones de compilaciones                                 | Inspección estática; [guía de código administrado](docs/managed-code-analysis.md)                                                          |
 | APK de Android              | Declaraciones del manifiesto, clases, métodos descompilados y referencias                                                      | JADX sin interfaz gráfica y un JDK completo en Linux/macOS/Windows x64; [guía de Android](docs/android-analysis.md)                        |
 | Dispositivos Android        | Dispositivos, paquetes, procesos, registros, volcados, capturas de pantalla y transferencias de APK/archivos                   | adb suministrado por el autor de la llamada (emulador o dispositivo); [guía de ADB](docs/adb-device-analysis.md)                           |
 | Proyectos JEB               | Unidades de proyecto del motor, resúmenes de artefactos y pseudocódigo de tipos/métodos                                        | Un cliente JEB iniciado por el autor de la llamada que sirve MCP, seleccionado con REA_JEB_MCP_URL; [guía de JEB](docs/jeb-analysis.md)    |
 | Recursos de Android         | Manifiesto decodificado, tablas de cadenas, idiomas y datos de versión                                                         | Lanzador de Apktool suministrado por el autor de la llamada; [guía de recursos](docs/apktool-resource-analysis.md)                         |
+| Aplicaciones Flutter        | Hash de snapshot de Dart, resúmenes de bibliotecas por ABI y procedencia de compilación del motor                              | Ninguna (análisis APK estático); [guía de Flutter](docs/flutter-analysis.md)                                                               |
 | Firmware                    | Regiones, resultados de extracción y derivaciones al análisis nativo                                                           | Binwalk / Unblob en Linux; [guía de firmware](docs/firmware-analysis.md)                                                                   |
+| Paquetes grabados           | Campos seleccionados, valores repetidos, filtros y reglas de decodificación                                                    | Linux: TShark 4.x + prlimit; [guía de capturas](docs/packet-captures.md)                                                                   |
+| Señales lógicas grabadas    | Anotaciones del decodificador, rangos de muestras y diagnósticos                                                               | Linux: sigrok-cli 0.7.2 + prlimit; [guía de señales](docs/signal-recordings.md)                                                            |
 | Paquetes y recursos         | Inventarios de archivos, resúmenes criptográficos, plists, estructura de paquetes de Apple y recursos extraídos                | [Guía de artefactos y JavaScript](docs/javascript-artifact-reconstruction.md), [aplicaciones de Apple](docs/apple-application-analysis.md) |
 | Comportamiento de procesos  | Salida de la terminal, interacciones, observaciones de salida y del sistema de archivos, y comparaciones entre ejecuciones     | Linux/macOS con una PTY nativa; [captura de procesos](docs/process-capture.md)                                                             |
 
@@ -259,7 +262,7 @@ Informa de vulnerabilidades siguiendo [SECURITY.md](SECURITY.md).
 
 ## Historial de estrellas
 
-🎉 **90.000 estrellas en GitHub: ¡gracias!**
+🎉 **170.000 estrellas en GitHub: ¡gracias!**
 
 Gracias a quienes usan REA, informan de errores, solicitan funciones, prueban compilaciones y contribuyen con correcciones.
 
@@ -273,7 +276,13 @@ Gracias a quienes usan REA, informan de errores, solicitan funciones, prueban co
 
 ## Aviso legal
 
-REA proporciona herramientas para la investigación, el análisis y la reconstrucción mediante ingeniería inversa conforme a la ley. Eres responsable de obtener las autorizaciones necesarias y cumplir las leyes aplicables. El proyecto no respalda usos ilegales ni no autorizados.
+Consulta [DISCLAIMER.md](DISCLAIMER.md) para obtener orientación sobre el uso responsable.
+
+REA está destinado a la investigación, la educación, la interoperabilidad, la preservación de software y el análisis de software propio o autorizado, dentro de la ley.
+
+The project's position on illegal or unauthorized use covers all REA
+versions, distribution channels, and platforms; each copy retains its
+applicable licenses.
 
 ## Contribuir
 
@@ -284,3 +293,15 @@ Consulta [CONTRIBUTING.md](CONTRIBUTING.md) para preparar el entorno de desarrol
 ## Licencia
 
 [MIT](LICENSE)
+
+REA-authored code is licensed under MIT. Third-party material retains its own
+licenses and copyright notices; see [Third-party notices](THIRD_PARTY_NOTICES.md)
+for the dependency inventory, preserved license texts, and external-tool terms.
+
+**You must legally obtain and be authorized to use commercial tools**, including
+IDA Pro / Hex-Rays decompilers, Hopper, and JEB, under their applicable licenses.
+REA grants no tool license, key, or activation entitlement. Trials and demos
+remain subject to vendor terms, including user, feature, automation, and output
+sharing restrictions. Cracked copies, stolen keys, unauthorized key sharing,
+and bypassing license restrictions are not authorized. This guidance does not
+amend MIT or third-party licenses.

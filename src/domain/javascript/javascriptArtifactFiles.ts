@@ -1,3 +1,5 @@
+import type { JavaScriptSourceSelection } from "./javascriptSourceSelection.js";
+
 /** Relevant file categories projected from the complete artifact inventory. */
 export type JavaScriptArtifactFileKind =
   | "package-json"
@@ -20,7 +22,10 @@ export interface JavaScriptArtifactFile {
     | { readonly included: true; readonly value: string }
     | {
         readonly included: false;
-        readonly reason: "not-applicable" | "invalid-utf8";
+        readonly reason:
+          | "not-applicable"
+          | "invalid-utf8"
+          | "outside-analysis-scope";
       };
 }
 
@@ -38,4 +43,5 @@ export interface JavaScriptArtifactFileSet {
   readonly containers: readonly JavaScriptArtifactContainer[];
   readonly text_bytes_read: number;
   readonly invalid_utf8_files: number;
+  readonly source_selection?: JavaScriptSourceSelection;
 }

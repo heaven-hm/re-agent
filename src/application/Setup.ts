@@ -26,6 +26,7 @@ import {
 import { AnalysisError } from "../domain/analysisErrorBase.js";
 import { analysisErrorWithCleanupFailure } from "../domain/analysisErrorCleanup.js";
 import { ProviderCleanupError } from "../domain/providerCleanupError.js";
+import type { SetupSkillInstallError } from "./SetupSkill.js";
 
 /** Discover, approve, and apply setup actions idempotently. */
 export const runSetup = async (
@@ -125,7 +126,10 @@ const runSetupWorkflow = async (
     : (options.clientIds ??
       options.readinessScope?.clients ??
       discovery.defaultClientIds);
-  let selectedSkillClientIds = options.skillClientIds ?? selectedClientIds;
+  let selectedSkillClientIds =
+    options.skillClientIds ??
+    options.readinessScope?.skillClients ??
+    selectedClientIds;
   let skillNeedsInstall = await host.skillNeedsInstall(selectedSkillClientIds);
   let skillSelected =
     options.installSkill === true ||
@@ -220,6 +224,7 @@ const runSetupWorkflow = async (
     installHopper: planDiscovery.installHopper,
     installSkill,
     skillSelected,
+    selectedSkillClientIds,
     selectedClients: planned.selectedClients,
     clientsToConfigure: planned.clientsToConfigure,
   };
@@ -311,18 +316,20 @@ const runSetupWorkflow = async (
       : { onProgress: options.onProgress }),
   });
   if (clientFailure !== undefined) return fail(clientFailure);
-  if (
-    planSelection.installSkill &&
-    !(await installSkillAction(
+  if (planSelection.installSkill) {
+    const skillFailure = await installSkillAction(
       host,
       options,
       appliedActions,
       selectedSkillClientIds,
-    ))
-  )
-    return fail(
-      "REA analysis skill could not be installed or verified. Check permissions for its planned skill directories, then rerun setup.",
     );
+    if (skillFailure !== undefined) {
+      return {
+        ...(await fail(skillFailure.remediation)),
+        code: "skill_install_failed",
+      };
+    }
+  }
   const doctor = summarizeDoctor(await host.doctor(readinessScope));
   const remediation = combineRemediation(
     finalSetupRemediation(
@@ -413,7 +420,7 @@ const installSkillAction = async (
   options: SetupOptions,
   appliedActions: string[],
   skillClientIds: readonly string[],
-): Promise<boolean> => {
+): Promise<SetupSkillInstallError | undefined> => {
   const label = "REA reverse-engineering skill";
   emitProgress(options, {
     actionId: "install_skill",
@@ -421,22 +428,23 @@ const installSkillAction = async (
     state: "started",
   });
   const skill = await host.installSkill(skillClientIds);
-  if (skill === "failed") {
+  if (!skill.ok) {
     emitProgress(options, {
       actionId: "install_skill",
       label,
       state: "failed",
+      detail: skill.error.message,
     });
-    return false;
+    return skill.error;
   }
-  if (skill === "installed") appliedActions.push("installed_skill");
+  if (skill.value === "installed") appliedActions.push("installed_skill");
   emitProgress(options, {
     actionId: "install_skill",
     label,
-    state: skill === "installed" ? "completed" : "warning",
-    ...(skill === "unchanged" ? { detail: "Already current" } : {}),
+    state: skill.value === "installed" ? "completed" : "warning",
+    ...(skill.value === "unchanged" ? { detail: "Already current" } : {}),
   });
-  return true;
+  return undefined;
 };
 
 const setupFailure = async (
@@ -519,6 +527,7 @@ const resolvedReadinessScope = (
     readonly selectedClients: readonly SetupClient[];
     readonly installHopper: boolean;
     readonly skillSelected?: boolean;
+    readonly selectedSkillClientIds: readonly string[];
   },
 ): DoctorScope => ({
   clients: selection.selectedClients.map(({ name }) => name),
@@ -526,6 +535,9 @@ const resolvedReadinessScope = (
     ? ["hopper"]
     : (requested?.providers ?? []),
   skill: selection.skillSelected === true || requested?.skill === true,
+  ...(selection.skillSelected === true || requested?.skill === true
+    ? { skillClients: selection.selectedSkillClientIds }
+    : {}),
 });
 
 const summarizeDoctor = (report: DoctorReport): SetupDoctorSummary => ({

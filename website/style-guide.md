@@ -219,14 +219,28 @@ display size; scaling small labels down is not a mobile layout.
 
 The shared stylesheet defines the site. Its core colors are:
 
-| Token      | Value     | Use                              |
-| ---------- | --------- | -------------------------------- |
-| `--page`   | `#ffffff` | Page background                  |
-| `--ink`    | `#20252b` | Main text                        |
-| `--muted`  | `#5b6570` | Secondary text                   |
-| `--line`   | `#e0e5e9` | Section and component boundaries |
-| `--soft`   | `#f4f6f8` | Code and supporting surfaces     |
-| `--accent` | `#294f82` | Links and meaningful highlights  |
+| Token      | Light     | Dark      | Use                              |
+| ---------- | --------- | --------- | -------------------------------- |
+| `--page`   | `#ffffff` | `#1e1e2e` | Page background                  |
+| `--ink`    | `#20252b` | `#cdd6f4` | Main text                        |
+| `--muted`  | `#5b6570` | `#a6adc8` | Secondary text                   |
+| `--line`   | `#e0e5e9` | `#45475a` | Section and component boundaries |
+| `--soft`   | `#f4f6f8` | `#181825` | Code and supporting surfaces     |
+| `--accent` | `#294f82` | `#89b4fa` | Links and meaningful highlights  |
+
+The header's sun/moon button switches between light and dark. On the first visit,
+the site follows the system preference; a manual choice is saved for later visits
+and shared across pages and languages on that host. Without JavaScript, the site
+uses the light palette and hides the switch.
+
+`assets/theme.js` applies the choice before styles load and owns theme changes.
+The stylesheet scopes the dark palette to `data-theme="dark"` on the root,
+using [Catppuccin Mocha](https://github.com/catppuccin/palette) colors (MIT).
+Any new fixed color needs a dark counterpart in that section. Keep selector
+specificity unchanged with `:where()` when scoping component rules.
+Embedded SVGs inherit the page's `color-scheme`; canvas demos listen for
+`website-theme-change` to redraw. Check both themes, including a manual choice
+that differs from the system preference.
 
 Use the system sans-serif stack for prose and the shared monospace stack for
 code. The current container is at most 1080px wide, with article text limited to

@@ -401,6 +401,32 @@ class WebsiteTranslationChecks(unittest.TestCase):
                 server.shutdown()
                 worker.join()
 
+    def test_every_reading_page_loads_theme_before_styles(self):
+        site = ROOT / "website/_site"
+        english_pages = reading_pages(ROOT / "website/public")
+        self.assertTrue(english_pages)
+        for language in languages(ROOT):
+            code = language["code"]
+            for original in english_pages:
+                relative = original.relative_to(ROOT / "website/public")
+                for path in {original, site / relative if code == "en" else site / code / relative}:
+                    with self.subTest(language=code, page=str(path.relative_to(ROOT))):
+                        doc = Document(path.read_text())
+                        colors = [node for node in doc.nodes if node.tag == "meta" and node.attrs.get("name") == "theme-color"]
+                        self.assertEqual(len(colors), 1)
+                        self.assertEqual(colors[0].attrs.get("content"), "#ffffff")
+                        self.assertNotIn("media", colors[0].attrs)
+                        theme = [node for node in doc.nodes if node.tag == "script" and (node.attrs.get("src") or "").endswith("/assets/theme.js")]
+                        self.assertEqual(len(theme), 1)
+                        for deferred in ("defer", "async", "type"):
+                            self.assertNotIn(deferred, theme[0].attrs)
+                        stylesheet = next(node for node in doc.nodes if node.tag == "link" and node.attrs.get("rel") == "stylesheet")
+                        self.assertLess(theme[0].start, stylesheet.start)
+                        toggle = [node for node in doc.nodes if "data-theme-toggle" in node.attrs]
+                        self.assertEqual(len(toggle), 1)
+                        self.assertEqual(toggle[0].tag, "button")
+                        self.assertIn("hidden", toggle[0].attrs)
+
 
 if __name__ == "__main__":
     unittest.main()

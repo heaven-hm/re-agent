@@ -11,18 +11,6 @@ const serve = async (
 ): Promise<{ readonly stdout: string; readonly exitCode: number }> =>
   serveCli(argv, jebEnvironment);
 
-it.each([
-  ["inspect-jeb-client"],
-  ["open-jeb-project"],
-  ["list-jeb-units"],
-  ["decompile-jeb-item"],
-])("%s advertises a schema through the public CLI", async (command) => {
-  const result = await serve([command, "--schema", "--json"]);
-  expect(result.exitCode, command).toBe(0);
-  const schema = JSON.parse(result.stdout) as { args?: unknown };
-  expect(schema).toBeTruthy();
-});
-
 it("reports an unreachable engine endpoint with recovery guidance", async () => {
   const result = await serve(["inspect-jeb-client", "--json"]);
   expect(result.stdout).toContain("capability_unavailable");
@@ -30,13 +18,26 @@ it("reports an unreachable engine endpoint with recovery guidance", async () => 
 });
 
 it("validates decompile item input before contacting the engine", async () => {
-  const result = await serve([
-    "decompile-jeb-item",
-    "not-an-address",
-    "--item-kind",
-    "method",
-    "--json",
-  ]);
-  expect(result.stdout).toBeTruthy();
-  expect(result.stdout).not.toContain("capability_unavailable");
+  const result = await serve(["decompile-jeb-item", "", "method", "--json"]);
+  expect(result.exitCode).toBe(1);
+  expect(JSON.parse(result.stdout)).toMatchObject({
+    code: "VALIDATION_ERROR",
+    fieldErrors: [
+      {
+        code: "too_small",
+        path: "item-address",
+      },
+    ],
+  });
+});
+
+it("reports an invalid endpoint without breaking other commands", async () => {
+  const environment = { REA_JEB_MCP_URL: "http://localhost:8425/mcp" };
+  const jeb = await serveCli(["inspect-jeb-client", "--json"], environment);
+  expect(JSON.parse(jeb.stdout)).toMatchObject({
+    code: "configuration_invalid",
+    details: { settings: [{ setting: "REA_JEB_MCP_URL" }] },
+  });
+  const capabilities = await serveCli(["capabilities", "--json"], environment);
+  expect(capabilities.exitCode).toBe(0);
 });

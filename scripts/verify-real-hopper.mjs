@@ -30,6 +30,7 @@ import {
   requireMcpOperationResult,
   requireMcpLifecycleResult,
   requireMcpEvidenceResult,
+  sortVerifierNames,
   requireWorkflowEvidenceProvider,
 } from "./lib/mcp-verifier-results.mjs";
 import {
@@ -46,6 +47,7 @@ import {
 } from "./lib/real-hopper-boundaries.mjs";
 import { startUnrelatedHopperSentinel } from "./lib/unrelated-hopper-sentinel.mjs";
 import { snapshotHopperRuntime } from "./lib/real-hopper-cleanup.mjs";
+import { verifyLinuxHopperOwnerExit } from "./lib/real-hopper-owner-exit.mjs";
 const execFileAsync = promisify(execFile);
 const verifierRun = createVerifierRun();
 const timeout = 180_000;
@@ -283,8 +285,10 @@ try {
   const availableTools = initialStatus.tool_availability;
   if (!Array.isArray(availableTools))
     throw new Error("The real session omitted tool availability");
-  const expectedNames = availableTools.map(({ name }) => name).sort();
-  const actualNames = listed.tools.map(({ name }) => name).sort();
+  const expectedNames = sortVerifierNames(
+    availableTools.map(({ name }) => name),
+  );
+  const actualNames = sortVerifierNames(listed.tools.map(({ name }) => name));
   if (JSON.stringify(actualNames) !== JSON.stringify(expectedNames)) {
     const expected = new Set(expectedNames);
     const actual = new Set(actualNames);
@@ -574,6 +578,14 @@ if (sessionsAfter.length > 0) {
 }
 if (summary === undefined)
   throw new Error("Real-Hopper verification did not produce a summary");
+if (process.platform === "linux")
+  summary.ownerExit = await verifyLinuxHopperOwnerExit({
+    primary: targetA,
+    secondary: targetB,
+    serverCommand,
+    serverArgs,
+    environment: serverEnvironment,
+  });
 const completedVerifierRun = await completeVerifierRun(verifierRun);
 if (
   completedVerifierRun.process_lineage.status !== "verified" ||

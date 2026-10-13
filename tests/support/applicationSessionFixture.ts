@@ -21,8 +21,7 @@ const { runProviderAnalysis } = createDirectAnalysis({});
 export const requireSuccessfulProjection = (
   result: Result<Evidence, AnalysisError>,
 ): Evidence => {
-  if (!result.ok)
-    throw new TypeError("Expected application projection to succeed");
+  if (!result.ok) throw result.error;
   return result.value;
 };
 

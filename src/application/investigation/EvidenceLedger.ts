@@ -8,13 +8,10 @@ import {
   validateResidualUnknownAddition,
   type EvidenceBundle,
 } from "../../domain/evidenceBundle.js";
+import { AnalysisInputError } from "../../domain/analysisErrorCore.js";
 import { EvidenceIntegrityError } from "../../domain/evidenceErrors.js";
 import { UnknownRegistryError } from "../../domain/unknownRegistryError.js";
-import {
-  immutableEvidence,
-  parseEvidence,
-  type Evidence,
-} from "../../domain/evidence.js";
+import { immutableEvidence, type Evidence } from "../../domain/evidence.js";
 import {
   createResidualUnknown,
   updateResidualUnknown,
@@ -25,6 +22,7 @@ import {
 } from "../../domain/residualUnknown.js";
 import { err, ok, type Result } from "../../domain/result.js";
 import { compareUnicodeCodePoints } from "../../domain/unicodeCodePointOrder.js";
+import type { UnknownPage, UnknownQuery } from "./InvestigationRecordPort.js";
 
 type EvidenceLedgerFailure = EvidenceIntegrityError;
 type RecordResult = Result<"added" | "duplicate", EvidenceLedgerFailure>;
@@ -37,7 +35,10 @@ export interface EvidenceImportDelta {
   readonly metadataChanged: boolean;
 }
 
-type ImportResult = Result<EvidenceImportDelta, EvidenceLedgerFailure>;
+type ImportResult = Result<
+  EvidenceImportDelta,
+  EvidenceLedgerFailure | AnalysisInputError
+>;
 
 /** Session-owned set of immutable evidence records. */
 export class EvidenceLedger {
@@ -76,10 +77,18 @@ export class EvidenceLedger {
     try {
       bundle = parseEvidenceBundle(input);
     } catch (cause: unknown) {
+      const failure = describeEvidenceBundleFailure(input, cause);
+      if (failure.kind === "single-record")
+        return err(
+          new AnalysisInputError("import_evidence_bundle", {
+            cause,
+            userMessage: failure.message,
+          }),
+        );
       return err(
         new EvidenceIntegrityError("Evidence bundle validation failed", {
           cause,
-          userMessage: describeEvidenceBundleFailure(input, cause),
+          userMessage: failure.message,
         }),
       );
     }
@@ -207,7 +216,7 @@ export class EvidenceLedger {
   ): Result<ResidualUnknown, EvidenceIntegrityError | UnknownRegistryError> {
     let parsedMutation: Evidence;
     try {
-      parsedMutation = parseEvidence(mutationEvidence);
+      parsedMutation = immutableEvidence(mutationEvidence);
     } catch (cause: unknown) {
       return err(
         new EvidenceIntegrityError("Unknown mutation evidence is invalid", {
@@ -242,8 +251,8 @@ export class EvidenceLedger {
     let evidence: Evidence;
     let mutation: Evidence;
     try {
-      evidence = parseEvidence(evidenceInput);
-      mutation = parseEvidence(mutationInput);
+      evidence = immutableEvidence(evidenceInput);
+      mutation = immutableEvidence(mutationInput);
     } catch (cause: unknown) {
       return err(
         new EvidenceIntegrityError("Atomic Evidence validation failed", {
@@ -314,18 +323,39 @@ export class EvidenceLedger {
       readonly domain?: string;
     } = {},
   ): ResidualUnknown[] {
-    return [...this.#unknownHeads.values()]
+    return this.listUnknownsPage(filters).items;
+  }
+
+  /** Select a stable page of current heads before detaching record payloads. */
+  listUnknownsPage(query: UnknownQuery = {}): UnknownPage {
+    const offset = query.offset ?? 0;
+    const matching = [...this.#unknownHeads.values()]
       .filter(
         (unknown) =>
-          (filters.status === undefined || unknown.status === filters.status) &&
-          (filters.severity === undefined ||
-            unknown.severity === filters.severity) &&
-          (filters.domain === undefined || unknown.domain === filters.domain),
+          (query.status === undefined || unknown.status === query.status) &&
+          (query.severity === undefined ||
+            unknown.severity === query.severity) &&
+          (query.domain === undefined || unknown.domain === query.domain),
       )
       .sort((left, right) =>
         compareUnicodeCodePoints(left.unknown_id, right.unknown_id),
-      )
-      .map((unknown) => structuredClone(unknown));
+      );
+    const start = Math.min(offset, matching.length);
+    const end =
+      query.limit === undefined
+        ? undefined
+        : start + Math.min(query.limit, matching.length - start);
+    const page = matching.slice(start, end);
+    const nextOffset =
+      offset <= matching.length && start + page.length < matching.length
+        ? start + page.length
+        : null;
+    return {
+      items: page.map((unknown) => structuredClone(unknown)),
+      total: matching.length,
+      offset,
+      next_offset: nextOffset,
+    };
   }
 
   /** Return current resolution validity; imported invalid states are rejected. */
@@ -360,7 +390,7 @@ export class EvidenceLedger {
   ): Result<ResidualUnknown, EvidenceIntegrityError | UnknownRegistryError> {
     let mutationEvidence: Evidence;
     try {
-      mutationEvidence = parseEvidence(mutationEvidenceInput);
+      mutationEvidence = immutableEvidence(mutationEvidenceInput);
     } catch (cause: unknown) {
       return err(
         new EvidenceIntegrityError("Unknown mutation evidence is invalid", {

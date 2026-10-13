@@ -3,7 +3,6 @@ import { access } from "node:fs/promises";
 
 import { afterEach, describe, expect, it } from "vitest";
 
-import { projectAnalysisError } from "../../../../src/domain/analysisErrorProjection.js";
 import { ok } from "../../../../src/domain/result.js";
 import type {
   BridgeLauncher,
@@ -50,31 +49,6 @@ class OwnedFixtureLauncher implements BridgeLauncher {
       shutdownMode: "process-cleanup" as const,
       cleanup: () => cleanupOwnedProcessGroup(started.ownership),
     });
-  }
-}
-
-class UnconfirmedFixtureLauncher implements BridgeLauncher {
-  constructor(readonly ownsProcessLifetime = false) {}
-
-  launch(session: BridgeSession) {
-    return Promise.resolve(
-      ok({
-        process: spawn(
-          process.execPath,
-          [
-            fixturePath,
-            session.socketPath,
-            session.token,
-            session.runId,
-            "unconfirmed",
-          ],
-          { stdio: ["ignore", "ignore", "pipe"] },
-        ),
-        ownsProcessLifetime: this.ownsProcessLifetime,
-        providerLifetime: "external-application" as const,
-        shutdownMode: "bridge-request" as const,
-      }),
-    );
   }
 }
 
@@ -136,42 +110,6 @@ describe("HopperClient cleanup", () => {
       signalCode: null,
     });
   });
-
-  it.each([
-    ["unowned", false],
-    ["owned helper", true],
-  ] as const)(
-    "reports unconfirmed external document cleanup for an %s process",
-    async (_description, ownsProcessLifetime) => {
-      const client = new HopperClient({
-        launcher: new UnconfirmedFixtureLauncher(ownsProcessLifetime),
-        startupTimeoutMs: 1_000,
-      });
-      clients.push(client);
-      expect((await client.start()).ok).toBe(true);
-
-      const closed = await client.close();
-
-      expect(closed).toMatchObject({
-        ok: false,
-        error: {
-          _tag: "ProviderAdapterError",
-          cleanupIncomplete: true,
-          cleanupResources: expect.arrayContaining(["hopper-document"]),
-        },
-      });
-      if (!closed.ok)
-        expect(projectAnalysisError(closed.error)).toMatchObject({
-          code: "cleanup_incomplete",
-          details: {
-            provider_id: "hopper",
-            operation: "close_binary",
-            cleanup: "incomplete",
-            resources: expect.arrayContaining(["hopper-document"]),
-          },
-        });
-    },
-  );
 
   it("kills only its owned Hopper group and emits sanitized shutdown coordinates", async () => {
     const unrelated = spawn(

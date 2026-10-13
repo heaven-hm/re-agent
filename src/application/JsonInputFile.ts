@@ -11,6 +11,7 @@ import streamValues from "stream-json/streamers/stream-values.js";
 import streamArray from "stream-json/streamers/stream-array.js";
 
 import { RegularFileChangedError } from "../filesystem/RegularFile.js";
+import type { ArtifactResourceScope } from "../artifacts/ArtifactResourceScope.js";
 import { withRegularFile } from "./RegularFileRead.js";
 import {
   JSON_BYTE_ORDER_MARK_MESSAGE,
@@ -55,6 +56,7 @@ export const readJsonObjectFile = (
   operation: string,
   scans: readonly ReadonlyMap<string, JsonObjectMemberReader>[],
   signal?: AbortSignal,
+  resources?: ArtifactResourceScope,
 ): Promise<Result<void, JsonInputFileFailure>> =>
   withRegularFile(
     path,
@@ -76,7 +78,9 @@ export const readJsonObjectFile = (
             value === null ||
             Array.isArray(value)
           )
-            throw new TypeError("JSON document root must be an object");
+            return err(
+              invalidJson(operation, "JSON document root must be an object"),
+            );
           for (const members of scans)
             for (const [key, member] of members) {
               if (!Object.hasOwn(value, key)) continue;
@@ -175,7 +179,9 @@ export const readJsonObjectFile = (
             signal === undefined ? {} : { signal },
           );
           if (!rootObject)
-            throw new TypeError("JSON document root must be an object");
+            return err(
+              invalidJson(operation, "JSON document root must be an object"),
+            );
           const digest = hash.digest("hex");
           if (previousDigest !== undefined && digest !== previousDigest)
             throw new RegularFileChangedError(path);
@@ -188,7 +194,10 @@ export const readJsonObjectFile = (
         throw cause;
       }
     },
-    { signal },
+    {
+      signal,
+      ...(resources === undefined ? {} : { resources }),
+    },
   );
 
 const memberConsumer = (
@@ -236,6 +245,7 @@ export const readJsonInputFile = (
   path: string,
   operation: string,
   signal?: AbortSignal,
+  resources?: ArtifactResourceScope,
 ): Promise<Result<unknown, JsonInputFileFailure>> =>
   withRegularFile(
     path,
@@ -294,7 +304,10 @@ export const readJsonInputFile = (
         throw cause;
       }
     },
-    { signal },
+    {
+      signal,
+      ...(resources === undefined ? {} : { resources }),
+    },
   );
 
 const jsonReadFailure = (

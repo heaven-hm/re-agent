@@ -53,65 +53,6 @@ export const parseProcessListOutput = (
   return { columns, processes, unparsedLines };
 };
 
-export interface AdbDirectoryEntry {
-  readonly name: string;
-  readonly kind: "directory" | "file" | "symlink" | "other";
-  readonly permissions: string | null;
-  readonly owner: string | null;
-  readonly group: string | null;
-  readonly bytes: number | null;
-  readonly date: string | null;
-  readonly link_target: string | null;
-}
-
-const LS_LINE =
-  /^([bcdlps-][rwxstST-]{9})\s+(?:(\d+)\s+)?(\S+)\s+(\S+)\s+(?:(\d+)\s+)?([\d-]{10})\s+([\d:]{4,8})\s+(.+)$/u;
-
-/** Parse `ls -la` output, including `total` headers and symlink targets. */
-export const parseLsOutput = (
-  stdout: string,
-): {
-  entries: readonly AdbDirectoryEntry[];
-  unparsedLines: readonly string[];
-} => {
-  const entries: AdbDirectoryEntry[] = [];
-  const unparsedLines: string[] = [];
-  for (const rawLine of stdout.split(/\r?\n/u)) {
-    const line = rawLine.trimEnd();
-    if (line === "" || line.startsWith("total ")) continue;
-    const match = LS_LINE.exec(line);
-    if (match === null) {
-      if (line.trim() !== "") unparsedLines.push(line);
-      continue;
-    }
-    const permissions = match[1]!;
-    let name = match[8]!.trim();
-    let linkTarget: string | null = null;
-    const linkArrow = name.indexOf(" -> ");
-    if (linkArrow !== -1 && permissions.startsWith("l")) {
-      linkTarget = name.slice(linkArrow + 4);
-      name = name.slice(0, linkArrow);
-    }
-    entries.push({
-      name,
-      kind: permissions.startsWith("d")
-        ? "directory"
-        : permissions.startsWith("l")
-          ? "symlink"
-          : permissions.startsWith("-")
-            ? "file"
-            : "other",
-      permissions,
-      owner: match[3] ?? null,
-      group: match[4] ?? null,
-      bytes: match[5] === undefined ? null : Number(match[5]),
-      date: `${match[6] ?? ""} ${match[7] ?? ""}`.trim() || null,
-      link_target: linkTarget,
-    });
-  }
-  return { entries, unparsedLines };
-};
-
 export interface AdbFeatureEntry {
   readonly name: string;
   readonly version: number | null;
@@ -295,7 +236,11 @@ export const parseDumpsysPackageOutput = (
       inPermissions = true;
       continue;
     }
-    if (inPermissions && /^\s{2,}[A-Za-z0-9._]+$/.test(line)) {
+    // Android 10 and 11 mark restricted entries as "NAME: restricted=true".
+    if (
+      inPermissions &&
+      /^\s{2,}[A-Za-z0-9._]+(?:: restricted=true)?$/u.test(line)
+    ) {
       permissions += 1;
       continue;
     }
@@ -379,32 +324,80 @@ export const parseResolveActivityOutput = (stdout: string): string | null => {
   return lines.length === 0 ? null : lines[lines.length - 1]!;
 };
 
+/** Parsed facts and verdict from the full `am start -W` report. */
+export interface AmStartOutput {
+  readonly status: "started" | "refused";
+  readonly startedActivity: string | null;
+  readonly activity: string | null;
+  readonly reportedStatus: string | null;
+  readonly reason: string | null;
+}
+
 /**
- * Parse `am start` output. Success prints `Starting: Intent { ... }`;
- * refusals print lines starting with `Error:` or `Warning:` and activity
- * classes that do not exist name the component.
+ * Parse the complete `am start -W` report. `Starting:` records an attempt;
+ * hard errors and any non-ok Activity Manager status determine the verdict.
  */
 export const parseAmStartOutput = (
   stdout: string,
-): {
-  readonly status: "started" | "refused";
-  readonly startedActivity: string | null;
-  readonly reason: string | null;
-} => {
-  const text = stdout.trim();
-  const starting = /^Starting:\s+Intent\s*\{(.*)\}\s*$/mu.exec(text);
-  if (starting !== null)
+  stderr = "",
+): AmStartOutput => {
+  const normalizedStdout = stdout.replaceAll("\r\n", "\n");
+  const starting = /^Starting:[ \t]+Intent[ \t]*\{(.*)\}[ \t]*$/mu.exec(
+    normalizedStdout,
+  );
+  const startedActivity = starting?.[1]?.trim() ?? null;
+  const activityMatch = /^Activity:[ \t]*(.*)$/mu.exec(normalizedStdout);
+  const activity = activityMatch?.[1]?.trim() || null;
+  const statuses = [...normalizedStdout.matchAll(/^Status:[ \t]*(.*)$/gmu)].map(
+    (match) => match[1]!.trim(),
+  );
+  const nonOkStatus = statuses.find((status) => status.toLowerCase() !== "ok");
+  const reportedStatus = nonOkStatus ?? statuses[0] ?? null;
+  const error = [normalizedStdout, stderr.replaceAll("\r\n", "\n")]
+    .flatMap((stream) => stream.split("\n"))
+    .map((line) => line.trim())
+    .map((line) => ({
+      line,
+      match: /^(?:Error|Exception)(?::|\b)(.*)$/iu.exec(line),
+    }))
+    .find(({ match }) => match !== null);
+  const errorReason = error?.match?.[1]?.trim() || error?.line || null;
+  const statusReason =
+    nonOkStatus === ""
+      ? "am start reported an empty status"
+      : nonOkStatus === undefined
+        ? null
+        : `am start reported status: ${nonOkStatus}`;
+  const reason =
+    errorReason ??
+    statusReason ??
+    (/^Warning:/mu.test(normalizedStdout.trim())
+      ? normalizedStdout.trim().slice(0, 512)
+      : null);
+  if (errorReason !== null || nonOkStatus !== undefined)
+    return {
+      status: "refused",
+      startedActivity,
+      activity,
+      reportedStatus,
+      reason: reason ?? "am start did not report a successful launch",
+    };
+  if (startedActivity !== null)
     return {
       status: "started",
-      startedActivity: starting[1]!.trim(),
+      startedActivity,
+      activity,
+      reportedStatus,
       reason: null,
     };
-  const error = /^(?:Error|Warning|Exception)(?::|\b)(.*)$/mu.exec(text);
+  const text = `${normalizedStdout}\n${stderr.replaceAll("\r\n", "\n")}`.trim();
   return {
     status: "refused",
-    startedActivity: null,
+    startedActivity,
+    activity,
+    reportedStatus,
     reason:
-      error?.[1]?.trim() ??
+      reason ??
       (text === "" ? "am start returned no activity" : text.slice(0, 512)),
   };
 };

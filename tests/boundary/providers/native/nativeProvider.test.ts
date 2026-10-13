@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { DarwinProcessOwnershipInspectionError } from "../../../../src/process/DarwinProcessRunTokenReader.js";
 import { EventEmitter } from "node:events";
 import { chmod, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
@@ -279,6 +280,30 @@ describe("native command failure capture and limits", () => {
         reason: "nonzero-exit",
         stderr_bytes: expect.any(Number),
       },
+    });
+    expect(projectAnalysisError(result.error).details).not.toHaveProperty(
+      "diagnostics.detail",
+    );
+  });
+
+  it("projects the ownership helper prerequisite when a command cannot be supervised", async () => {
+    const inspection = new DarwinProcessOwnershipInspectionError(
+      "Direct Darwin helper compilation requires absolute REA_DARWIN_SWIFTC_PATH and SDKROOT paths.",
+    );
+    const runner = new XcrunCommandRunner(
+      {},
+      () =>
+        Promise.resolve(ok({ path: process.execPath, sha256: "a".repeat(64) })),
+      () => Promise.reject(inspection),
+    );
+    const result = await new NativeMacOSProvider({}, runner, "darwin")
+      .createClient(machoTarget("/private/fixture"))
+      .execute("demangle_swift", { symbols: ["fixture-symbol"] });
+
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(projectAnalysisError(result.error).details).toMatchObject({
+      diagnostics: { reason: "io", detail: inspection.message },
     });
   });
 

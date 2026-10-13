@@ -1,23 +1,20 @@
 import type { MipsElfMetadata } from "../../../src/domain/binaryTargetTypes.js";
 
+export type MipsFloatAbi = "hard" | "soft";
 export interface MipsReadelfFacts {
   mips: MipsElfMetadata;
-  symbols: Record<
-    | "rea_mips_entry"
-    | "rea_mips_leaf"
-    | "rea_mips_probe"
-    | "rea_mips_global"
-    | "rea_mips_marker",
-    string
-  >;
+  symbols: Record<string, string>;
 }
 export function parseMipsReadelf(
   text: string,
   byteOrder: string,
+  floatAbi?: MipsFloatAbi,
+  objectType?: "exec" | "rel",
 ): MipsReadelfFacts;
 export function inspectMipsReadelf(
   path: string,
   byteOrder: string,
+  floatAbi?: MipsFloatAbi,
 ): Promise<
   MipsReadelfFacts & { command: string; version: string; raw: string }
 >;
@@ -33,3 +30,7 @@ export function assertMipsProbe(
   address: string,
 ): void;
 export function assertMipsGlobal(bytes: string, byteOrder: string): void;
+export function assertMipsSoftFloatStorage(
+  boundaries: Record<string, unknown>,
+  byteOrder: string,
+): void;

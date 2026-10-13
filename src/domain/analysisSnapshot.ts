@@ -27,6 +27,7 @@ import {
 } from "./evidenceBundle.js";
 import {
   evidenceLocationSchema,
+  rebindEvidenceToTargetPath,
   type Evidence,
   type EvidenceLocation,
   type EvidenceSubjectTarget,
@@ -41,11 +42,16 @@ import { prefixedDigestSchema } from "./../domain/digests.js";
 import { canonicalJsonDigestSteps } from "./canonicalJsonDigestSteps.js";
 import { freezeJsonSnapshot } from "./immutableJson.js";
 import { rawBinaryEntryPointSchema } from "./rawBinary.js";
+import {
+  relationshipCoverageSchema,
+  type RelationshipCoverage,
+} from "./relationshipCoverage.js";
 
 const architectureSchema = z.enum(BINARY_ARCHITECTURES);
 const formatSchema = z.enum([
   "analysis-database",
   "mach-o",
+  "mach-o-universal",
   "elf",
   "pe",
   "dos-mz",
@@ -76,7 +82,6 @@ const subjectSchema = z.object({
     "directory",
     "file",
     "unknown",
-    "mach-o-universal",
     "javascript-bundle",
     "entitlements",
   ]),
@@ -124,6 +129,7 @@ const entrySchema = z.object({
     raw_result: jsonValueSchema.nullable(),
     provider: committedProviderSchema,
     limitations: z.array(z.string()),
+    relationship_coverage: relationshipCoverageSchema.nullable().default(null),
     locations: z.array(evidenceLocationSchema),
     subject: subjectSchema.nullable(),
   }),
@@ -138,6 +144,7 @@ const workflowEntrySchema = z.object({
     provider: committedProviderSchema,
     analysis_profile: analysisProfileSchema,
     limitations: z.array(z.string()),
+    relationship_coverage: relationshipCoverageSchema.nullable().default(null),
     locations: z.array(evidenceLocationSchema),
     subject: subjectSchema.nullable(),
   }),
@@ -267,7 +274,7 @@ const snapshotContentDigest = (
   rawResult: JsonValue | null,
   execution: Pick<
     AnalysisSnapshotEntry["execution"],
-    "limitations" | "locations" | "subject"
+    "limitations" | "locations" | "subject" | "relationship_coverage"
   >,
 ): string => {
   const metadata = jsonObjectSchema.parse({
@@ -282,6 +289,9 @@ const snapshotContentDigest = (
             format: execution.subject.format,
             architecture: execution.subject.architecture,
           },
+    ...(execution.relationship_coverage === null
+      ? {}
+      : { relationship_coverage: execution.relationship_coverage }),
   });
   return contentDigest({
     ...metadata,
@@ -308,6 +318,7 @@ interface SnapshotExecution {
   };
   readonly analysisProfile?: AnalysisProfileCommitment;
   readonly limitations: readonly string[];
+  readonly relationshipCoverage?: RelationshipCoverage | null | undefined;
   readonly locations: readonly EvidenceLocation[];
   readonly subject: EvidenceSubjectTarget | null;
 }
@@ -411,7 +422,7 @@ export const snapshotEvidenceForQuery = (
     (candidate) => candidate.query_id === queryId,
   );
   if (entry === undefined && workflowEntry === undefined) return undefined;
-  return snapshot.evidence_bundle.records.find(
+  const evidence = snapshot.evidence_bundle.records.find(
     (record) =>
       record.subject?.digest.sha256 === target.sha256 &&
       record.operation === operation &&
@@ -425,6 +436,9 @@ export const snapshotEvidenceForQuery = (
         (workflowEntry !== undefined &&
           evidenceMatchesWorkflowEntry(record, workflowEntry, snapshot))),
   );
+  return evidence === undefined
+    ? undefined
+    : rebindEvidenceToTargetPath(evidence, target);
 };
 
 /** Create one exact replay record for a derived application workflow result. */
@@ -456,6 +470,7 @@ export const createAnalysisSnapshotWorkflowEntry = (input: {
       provider: execution.analysisProfile.provider,
       analysis_profile: execution.analysisProfile,
       limitations: [...execution.limitations],
+      relationship_coverage: execution.relationshipCoverage ?? null,
       locations: [...execution.locations],
       subject:
         execution.subject === null
@@ -518,6 +533,7 @@ export const createAnalysisSnapshotEntry = (input: {
       raw_result: execution.rawResult,
       provider: binding.provider,
       limitations: [...execution.limitations],
+      relationship_coverage: execution.relationshipCoverage ?? null,
       locations: [...execution.locations],
       subject:
         execution.subject === null
@@ -834,19 +850,24 @@ const evidenceMatchesWorkflowEntry = (
     evidenceContentDigest(evidence),
   ]) === workflowEntryEvidenceKey(entry);
 
-const evidenceContentMetadata = (evidence: Evidence) => ({
-  limitations: evidence.limitations,
-  locations: evidence.locations,
-  subject:
-    evidence.subject === null
-      ? null
-      : {
-          local_path: evidence.subject.local_path,
-          sha256: evidence.subject.digest.sha256,
-          format: evidence.subject.format,
-          architecture: evidence.subject.architecture,
-        },
-});
+const evidenceContentMetadata = (evidence: Evidence) => {
+  return {
+    limitations: evidence.limitations,
+    ...(evidence.relationship_coverage === null
+      ? {}
+      : { relationship_coverage: evidence.relationship_coverage }),
+    locations: evidence.locations,
+    subject:
+      evidence.subject === null
+        ? null
+        : {
+            local_path: evidence.subject.local_path,
+            sha256: evidence.subject.digest.sha256,
+            format: evidence.subject.format,
+            architecture: evidence.subject.architecture,
+          },
+  };
+};
 
 /** Serialize a validated snapshot with byte-stable canonical entry ordering. */
 export const serializeAnalysisSnapshot = (snapshot: AnalysisSnapshot): string =>

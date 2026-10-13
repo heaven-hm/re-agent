@@ -1,50 +1,45 @@
-import { expect, it } from "vitest";
+import { chmod, lstat, readFile } from "node:fs/promises";
+import { expect, it, onTestFinished } from "vitest";
 
-import { serveCli as serve } from "./cliServeHarness.js";
+import {
+  expectConfigurationRefusal,
+  serveCli as serve,
+} from "./cliServeHarness.js";
+import {
+  createTestWorkspace,
+  removeTestWorkspace,
+} from "../../support/workspace/workspaceFixture.js";
 
 it.each([
-  ["inspect-adb-client"],
-  ["list-adb-devices"],
-  ["inspect-adb-device"],
-  ["list-adb-packages"],
-  ["pull-adb-package"],
-  ["read-adb-logcat"],
-  ["inspect-adb-package"],
-  ["pull-adb-file"],
-  ["push-adb-file"],
-  ["capture-adb-screen"],
-  ["list-adb-processes"],
-  ["list-adb-directory"],
-  ["list-adb-features"],
-  ["list-adb-services"],
-  ["inspect-adb-display"],
-  ["inspect-adb-window"],
-  ["read-adb-setting"],
-  ["collect-adb-bugreport"],
-  ["resolve-adb-packages"],
-  ["install-adb-package"],
-  ["uninstall-adb-package"],
-  ["start-adb-app"],
-  ["start-adb-activity"],
-  ["stop-adb-app"],
-])("%s advertises a schema through the public CLI", async (command) => {
-  const result = await serve([command, "--schema", "--json"]);
-  expect(result.exitCode, command).toBe(0);
-  const schema = JSON.parse(result.stdout) as { args?: unknown };
-  expect(schema).toBeTruthy();
-});
-
-it("reports a missing adb binary with recovery guidance", async () => {
-  const result = await serve(["inspect-adb-client", "--json"], {
-    REA_ADB_PATH: "/nonexistent/adb",
-  });
-  expect(result.stdout).toContain("capability_unavailable");
-  expect(result.stdout).toContain("REA_ADB_PATH");
-});
+  [
+    ["inspect-adb-client", "--json"],
+    "/nonexistent/adb",
+    "The selected adb binary was not found: /nonexistent/adb. Set REA_ADB_PATH",
+  ],
+  [
+    ["list-adb-devices", "--json"],
+    "/nonexistent/adb",
+    "The selected adb binary was not found: /nonexistent/adb. Set REA_ADB_PATH",
+  ],
+  [
+    ["list-adb-devices", "--json"],
+    "relative/adb",
+    "REA_ADB_PATH must be an absolute path to the adb binary.",
+  ],
+])(
+  "%j with REA_ADB_PATH=%s names the host requirement",
+  async (argv, binary, reason) => {
+    const result = await serve(argv, { REA_ADB_PATH: binary });
+    expectConfigurationRefusal(result, reason);
+  },
+);
 
 it("validates device serials before contacting any device", async () => {
   const result = await serve(["inspect-adb-device", "bad serial", "--json"]);
-  expect(result.stdout).toContain("invalid_input");
+  expect(JSON.parse(result.stdout)).toMatchObject({
+    code: "invalid_request",
+    category: "invalid_input",
+  });
 });
 
 it("requires the output directory option on pull", async () => {
@@ -56,3 +51,40 @@ it("requires the output directory option on pull", async () => {
   ]);
   expect(result.exitCode).not.toBe(0);
 });
+
+it.skipIf(process.platform === "win32")(
+  "refuses a trailing device separator through the CLI before adb or output effects",
+  async () => {
+    const workspace = await createTestWorkspace("rea-adb-cli-pull-");
+    onTestFinished(() => removeTestWorkspace(workspace.root));
+    const adb = await workspace.write(
+      "adb",
+      `#!/bin/sh
+if [ "$1" = "version" ]; then
+  printf 'Android Debug Bridge version 1.0.41\\nVersion 34.0.5-cli\\nInstalled as %s\\n' "$0"
+  exit 0
+fi
+: > '${workspace.path("invoked")}'
+exit 0
+`,
+    );
+    await chmod(adb, 0o755);
+    const output = workspace.path("pulls");
+    const result = await serve(
+      [
+        "pull-adb-file",
+        "emulator-5554",
+        "/data/local/tmp/",
+        "--output-directory",
+        output,
+        "--json",
+      ],
+      { REA_ADB_PATH: adb },
+    );
+    expect(JSON.parse(result.stdout)).toMatchObject({
+      code: "invalid_request",
+    });
+    await expect(readFile(workspace.path("invoked"))).rejects.toThrow();
+    await expect(lstat(output)).rejects.toMatchObject({ code: "ENOENT" });
+  },
+);

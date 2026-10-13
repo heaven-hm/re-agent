@@ -281,6 +281,42 @@ describe("doctor installation identity", () => {
 });
 
 describe("doctor scoped readiness", () => {
+  it("checks explicitly selected skill destinations independently of registrations", async () => {
+    const selected: (readonly string[] | undefined)[] = [];
+    const result = await runDoctor(
+      undefined,
+      host({
+        clientRegistrations: () => Promise.resolve([]),
+        installedSkillIdentity: (clients) => {
+          selected.push(clients);
+          return Promise.resolve({
+            version: "stale",
+            toolCount: 0,
+            canonical: false,
+          });
+        },
+      }),
+      {
+        clients: [],
+        skillClients: ["claude_code", "claude_code"],
+        skill: true,
+      },
+    );
+
+    expect(selected).toEqual([["claude_code"]]);
+    expect(result.scope).toMatchObject({
+      mode: "explicit",
+      clients: [],
+      skill_clients: ["claude_code"],
+      skill: true,
+    });
+    expect(result.healthy).toBe(false);
+    expect(result.scope_checks.map(({ name }) => name)).toEqual([
+      "node",
+      "skill:identity",
+    ]);
+  });
+
   it("scopes effective readiness to selected clients without hiding drift", async () => {
     const registrations: readonly ClientRegistrationStatus[] = [
       {

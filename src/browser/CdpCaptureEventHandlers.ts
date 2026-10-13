@@ -226,10 +226,17 @@ export const handleRequestWillBeSent = (
     preserveMalformedRedirectEvidence(state, requestId, previous)
   )
     return;
-  if (request === undefined) {
-    state.completeness.exclude("network_requests", "invalid_protocol_value");
-    state.network.delete(requestId);
-    state.networkRequestTimestamps.delete(requestId);
+  const method = cdpStringValue(request?.method);
+  const initiator = recordValue(params.initiator);
+  const initiatorType = cdpStringValue(initiator?.type);
+  if (
+    request === undefined ||
+    method === undefined ||
+    method.length === 0 ||
+    initiatorType === undefined ||
+    initiatorType.length === 0
+  ) {
+    preserveMalformedRedirectEvidence(state, requestId, previous);
     return;
   }
   const sanitized = allowedSanitizedUrl(request.url, state.allowedOrigins);
@@ -273,6 +280,12 @@ export const handleRequestWillBeSent = (
       state.networkRequestTimestamps.delete(requestId);
       return;
     } else {
+      const encodedDataLength = numberValue(redirectResponse.encodedDataLength);
+      if (encodedDataLength === undefined || encodedDataLength < 0)
+        state.completeness.exclude(
+          "network_requests",
+          "invalid_protocol_value",
+        );
       redirects.push({
         url: previous.url,
         response_url: responseUrl.url,
@@ -280,10 +293,10 @@ export const handleRequestWillBeSent = (
         resource_type: previous.resource_type,
         status: numberValue(redirectResponse.status) ?? null,
         mime_type: cdpStringValue(redirectResponse.mimeType) ?? null,
-        encoded_data_length: (() => {
-          const length = numberValue(redirectResponse.encodedDataLength);
-          return length === undefined ? null : Math.max(0, length);
-        })(),
+        encoded_data_length:
+          encodedDataLength === undefined || encodedDataLength < 0
+            ? null
+            : encodedDataLength,
         request_timestamp:
           state.networkRequestTimestamps.get(requestId) ?? null,
         // CDP reports redirectResponse on the next requestWillBeSent event.
@@ -292,7 +305,6 @@ export const handleRequestWillBeSent = (
       });
     }
   }
-  const initiator = recordValue(params.initiator);
   const initiatorFrame = initiatorLocation(initiator);
   const rawInitiatorUrl = cdpStringValue(initiatorFrame?.url);
   const initiatorUrl = allowedSanitizedUrl(
@@ -308,14 +320,14 @@ export const handleRequestWillBeSent = (
     request_id: requestId,
     url: sanitized.url,
     origin: sanitized.origin ?? "",
-    method: cdpStringValue(request.method) ?? "GET",
+    method,
     resource_type: cdpStringValue(params.type) ?? null,
     status: null,
     mime_type: null,
     encoded_data_length: null,
     redirects,
     initiator: {
-      type: cdpStringValue(initiator?.type) ?? "other",
+      type: initiatorType,
       url: initiatorUrl?.url ?? null,
       line: integerOrNull(initiatorFrame?.lineNumber),
       column: integerOrNull(initiatorFrame?.columnNumber),
@@ -411,12 +423,14 @@ export const handleLoadingFinished = (
   if (state.malformedRedirectRequestIds.has(requestId)) return;
   const current = state.network.get(requestId);
   if (current === undefined) return;
+  const encodedDataLength = numberValue(params.encodedDataLength);
+  if (encodedDataLength === undefined || encodedDataLength < 0) {
+    state.completeness.exclude("network_requests", "invalid_protocol_value");
+    return;
+  }
   state.network.set(requestId, {
     ...current,
-    encoded_data_length: Math.max(
-      0,
-      numberValue(params.encodedDataLength) ?? 0,
-    ),
+    encoded_data_length: encodedDataLength,
   });
 };
 

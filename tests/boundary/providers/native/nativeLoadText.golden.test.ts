@@ -1,6 +1,9 @@
 import { expect, it } from "vitest";
 import { parseOtoolLoadCommands } from "../../../../src/native/parsers/otool.js";
-import { nativeFixture } from "../../../fixtures/nativeCommands.js";
+import {
+  nativeFixture,
+  withOtoolMachHeader,
+} from "../../../fixtures/nativeCommands.js";
 it.each([
   ["decimal-space", "123 library.dylib"],
   ["hex-space", "0x123 library.dylib"],
@@ -9,7 +12,9 @@ it.each([
   ["ordinary", "ordinary.dylib"],
 ])("preserves native install-name text from %s capture", async (slug, name) => {
   const load = parseOtoolLoadCommands(
-    await nativeFixture(`load-command-text-values/${slug}.txt`),
+    withOtoolMachHeader(
+      await nativeFixture(`load-command-text-values/${slug}.txt`),
+    ),
   );
   expect(load.dependencies).toContainEqual({
     path: name,

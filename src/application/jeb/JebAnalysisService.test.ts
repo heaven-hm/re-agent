@@ -73,11 +73,11 @@ describe("JebAnalysisService admission", () => {
     const requests: JebRequest[] = [];
     const service = new JebAnalysisService(fakePort(requests));
     const result = await service.execute("list_jeb_units", {});
-    expect(result.ok).toBe(true);
-    if (!result.ok) return;
-    expect(requests[0]?.operation).toBe("list_jeb_units");
+    if (!result.ok) throw result.error;
+    expect(requests).toHaveLength(1);
     const request = requests[0];
-    if (request?.operation !== "list_jeb_units") return;
+    if (request?.operation !== "list_jeb_units")
+      throw new Error("Expected the list_jeb_units provider request");
     expect(request.input.index).toBe(0);
     expect(request.input.count).toBe(100);
     expect(result.value.normalized_result).toEqual({ observed: true });

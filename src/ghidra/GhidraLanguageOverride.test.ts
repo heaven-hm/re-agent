@@ -42,7 +42,7 @@ const X86_LDEFS = `<?xml version="1.0" encoding="UTF-8"?>
 const host: GhidraInstallationHost = {
   platform: "linux",
   architecture: "x64",
-  readText: () => "application.version=12.1.4\n",
+  readText: () => "application.version=12.1.4\napplication.java.min=21\n",
   executable: () => true,
   probeJava: () => ({
     version: "21.0.11",
@@ -158,8 +158,14 @@ describe("Ghidra language catalog", () => {
         { languageId: "x86:LE:32:default", compilerSpecId: "removed" },
         catalog,
         "12.1.4",
-      ),
-    ).not.toBeNull();
+      )?.settings,
+    ).toEqual([
+      {
+        setting: "REA_GHIDRA_COMPILER_SPEC_ID",
+        constraint:
+          "must be one of the selected language's compiler specs: borlandcpp",
+      },
+    ]);
   });
 
   it.each([

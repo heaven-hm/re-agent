@@ -48,6 +48,19 @@ export async function verifyNativeProvenance(app, executable) {
       assert.equal(mcp.raw_result, null);
       assert.ok(cli.normalized_result.provenance.length > 0);
       assert.deepEqual(mcp.normalized_result, cli.normalized_result);
+      if (operation === "inspect_macho") {
+        const delayed = cli.normalized_result.load_commands.items.find(
+          ({ fields }) => fields.name === "@rpath/libdelay.dylib (offset 28)",
+        );
+        assert.equal(delayed?.kind, "LC_LOAD_DYLIB");
+        assert.equal(delayed.fields.options, "delay-init");
+        assert.equal(delayed.fields["time stamp"], undefined);
+        assert.ok(
+          cli.normalized_result.dependencies.items.some(
+            ({ path }) => path === "@rpath/libdelay.dylib",
+          ),
+        );
+      }
       assert.deepEqual(
         JSON.parse(response.content.find((item) => item.type === "text").text),
         response.structuredContent,

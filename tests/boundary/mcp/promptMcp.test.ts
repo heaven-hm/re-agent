@@ -11,7 +11,22 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import { createTestTempDirectory } from "../../fixtures/temporaryDirectory.js";
 
-import type { AnalysisClient } from "../../../src/application/AnalysisProvider.js";
+import {
+  createAnalysisExecution,
+  type AnalysisClient,
+} from "../../../src/application/AnalysisProvider.js";
+import type { JsonValue } from "../../../src/domain/jsonValue.js";
+import type {
+  AnalysisProvider,
+  AnalysisProviderCandidate,
+  CapabilityDescriptor,
+  ProviderIdentity,
+} from "../../../src/application/AnalysisProvider.js";
+import { AnalysisProviderRegistry } from "../../../src/application/binary/AnalysisProviderRegistry.js";
+import { composeBinarySession } from "../../../src/application/binary/BinarySessionComposition.js";
+import { createAnalysisProfile } from "../../../src/domain/analysisProfile.js";
+import { AnalysisCancelledError } from "../../../src/domain/analysisErrorCore.js";
+import { err, ok } from "../../../src/domain/result.js";
 import {
   createCacheProvider,
   createTestBinarySession,
@@ -54,9 +69,11 @@ describe("guided prompts over MCP", () => {
       completions: {},
       prompts: { listChanged: true },
     });
-    for (const [index, contract] of PROMPT_CONTRACTS.entries()) {
-      const advertised = prompts.prompts[index];
-      expect(advertised?.arguments).toEqual(
+    const advertisedByName = new Map(
+      prompts.prompts.map((prompt) => [prompt.name, prompt]),
+    );
+    for (const contract of PROMPT_CONTRACTS) {
+      expect(advertisedByName.get(contract.name)?.arguments).toEqual(
         Object.entries(contract.arguments).map(
           ([name, { description, required }]) => ({
             name,
@@ -271,15 +288,21 @@ describe("guided prompt completion registry", () => {
     });
     await connectPair(server, client);
     resources.push(session);
-    expect((await client.listPrompts()).prompts[0]?.title).toBe(
-      "Investigate a feature",
+    const contract = PROMPT_CONTRACTS.find(
+      ({ name }) => name === "investigate_feature",
     );
+    if (contract === undefined)
+      throw new Error("Missing investigate_feature prompt contract");
+    const initialPrompt = (await client.listPrompts()).prompts.find(
+      ({ name }) => name === contract.name,
+    );
+    expect(initialPrompt?.title).toBe(contract.title);
 
     registry.update({
-      ...PROMPT_CONTRACTS[0],
-      title: "Investigate a feature (updated)",
+      ...contract,
+      title: `${contract.title} (updated)`,
       arguments: {
-        ...PROMPT_CONTRACTS[0].arguments,
+        ...contract.arguments,
         document: {
           description: "Updated provider-backed selector",
           required: false,
@@ -289,10 +312,73 @@ describe("guided prompt completion registry", () => {
     });
     await changed;
     const prompts = await client.listPrompts();
-    expect(prompts.prompts[0]?.title).toBe("Investigate a feature (updated)");
+    expect(
+      prompts.prompts.find(({ name }) => name === contract.name)?.title,
+    ).toBe(`${contract.title} (updated)`);
     expect(await complete(client, "document", "fixture")).toEqual(["fixture"]);
   });
 });
+
+it("guided prompt completion avoids cold startup and cancels warm lookup on close", async () => {
+  const directory = await createTestTempDirectory("rea-prompt-warm-only-");
+  temporaryDirectories.push(directory);
+  const target = join(directory, "target.hop");
+  await writeFile(target, "fixture target");
+  const fixture = await createWarmCompletionFixture(target);
+  const { client } = fixture;
+
+  const opened = await client.callTool({
+    name: "open_binary",
+    arguments: { path: target },
+  });
+  expect(opened.isError).not.toBe(true);
+  expect(fixture.childrenCreated()).toBe(0);
+  expect(await complete(client, "document", "")).toEqual([]);
+  expect(await complete(client, "procedure", "")).toEqual([]);
+  expect(fixture.childrenCreated()).toBe(0);
+
+  const startup = fixture.holdStartup();
+  const warming = client.callTool({ name: "list_documents", arguments: {} });
+  await startup.started;
+  expect(await complete(client, "document", "")).toEqual([]);
+  expect(await complete(client, "procedure", "")).toEqual([]);
+  expect(fixture.childrenCreated()).toBe(1);
+  startup.finish();
+  const warmed = await warming;
+  expect(warmed.isError, JSON.stringify(warmed)).not.toBe(true);
+  expect(fixture.childrenCreated()).toBe(1);
+  expect(await complete(client, "document", "fixture")).toEqual([
+    "fixture-document",
+  ]);
+
+  const cancellation = fixture.holdCompletion();
+  const controller = new AbortController();
+  const cancelled = client.complete(
+    {
+      ref: { type: "ref/prompt", name: "investigate_feature" },
+      argument: { name: "document", value: "" },
+    },
+    { signal: controller.signal },
+  );
+  await cancellation.started;
+  controller.abort();
+  await expect(cancelled).rejects.toThrow();
+  await cancellation.aborted;
+
+  const lifecycle = fixture.holdCompletion();
+  const pending = client.complete({
+    ref: { type: "ref/prompt", name: "investigate_feature" },
+    argument: { name: "document", value: "" },
+  });
+  await lifecycle.started;
+  const closed = await client.callTool({
+    name: "close_binary",
+    arguments: {},
+  });
+  expect(closed.isError).not.toBe(true);
+  await lifecycle.aborted;
+  expect((await pending).completion.values).toEqual([]);
+}, 10_000);
 
 describe("guided prompt completion lifecycle", () => {
   it("survives a cancelled completion and ignores its late result", async () => {
@@ -400,6 +486,181 @@ describe("guided prompt completion lifecycle", () => {
   }, 10_000);
 });
 
+const createWarmCompletionFixture = async (target: string) => {
+  const identity = {
+    id: "deep-fixture",
+    name: "Deep fixture provider",
+    version: "1",
+  };
+  const analysisProfile = createAnalysisProfile(identity, { fixture: true });
+  const observeCompletion = (result: JsonValue) =>
+    resultOk(createAnalysisExecution(result, identity, { analysisProfile }));
+  let childrenCreated = 0;
+  let ready = false;
+  let startupGate:
+    | {
+        readonly started: () => void;
+        readonly release: Promise<void>;
+      }
+    | undefined;
+  let completionGate:
+    | {
+        readonly started: () => void;
+        readonly aborted: () => void;
+      }
+    | undefined;
+  const deep = deepProvider(identity, {
+    createClient() {
+      childrenCreated += 1;
+      return {
+        execute: async (operation) => {
+          if (operation !== "health") {
+            const gate = startupGate;
+            if (gate !== undefined) {
+              startupGate = undefined;
+              gate.started();
+              await gate.release;
+            }
+            ready = true;
+          }
+          return observeCompletion(
+            operation === "list_documents"
+              ? ["fixture-document"]
+              : operation === "list_procedures"
+                ? [{ address: "0x1000", value: "fixture-procedure" }]
+                : null,
+          );
+        },
+        executeIfReady(operation, _parameters, options) {
+          if (
+            !ready ||
+            (operation !== "list_documents" && operation !== "list_procedures")
+          )
+            return Promise.resolve(undefined);
+          const gate = completionGate;
+          if (gate === undefined)
+            return Promise.resolve(
+              observeCompletion(
+                operation === "list_documents"
+                  ? ["fixture-document"]
+                  : [{ address: "0x1000", value: "fixture-procedure" }],
+              ),
+            );
+          completionGate = undefined;
+          gate.started();
+          return new Promise((resolve) => {
+            const signal = options?.signal;
+            const cancel = (): void => {
+              gate.aborted();
+              resolve(err(new AnalysisCancelledError(operation)));
+            };
+            if (signal?.aborted === true) cancel();
+            else signal?.addEventListener("abort", cancel, { once: true });
+          });
+        },
+        close: () => Promise.resolve(resultOk(null)),
+      };
+    },
+  });
+  const auxiliaryIdentity: ProviderIdentity = {
+    id: "aux-fixture",
+    name: "Aux fixture",
+    version: "1",
+  };
+  const auxiliary: AnalysisProvider = {
+    identity: () => auxiliaryIdentity,
+    capabilities: () => [
+      promptCapability(auxiliaryIdentity, "inspect_artifact"),
+    ],
+    createClient: () => ({
+      execute: () => Promise.resolve(observed(null)),
+      close: () => Promise.resolve(resultOk(null)),
+    }),
+  };
+  const session = composeBinarySession(new AnalysisProviderRegistry([deep]), [
+    auxiliary,
+  ]);
+  const client = await connect(createServer({ kind: "session", session }));
+  resources.push(session);
+  return {
+    client,
+    childrenCreated: () => childrenCreated,
+    holdStartup: () => {
+      let started = (): void => undefined;
+      let finish = (): void => undefined;
+      const observedStart = new Promise<void>((resolve) => {
+        started = resolve;
+      });
+      const release = new Promise<void>((resolve) => {
+        finish = resolve;
+      });
+      startupGate = { started, release };
+      return { started: observedStart, finish };
+    },
+    holdCompletion: () => {
+      let started = (): void => undefined;
+      let aborted = (): void => undefined;
+      const observedStart = new Promise<void>((resolve) => {
+        started = resolve;
+      });
+      const observedAbort = new Promise<void>((resolve) => {
+        aborted = resolve;
+      });
+      completionGate = { started, aborted };
+      return { started: observedStart, aborted: observedAbort };
+    },
+  };
+};
+
+const deepProvider = (
+  identity: Parameters<typeof createAnalysisProfile>[0],
+  options: {
+    readonly createClient: AnalysisProviderCandidate["createClient"];
+  },
+): AnalysisProviderCandidate => ({
+  identity: () => identity,
+  capabilities: () => [
+    promptCapability(identity, "list_documents"),
+    promptCapability(identity, "list_procedures"),
+  ],
+  inspectAvailability: () => ({
+    status: "available",
+    code: null,
+    reason: null,
+    diagnostics: {},
+  }),
+  inspectTargetSupport: () => ({
+    status: "supported",
+    code: null,
+    reason: null,
+    diagnostics: {},
+  }),
+  resolveAnalysisProfile: async () =>
+    ok({ profile: createAnalysisProfile(identity, { fixture: true }) }),
+  createClient: options.createClient,
+});
+
+const promptCapability = (
+  provider: ProviderIdentity,
+  operation: CapabilityDescriptor["operation"],
+): CapabilityDescriptor => ({
+  provider,
+  operation,
+  available: true,
+  reason: null,
+  cachePolicy: "live",
+  effects: {
+    mutatesArtifact: false,
+    launchesProcess: false,
+    mayShowUi: false,
+    mayAccessNetwork: false,
+    mayWriteFilesystem: false,
+    changesPermissions: false,
+    requiresRoot: false,
+  },
+  limitations: [],
+});
+
 const fixtureProvider = { id: "fixture", name: "Fixture", version: "1" };
 
 const fixtureSession = (
@@ -450,6 +711,22 @@ const lifecycleClient = (
       );
     }
     return Promise.resolve(observed(null));
+  },
+  executeIfReady(operation, parameters) {
+    if (operation === "list_documents")
+      return Promise.resolve(observed([`${target}-document`]));
+    if (operation === "list_procedures") {
+      requests.push(parameters);
+      return Promise.resolve(
+        observed([
+          {
+            address: target === "first" ? "0x1000" : "0x2000",
+            value: `${target}-procedure`,
+          },
+        ]),
+      );
+    }
+    return Promise.resolve(undefined);
   },
   close: () => Promise.resolve(resultOk(null)),
 });

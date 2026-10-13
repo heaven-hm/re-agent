@@ -26,10 +26,34 @@ export interface ArtifactEntry {
   readonly adapterKey: string;
   /** Filesystem identity captured during traversal, when supplied by an adapter. */
   readonly sourceIdentity?: {
-    readonly device: number;
-    readonly inode: number;
+    readonly device: bigint;
+    readonly inode: bigint;
+    readonly size: bigint;
+    readonly mode: bigint;
+    readonly mtimeNs: bigint;
+    readonly ctimeNs: bigint;
   };
 }
+
+/** Compare captured filesystem identity and mutable metadata at a read boundary. */
+export const sameArtifactSourceIdentity = (
+  expected: ArtifactEntry["sourceIdentity"],
+  observed: {
+    readonly dev: bigint;
+    readonly ino: bigint;
+    readonly size: bigint;
+    readonly mode: bigint;
+    readonly mtimeNs: bigint;
+    readonly ctimeNs: bigint;
+  },
+): boolean =>
+  expected !== undefined &&
+  observed.dev === expected.device &&
+  observed.ino === expected.inode &&
+  observed.size === expected.size &&
+  observed.mode === expected.mode &&
+  observed.mtimeNs === expected.mtimeNs &&
+  observed.ctimeNs === expected.ctimeNs;
 
 /** Snapshot mutable entry metadata before the producer later validates open(). */
 export const copyArtifactEntry = (entry: ArtifactEntry): ArtifactEntry => ({
@@ -60,7 +84,11 @@ export const sameArtifactEntry = (
     (limitation, index) => limitation === produced.limitations[index],
   ) &&
   entry.sourceIdentity?.device === produced.sourceIdentity?.device &&
-  entry.sourceIdentity?.inode === produced.sourceIdentity?.inode;
+  entry.sourceIdentity?.inode === produced.sourceIdentity?.inode &&
+  entry.sourceIdentity?.size === produced.sourceIdentity?.size &&
+  entry.sourceIdentity?.mode === produced.sourceIdentity?.mode &&
+  entry.sourceIdentity?.mtimeNs === produced.sourceIdentity?.mtimeNs &&
+  entry.sourceIdentity?.ctimeNs === produced.sourceIdentity?.ctimeNs;
 
 /** Read-only adapter over one directory, archive, or virtual container. */
 export interface ArtifactReader {

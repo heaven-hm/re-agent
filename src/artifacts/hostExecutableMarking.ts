@@ -1,4 +1,4 @@
-import type { Stats } from "node:fs";
+import type { BigIntStats, Stats } from "node:fs";
 import { extname } from "node:path";
 
 /** Extensions Windows launches directly through CreateProcess or cmd.exe. */
@@ -13,10 +13,12 @@ const windowsLaunchableExtensions = new Set([".bat", ".cmd", ".com", ".exe"]);
  */
 export const hostExecutableMarking = (
   path: string,
-  metadata: Pick<Stats, "mode" | "isFile">,
+  metadata: Pick<Stats | BigIntStats, "mode" | "isFile">,
   platform: NodeJS.Platform = process.platform,
 ): boolean =>
   platform === "win32"
     ? metadata.isFile() &&
       windowsLaunchableExtensions.has(extname(path).toLowerCase())
-    : (metadata.mode & 0o111) !== 0;
+    : typeof metadata.mode === "bigint"
+      ? (metadata.mode & 0o111n) !== 0n
+      : (metadata.mode & 0o111) !== 0;

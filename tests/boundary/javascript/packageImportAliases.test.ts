@@ -455,6 +455,138 @@ describe("package import target arrays compared with Node", () => {
   });
 });
 
+describe("package import target URL normalization compared with Node", () => {
+  it("normalizes targets before package-root validation and array selection", async () => {
+    const root = await createTestTempDirectory("rea-package-target-url-");
+    const directory = "app space#?%λ";
+    const imports = {
+      "#tab-escape": ["./.\t./outside.cjs", "./fallback.cjs"],
+      "#newline-escape": ["./.%\n2e/outside.cjs", "./fallback.cjs"],
+      "#cr-escape": ["./.\r./outside.cjs", "./fallback.cjs"],
+      "#normalized": "./fall\tback.cjs",
+      "#trimmed": "./fallback.cjs \t",
+      "#suffix": "./fallback.cjs?selected=one#fragment",
+      "#return": `./.\t./${encodeURIComponent(directory)}/fallback.cjs`,
+    };
+    const contents = await writeTree(root, {
+      [`${directory}/package.json`]: JSON.stringify({ imports }),
+      [`${directory}/main.cjs`]: "module.exports = 1;",
+      [`${directory}/fallback.cjs`]: "module.exports = 1;",
+    });
+    const inventoried = inventory(contents);
+    for (const specifier of Object.keys(imports)) {
+      const required = await nodeRequireTarget(
+        join(root, directory, "main.cjs"),
+        specifier,
+      );
+      expect(required.error_code, specifier).toBeNull();
+      expect(posixRelative(root, required.target ?? "")).toBe(
+        `${directory}/fallback.cjs`,
+      );
+      const imported = await nodeImportTarget(join(root, directory), specifier);
+      expect(imported.error_code, specifier).toBeNull();
+      expect(posixRelative(root, fileURLToPath(imported.target ?? ""))).toBe(
+        `${directory}/fallback.cjs`,
+      );
+      for (const moduleKind of ["require", "import"] as const)
+        expect(
+          resolveAlias(
+            inventoried,
+            specifier,
+            `${directory}/main.cjs`,
+            moduleKind,
+          ),
+          specifier,
+        ).toMatchObject({
+          declared_path: specifier,
+          resolution_status: "resolved",
+          resolved_path: `${directory}/fallback.cjs`,
+        });
+    }
+  });
+
+  it("keeps URL decoding and missing-file failures after array selection", async () => {
+    const root = await createTestTempDirectory(
+      "rea-package-target-url-refusal-",
+    );
+    const contents = await writeTree(root, {
+      "package.json": JSON.stringify({
+        imports: {
+          "#escape": "./.\t./outside.cjs",
+          "#separator": ["./fall%2fback.cjs", "./fallback.cjs"],
+          "#missing": ["./miss\ting.cjs", "./fallback.cjs"],
+          "#query-separator": ["./first.cjs?selected=%2f", "./fallback.cjs"],
+        },
+      }),
+      "main.cjs": "module.exports = 1;",
+      "fallback.cjs": "module.exports = 1;",
+      "first.cjs": "module.exports = 2;",
+    });
+    const inventoried = inventory(contents);
+    for (const [specifier, code] of [
+      ["#escape", "ERR_INVALID_PACKAGE_TARGET"],
+      ["#separator", "ERR_INVALID_MODULE_SPECIFIER"],
+    ] as const) {
+      expect(
+        (await nodeRequireTarget(join(root, "main.cjs"), specifier)).error_code,
+      ).toBe(code);
+      expect((await nodeImportTarget(root, specifier)).error_code).toBe(code);
+      for (const moduleKind of ["require", "import"] as const)
+        expect(
+          resolveAlias(inventoried, specifier, "main.cjs", moduleKind),
+        ).toMatchObject({ resolution_status: "rejected", resolved_path: null });
+    }
+    expect(
+      (await nodeRequireTarget(join(root, "main.cjs"), "#missing")).error_code,
+    ).toBe("MODULE_NOT_FOUND");
+    const imported = await nodeImportTarget(root, "#missing");
+    expect(posixRelative(root, fileURLToPath(imported.target ?? ""))).toBe(
+      "missing.cjs",
+    );
+    for (const moduleKind of ["require", "import"] as const)
+      expect(
+        resolveAlias(inventoried, "#missing", "main.cjs", moduleKind),
+      ).toMatchObject({
+        resolution_status: "not-found",
+        resolved_path: null,
+        limitations: [expect.stringContaining("missing.cjs")],
+      });
+    expect(
+      resolveAlias(
+        inventoried,
+        "#escape",
+        "main.cjs",
+        "require",
+      ).limitations.join(" "),
+    ).toContain(JSON.stringify("./.\t./outside.cjs"));
+    expect(
+      (await nodeRequireTarget(join(root, "main.cjs"), "#query-separator"))
+        .error_code,
+    ).toBe("ERR_INVALID_MODULE_SPECIFIER");
+    expect(
+      resolveAlias(inventoried, "#query-separator", "main.cjs", "require"),
+    ).toMatchObject({ resolution_status: "rejected", resolved_path: null });
+    const withQuery = await nodeImportTarget(root, "#query-separator");
+    expect(posixRelative(root, fileURLToPath(withQuery.target ?? ""))).toBe(
+      "first.cjs",
+    );
+    expect(
+      resolveAlias(inventoried, "#query-separator", "main.cjs", "import"),
+    ).toMatchObject({
+      resolution_status: "resolved",
+      resolved_path: "first.cjs",
+    });
+    expect(
+      resolveAlias(
+        inventoried,
+        "#missing",
+        "main.cjs",
+        "require",
+      ).limitations.join(" "),
+    ).toContain(JSON.stringify("./miss\ting.cjs"));
+  });
+});
+
 describe("package import aliases compared with Node", () => {
   it("matches Node require and import for an exact root alias", async () => {
     const root = await createTestTempDirectory("rea-import-alias-root-");

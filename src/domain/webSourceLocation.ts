@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { digestSchema } from "./digests.js";
+import { localPathStringSchema } from "./localPath.js";
 import { exportedWebScriptSchema } from "./webScriptExport.js";
 import {
   capturedWebManifestIdentitySchema,
@@ -17,10 +18,9 @@ export const webSourcePositionSchema = z.strictObject({
 export const webSourceLocationInputSchema = selectedWebScriptInputSchema.extend(
   {
     source_map: z.strictObject({
-      path: z
-        .string()
-        .min(1)
-        .describe("Absolute local source-map path; no fetch"),
+      path: localPathStringSchema.describe(
+        "Absolute local source-map path; no fetch",
+      ),
       url: z
         .string()
         .min(1)

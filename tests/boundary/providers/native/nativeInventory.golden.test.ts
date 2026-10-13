@@ -21,6 +21,7 @@ import {
   nativeFixture as fixture,
   nativeMachoTarget as machoTarget,
   nativeMachoTargetForFile,
+  withOtoolMachHeader,
 } from "../../../fixtures/nativeCommands.js";
 import { createTestTempDirectory } from "../../../fixtures/temporaryDirectory.js";
 
@@ -143,6 +144,7 @@ it("retains native inventory facts from captured Apple tool output", async () =>
   const outputs: Record<string, string> = {};
   for (const tool of ["file", "lipo", "otool", "nm", "dwarfdump", "vtool"])
     outputs[tool] = await fixture(`dyld-inventory/${tool}.txt`);
+  outputs.otool = withOtoolMachHeader(outputs.otool ?? "");
   outputs["dyld_info:-imports"] = await fixture("dyld-inventory/imports.txt");
   const exportsOutput = await fixture("dyld-inventory/exports.txt");
   outputs["dyld_info:-exports"] = exportsOutput;
@@ -275,7 +277,8 @@ it("retains symbol names containing spaces in dyld inventory rows", () => {
 });
 
 it("preserves numeric-looking segment and section identifiers from otool", () => {
-  const parsed = parseOtoolLoadCommands(`Load command 1
+  const parsed = parseOtoolLoadCommands(
+    withOtoolMachHeader(`Load command 0
       cmd LC_SEGMENT_64
   cmdsize 152
   segname 0001
@@ -299,7 +302,8 @@ Section
      flags 0x00000000
  reserved1 0
  reserved2 0
-`);
+`),
+  );
   expect(parsed.segments[0]).toMatchObject({
     name: "0001",
     file_offset: 16384,
@@ -367,7 +371,8 @@ it.each([
 ])(
   "keeps load-command-looking text inside native install names: %s",
   (installName) => {
-    const parsed = parseOtoolLoadCommands(`Load command 0
+    const parsed = parseOtoolLoadCommands(
+      withOtoolMachHeader(`Load command 0
           cmd LC_ID_DYLIB
       cmdsize 80
          name ${installName} (offset 24)
@@ -378,7 +383,8 @@ Load command 1
           cmd LC_UUID
       cmdsize 24
          uuid 01234567-89AB-CDEF-0123-456789ABCDEF
-`);
+`),
+    );
     expect(parsed.commands.map(({ index, kind }) => ({ index, kind }))).toEqual(
       [
         { index: 0, kind: "LC_ID_DYLIB" },

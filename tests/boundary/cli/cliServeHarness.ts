@@ -1,3 +1,5 @@
+import { expect } from "vitest";
+
 import { createCli } from "../../../src/cli.js";
 
 /** Captured CLI invocation for boundary tests. */
@@ -24,4 +26,19 @@ export const serveCli = async (
     },
   });
   return { stdout, exitCode };
+};
+
+/** A host tool configuration refusal names what to configure, not the target. */
+export const expectConfigurationRefusal = (
+  result: ServedCli,
+  reason: string,
+): void => {
+  const output = JSON.parse(result.stdout) as {
+    code?: unknown;
+    message?: unknown;
+    remediation?: { action?: unknown };
+  };
+  expect(output.code).toBe("capability_unavailable");
+  expect(output.message).toEqual(expect.stringContaining(reason));
+  expect(output.remediation?.action).toEqual(expect.stringContaining(reason));
 };

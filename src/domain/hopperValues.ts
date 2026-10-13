@@ -59,6 +59,9 @@ const segmentSchema = z.object({
   writable: z.boolean().nullable(),
   executable: z.boolean().nullable(),
 });
+const segmentImageBaseSchema = z
+  .object({ image_base: z.string().min(1) })
+  .passthrough();
 const unavailableAnalysisFactSchema = z
   .object({ available: z.literal(false), reason: z.string() })
   .strict();
@@ -422,6 +425,16 @@ export const parseSegments = (
   return parsed.success
     ? ok(parsed.data)
     : invalid("segment list", parsed.error);
+};
+
+/** Return a provider-reported image base only when every segment agrees on it. */
+export const parseSegmentImageBase = (value: JsonValue): string | undefined => {
+  const parsed = z
+    .array(segmentImageBaseSchema)
+    .safeParse(unwrapProperty(value, "segments"));
+  if (!parsed.success) return undefined;
+  const bases = new Set(parsed.data.map(({ image_base }) => image_base));
+  return bases.size === 1 ? parsed.data[0]?.image_base : undefined;
 };
 
 /** Parse direct or wrapped Hopper document names. */

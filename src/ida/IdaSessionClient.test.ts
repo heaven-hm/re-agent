@@ -116,6 +116,86 @@ describe("headless IDA producer pagination", () => {
 });
 
 describe("attached IDA observation semantics", () => {
+  it("returns cold and pending startup calls immediately, then cancels queued work before dispatch", async () => {
+    const { producer, client } = await fixture("headless");
+    await expect(client.executeIfReady("list_procedures", {})).resolves.toBe(
+      undefined,
+    );
+    expect(producer.connects).toBe(0);
+
+    let enterOpen: (() => void) | undefined;
+    let finishOpen: (() => void) | undefined;
+    const openEntered = new Promise<void>((resolve) => {
+      enterOpen = resolve;
+    });
+    const openGate = new Promise<void>((resolve) => {
+      finishOpen = resolve;
+    });
+    producer.beforeCall = async (name) => {
+      if (name === "idb_open") {
+        enterOpen?.();
+        await openGate;
+      }
+    };
+    const startup = client.execute("list_procedures", {});
+    await openEntered;
+    await expect(client.executeIfReady("list_strings", {})).resolves.toBe(
+      undefined,
+    );
+    expect(
+      producer.calls.filter(({ name }) => name === "idb_open"),
+    ).toHaveLength(1);
+    finishOpen?.();
+    const started = await startup;
+    if (!started.ok) throw started.error;
+    const warm = await client.executeIfReady("list_procedures", {});
+    if (warm === undefined) throw new Error("expected ready IDA dispatch");
+    if (!warm.ok) throw warm.error;
+    expect(warm.value.result).toEqual([
+      expect.objectContaining({ address: "0x1000", value: "main" }),
+    ]);
+
+    let enterRead: (() => void) | undefined;
+    let finishRead: (() => void) | undefined;
+    const readEntered = new Promise<void>((resolve) => {
+      enterRead = resolve;
+    });
+    const readGate = new Promise<void>((resolve) => {
+      finishRead = resolve;
+    });
+    producer.beforeCall = async (name) => {
+      if (name === "list_funcs") {
+        enterRead?.();
+        await readGate;
+      }
+    };
+    const active = client.execute("list_procedures", {});
+    await readEntered;
+    const controller = new AbortController();
+    const queued = client.executeIfReady(
+      "list_strings",
+      {},
+      {
+        signal: controller.signal,
+      },
+    );
+    controller.abort();
+    await expect(queued).resolves.toMatchObject({
+      ok: false,
+      error: { _tag: "AnalysisCancelledError" },
+    });
+    finishRead?.();
+    const activeResult = await active;
+    if (!activeResult.ok) throw activeResult.error;
+    expect(
+      producer.calls.filter(({ name }) => name === "list_funcs"),
+    ).toHaveLength(3);
+    expect(producer.calls.some(({ name }) => name === "find_regex")).toBe(
+      false,
+    );
+    await client.close();
+  });
+
   it("accepts a normalized spelling of the bound document path", async () => {
     const { target, producer, client } = await fixture();
     const equivalent =
@@ -716,6 +796,103 @@ describe("headless IDA session ownership and cleanup", () => {
     const result = await client.close();
     expect(result.ok).toBe(false);
     if (!result.ok) expect(result.error.cleanupIncomplete).toBe(true);
+    expect(
+      (await readdir(root)).some((name) => name.startsWith("rea-ida-")),
+    ).toBe(true);
+  });
+});
+
+describe("headless IDA reaped worker cleanup", () => {
+  it("recovers a reaped worker only after inventory confirms its session and private input are absent", async () => {
+    const { producer, client, root } = await fixture("headless");
+    expect((await client.execute("health", {})).ok).toBe(true);
+    const sessionId = producer.database;
+    producer.beforeCall = async (name) => {
+      if (name === "idb_close") producer.database = undefined;
+    };
+    producer.overrideCall = (name) =>
+      name === "idb_close"
+        ? { error: `Session not found: ${sessionId}` }
+        : undefined;
+
+    expect((await client.close()).ok).toBe(true);
+    expect(producer.calls.map(({ name }) => name).slice(-2)).toEqual([
+      "idb_close",
+      "idb_list",
+    ]);
+    expect(producer.closes).toBe(1);
+    expect(await readdir(root)).toEqual(["target.elf"]);
+  });
+
+  it("retains resources when an absent-session close is followed by a live private-input peer", async () => {
+    const { producer, client, root } = await fixture("headless");
+    expect((await client.execute("health", {})).ok).toBe(true);
+    const sessionId = producer.database;
+    producer.beforeCall = async (name) => {
+      if (name === "idb_close") producer.database = undefined;
+      if (name === "idb_list" && producer.database === undefined) {
+        producer.database = "unrelated-live-peer";
+        producer.owned = false;
+      }
+    };
+    producer.overrideCall = (name) =>
+      name === "idb_close"
+        ? { error: `Session not found: ${sessionId}` }
+        : undefined;
+
+    const result = await client.close();
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.error.cleanupIncomplete).toBe(true);
+    expect(producer.closes).toBe(0);
+    expect(
+      (await readdir(root)).some((name) => name.startsWith("rea-ida-")),
+    ).toBe(true);
+  });
+
+  it("retries independent inventory verification after an absent-session response", async () => {
+    const { producer, client, root } = await fixture("headless");
+    expect((await client.execute("health", {})).ok).toBe(true);
+    const sessionId = producer.database;
+    let inventoryUnavailable = true;
+    producer.beforeCall = async (name) => {
+      if (name === "idb_close") producer.database = undefined;
+      if (name === "idb_list" && inventoryUnavailable) {
+        inventoryUnavailable = false;
+        throw new Error("Inventory temporarily unavailable");
+      }
+    };
+    producer.overrideCall = (name) =>
+      name === "idb_close"
+        ? { error: `Session not found: ${sessionId}` }
+        : undefined;
+
+    expect((await client.close()).ok).toBe(false);
+    expect(producer.closes).toBe(0);
+    expect((await client.close()).ok).toBe(true);
+    expect(
+      producer.calls.filter(({ name }) => name === "idb_close"),
+    ).toHaveLength(1);
+    expect(producer.closes).toBe(1);
+    expect(await readdir(root)).toEqual(["target.elf"]);
+  });
+
+  it("does not treat a different missing session identity as proof of release", async () => {
+    const { producer, client, root } = await fixture("headless");
+    expect((await client.execute("health", {})).ok).toBe(true);
+    producer.beforeCall = async (name) => {
+      if (name === "idb_close") producer.database = undefined;
+    };
+    producer.overrideCall = (name) =>
+      name === "idb_close"
+        ? { error: "Session not found: another-session" }
+        : undefined;
+
+    const result = await client.close();
+    expect(result.ok).toBe(false);
+    expect(
+      producer.calls.filter(({ name }) => name === "idb_list"),
+    ).toHaveLength(1);
+    expect(producer.closes).toBe(0);
     expect(
       (await readdir(root)).some((name) => name.startsWith("rea-ida-")),
     ).toBe(true);

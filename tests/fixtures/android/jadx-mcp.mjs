@@ -26,6 +26,7 @@ const classes = [
     { length: generatedCount },
     (_, index) => `fixture.Class${index}`,
   ),
+  ...(mode === "duplicate-class-name" ? ["fixture.Target"] : []),
 ];
 const methods = [
   {
@@ -158,3 +159,6 @@ for (const name of ["get_xrefs_to_class", "get_xrefs_to_method"])
     }),
   );
 await server.connect(new StdioServerTransport());
+// A refused cleanup must leave a live process for verified fixture teardown.
+// Otherwise stdin EOF races the ownership scan with the server's natural exit.
+if (mode === "cleanup-failure") setInterval(() => {}, 1000);

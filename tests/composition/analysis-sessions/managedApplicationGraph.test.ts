@@ -507,6 +507,50 @@ describe("managed application graph token scope", () => {
       "token scope SHA-256",
     );
   });
+
+  it.each([
+    "module identity absent",
+    "module MVID unknown",
+    "token scope MVID unknown",
+  ] as const)("rejects inconsistent identity when %s", (variant) => {
+    const { memberEvidence, boundaryEvidence } = createManagedInteropEvidence();
+    const members = managedMemberInspectionSchema.parse(
+      parseEvidence(memberEvidence).normalized_result,
+    );
+    if (members.module === null || members.module.mvid === null)
+      throw new Error("Expected fixture module identity and MVID");
+    const module =
+      variant === "module identity absent"
+        ? null
+        : variant === "module MVID unknown"
+          ? { ...members.module, mvid: null }
+          : members.module;
+    const identity_scope =
+      variant === "token scope MVID unknown"
+        ? { ...members.identity_scope, requires_mvid: null }
+        : members.identity_scope;
+    const inconsistentMembers = createEvidence(
+      undefined,
+      MANAGED_STATIC_PROVIDER,
+      {
+        operation: "inspect_managed_members",
+        parameters: {},
+        result: { ...members, module, identity_scope },
+        rawResult: null,
+        limitations: members.limitations,
+      },
+    );
+
+    const projected = projectManagedApplicationGraphEvidence({
+      managed_members: inconsistentMembers,
+      managed_native_boundaries: boundaryEvidence,
+    });
+
+    expect(projected.ok).toBe(false);
+    if (projected.ok)
+      throw new Error("An inconsistent token scope was accepted");
+    expect(JSON.stringify(projected.error)).toContain("token scope MVID");
+  });
 });
 
 describe("unknown managed application graph token scope", () => {
@@ -626,6 +670,58 @@ describe("managed application graph coverage", () => {
       truncated: false,
       omitted_count: null,
       limits: [],
+    });
+  });
+});
+
+describe("managed application graph type selection", () => {
+  const project = (result: Parameters<typeof createEvidence>[2]["result"]) => {
+    const bytes = buildManagedPeFixture();
+    const binary = managedPeFixtureTarget(bytes, "/fixture/ManagedInterop.exe");
+    const projection = projectManagedApplicationGraphEvidence({
+      managed_members: createEvidence(binary, MANAGED_STATIC_PROVIDER, {
+        operation: "inspect_managed_members",
+        parameters: {},
+        result,
+        rawResult: null,
+        limitations: [],
+      }),
+    });
+    if (!projection.ok) throw new Error("projection failed");
+    return managedApplicationGraphResultSchema.parse(
+      parseEvidence(projection.value).normalized_result,
+    );
+  };
+
+  it("marks a graph from selected member inspection partial", () => {
+    const bytes = buildManagedPeFixture();
+    const binary = managedPeFixtureTarget(bytes, "/fixture/ManagedInterop.exe");
+    const selected = inspectManagedMembersBytes(bytes, binary, {
+      typeNames: ["Fixture.Program"],
+    });
+
+    expect(selected.coverage.state).toBe("complete");
+    const result = project(selected);
+    expect(result.coverage).toMatchObject({ status: "partial" });
+    expect(result.limitations).toContain(
+      "Managed member Evidence selected only these declaring types: Fixture.Program; type, method, and field nodes of other types are omitted, not absent.",
+    );
+    expect(result.limitations).not.toContain(
+      "At least one supplied managed Evidence record has partial coverage.",
+    );
+  });
+
+  it("accepts member Evidence recorded before type selection existed", () => {
+    const bytes = buildManagedPeFixture();
+    const binary = managedPeFixtureTarget(bytes, "/fixture/ManagedInterop.exe");
+    const { selection: _selection, ...legacy } = inspectManagedMembersBytes(
+      bytes,
+      binary,
+    );
+
+    expect(managedMemberInspectionSchema.parse(legacy).selection).toBeNull();
+    expect(project(legacy).coverage).toMatchObject({
+      status: "complete-within-inputs",
     });
   });
 });

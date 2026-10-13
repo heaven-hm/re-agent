@@ -273,14 +273,12 @@ export class HopperRequestQueue {
           this.accept(
             entry.id,
             err(
-              new HopperProcessError(
-                null,
-                undefined,
-                entry.method,
-                entry.id,
-                "unreachable",
-                hopperOperationStage(entry.method),
-              ),
+              new HopperProcessError(null, {
+                operation: entry.method,
+                requestId: entry.id,
+                providerState: "unreachable",
+                stage: hopperOperationStage(entry.method),
+              }),
             ),
           ),
       );
@@ -386,19 +384,20 @@ const withRequestContext = (
   entry: QueuedRequest,
 ): HopperError => {
   if (error instanceof HopperProcessError)
-    return new HopperProcessError(
-      error.exitCode,
-      error.diagnostic,
-      error.operation ?? entry.method,
-      error.requestId ?? entry.id,
-      error.providerState,
-      error.operation === undefined && error.stage === "connection"
-        ? hopperOperationStage(entry.method)
-        : error.stage,
-    );
+    return new HopperProcessError(error.exitCode, {
+      ...error,
+      cause: error.cause,
+      operation: error.operation ?? entry.method,
+      requestId: error.requestId ?? entry.id,
+      stage:
+        error.operation === undefined && error.stage === "connection"
+          ? hopperOperationStage(entry.method)
+          : error.stage,
+    });
   if (error instanceof HopperRemoteError)
     return new HopperRemoteError(error.code, error.safeMessage, {
-      diagnosticType: error.diagnosticType,
+      ...error,
+      cause: error.cause,
       operation: error.operation ?? entry.method,
       requestId: error.requestId ?? entry.id,
     });

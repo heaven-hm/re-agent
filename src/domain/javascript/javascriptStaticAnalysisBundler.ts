@@ -1,4 +1,9 @@
 import * as t from "@babel/types";
+import { javascriptBootstrapAt } from "./javascriptBootstrap.js";
+import {
+  resolveSemanticBindingState,
+  type JavaScriptSemanticAnalysisState,
+} from "./javascriptSemanticState.js";
 
 import { traverseJavaScriptAst } from "./javascriptSemanticTraversal.js";
 
@@ -32,6 +37,7 @@ export const inspectBundlerRegistration = (
   source: string,
   call: t.CallExpression,
   accumulator: AnalysisAccumulator,
+  bindings: JavaScriptSemanticAnalysisState,
 ): void => {
   const runtime = chunkRuntime(call);
   const entry = call.arguments[0];
@@ -40,7 +46,10 @@ export const inspectBundlerRegistration = (
   const table = entry.elements[1];
   const runtimeValue = runtimeMetadata(entry.elements[2]);
   if (!t.isArrayExpression(chunkIds) || !t.isObjectExpression(table)) return;
-  const recovered = recoverBundlerModules(source, table, runtime, accumulator);
+  const recovered = recoverBundlerModules(source, table, accumulator, {
+    runtime,
+    bindings,
+  });
   const chunkKeys = staticArrayValues(chunkIds);
   accumulator.unknownFindings += chunkKeys.unknown;
   accumulator.unknownFindings +=
@@ -51,7 +60,7 @@ export const inspectBundlerRegistration = (
     ...runtimeValue.asyncChunkKeys,
     ...recovered.asyncChunkKeys,
   ]);
-  const registration = {
+  const registration: JavaScriptBundlerRegistration = {
     bundler: runtime.toLowerCase().includes("rspack")
       ? ("rspack" as const)
       : ("webpack" as const),
@@ -59,7 +68,10 @@ export const inspectBundlerRegistration = (
     chunk_keys: chunkKeys.values,
     unknown_chunk_keys: chunkKeys.unknown,
     runtime_require_name: runtimeValue.requireName,
-    runtime_module_cache_status: bundlerModuleCacheStatus(source),
+    // A name appearing in the source does not establish cache behavior or
+    // associate it with this registration. Until the analyzed runtime body
+    // proves cache reads and writes, preserve the honest unknown state.
+    runtime_module_cache_status: "not-observed",
     entry_module_keys: runtimeValue.entryModuleKeys,
     unknown_entry_module_keys: runtimeValue.unknownEntryModuleKeys,
     async_chunk_keys: asyncChunkKeys.values,
@@ -77,11 +89,70 @@ export const inspectBundlerRegistration = (
   );
 };
 
+/** Recover standalone Webpack tables whose factories are called by a local loader. */
+export const inspectBundlerBootstrap = (
+  source: string,
+  call: t.CallExpression,
+  accumulator: AnalysisAccumulator,
+  bindings: JavaScriptSemanticAnalysisState,
+): void => {
+  const bootstrap = javascriptBootstrapAt(call, bindings);
+  if (bootstrap === undefined) return;
+  const runtime = `webpack-bootstrap@${String(call.start ?? 0)}`;
+  const recovered = recoverBundlerModules(
+    source,
+    bootstrap.table,
+    accumulator,
+    { runtime, bindings },
+  );
+  const entries: string[] = [];
+  let unknownEntries = 0;
+  traverseJavaScriptAst(bootstrap.body, {
+    enter: (node, _parent, ancestors) => {
+      if (
+        !t.isCallExpression(node) ||
+        ancestors().some((node) => t.isFunction(node)) ||
+        !t.isIdentifier(node.callee) ||
+        resolveSemanticBindingState(bindings, node.callee, node.callee.name)
+          ?.bindingId !== bootstrap.loaderBindingId
+      )
+        return;
+      const value = argumentValue(node.arguments[0]);
+      if (value === undefined) unknownEntries++;
+      else entries.push(value);
+    },
+  });
+  const registration: JavaScriptBundlerRegistration = {
+    bundler: "webpack",
+    runtime,
+    chunk_keys: [`bootstrap@${String(call.start ?? 0)}`],
+    unknown_chunk_keys: 0,
+    runtime_require_name: bootstrap.loaderName,
+    runtime_module_cache_status: "not-observed",
+    entry_module_keys: uniqueValues(entries).values,
+    unknown_entry_module_keys: unknownEntries,
+    async_chunk_keys: recovered.asyncChunkKeys,
+    unknown_async_chunk_keys: recovered.unknownAsyncChunkKeys,
+    modules: recovered.modules.sort((left, right) =>
+      compareUnicodeCodePoints(left.module_key, right.module_key),
+    ),
+    location: range(call),
+  };
+  accumulator.unknownFindings +=
+    unknownEntries + recovered.unknownAsyncChunkKeys;
+  addFindingOnce(
+    accumulator,
+    `registration\0${registrationKey(registration)}`,
+    () => accumulator.registrations.push(registration),
+  );
+};
+
 /** Inspect esbuild helper wrappers and recover their literal module tables. */
 export const inspectEsbuildWrapper = (
   source: string,
   call: t.CallExpression,
   accumulator: AnalysisAccumulator,
+  bindings: JavaScriptSemanticAnalysisState,
 ): void => {
   const name = calleeName(call.callee);
   const wrapperKind =
@@ -93,7 +164,10 @@ export const inspectEsbuildWrapper = (
   const table = call.arguments[0];
   if (wrapperKind === null || !t.isObjectExpression(table)) return;
   const runtime = `esbuild-${wrapperKind}`;
-  const recovered = recoverBundlerModules(source, table, runtime, accumulator);
+  const recovered = recoverBundlerModules(source, table, accumulator, {
+    runtime,
+    bindings,
+  });
   if (recovered.modules.length === 0) return;
   accumulator.unknownFindings += recovered.unknownAsyncChunkKeys;
   const registration: JavaScriptBundlerRegistration = {
@@ -125,11 +199,16 @@ interface RecoveredBundlerModules {
   readonly unknownAsyncChunkKeys: number;
 }
 
+interface BundlerRecoveryContext {
+  readonly runtime: string;
+  readonly bindings: JavaScriptSemanticAnalysisState;
+}
+
 const recoverBundlerModules = (
   source: string,
   table: t.ObjectExpression,
-  runtime: string,
   accumulator: AnalysisAccumulator,
+  context: BundlerRecoveryContext,
 ): RecoveredBundlerModules => {
   const modules: JavaScriptBundlerModule[] = [];
   const asyncChunkKeys: string[] = [];
@@ -138,8 +217,8 @@ const recoverBundlerModules = (
     const recovered = recoverBundlerModule(
       source,
       property,
-      runtime,
       accumulator,
+      context,
     );
     if (recovered === null) continue;
     modules.push(recovered.module);
@@ -156,20 +235,21 @@ const recoverBundlerModules = (
 const recoverBundlerModule = (
   source: string,
   property: t.ObjectMethod | t.ObjectProperty | t.SpreadElement,
-  runtime: string,
   accumulator: AnalysisAccumulator,
+  context: BundlerRecoveryContext,
 ): {
   readonly module: JavaScriptBundlerModule;
   readonly asyncChunkKeys: readonly string[];
   readonly unknownAsyncChunkKeys: number;
 } | null => {
+  const { runtime, bindings } = context;
   const factory = moduleFactory(property);
   if (factory === undefined) return null;
   const key = modulePropertyName(property);
   if (key.startsWith("[computed@") || key.startsWith("[unknown@"))
     accumulator.unknownFindings += 1;
   const fingerprint = fingerprintJavaScriptAst(factory);
-  const exportsValue = collectJavaScriptExports(factory);
+  const exportsValue = collectJavaScriptExports(factory, bindings);
   const requireName = factoryRequireName(factory);
   const asyncChunks = collectBundlerAsyncChunkKeys(factory, requireName);
   if (typeof factory.start === "number" && typeof factory.end === "number") {
@@ -287,12 +367,3 @@ const uniqueValues = (values: readonly string[], unknown = 0): StaticValues => {
     unknown,
   };
 };
-
-const bundlerModuleCacheStatus = (
-  source: string,
-): "observed" | "not-observed" =>
-  /\b(?:__webpack_module_cache__|__rspack_module_cache__|installedModules)\b/u.test(
-    source,
-  )
-    ? "observed"
-    : "not-observed";

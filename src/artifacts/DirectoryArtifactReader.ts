@@ -1,4 +1,4 @@
-import { constants, type Stats } from "node:fs";
+import { constants, type BigIntStats } from "node:fs";
 import {
   lstat,
   open,
@@ -11,6 +11,7 @@ import { Readable } from "node:stream";
 
 import {
   ArtifactReaderFailure,
+  sameArtifactSourceIdentity,
   type ArtifactEntry,
   type ArtifactReader,
 } from "./ArtifactReader.js";
@@ -95,9 +96,11 @@ export class DirectoryArtifactReader implements ArtifactReader {
         if (child === null) break;
         abortIfNeeded(signal);
         const absolute = join(directory, child.name);
-        const metadata = await lstat(absolute).catch((cause: unknown) => {
-          throw directoryIoFailure("inspect entry", absolute, cause);
-        });
+        const metadata = await lstat(absolute, { bigint: true }).catch(
+          (cause: unknown) => {
+            throw directoryIoFailure("inspect entry", absolute, cause);
+          },
+        );
         const path = relative(root, absolute).split(sep).join("/");
         const entry = artifactEntry(path, absolute, metadata);
         if (entry === undefined) continue;
@@ -158,18 +161,18 @@ export class DirectoryArtifactReader implements ArtifactReader {
     const owner = new OwnedFileHandle(fileHandle);
     this.#files.set(owner, entry.adapterKey);
     try {
-      const observed = await owner.handle.stat().catch((cause: unknown) => {
-        throw directoryIoFailure(
-          "inspect opened entry",
-          entry.adapterKey,
-          cause,
-        );
-      });
+      const observed = await owner.handle
+        .stat({ bigint: true })
+        .catch((cause: unknown) => {
+          throw directoryIoFailure(
+            "inspect opened entry",
+            entry.adapterKey,
+            cause,
+          );
+        });
       if (
         !observed.isFile() ||
-        entry.sourceIdentity === undefined ||
-        observed.dev !== entry.sourceIdentity.device ||
-        observed.ino !== entry.sourceIdentity.inode
+        !sameArtifactSourceIdentity(entry.sourceIdentity, observed)
       ) {
         throw new ArtifactReaderFailure(
           "integrity",
@@ -178,7 +181,7 @@ export class DirectoryArtifactReader implements ArtifactReader {
       }
       abortIfNeeded(signal);
       const source = Readable.from(
-        mapFileReadCancellation(owner.handle, signal),
+        mapStableFileRead(owner.handle, entry, signal),
         { objectMode: false },
       );
       source.once("close", () => {
@@ -256,7 +259,7 @@ export class DirectoryArtifactReader implements ArtifactReader {
 const artifactEntry = (
   path: string,
   absolute: string,
-  metadata: Stats,
+  metadata: BigIntStats,
 ): ArtifactEntry | undefined => {
   const kind = metadata.isSymbolicLink()
     ? "symlink"
@@ -269,7 +272,7 @@ const artifactEntry = (
   return {
     path,
     kind,
-    declaredSize: kind === "file" ? metadata.size : null,
+    declaredSize: kind === "file" ? safeArtifactSize(metadata.size) : null,
     compressedSize: null,
     executable: hostExecutableMarking(absolute, metadata),
     encrypted: false,
@@ -283,10 +286,22 @@ const artifactEntry = (
     adapterKey: absolute,
     ...(kind === "file"
       ? {
-          sourceIdentity: { device: metadata.dev, inode: metadata.ino },
+          sourceIdentity: {
+            device: metadata.dev,
+            inode: metadata.ino,
+            size: metadata.size,
+            mode: metadata.mode,
+            mtimeNs: metadata.mtimeNs,
+            ctimeNs: metadata.ctimeNs,
+          },
         }
       : {}),
   };
+};
+
+const safeArtifactSize = (size: bigint): number | null => {
+  if (size < 0n || size > BigInt(Number.MAX_SAFE_INTEGER)) return null;
+  return Number(size);
 };
 
 const directoryIoFailure = (
@@ -313,16 +328,45 @@ const directoryIoFailure = (
 const failureMessage = (cause: unknown): string =>
   cause instanceof Error ? cause.message : String(cause);
 
-const mapFileReadCancellation = async function* (
+const mapStableFileRead = async function* (
   handle: FileHandle,
+  entry: ArtifactEntry,
   signal?: AbortSignal,
 ): AsyncGenerator<Buffer> {
+  let bytes = 0n;
   try {
-    for await (const chunk of readFileHandleChunks(handle, { signal })) {
+    const expectedBytes = entry.sourceIdentity?.size;
+    if (expectedBytes === undefined)
+      throw new ArtifactReaderFailure(
+        "integrity",
+        `Directory entry has no captured file state: ${entry.path}`,
+      );
+    for await (const chunk of readFileHandleChunks(handle, {
+      // Include one extra byte so a growing file cannot make this read unbounded.
+      end: expectedBytes,
+      signal,
+    })) {
       abortIfNeeded(signal);
+      bytes += BigInt(chunk.length);
       yield chunk;
     }
     abortIfNeeded(signal);
+    const [opened, current] = await Promise.all([
+      handle.stat({ bigint: true }),
+      lstat(entry.adapterKey, { bigint: true }),
+    ]);
+    abortIfNeeded(signal);
+    if (
+      !opened.isFile() ||
+      !current.isFile() ||
+      !sameArtifactSourceIdentity(entry.sourceIdentity, opened) ||
+      !sameArtifactSourceIdentity(entry.sourceIdentity, current) ||
+      bytes !== expectedBytes
+    )
+      throw new ArtifactReaderFailure(
+        "integrity",
+        `Directory entry changed during read: ${entry.path}`,
+      );
   } catch (cause: unknown) {
     if (signal?.aborted === true)
       throw new ArtifactReaderFailure(
@@ -330,6 +374,18 @@ const mapFileReadCancellation = async function* (
         "Directory artifact read cancelled",
         { cause },
       );
+    if (
+      cause instanceof Error &&
+      "code" in cause &&
+      ["ENOENT", "ENOTDIR", "ELOOP"].includes(String(cause.code))
+    )
+      throw new ArtifactReaderFailure(
+        "integrity",
+        `Directory entry changed during read: ${entry.path}`,
+        { cause },
+      );
+    if (!(cause instanceof ArtifactReaderFailure))
+      throw directoryIoFailure("validate read entry", entry.adapterKey, cause);
     throw cause;
   }
 };

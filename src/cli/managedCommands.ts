@@ -4,13 +4,19 @@ import { compareManagedMemberPaths } from "../application/managed/ManagedMemberC
 import { verifyManagedNativeBoundariesEvidence } from "../application/managed/ManagedNativeVerificationService.js";
 import { importManagedReconstructionEvidence } from "../application/managed/ManagedReconstructionService.js";
 import type { DirectAnalysis } from "../composition/directAnalysis.js";
+import { ArtifactReaderFailure } from "../artifacts/ArtifactReader.js";
+import { ArtifactResourceScope } from "../artifacts/ArtifactResourceScope.js";
 import { parseCliJsonInput } from "../cliJsonInput.js";
+import { MANAGED_STATIC_PROVIDER } from "../application/InvestigationProviders.js";
+import { analysisErrorWithCleanupFailure } from "../domain/analysisErrorCleanup.js";
 import { projectAnalysisError } from "../domain/analysisErrorProjection.js";
+import { ProviderCleanupError } from "../domain/providerCleanupError.js";
 import { CLI_COMMANDS } from "../cliCommandNames.js";
 import { logCliCommand } from "../cliLogging.js";
 import type { Logger } from "pino";
 import type { CliInstance } from "./types.js";
 import { registerProjectManagedApplicationGraph } from "./managedProjectGraphCommand.js";
+import { managedMembersInputSchema } from "../contracts/managed/managedToolContracts.js";
 
 export const registerManagedCommands = (
   cli: CliInstance,
@@ -54,9 +60,19 @@ const registerInspectManagedMembers = (
     args: z.object({
       path: z.string().describe("Managed PE executable or assembly path"),
     }),
-    run: ({ args }) =>
+    options: z.object({
+      type: managedMembersInputSchema.shape.type_names.describe(
+        "Inspect only members declared by this exact type full name, such as System.Threading.Monitor; a nested type is named by its bare name, which selects every nested type of that name (repeatable)",
+      ),
+    }),
+    run: ({ args, options }) =>
       logCliCommand(logger, "inspect-managed-members", () =>
-        runProviderAnalysis(args.path, "inspect_managed_members", {}, logger),
+        runProviderAnalysis(
+          args.path,
+          "inspect_managed_members",
+          options.type === undefined ? {} : { type_names: options.type },
+          logger,
+        ),
       ),
   });
 };
@@ -99,10 +115,44 @@ const registerCompareManagedMembers = (
     args: compareManagedMemberArgs,
     run: ({ args }) =>
       logCliCommand(logger, "compare-managed-members", async () => {
-        const result = await compareManagedMemberPaths({
-          leftPath: args.leftPath,
-          rightPath: args.rightPath,
-        });
+        const resources = new ArtifactResourceScope();
+        const result = await compareManagedMemberPaths(
+          {
+            leftPath: args.leftPath,
+            rightPath: args.rightPath,
+          },
+          {},
+          resources,
+        );
+        try {
+          await resources.close();
+        } catch (cause: unknown) {
+          const cleanup = ArtifactReaderFailure.cleanupObservation(
+            cause,
+            "Managed member comparison resources",
+          );
+          const failure = new ProviderCleanupError(
+            MANAGED_STATIC_PROVIDER.id,
+            cleanup.resources,
+            { reason: cleanup.reason },
+            {
+              cause,
+              operation: "compare_managed_members",
+              ...(result.ok ? { partialObservation: result.value } : {}),
+            },
+          );
+          const error = result.ok
+            ? failure
+            : analysisErrorWithCleanupFailure(
+                result.error,
+                failure,
+                "compare_managed_members",
+              );
+          return {
+            error: "Managed member comparison failed",
+            ...projectAnalysisError(error),
+          };
+        }
         return result.ok
           ? result.value
           : {

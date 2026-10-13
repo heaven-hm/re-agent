@@ -23,5 +23,5 @@ section = struct.pack(
 )
 Path('/tmp/rea-high-address.macho').write_bytes(header + segment + section + b'\xc0')
 PY
-xcrun otool -l /tmp/rea-high-address.macho
+xcrun otool -h -l /tmp/rea-high-address.macho
 ```

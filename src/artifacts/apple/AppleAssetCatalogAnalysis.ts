@@ -1,10 +1,14 @@
 import { createHash } from "node:crypto";
 import { lstat } from "node:fs/promises";
 import { DirectoryArtifactReader } from "../DirectoryArtifactReader.js";
-import { ArtifactReaderFailure } from "../ArtifactReader.js";
+import {
+  ArtifactReaderFailure,
+  sameArtifactSourceIdentity,
+} from "../ArtifactReader.js";
 import { analyzeInterfaceBuilderBundle } from "./InterfaceBuilderAnalysis.js";
 import {
   appleAssetCatalogInputSchema,
+  appleResourceKeyFields,
   parseAppleAssetCatalogRecords,
   projectAppleAssetCatalogPage,
 } from "../../domain/apple/appleAssetCatalog.js";
@@ -13,17 +17,6 @@ import { execFileOutput } from "../../process/ExecFileOutput.js";
 const ASSETUTIL = "/usr/bin/assetutil";
 const MAX_CATALOG_BYTES = 64 * 1024 * 1024;
 const MAX_TOTAL_METADATA_BYTES = 64 * 1024 * 1024;
-const RESOURCE_KEY_FIELDS = new Set([
-  "image",
-  "imageName",
-  "image_name",
-  "resourceName",
-  "resource_name",
-  "assetName",
-  "asset_name",
-  "UIImageName",
-  "NSImageName",
-]);
 
 /** Inspect compiled asset catalog metadata without extracting rendition bytes. */
 export const analyzeAppleAssetCatalogs = async (input: {
@@ -136,22 +129,20 @@ const inspectAssetCatalogEntry = async (input: {
 }) => {
   const { entry, reader, signal } = input;
   const sha256 = await digestBounded(reader, entry, signal);
-  const before = await lstat(entry.adapterKey);
+  const before = await lstat(entry.adapterKey, { bigint: true });
   if (
-    entry.sourceIdentity === undefined ||
-    before.dev !== entry.sourceIdentity.device ||
-    before.ino !== entry.sourceIdentity.inode
+    !before.isFile() ||
+    !sameArtifactSourceIdentity(entry.sourceIdentity, before)
   )
     throw new ArtifactReaderFailure(
       "integrity",
       `Asset catalog changed before inspection: ${entry.path}`,
     );
   const output = await input.runAssetUtil(entry.adapterKey, signal);
-  const after = await lstat(entry.adapterKey);
+  const after = await lstat(entry.adapterKey, { bigint: true });
   if (
-    before.dev !== after.dev ||
-    before.ino !== after.ino ||
-    before.size !== after.size ||
+    !after.isFile() ||
+    !sameArtifactSourceIdentity(entry.sourceIdentity, after) ||
     (await digestBounded(reader, entry, signal)) !== sha256
   )
     throw new ArtifactReaderFailure(
@@ -200,27 +191,22 @@ export const collectInterfaceBuilderResourceKeys = (
   }[],
 ) =>
   nodes.flatMap((node) => {
+    if (node.kind !== "resource") return [];
     const source = node.evidence.find(
       (item) => item.artifact_path !== null && item.artifact_sha256 !== null,
     );
     const sourcePath = source?.artifact_path;
     const sourceArchiveSha256 = source?.artifact_sha256;
     if (sourcePath == null || sourceArchiveSha256 == null) return [];
-    return Object.entries(node.attributes).flatMap(([field, value]) =>
-      RESOURCE_KEY_FIELDS.has(field) &&
-      typeof value === "string" &&
-      value.length > 0
-        ? [
-            {
-              sourceNodeId: node.id,
-              sourcePath,
-              sourceArchiveSha256,
-              field,
-              key: value,
-            },
-          ]
-        : [],
-    );
+    return appleResourceKeyFields(node.attributes).flatMap(([field, value]) => [
+      {
+        sourceNodeId: node.id,
+        sourcePath,
+        sourceArchiveSha256,
+        field,
+        key: value,
+      },
+    ]);
   });
 
 const runAssetUtil = async (

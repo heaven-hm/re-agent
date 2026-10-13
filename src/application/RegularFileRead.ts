@@ -16,6 +16,18 @@ import type { AnalysisCleanupObservation } from "../domain/analysisErrorBase.js"
 export interface RegularFileReadOptions {
   readonly signal?: AbortSignal | undefined;
   readonly symlinks?: "follow" | "reject";
+  readonly resources?: ArtifactResourceScope;
+}
+
+export class InvalidUtf8FileError extends TypeError {
+  readonly _tag = "InvalidUtf8FileError";
+  constructor(
+    readonly path: string,
+    cause: unknown,
+  ) {
+    super(`File is not valid UTF-8: ${path}`, { cause });
+    this.name = this._tag;
+  }
 }
 
 export type RegularFileReadOutcome<Value> =
@@ -68,6 +80,15 @@ export const withRegularFile = async <Value>(
   path: string,
   read: (handle: FileHandle, stats: Stats) => Promise<Value>,
   options: RegularFileReadOptions = {},
+): Promise<Value> =>
+  options.resources === undefined
+    ? withRegularFileOwned(path, read, options)
+    : options.resources.run(() => withRegularFileOwned(path, read, options));
+
+const withRegularFileOwned = async <Value>(
+  path: string,
+  read: (handle: FileHandle, stats: Stats) => Promise<Value>,
+  options: RegularFileReadOptions,
 ): Promise<Value> => {
   const { signal } = options;
   let handle: FileHandle;
@@ -78,12 +99,16 @@ export const withRegularFile = async <Value>(
     });
   } catch (cause: unknown) {
     if (!(cause instanceof RegularFileAdmissionFailure)) throw cause;
-    throw new RegularFileCleanupFailure(
+    const failure = new RegularFileCleanupFailure(
       path,
       cause.owner,
       { kind: "failed", cause: cause.cause },
       cause.cleanupCause,
     );
+    if (options.resources === undefined) throw failure;
+    const retry = await retryRegularFileCleanup(failure, options.resources);
+    if (retry.cleanup !== undefined) throw failure;
+    throw cause.cause;
   }
   const owner = new OwnedFileHandle(handle);
   let outcome: RegularFileReadOutcome<Value>;
@@ -108,7 +133,17 @@ export const withRegularFile = async <Value>(
   try {
     await owner.close();
   } catch (cleanupCause: unknown) {
-    throw new RegularFileCleanupFailure(path, owner, outcome, cleanupCause);
+    const failure = new RegularFileCleanupFailure(
+      path,
+      owner,
+      outcome,
+      cleanupCause,
+    );
+    if (options.resources === undefined) throw failure;
+    const retry = await retryRegularFileCleanup(failure, options.resources);
+    if (retry.cleanup !== undefined) throw failure;
+    if (retry.outcome.kind === "failed") throw retry.outcome.cause;
+    return retry.outcome.value;
   }
   if (outcome.kind === "failed") throw outcome.cause;
   return outcome.value;
@@ -118,7 +153,34 @@ export const withRegularFile = async <Value>(
 export const readRegularFile = (
   path: string,
   options: RegularFileReadOptions = {},
-): Promise<Buffer> =>
+): Promise<Buffer> => readRegularFileContent(path, (bytes) => bytes, options);
+
+/** Read valid UTF-8 without replacing source bytes or stripping an initial BOM. */
+export const readRegularFileText = (
+  path: string,
+  options: RegularFileReadOptions = {},
+): Promise<string> =>
+  readRegularFileContent(
+    path,
+    (bytes) => {
+      try {
+        return new TextDecoder("utf-8", {
+          fatal: true,
+          ignoreBOM: true,
+        }).decode(bytes);
+      } catch (cause: unknown) {
+        if (!(cause instanceof TypeError)) throw cause;
+        throw new InvalidUtf8FileError(path, cause);
+      }
+    },
+    options,
+  );
+
+const readRegularFileContent = <Value>(
+  path: string,
+  decode: (bytes: Buffer) => Value,
+  options: RegularFileReadOptions,
+): Promise<Value> =>
   withRegularFile(
     path,
     async (handle, stats) => {
@@ -129,30 +191,7 @@ export const readRegularFile = (
       );
       if (bytes === undefined || bytes.length !== stats.size)
         throw new RegularFileChangedError(path);
-      return bytes;
+      return decode(bytes);
     },
     options,
   );
-
-/** Read one admitted regular file as UTF-8 without waiting on a pipe. */
-export const readRegularFileText = async (
-  path: string,
-  options: RegularFileReadOptions = {},
-): Promise<string> => {
-  try {
-    return (await readRegularFile(path, options)).toString("utf8");
-  } catch (cause: unknown) {
-    if (
-      cause instanceof RegularFileCleanupFailure &&
-      cause.outcome.kind === "completed" &&
-      Buffer.isBuffer(cause.outcome.value)
-    )
-      throw new RegularFileCleanupFailure(
-        cause.path,
-        cause.owner,
-        { kind: "completed", value: cause.outcome.value.toString("utf8") },
-        cause.cleanupCause,
-      );
-    throw cause;
-  }
-};

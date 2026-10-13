@@ -9,7 +9,6 @@
 **Thấy một tính năng bạn thích? Hiểu cách nó hoạt động, đến tận mức mã nhị phân.**
 
 [![npm version](https://img.shields.io/npm/v/rea-agents?style=flat-square&color=cb3837)](https://www.npmjs.com/package/rea-agents)
-[![CI](https://img.shields.io/github/actions/workflow/status/morluto/rea/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/morluto/rea/actions/workflows/ci.yml)
 [![MCP tool catalog](https://img.shields.io/badge/MCP-tool_catalog-5c4ee5?style=flat-square)](docs/mcp-contracts.md#generated-catalog)
 [![Node.js requirements](https://img.shields.io/badge/Node.js-requirements-339933?style=flat-square&logo=nodedotjs&logoColor=white)](#current-status)
 [![skills.sh](https://skills.sh/b/morluto/rea?style=flat-square)](https://skills.sh/morluto/rea/reverse-engineer-anything)
@@ -140,12 +139,16 @@ REA yêu cầu Node.js 22.x (>=22.19), 24.x (>=24.11) hoặc 26+, cùng với np
 | JavaScript / Electron         | Mô-đun, các khai báo import, source map, tuyến, IPC và quan hệ với tiện ích mở rộng mã máy                      | Node.js và npm; [phân tích ứng dụng](https://rea.tools/vi/guides/javascript/)                                                                 |
 | Trang web                     | Cấu trúc trang, script, quan sát mạng và ảnh chụp màn hình được yêu cầu                                         | Trình duyệt thuộc họ Chrome; [phân tích trình duyệt](https://rea.tools/vi/guides/browser/)                                                    |
 | Bản ghi lưu lượng mạng đã lưu | Yêu cầu, phản hồi, payload có thể truy cập và vị trí nguồn                                                      | HAR; mitmdump trên Linux cho bản ghi định dạng gốc của mitmproxy; [hướng dẫn bản ghi mạng](docs/web-network-captures.md)                      |
+| Bắt gói tin                   | Điểm cuối, DNS, TLS SNI, phân bố giao thức và yêu cầu HTTP                                                      | tshark và capinfos do nơi gọi cung cấp; [hướng dẫn pcap](docs/pcap-analysis.md)                                                               |
 | Assembly .NET                 | Siêu dữ liệu, lệnh CIL, các phụ thuộc mã máy được khai báo và so sánh bản dựng                                  | Kiểm tra tĩnh; [hướng dẫn mã được quản lý](docs/managed-code-analysis.md)                                                                     |
 | APK Android                   | Khai báo manifest, lớp, phương thức được dịch ngược và tham chiếu                                               | JADX không giao diện đồ họa và JDK đầy đủ trên Linux/macOS/Windows x64; [hướng dẫn Android](docs/android-analysis.md)                         |
 | Thiết bị Android              | Thiết bị, gói, tiến trình, nhật ký, dump, ảnh chụp màn hình và truyền APK/tệp                                   | adb do nơi gọi cung cấp (trình giả lập hoặc thiết bị); [hướng dẫn ADB](docs/adb-device-analysis.md)                                           |
 | Dự án JEB                     | Đơn vị dự án từ engine, hash của artifact và mã giả của kiểu/phương thức                                        | Một ứng dụng JEB do nơi gọi khởi động, phục vụ MCP, chọn bằng REA_JEB_MCP_URL; [hướng dẫn JEB](docs/jeb-analysis.md)                          |
 | Tài nguyên Android            | Manifest đã giải mã, bảng chuỗi, ngôn ngữ và thông tin phiên bản                                                | Trình khởi chạy Apktool do nơi gọi cung cấp; [hướng dẫn tài nguyên](docs/apktool-resource-analysis.md)                                        |
+| Ứng dụng Flutter              | Băm snapshot Dart, hash thư viện theo ABI và nguồn gốc build engine                                             | Không cần (phân tích APK tĩnh); [hướng dẫn Flutter](docs/flutter-analysis.md)                                                                 |
 | Phần sụn                      | Các vùng, kết quả trích xuất và dữ liệu chuyển sang phân tích mã máy                                            | Binwalk / Unblob trên Linux; [hướng dẫn phần sụn](docs/firmware-analysis.md)                                                                  |
+| Gói tin đã ghi                | Trường được chọn, giá trị lặp, bộ lọc và quy tắc giải mã                                                        | Linux: TShark 4.x + prlimit; [hướng dẫn bản ghi gói tin](docs/packet-captures.md)                                                             |
+| Tín hiệu logic đã ghi         | Chú thích bộ giải mã, phạm vi mẫu và chẩn đoán                                                                  | Linux: sigrok-cli 0.7.2 + prlimit; [hướng dẫn tín hiệu](docs/signal-recordings.md)                                                            |
 | Gói và tài nguyên             | Danh sách tệp, giá trị băm, plist, cấu trúc bundle Apple và tài nguyên được trích xuất                          | [Hướng dẫn hiện vật phần mềm và JavaScript](docs/javascript-artifact-reconstruction.md), [ứng dụng Apple](docs/apple-application-analysis.md) |
 | Hành vi tiến trình            | Đầu ra terminal, tương tác, quan sát khi thoát và hệ thống tệp, cùng so sánh các lần chạy                       | Linux/macOS có PTY gốc; [ghi lại tiến trình](docs/process-capture.md)                                                                         |
 
@@ -259,7 +262,7 @@ Báo cáo lỗ hổng theo [SECURITY.md](SECURITY.md).
 
 ## Lịch sử sao
 
-🎉 **90.000 sao trên GitHub — xin cảm ơn!**
+🎉 **170.000 sao trên GitHub — xin cảm ơn!**
 
 Cảm ơn mọi người đã sử dụng REA, báo lỗi, đề xuất tính năng, kiểm thử bản dựng và đóng góp bản sửa lỗi.
 
@@ -273,7 +276,13 @@ Cảm ơn mọi người đã sử dụng REA, báo lỗi, đề xuất tính n�
 
 ## Miễn trừ trách nhiệm
 
-REA cung cấp công cụ cho nghiên cứu dịch ngược, phân tích và tái tạo hợp pháp. Bạn có trách nhiệm có được các quyền cho phép cần thiết và tuân thủ luật áp dụng. Dự án không ủng hộ việc sử dụng trái pháp luật hoặc không được cho phép.
+Xem [DISCLAIMER.md](DISCLAIMER.md) để biết hướng dẫn sử dụng có trách nhiệm.
+
+REA dành cho nghiên cứu, giáo dục, khả năng tương tác, bảo tồn phần mềm và phân tích phần mềm bạn sở hữu hoặc được phép kiểm tra, trong khuôn khổ pháp luật.
+
+The project's position on illegal or unauthorized use covers all REA
+versions, distribution channels, and platforms; each copy retains its
+applicable licenses.
 
 ## Đóng góp
 
@@ -284,3 +293,15 @@ Xem [CONTRIBUTING.md](CONTRIBUTING.md) về thiết lập môi trường phát t
 ## Giấy phép
 
 [MIT](LICENSE)
+
+REA-authored code is licensed under MIT. Third-party material retains its own
+licenses and copyright notices; see [Third-party notices](THIRD_PARTY_NOTICES.md)
+for the dependency inventory, preserved license texts, and external-tool terms.
+
+**You must legally obtain and be authorized to use commercial tools**, including
+IDA Pro / Hex-Rays decompilers, Hopper, and JEB, under their applicable licenses.
+REA grants no tool license, key, or activation entitlement. Trials and demos
+remain subject to vendor terms, including user, feature, automation, and output
+sharing restrictions. Cracked copies, stolen keys, unauthorized key sharing,
+and bypassing license restrictions are not authorized. This guidance does not
+amend MIT or third-party licenses.

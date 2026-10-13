@@ -3,6 +3,12 @@ import { describe, expect, it } from "vitest";
 import { RECONSTRUCTION_READINESS_EXAMPLE } from "../contracts/reconstructionReadinessExample.js";
 import { createReconstructionReadinessReport } from "./reconstructionReadiness.js";
 import {
+  reconstructionObligationLedgerClosureDigest,
+  reconstructionObligationLedgerStatus,
+  summarizeReconstructionObligations,
+} from "./reconstructionObligationLedgerIntegrity.js";
+import { reconstructionObligationLedgerSchema } from "./reconstructionObligationLedgerSchemas.js";
+import {
   reconstructionReadinessInputSchema,
   type ReconstructionReadinessInput,
 } from "./reconstructionReadinessSchemas.js";
@@ -86,7 +92,158 @@ describe("reconstruction readiness report", () => {
       nondeterministic_replay_count: 0,
     });
   });
+});
 
+describe("readiness obligation ledger integrity", () => {
+  it("rejects a required obligation changed behind the old ledger commitment", () => {
+    const value = input();
+    expect(
+      reconstructionObligationLedgerSchema.parse(value.obligation_ledger),
+    ).toEqual(value.obligation_ledger);
+    const obligation = value.obligation_ledger.obligations[0];
+    if (obligation === undefined)
+      throw new TypeError("Missing reconstruction obligation");
+    value.obligation_ledger.obligations[0] = {
+      ...obligation,
+      status: "blocked",
+    };
+
+    expect(() => createReconstructionReadinessReport(value)).toThrow(
+      /Ledger status does not match its obligations/u,
+    );
+  });
+
+  it("rejects a recomputed commitment over a false obligation summary", () => {
+    const ledger = structuredClone(input().obligation_ledger);
+    ledger.summary.required_open = 1;
+    ledger.closure_digest = reconstructionObligationLedgerClosureDigest(ledger);
+
+    expect(() => reconstructionObligationLedgerSchema.parse(ledger)).toThrow(
+      /Ledger summary does not match its obligations/u,
+    );
+  });
+
+  it("accepts reordered summary count entries with the same keyed values", () => {
+    const ledger = structuredClone(input().obligation_ledger);
+    ledger.summary.by_status.reverse();
+    ledger.closure_digest = reconstructionObligationLedgerClosureDigest(ledger);
+
+    expect(reconstructionObligationLedgerSchema.parse(ledger)).toEqual(ledger);
+  });
+
+  it.each([
+    [
+      "reports",
+      (ledger: ReconstructionReadinessInput["obligation_ledger"]) => {
+        ledger.reports.missing_owner_obligation_ids.push("obl.extra");
+      },
+      /Ledger report does not match its obligations/u,
+    ],
+    [
+      "ownership graph",
+      (ledger: ReconstructionReadinessInput["obligation_ledger"]) => {
+        const owner = ledger.ownership_graph[0];
+        if (owner === undefined)
+          throw new TypeError("Missing owner graph edge");
+        owner.symbol = "tamperedOwner";
+      },
+      /Ownership graph does not match its obligations/u,
+    ],
+    [
+      "dependency graph",
+      (ledger: ReconstructionReadinessInput["obligation_ledger"]) => {
+        ledger.dependency_graph.push({
+          obligation_id: "obl.readiness",
+          depends_on_obligation_id: "obl.extra",
+        });
+      },
+      /Dependency graph does not match its obligations/u,
+    ],
+    [
+      "evidence links",
+      (ledger: ReconstructionReadinessInput["obligation_ledger"]) => {
+        ledger.evidence_links = [];
+      },
+      /Evidence links omit Evidence referenced by an obligation/u,
+    ],
+  ] as const)(
+    "rejects recomputed commitments over tampered %s",
+    (_, mutate, expected) => {
+      const ledger = structuredClone(input().obligation_ledger);
+      mutate(ledger);
+      ledger.closure_digest =
+        reconstructionObligationLedgerClosureDigest(ledger);
+
+      expect(() => reconstructionObligationLedgerSchema.parse(ledger)).toThrow(
+        expected,
+      );
+    },
+  );
+});
+
+describe("readiness missing Evidence references", () => {
+  it("reports each absent Evidence ID once per stage across stage and check references", () => {
+    const value = input();
+    const stage = value.stages[0]!;
+    const missing = [`ev_${"0".repeat(64)}`, `ev_${"1".repeat(64)}`];
+    stage.evidence_ids.push(...missing);
+    for (const check of stage.checks) check.evidence_ids.push(...missing);
+
+    const report = createReconstructionReadinessReport(value);
+    expect(report.status).toBe("unknown");
+    expect(report.findings).toEqual(
+      missing.map((id) => ({
+        code: "referenced-evidence-missing",
+        stage_id: stage.stage_id,
+        status: "unknown",
+        detail: `Referenced Evidence is absent from the bundle: ${id}.`,
+        evidence_ids: [],
+      })),
+    );
+    expect(report.summary).toMatchObject({ findings: 2, unknown_findings: 2 });
+  });
+
+  it("keeps absent references distinct across stages and preserves failed checks", () => {
+    const value = input();
+    const [first, second] = value.stages;
+    if (first === undefined || second === undefined)
+      throw new TypeError("Missing conformance stages");
+    const missing = `ev_${"0".repeat(64)}`;
+    first.evidence_ids.push(missing);
+    second.checks[0]!.evidence_ids.push(missing);
+    first.checks[0]!.status = "fail";
+
+    const report = createReconstructionReadinessReport(value);
+    expect(report.status).toBe("fail");
+    expect(
+      report.findings
+        .filter(({ code }) => code === "referenced-evidence-missing")
+        .map(({ stage_id }) => stage_id)
+        .sort(),
+    ).toEqual([first.stage_id, second.stage_id].sort());
+    expect(report.summary).toMatchObject({
+      findings: 3,
+      unknown_findings: 2,
+      failed_findings: 1,
+    });
+  });
+
+  it("checks stage Evidence even when every required check is absent", () => {
+    const value = input();
+    const stage = value.stages[0]!;
+    stage.checks = [];
+    stage.evidence_ids.push(`ev_${"0".repeat(64)}`);
+
+    const report = createReconstructionReadinessReport(value);
+    expect(report.status).toBe("fail");
+    expect(report.summary).toMatchObject({ unknown_findings: 1 });
+    expect(report.findings).toContainEqual(
+      expect.objectContaining({ code: "referenced-evidence-missing" }),
+    );
+  });
+});
+
+describe("readiness failure semantics", () => {
   it("rejects equivalence over truncated concurrent evidence", () => {
     const value = input();
     const comparison = value.comparisons[0];
@@ -110,14 +267,28 @@ describe("reconstruction readiness report", () => {
 
   it("keeps green stages unknown while one reconstruction obligation is open", () => {
     const value = input();
-    value.obligation_ledger = {
+    const obligation = value.obligation_ledger.obligations[0];
+    if (obligation === undefined)
+      throw new TypeError("Missing reconstruction obligation");
+    const obligations = [{ ...obligation, status: "blocked" as const }];
+    const uncommitted = {
       ...value.obligation_ledger,
+      obligations,
+      status: reconstructionObligationLedgerStatus(obligations, []),
+      summary: summarizeReconstructionObligations(obligations),
+    };
+    value.obligation_ledger = {
+      ...uncommitted,
+      closure_digest: reconstructionObligationLedgerClosureDigest(uncommitted),
+    };
+    const latest = value.closure_history.at(-1);
+    if (latest === undefined) throw new TypeError("Missing closure history");
+    value.closure_history[value.closure_history.length - 1] = {
+      ...latest,
+      ledger_digest: value.obligation_ledger.closure_digest,
       status: "open",
-      summary: {
-        ...value.obligation_ledger.summary,
-        verified: 0,
-        required_open: 1,
-      },
+      required_open: 1,
+      newly_verified_obligation_ids: [],
     };
     const report = createReconstructionReadinessReport(value);
 

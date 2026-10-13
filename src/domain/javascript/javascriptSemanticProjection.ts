@@ -28,6 +28,12 @@ import {
   propertyName,
   semanticStaticPropertyKey,
 } from "./javascriptAstValues.js";
+import {
+  isTypeOnlyExportDeclaration,
+  isTypeOnlyExportSpecifier,
+  isTypeOnlyImportDeclaration,
+  isTypeOnlyImportSpecifier,
+} from "./javascriptModuleDeclaration.js";
 
 interface CollectCallableInput {
   readonly node: t.Node;
@@ -69,12 +75,13 @@ export const collectSemanticModuleLink = (
   node: t.Node,
   state: JavaScriptSemanticAnalysisState,
 ): void => {
-  if (t.isImportDeclaration(node)) collectImports(node, state);
+  if (t.isTSImportEqualsDeclaration(node)) collectImportEquals(node, state);
+  else if (t.isImportDeclaration(node)) collectImports(node, state);
   else if (t.isExportAllDeclaration(node))
     addModuleLink(
       state,
       {
-        kind: "re-export",
+        kind: isTypeOnlyExportDeclaration(node) ? "type-import" : "re-export",
         specifier: node.source.value,
         importedName: "*",
         localName: null,
@@ -102,6 +109,43 @@ export const collectSemanticModuleLink = (
   else if (t.isAssignmentExpression(node)) collectCommonJsExport(node, state);
   else if (t.isCallExpression(node)) collectUnboundRequireLink(node, state);
 };
+
+const collectImportEquals = (
+  node: t.TSImportEqualsDeclaration,
+  state: JavaScriptSemanticAnalysisState,
+): void => {
+  const moduleReference = node.moduleReference;
+  const specifier =
+    semanticImportEqualsSpecifier(node) ??
+    (node.importKind === "type" &&
+    t.isTSExternalModuleReference(moduleReference) &&
+    t.isStringLiteral(moduleReference.expression)
+      ? moduleReference.expression.value
+      : null);
+  if (specifier === null) return;
+  addModuleLink(
+    state,
+    {
+      kind: node.importKind === "type" ? "type-import" : "require",
+      specifier,
+      importedName: null,
+      localName: node.id.name,
+      exportedName: null,
+      location: range(node),
+    },
+    node,
+  );
+};
+
+/** Runtime external-module target for a value import-equals declaration. */
+export const semanticImportEqualsSpecifier = (
+  node: t.TSImportEqualsDeclaration,
+): string | null =>
+  node.importKind !== "type" &&
+  t.isTSExternalModuleReference(node.moduleReference) &&
+  t.isStringLiteral(node.moduleReference.expression)
+    ? node.moduleReference.expression.value
+    : null;
 
 /** Collect lexical references after definitions exist, optionally for one name. */
 export const collectSemanticReferences = (
@@ -256,7 +300,7 @@ const collectImports = (
     addModuleLink(
       state,
       {
-        kind: "import",
+        kind: isTypeOnlyImportDeclaration(node) ? "type-import" : "import",
         specifier: node.source.value,
         importedName: null,
         localName: null,
@@ -269,7 +313,12 @@ const collectImports = (
     addModuleLink(
       state,
       {
-        kind: "import",
+        kind:
+          isTypeOnlyImportDeclaration(node) ||
+          (t.isImportSpecifier(specifier) &&
+            isTypeOnlyImportSpecifier(specifier))
+            ? "type-import"
+            : "import",
         specifier: node.source.value,
         importedName: t.isImportDefaultSpecifier(specifier)
           ? "default"
@@ -288,12 +337,13 @@ const collectNamedExports = (
   node: t.ExportNamedDeclaration,
   state: JavaScriptSemanticAnalysisState,
 ): void => {
+  const declarationTypeOnly = isTypeOnlyExportDeclaration(node);
   if (node.declaration !== null && node.declaration !== undefined)
     for (const localName of declarationNames(node.declaration))
       addModuleLink(
         state,
         {
-          kind: "export",
+          kind: declarationTypeOnly ? "type-import" : "export",
           specifier: null,
           importedName: null,
           localName,
@@ -311,7 +361,14 @@ const collectNamedExports = (
       addModuleLink(
         state,
         {
-          kind: node.source == null ? "export" : "re-export",
+          kind:
+            declarationTypeOnly ||
+            (t.isExportSpecifier(specifier) &&
+              isTypeOnlyExportSpecifier(specifier))
+              ? "type-import"
+              : node.source == null
+                ? "export"
+                : "re-export",
           specifier: node.source?.value ?? null,
           importedName: t.isExportNamespaceSpecifier(specifier)
             ? "*"
@@ -476,7 +533,20 @@ const addModuleLink = (
   },
   referenceNode: t.Node,
 ): void => {
-  const collected = { ...link, callableId: link.callableId ?? null };
+  const resolutionMode =
+    link.resolutionMode ??
+    (link.kind === "import" ||
+    link.kind === "re-export" ||
+    link.kind === "type-import"
+      ? state.staticImportResolutionMode
+      : link.kind === "require"
+        ? "require"
+        : undefined);
+  const collected = {
+    ...link,
+    ...(resolutionMode === undefined ? {} : { resolutionMode }),
+    callableId: link.callableId ?? null,
+  };
   state.moduleLinks.push(collected);
   if (link.localName !== null) {
     const binding = resolveSemanticBindingState(
@@ -638,19 +708,26 @@ export const semanticReferenceRole = (
   return "read";
 };
 
-const isDeclarationIdentifier = (node: t.Identifier, parent: t.Node): boolean =>
-  (t.isVariableDeclarator(parent) && patternContains(parent.id, node)) ||
-  ((t.isFunctionDeclaration(parent) || t.isFunctionExpression(parent)) &&
-    parent.id === node) ||
-  (t.isFunction(parent) &&
-    parent.params.some((value) => patternContains(value, node))) ||
-  ((t.isClassDeclaration(parent) || t.isClassExpression(parent)) &&
-    parent.id === node) ||
-  (t.isImportSpecifier(parent) &&
-    (parent.local === node || parent.imported === node)) ||
-  (t.isImportDefaultSpecifier(parent) && parent.local === node) ||
-  (t.isImportNamespaceSpecifier(parent) && parent.local === node) ||
-  (t.isCatchClause(parent) && parent.param === node);
+const isDeclarationIdentifier = (
+  node: t.Identifier,
+  parent: t.Node,
+): boolean => {
+  if (t.isTSImportEqualsDeclaration(parent)) return parent.id === node;
+  return (
+    (t.isVariableDeclarator(parent) && patternContains(parent.id, node)) ||
+    ((t.isFunctionDeclaration(parent) || t.isFunctionExpression(parent)) &&
+      parent.id === node) ||
+    (t.isFunction(parent) &&
+      parent.params.some((value) => patternContains(value, node))) ||
+    ((t.isClassDeclaration(parent) || t.isClassExpression(parent)) &&
+      parent.id === node) ||
+    (t.isImportSpecifier(parent) &&
+      (parent.local === node || parent.imported === node)) ||
+    (t.isImportDefaultSpecifier(parent) && parent.local === node) ||
+    (t.isImportNamespaceSpecifier(parent) && parent.local === node) ||
+    (t.isCatchClause(parent) && parent.param === node)
+  );
+};
 
 const isNonReferenceKey = (node: t.Identifier, parent: t.Node): boolean =>
   ((t.isMemberExpression(parent) || t.isOptionalMemberExpression(parent)) &&
@@ -705,6 +782,18 @@ const declarationNames = (declaration: t.Declaration): string[] => {
     (t.isFunctionDeclaration(declaration) ||
       t.isClassDeclaration(declaration)) &&
     t.isIdentifier(declaration.id)
+  )
+    return [declaration.id.name];
+  if (
+    (t.isTSInterfaceDeclaration(declaration) ||
+      t.isTSTypeAliasDeclaration(declaration) ||
+      t.isTSDeclareFunction(declaration)) &&
+    t.isIdentifier(declaration.id)
+  )
+    return [declaration.id.name];
+  if (
+    t.isTSImportEqualsDeclaration(declaration) &&
+    semanticImportEqualsSpecifier(declaration) !== null
   )
     return [declaration.id.name];
   return [];

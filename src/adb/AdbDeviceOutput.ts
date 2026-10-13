@@ -6,10 +6,19 @@
  * their evidence basis.
  */
 
+import {
+  adbHostFileName,
+  type AdbHostFileNameReason,
+} from "./AdbHostFileName.js";
+import {
+  ADB_DEVICE_STATES,
+  type AdbDeviceState,
+} from "../domain/adb/adbDeviceAnalysis.js";
+
 /** One device exactly as `adb devices -l` reports it. */
 export interface AdbDeviceEntry {
   readonly serial: string;
-  readonly state: string;
+  readonly state: AdbDeviceState;
   readonly transport: "usb" | "tcp" | "unknown";
   readonly product: string | null;
   readonly model: string | null;
@@ -18,25 +27,6 @@ export interface AdbDeviceEntry {
   readonly kind: "emulator" | "physical" | "unknown";
   readonly kind_basis: "emulator_serial_prefix" | "usb_transport" | "none";
 }
-
-/**
- * Device states adb prints after the serial, longest first so two-word
- * states match before their single-word prefixes. A line whose remainder
- * starts with none of them is not a device line.
- */
-const DEVICE_STATES = [
-  "no permissions",
-  "unauthorized",
-  "authorizing",
-  "offline",
-  "recovery",
-  "sideload",
-  "connecting",
-  "bootloader",
-  "device",
-  "unknown",
-  "host",
-] as const;
 
 const DEVICE_LINE = /^(\S+)\s+(.*)$/u;
 
@@ -68,11 +58,15 @@ export const parseAdbDevicesOutput = (
       continue;
     }
     const match = DEVICE_LINE.exec(line);
-    const state = DEVICE_STATES.find((candidate) =>
-      match?.[2]?.startsWith(candidate),
-    );
+    const state = ADB_DEVICE_STATES.find((candidate) => {
+      const remainder = match?.[2];
+      if (remainder === undefined || !remainder.startsWith(candidate))
+        return false;
+      const next = remainder[candidate.length];
+      return next === undefined || /\s/u.test(next);
+    });
     if (match === null || state === undefined) {
-      if (line.trim() !== "") unparsedLines.push(line);
+      if (rawLine.trim() !== "") unparsedLines.push(rawLine);
       continue;
     }
     const serial = match[1]!;
@@ -187,7 +181,7 @@ export const parsePackageListOutput = (
     if (line === "") continue;
     const match = PACKAGE_LINE.exec(line);
     if (match === null) {
-      unparsedLines.push(line);
+      unparsedLines.push(rawLine);
       continue;
     }
     packages.push({
@@ -205,11 +199,6 @@ export interface AdbPackagePathEntry {
   readonly role: "base" | "split" | "unknown";
 }
 
-const fileNameOf = (devicePath: string): string => {
-  const parts = devicePath.split(/\//u);
-  return parts[parts.length - 1] ?? devicePath;
-};
-
 /**
  * Parse `pm path PACKAGE` lines. The base/split role is derived from the file
  * name (`base.apk`, `split_*.apk`), which is the only signal the output
@@ -219,20 +208,35 @@ export const parsePmPathOutput = (
   stdout: string,
 ): {
   paths: readonly AdbPackagePathEntry[];
+  rejectedPaths: readonly {
+    device_path: string;
+    reason: AdbHostFileNameReason;
+  }[];
   unparsedLines: readonly string[];
 } => {
   const paths: AdbPackagePathEntry[] = [];
+  const rejectedPaths: {
+    device_path: string;
+    reason: AdbHostFileNameReason;
+  }[] = [];
   const unparsedLines: string[] = [];
   for (const rawLine of stdout.split(/\r?\n/u)) {
-    const line = rawLine.trim();
-    if (line === "") continue;
-    const match = /^package:(\S+)$/u.exec(line);
+    if (rawLine === "") continue;
+    const match = /^package:(.*)$/u.exec(rawLine);
     if (match === null) {
-      unparsedLines.push(line);
+      unparsedLines.push(rawLine);
       continue;
     }
     const devicePath = match[1]!;
-    const fileName = fileNameOf(devicePath);
+    const validated = adbHostFileName(devicePath);
+    if (!validated.ok) {
+      rejectedPaths.push({
+        device_path: devicePath,
+        reason: validated.reason,
+      });
+      continue;
+    }
+    const fileName = validated.fileName;
     paths.push({
       device_path: devicePath,
       file_name: fileName,
@@ -244,5 +248,5 @@ export const parsePmPathOutput = (
             : "unknown",
     });
   }
-  return { paths, unparsedLines };
+  return { paths, rejectedPaths, unparsedLines };
 };

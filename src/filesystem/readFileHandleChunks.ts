@@ -5,26 +5,30 @@ import { Readable } from "node:stream";
 export const readFileHandleChunks = (
   handle: Pick<FileHandle, "read">,
   options: {
-    readonly start?: number;
-    readonly end?: number;
+    readonly start?: number | bigint;
+    readonly end?: number | bigint;
     readonly signal?: AbortSignal | undefined;
   } = {},
 ): Readable => {
-  const start = options.start ?? 0;
-  const end = options.end ?? Infinity;
+  const start = fileOffset(options.start ?? 0);
+  const unlimited = options.end === undefined || options.end === Infinity;
+  const end = unlimited ? undefined : fileOffset(options.end);
   if (
-    !Number.isSafeInteger(start) ||
-    start < 0 ||
-    (end !== Infinity && (!Number.isSafeInteger(end) || end < start))
+    start === undefined ||
+    (!unlimited && end === undefined) ||
+    (end !== undefined && end < start)
   )
     throw new RangeError("Invalid file read range");
   return Readable.from(
     (async function* () {
       let position = start;
-      while (position <= end) {
+      while (end === undefined || position <= end) {
         options.signal?.throwIfAborted();
+        const remaining = end === undefined ? undefined : end - position + 1n;
         const chunk = Buffer.allocUnsafe(
-          Math.min(64 * 1024, end - position + 1),
+          remaining === undefined || remaining > 64n * 1024n
+            ? 64 * 1024
+            : Number(remaining),
         );
         const { bytesRead } = await handle.read(
           chunk,
@@ -34,7 +38,7 @@ export const readFileHandleChunks = (
         );
         options.signal?.throwIfAborted();
         if (bytesRead === 0) return;
-        position += bytesRead;
+        position += BigInt(bytesRead);
         yield chunk.subarray(0, bytesRead);
       }
     })(),
@@ -43,4 +47,9 @@ export const readFileHandleChunks = (
       ...(options.signal === undefined ? {} : { signal: options.signal }),
     },
   );
+};
+
+const fileOffset = (value: number | bigint): bigint | undefined => {
+  if (typeof value === "bigint") return value >= 0n ? value : undefined;
+  return Number.isSafeInteger(value) && value >= 0 ? BigInt(value) : undefined;
 };

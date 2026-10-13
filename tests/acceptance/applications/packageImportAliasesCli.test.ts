@@ -4,15 +4,18 @@ import { createRequire } from "node:module";
 import { dirname, join, relative } from "node:path";
 
 import { expect } from "vitest";
-import { z } from "zod";
 
-import { javascriptApplicationAnalysisResultSchema } from "../../../src/domain/javascript/javascriptApplicationAnalysis.js";
-import { connectLocalToolsMcp } from "../../fixtures/localToolsMcp.js";
 import { createTestTempDirectory } from "../../fixtures/temporaryDirectory.js";
 import { cliTest } from "../../support/cli/cliFixture.js";
+import { analyzeJavaScriptDirectory } from "../../support/cli/javascriptApplication.js";
 
 const literalAliases = ["#/x", "#x%2Fy", "#x%2Ey", "#x\\y", "#x\0y"];
 const fallbackAliases = {
+  "#tab-escape": ["./.\t./outside.cjs", "./config.cjs"],
+  "#newline-escape": ["./.%\n2e/outside.cjs", "./config.cjs"],
+  "#normalized-url": "./con\tfig.cjs",
+  "#trimmed-url": "./config.cjs \t",
+  "#url-suffix": "./config.cjs?selected=one#fragment",
   "#inactive-array": {
     node: [{ browser: "./browser.cjs" }],
     default: "./config.cjs",
@@ -30,28 +33,52 @@ const fallbackAliases = {
 };
 const resolvedAliases = [...literalAliases, ...Object.keys(fallbackAliases)];
 const refusedAliases = {
-  "#empty": { target: [], limitation: "an empty imports target array" },
+  "#empty": {
+    target: [],
+    status: "external",
+    limitation: "an empty imports target array",
+  },
   "#empty-active": {
     target: { node: [] },
+    status: "external",
     limitation: "an empty imports target array",
   },
   "#null-last": {
     target: [[], null],
+    status: "external",
     limitation: "an explicit null imports target",
   },
   "#empty-last": {
     target: [null, []],
+    status: "external",
     limitation: "an empty imports target array",
   },
   "#inactive": {
     target: [{ browser: "./browser.cjs" }],
+    status: "external",
     limitation: "it declares browser.",
   },
   "#nested-inactive": {
+    status: "external",
     target: [
       [{ browser: "./browser.cjs" }, { "rea-inactive": "./inactive.cjs" }],
     ],
     limitation: "it declares browser, rea-inactive.",
+  },
+  "#escape": {
+    target: "./.\t./outside.cjs",
+    status: "rejected",
+    limitation: "escapes the package root",
+  },
+  "#encoded-separator": {
+    target: ["./con%2ffig.cjs", "./config.cjs"],
+    status: "rejected",
+    limitation: "separator bytes",
+  },
+  "#missing-url": {
+    target: ["./miss\ting.cjs", "./config.cjs"],
+    status: "not-found",
+    limitation: JSON.stringify("./miss\ting.cjs"),
   },
 };
 const allAliases = [...resolvedAliases, ...Object.keys(refusedAliases)];
@@ -129,26 +156,7 @@ cliTest.for(["CLI", "stdio MCP"] as const)(
       expect.objectContaining({ code: "ERR_PACKAGE_IMPORT_NOT_DEFINED" }),
     );
 
-    let document: unknown;
-    if (surface === "CLI") {
-      const response = await cli.run({
-        arguments: ["analyze-javascript-application", root, "--format", "json"],
-        environment: { REA_LOG_LEVEL: "silent" },
-      });
-      expect(response.exitCode, response.stderr).toBe(0);
-      document = response.json;
-    } else {
-      const { call } = await connectLocalToolsMcp();
-      const response = await call("analyze_javascript_application", {
-        input_path: root,
-        format: "directory",
-      });
-      expect(response.isError, JSON.stringify(response)).not.toBe(true);
-      document = response.structuredContent;
-    }
-    const { graph } = z
-      .object({ normalized_result: javascriptApplicationAnalysisResultSchema })
-      .parse(document).normalized_result;
+    const { graph } = await analyzeJavaScriptDirectory(surface, cli, root);
     for (const specifier of resolvedAliases)
       for (const [moduleKind, sourcePath, source] of [
         ["require", "main.cjs", mainSource],
@@ -168,7 +176,9 @@ cliTest.for(["CLI", "stdio MCP"] as const)(
     const imports = graph.edges.filter(
       ({ properties }) => properties.module_link_kind === "require",
     );
-    for (const [specifier, { limitation }] of Object.entries(refusedAliases))
+    for (const [specifier, { status, limitation }] of Object.entries(
+      refusedAliases,
+    ))
       for (const [moduleKind, sourcePath, source] of [
         ["require", "main.cjs", mainSource],
         ["import", "main.mjs", moduleSource],
@@ -179,7 +189,7 @@ cliTest.for(["CLI", "stdio MCP"] as const)(
               module_link_kind: moduleKind,
               specifier,
               resolved_path: null,
-              resolution_status: "external",
+              resolution_status: status,
             }),
             evidence: sourceEvidence(sourcePath, source, limitation),
           }),

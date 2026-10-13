@@ -182,15 +182,13 @@ describe("ASAR snapshot operation ownership", () => {
     const removalStartedPromise = new Promise<void>((resolve) => {
       removalStarted = resolve;
     });
-    const reader = new AsarArtifactReader(
-      fixture.archive,
-      undefined,
-      async (path) => {
+    const reader = new AsarArtifactReader(fixture.archive, {
+      removeSnapshot: async (path) => {
         removalStarted?.();
         await removalGate;
         await rm(path, { recursive: true, force: true });
       },
-    );
+    });
     let prepared = false;
     const preparing = reader.prepareContainer().then(() => {
       prepared = true;
@@ -302,15 +300,13 @@ describe("ASAR captured-byte identity", () => {
   it("retains a completed inventory and snapshot ownership when cleanup fails", async () => {
     const fixture = await archiveFixture();
     const attempts: string[] = [];
-    const reader = new AsarArtifactReader(
-      fixture.archive,
-      undefined,
-      async (path) => {
+    const reader = new AsarArtifactReader(fixture.archive, {
+      removeSnapshot: async (path) => {
         attempts.push(path);
         if (attempts.length === 1) throw new Error("snapshot removal denied");
         await rm(path, { recursive: true, force: true });
       },
-    );
+    });
     const resourceScope = new ArtifactResourceScope();
     onTestFinished(() => resourceScope.close());
     try {

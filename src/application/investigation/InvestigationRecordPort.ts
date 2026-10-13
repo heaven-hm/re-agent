@@ -2,6 +2,7 @@ import type { Evidence } from "../../domain/evidence.js";
 import type { EvidenceBundle } from "../../domain/evidenceBundle.js";
 import type { EvidenceIntegrityError } from "../../domain/evidenceErrors.js";
 import type { AnalysisError } from "../../domain/analysisErrorBase.js";
+import type { AnalysisInputError } from "../../domain/analysisErrorCore.js";
 import type { UnknownRegistryError } from "../../domain/unknownRegistryError.js";
 import type {
   RecordUnknownInput,
@@ -37,6 +38,21 @@ export interface EvidenceUnknownWriter {
   ): Result<ResidualUnknown | null, AnalysisError>;
 }
 
+export type UnknownPage = {
+  readonly items: ResidualUnknown[];
+  readonly total: number;
+  readonly offset: number;
+  readonly next_offset: number | null;
+};
+
+export interface UnknownQuery {
+  readonly status?: UnknownStatus;
+  readonly severity?: ResidualUnknown["severity"];
+  readonly domain?: string;
+  readonly offset?: number;
+  readonly limit?: number;
+}
+
 /** Optimistic Unknown revisions and consistency verification. */
 export interface UnknownRegistryPort {
   recordUnknown(
@@ -50,6 +66,7 @@ export interface UnknownRegistryPort {
     readonly severity?: ResidualUnknown["severity"];
     readonly domain?: string;
   }): ResidualUnknown[];
+  listUnknownsPage(query?: UnknownQuery): UnknownPage;
   verifyUnknownResolution(unknownId: string): Result<
     {
       readonly valid: boolean;
@@ -67,5 +84,7 @@ export interface InvestigationRecordPort
     EvidenceWriter,
     EvidenceUnknownWriter,
     UnknownRegistryPort {
-  importEvidenceBundle(bundle: unknown): Result<number, EvidenceIntegrityError>;
+  importEvidenceBundle(
+    bundle: unknown,
+  ): Result<number, EvidenceIntegrityError | AnalysisInputError>;
 }

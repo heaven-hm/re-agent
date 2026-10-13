@@ -15,7 +15,7 @@ const ROW_SIZE_FACTORIES: readonly RowSizeFactory[] = [
   ({ stringSize: s, guidSize: g }) => 2 + s + g * 3,
   ({ codedSize: c, stringSize: s }) => c("ResolutionScope") + s * 2,
   ({ tableSize: t, codedSize: c, stringSize: s }) =>
-    4 + s * 2 + c("TypeDefOrRef") + t(4) + t(6),
+    4 + s * 2 + c("TypeDefOrRef") + Math.max(t(3), t(4)) + Math.max(t(5), t(6)),
   ({ tableSize: t }) => t(4),
   ({ stringSize: s, blobSize: b }) => 2 + s + b,
   ({ tableSize: t }) => t(6),

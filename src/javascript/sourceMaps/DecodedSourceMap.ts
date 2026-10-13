@@ -19,31 +19,6 @@ export const isBeforeSourceMapLeafStop = (
   );
 };
 
-/** Resolve one declaration with the same pinned upstream implementation used by full maps. */
-export const resolveSourceMapSource = (
-  source: string | null,
-  sourceRoot: string | null | undefined,
-  mapUrl: string,
-): string => {
-  const map = new TraceMap(
-    {
-      version: 3,
-      names: [],
-      sources: [source ?? ""],
-      ...(sourceRoot == null ? {} : { sourceRoot }),
-      mappings: "",
-    },
-    mapUrl,
-  );
-  const resolved = map.resolvedSources[0];
-  if (resolved === undefined)
-    throw new SourceMapFormatFailure(
-      "format",
-      "Source-map resolver did not return the requested source identity.",
-    );
-  return resolved;
-};
-
 /** Decode leaf mappings and validate producer indices before any consumer publishes them. */
 export const decodeValidatedSourceMapLeaves = (
   leaves: readonly SourceMapLeaf[],
@@ -51,12 +26,13 @@ export const decodeValidatedSourceMapLeaves = (
   check?: () => void,
 ): readonly {
   readonly leaf: SourceMapLeaf;
+  readonly map: TraceMap;
   readonly rows: ReturnType<typeof decodedMappings>;
   readonly resolvedSources: readonly string[];
 }[] =>
   leaves.map((leaf) => {
     check?.();
-    const map = new TraceMap(JSON.stringify(leaf.map), mapUrl);
+    const map = new TraceMap(leaf.codecMap, mapUrl);
     const rows = decodedMappings(map);
     for (const [line, row] of rows.entries()) {
       if ((line & 255) === 0) check?.();
@@ -78,5 +54,5 @@ export const decodeValidatedSourceMapLeaves = (
           );
       }
     }
-    return { leaf, rows, resolvedSources: map.resolvedSources };
+    return { leaf, map, rows, resolvedSources: map.resolvedSources };
   });

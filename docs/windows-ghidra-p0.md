@@ -21,8 +21,10 @@ additional permission flag or degraded mode is required.
 - the 25 read-only Ghidra inventory, memory, and function-analysis operations.
 
 Loaded memory reads and file offsets preserve Ghidra's observed source mappings.
-PE load-image inspection returns an explicit unsupported attestation status;
-independent load-image verification currently supports DOS MZ only. For x64 PE
+PE load-image inspection returns an explicit unsupported attestation status.
+Independent verification covers admitted DOS MZ, explicit COM, and explicit
+[raw-binary imports](raw-binary.md) on their supported hosts. This does not
+extend Windows P0 admission beyond native PE. For x64 PE
 NativeAOT RTR 9.1, the read-only snapshot parser can report metadata through
 `inspect_native_load_image` and `inspect_native_data_type` without a JAR or
 database mutation. A real Windows-host NativeAOT Ghidra run is still required
@@ -151,8 +153,12 @@ the private runtime, isolating Ghidra preferences, logs, and caches.
 Process creation assigns a suspended child atomically to an owned Job Object.
 Membership and kill-on-owner-close policy are verified before resume.
 Breakaway is disabled. Only the child's default file owner is normalized;
-the caller token stays unchanged. Caller CPU affinity and priority are
-preserved. Close, cancellation, timeout, startup failure, and provider failure
+the caller token stays unchanged. Caller priority is preserved, and caller CPU
+affinity whenever the caller and the child share a processor group. A child that
+Windows places in another group keeps that group's default when the caller asked
+for no bound of its own; a caller pinned to fewer processors than its group
+holds is refused there rather than widened.
+Close, cancellation, timeout, startup failure, and provider failure
 terminate the job and verify all members have settled before runtime cleanup.
 Cleanup removes admitted objects by handle and unlinks reparse entries without
 following their targets. Abrupt owner death kills the job but can leave

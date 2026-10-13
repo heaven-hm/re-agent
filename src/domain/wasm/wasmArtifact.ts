@@ -1,4 +1,8 @@
 import { z } from "zod";
+import { createHash } from "node:crypto";
+import type { EvidenceSubjectTarget } from "../evidence.js";
+
+import { localPathStringSchema } from "../localPath.js";
 
 const digest = z.string().regex(/^[a-f0-9]{64}$/);
 const artifact = z.strictObject({
@@ -8,12 +12,11 @@ const artifact = z.strictObject({
 });
 /** All artifacts are explicitly selected local files; references never trigger acquisition. */
 export const inspectWasmArtifactInputSchema = z.strictObject({
-  path: z
-    .string()
-    .min(1)
-    .describe("Absolute selected local WASM artifact path"),
-  glue_paths: z.array(z.string().min(1)).max(16).default([]),
-  candidate_paths: z.array(z.string().min(1)).max(16).default([]),
+  path: localPathStringSchema.describe(
+    "Absolute selected local WASM artifact path",
+  ),
+  glue_paths: z.array(localPathStringSchema).max(16).default([]),
+  candidate_paths: z.array(localPathStringSchema).max(16).default([]),
 });
 /** Upstream output stays intact; import/export names are never split on ambiguous punctuation. */
 export const wasmArtifactSchema = z
@@ -82,6 +85,15 @@ export const wasmArtifactSchema = z
     limitations: z.array(z.string()),
   })
   .superRefine((value, context) => {
+    if (
+      createHash("sha256").update(value.wat.text, "utf8").digest("hex") !==
+      value.wat.sha256
+    )
+      context.addIssue({
+        code: "custom",
+        path: ["wat", "sha256"],
+        message: "Decoded WAT digest does not match its UTF-8 text.",
+      });
     const selected = value.candidates[0];
     if (
       selected?.path !== value.artifact.path ||
@@ -124,3 +136,22 @@ export const wasmArtifactSchema = z
 export type InspectWasmArtifactInput = z.infer<
   typeof inspectWasmArtifactInputSchema
 >;
+export type WasmArtifact = z.infer<typeof wasmArtifactSchema>;
+
+/** A WASM observation must identify the selected file path and byte digest. */
+export type WasmArtifactSubject = Pick<
+  EvidenceSubjectTarget,
+  "path" | "sha256" | "format"
+>;
+type WasmArtifactFileSubject = WasmArtifactSubject & {
+  readonly format: "file";
+};
+
+export const wasmArtifactMatchesSubject = (
+  artifact: WasmArtifact["artifact"],
+  subject: WasmArtifactSubject | null | undefined,
+): subject is WasmArtifactFileSubject =>
+  subject != null &&
+  subject.path === artifact.path &&
+  subject.sha256 === artifact.sha256 &&
+  subject.format === "file";

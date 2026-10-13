@@ -1,4 +1,7 @@
-import { requireMcpToolError } from "./lib/mcp-verifier-results.mjs";
+import {
+  requireMcpLifecycleResult,
+  requireMcpToolError,
+} from "./lib/mcp-verifier-results.mjs";
 import assert from "node:assert/strict";
 import { join } from "node:path";
 import { execFile } from "node:child_process";
@@ -17,18 +20,18 @@ const execute = promisify(execFile);
 const verifyMcpToolsAndPrompts = async (client, mcpOptions) => {
   await verifyCompleteToolCatalog(client, mcpOptions);
   await prompts.verifyPromptCatalog(client, mcpOptions, prompts.names);
-  await prompts.verifyPromptCompletion(client, mcpOptions, false);
+  await prompts.verifyPromptCompletion(client, mcpOptions, []);
 };
 
 const verifyMcpTargetFree = async (client, mcpOptions) => {
-  const status = await client.callTool(
+  const result = await client.callTool(
     { name: "binary_session", arguments: {} },
     mcpOptions,
   );
-  const currentDocument =
-    status.structuredContent?.result?.tool_availability?.find(
-      ({ name }) => name === "current_document",
-    );
+  const status = requireMcpLifecycleResult(result, "binary_session");
+  const currentDocument = status.tool_availability.find(
+    ({ name }) => name === "current_document",
+  );
   if (
     currentDocument?.available !== false ||
     currentDocument.reason !== "target_required"
@@ -67,15 +70,13 @@ const verifyMcpOpenAndBind = async (client, mcpOptions) => {
   );
   if (opened.isError === true)
     throw new Error("packaged MCP could not open a binary");
-  const providerStatusEnvelope = json(
-    prompts.mcpText(
-      await client.callTool(
-        { name: "binary_session", arguments: {} },
-        mcpOptions,
-      ),
+  const providerStatus = requireMcpLifecycleResult(
+    await client.callTool(
+      { name: "binary_session", arguments: {} },
+      mcpOptions,
     ),
+    "binary_session",
   );
-  const providerStatus = providerStatusEnvelope.result;
   if (
     providerStatus.analysis_provider_binding?.provider?.id !== "hopper" ||
     providerStatus.analysis_provider_binding?.selection_source !== "request"
@@ -120,11 +121,8 @@ const verifyMcpNonLinuxCurrentDocument = async (
 
 const verifyMcpBinaryLifecycle = async (client, mcpOptions) => {
   await verifyMcpOpenAndBind(client, mcpOptions);
-  await prompts.verifyPromptCompletion(
-    client,
-    mcpOptions,
-    process.platform !== "linux",
-  );
+  // Completion never starts a provider; only an ordinary operation readies it.
+  await prompts.verifyPromptCompletion(client, mcpOptions, []);
   if (process.platform === "linux") {
     await verifyMcpLinuxToolAvailability(client, mcpOptions);
   } else {
@@ -133,6 +131,7 @@ const verifyMcpBinaryLifecycle = async (client, mcpOptions) => {
       mcpOptions,
     );
     await verifyMcpNonLinuxCurrentDocument(client, mcpOptions, current);
+    await prompts.verifyPromptCompletion(client, mcpOptions, ["fixture"]);
   }
   const closed = await client.callTool(
     { name: "close_binary", arguments: {} },
@@ -140,7 +139,7 @@ const verifyMcpBinaryLifecycle = async (client, mcpOptions) => {
   );
   if (closed.isError === true)
     throw new Error("packaged MCP could not close its binary");
-  await prompts.verifyPromptCompletion(client, mcpOptions, false);
+  await prompts.verifyPromptCompletion(client, mcpOptions, []);
 };
 
 const verifyMcpEvidenceBundle = async (client, mcpOptions, evidenceRoot) => {

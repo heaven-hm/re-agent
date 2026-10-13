@@ -22,6 +22,7 @@ export interface WebModuleArtifacts extends SelectedWebScriptArtifacts {
 
 /** Read selected local artifacts without refetching website assets. */
 export interface WebModuleArtifactPort {
+  close?(): Promise<void>;
   load(
     input: WebModuleTraceInput,
     options?: ExecutionOptions,
@@ -38,6 +39,7 @@ export interface WebModuleResolutionBatch {
 
 /** Replaceable native resolution engine, with no provider protocol in callers. */
 export interface WebModuleResolutionPort {
+  close?(): Promise<void>;
   resolve(
     input: {
       readonly importerUrl: string;

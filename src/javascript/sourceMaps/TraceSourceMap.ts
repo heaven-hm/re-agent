@@ -34,7 +34,6 @@ export const traceSourceMap = (
   position: WebSourcePosition,
 ): WebSourceMapReport => {
   const inspected = inspectSourceMap(text);
-  const map = new AnyMap(inspected.jsonText, url);
   const decodedLeaves = decodeValidatedSourceMapLeaves(inspected.leaves, url);
   for (const { leaf, rows } of decodedLeaves)
     for (const [line, row] of rows.entries())
@@ -44,6 +43,27 @@ export const traceSourceMap = (
             "format",
             "Embedded source-map mappings overlap the following section boundary.",
           );
+  let map: TraceMap;
+  if (inspected.format === "regular") {
+    const decoded = decodedLeaves[0];
+    if (decoded === undefined)
+      throw new SourceMapFormatFailure(
+        "format",
+        "Regular source map has no validated leaf.",
+      );
+    map = decoded.map;
+  } else {
+    map = new AnyMap(
+      {
+        version: 3,
+        sections: decodedLeaves.map(({ leaf, map: sectionMap }) => ({
+          offset: leaf.offset,
+          map: sectionMap,
+        })),
+      },
+      url,
+    );
+  }
   const rows =
     inspected.format === "regular"
       ? (decodedLeaves[0]?.rows ?? [])
