@@ -1,0 +1,50 @@
+{
+  "target": "pixeltetris",
+  "original": {
+    "name": "Pixeltetris v1.0.0 (mvlassis/pixeltetris, MIT)",
+    "archive": "https://github.com/mvlassis/pixeltetris/releases/download/v1.0.0/Pixeltetris-v1.0.0-Windows-64bit.zip",
+    "archive_sha256": "ccc68f4179ac3ad56a27b2a8c28d28818bca0857f9bd05ed377035de88d33268",
+    "binary": "Pixeltetris-v1.0.0-Windows-64bit/bin/Version 1.0.0 - 64 bit/Pixeltetris.exe",
+    "sha256": "3eabbe4a4de93c9d0b91589511203313697f60500e58f18dd67eb37f8e25ca81",
+    "format": "PE32+ x86-64 GUI, MSVC C++, SDL2 dynamic (SDL2/TTF/Image DLLs shipped)"
+  },
+  "analysis": {
+    "procedures": 4945,
+    "strings": 771,
+    "externals": 115,
+    "init": "FUN_140013ce0: SDL_Init(VIDEO), window 'Pixeltetris' 640x360 logical, IMG_Init JPG|PNG, TTF_Init, RenderSetLogicalSize, window scale by resolution factor, menu/game object construction",
+    "input_map": {
+      "1": "quit/back (SDL_QUIT, Esc, q)",
+      "2": "left (Left arrow)",
+      "3": "up (Up arrow)",
+      "4": "down (Down arrow)",
+      "5": "right (Right arrow)",
+      "6": "confirm (Enter)",
+      "7": "space",
+      "8": "X",
+      "9": "hold (C / Ctrl)",
+      "10": "pause (P)",
+      "0": "none"
+    },
+    "game_state": "FUN_1400154e0: score=0, width=10, RNG seeded by time, 'Game Over!' text object",
+    "event_helpers": [
+      "FUN_140015e30 event drain",
+      "FUN_140015e90 per-event action mapper"
+    ]
+  },
+  "replica": {
+    "source": "benchmarks/native-windows-ports/pixeltetris/replica/pixelmac.c",
+    "binary": "benchmarks/native-windows-ports/pixeltetris/replica/pixelmac (arm64)",
+    "assets": "benchmarks/native-windows-ports/pixeltetris/replica/assets (verbatim MIT release assets + OFL fonts)",
+    "build": "clang -O2 -o pixelmac pixelmac.c -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2 -lSDL2_image -lSDL2_ttf"
+  },
+  "verification": {
+    "mac_build": "PASS (36KB, clean)",
+    "mac_menu_render": "UNVERIFIED (SDL window not observed in screenshots yet)",
+    "original_runtime": "PASS (process alive, no crash from own dir; font-crash CWD issue recorded)",
+    "original_screenshot": "UNVERIFIED (X11 window not captured)",
+    "input_semantics": "PARTIAL (codes exact; actions 6-10 meanings guideline-inferred)",
+    "pieces_colors_rng": "UNVERIFIED",
+    "gravity_scoring": "UNVERIFIED (guideline values used)"
+  }
+}
