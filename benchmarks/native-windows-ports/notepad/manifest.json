@@ -17,6 +17,12 @@
     "about": "Legacy Notepad v1.2.0, fast lightweight editor, C++ Win32"
   },
   "replica_plan": "AppKit NSTextView + menu bar mirroring recovered labels/shortcuts + open/save dialogs + find/replace + font panel + dark theme + drag-drop + recent files",
+  "replica": {
+    "source": "benchmarks/native-windows-ports/notepad/replica/main.swift",
+    "binary": "benchmarks/native-windows-ports/notepad/replica/notepadmac (arm64)",
+    "build": "swiftc -O -o notepadmac main.swift -framework Cocoa",
+    "screenshot": "benchmarks/native-windows-ports/screenshots/notepadmac-hello.png (real window capture: Unicode file loaded, title set from cmdline open)"
+  },
   "verification": {
     "replica": "QUEUED next build"
   }
