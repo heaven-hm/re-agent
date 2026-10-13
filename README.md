@@ -53,7 +53,7 @@ Use the built repository CLI to register its MCP server and packaged agent skill
 - [Executed benchmarks and reproduction](docs/autonomous-reconstruction-benchmark.md)
 - [Static/runtime tool bootstrap and offline bundles](docs/autonomy-tool-bootstrap.md)
 - [CLI and evidence](docs/cli.md)
-- [Native providers](docs/providers.md)
+- [Ghidra provider](docs/ghidra-provider.md)
 - [Managed .NET analysis](docs/managed-code-analysis.md)
 - [MCP contracts](docs/mcp-contracts.md)
 - [Licensing](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md)
