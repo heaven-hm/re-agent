@@ -8,7 +8,7 @@ import {
 } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   AutonomousInvestigation,
   investigationConfigSchema,
@@ -53,6 +53,34 @@ const fixture = async () => {
 };
 
 describe("autonomous reconstruction checkpoint and workspace safety", () => {
+  it("preserves a stop queued while an earlier pause is being persisted", async () => {
+    const f = await fixture();
+    await AutonomousInvestigation.create(f.checkpoint, f.config);
+    await writeFile(
+      `${f.checkpoint}.control.json`,
+      JSON.stringify({ action: "pause" }),
+    );
+    const pause = AutonomousInvestigation.prototype.pause;
+    const intercepted = vi
+      .spyOn(AutonomousInvestigation.prototype, "pause")
+      .mockImplementation(async function (this: AutonomousInvestigation) {
+        await writeFile(
+          `${f.checkpoint}.control.json`,
+          JSON.stringify({ action: "stop" }),
+        );
+        await pause.call(this);
+      });
+    try {
+      const resumed = await AutonomousInvestigation.open(f.checkpoint);
+      expect(
+        JSON.parse(await readFile(`${f.checkpoint}.control.json`, "utf8")),
+      ).toEqual({ action: "stop" });
+      expect((await resumed.run()).status).toBe("stopped");
+    } finally {
+      intercepted.mockRestore();
+    }
+  });
+
   it("rejects stale in-memory checkpoints without overwriting newer evidence", async () => {
     const f = await fixture();
     const stale = await AutonomousInvestigation.create(f.checkpoint, f.config);

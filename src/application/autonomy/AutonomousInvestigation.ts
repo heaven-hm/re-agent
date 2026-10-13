@@ -448,19 +448,20 @@ export class AutonomousInvestigation {
   }
 
   async #consumeControl(): Promise<void> {
-    let text: string;
+    const consumed = `${this.storePath}.control.${randomUUID()}.consumed.json`;
     try {
-      text = await readFile(`${this.storePath}.control.json`, "utf8");
+      await rename(`${this.storePath}.control.json`, consumed);
     } catch (cause) {
       if (cause instanceof Error && "code" in cause && cause.code === "ENOENT")
         return;
       throw cause;
     }
+    const text = await readFile(consumed, "utf8");
     const control = JSON.parse(text) as { action?: string };
     if (control.action === "stop") await this.stop();
     else if (control.action === "pause") await this.pause();
     else throw new Error("Invalid investigation control action");
-    await unlink(`${this.storePath}.control.json`);
+    await unlink(consumed);
   }
 
   async #rollbackForInterruption(): Promise<void> {

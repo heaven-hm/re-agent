@@ -9,8 +9,8 @@
     },
     {
       "file": "checkpoint-controls-tests.log",
-      "sha256": "4c00c26d26fd24b9684ccff4fb2f930c2f0b28bd8cec7048f69e2fe6c134d46f",
-      "bytes": 27890
+      "sha256": "8fff702f5efa96cf5d255889cea76022afc8e53747a52f16feaa6dc6786ff62d",
+      "bytes": 27730
     },
     {
       "file": "display-cleanup.json",
@@ -46,6 +46,11 @@
       "file": "index.html",
       "sha256": "3401f51bd99d8f3abbbbb97ead049b4e476651866e85465eb2f0c18d029ce692",
       "bytes": 10336
+    },
+    {
+      "file": "installer-failure-retry.json",
+      "sha256": "9559c5c6d841a9a4b652a03206820b2f4ef58c58f7d14fa4cb7d141d03ed78ec",
+      "bytes": 613
     },
     {
       "file": "luhn-reconstruction-evidence.json",

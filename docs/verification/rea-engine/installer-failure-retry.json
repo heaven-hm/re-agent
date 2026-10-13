@@ -1,0 +1,15 @@
+{
+  "failedAttemptExitCode": 1,
+  "temporaryConfigsAfterFailure": 0,
+  "retryExitCode": 0,
+  "retryHealth": {
+    "tool": "ilspycmd",
+    "version": "9.1.0.7988",
+    "executable": "/Users/haseeb-mir/Documents/Code/rea/output/autonomy/installer-failure-retry-1791912385/tool/ilspycmd",
+    "reused": false,
+    "packageSha256": "2b5058f5ccc164c33b7aabf1a5eb0cf3d3a6af6c145aaf58efd3ed891443af7c",
+    "health": "ilspycmd: 9.1.0.7988\nICSharpCode.Decompiler: 9.1.0.7988\n",
+    "rollForward": "Major"
+  },
+  "scope": "Injected dotnet installation failure followed by real offline installation in same directory."
+}

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import { managedBenchmarkCommand as exec } from "./lib/managed-benchmark-command.mjs";
 /** Install the bundled, hash-pinned ILSpy package into a workspace directory. */
-import { readFile, mkdir, writeFile, access } from "node:fs/promises";
-import { createHash } from "node:crypto";
+import { readFile, mkdir, writeFile, access, unlink } from "node:fs/promises";
+import { createHash, randomUUID } from "node:crypto";
 import { join, resolve } from "node:path";
 const root = resolve(import.meta.dirname, "..");
 const source = join(root, "third_party/ilspy");
@@ -34,7 +34,7 @@ try {
 } catch (cause) {
   if (cause.code !== "ENOENT") throw cause;
   await mkdir(directory, { recursive: true });
-  const config = join(directory, "NuGet.Config");
+  const config = join(directory, `NuGet.${randomUUID()}.Config`);
   await writeFile(
     config,
     '<configuration><packageSources><clear/><add key="bundled" value="' +
@@ -42,21 +42,25 @@ try {
       '"/></packageSources></configuration>',
     { flag: "wx" },
   );
-  await exec(
-    "dotnet",
-    [
-      "tool",
-      "install",
-      "ilspycmd",
-      "--version",
-      manifest.version,
-      "--tool-path",
-      directory,
-      "--configfile",
-      config,
-    ],
-    { env, timeoutMs: 120000, outputBytes: 8 * 1024 * 1024 },
-  );
+  try {
+    await exec(
+      "dotnet",
+      [
+        "tool",
+        "install",
+        "ilspycmd",
+        "--version",
+        manifest.version,
+        "--tool-path",
+        directory,
+        "--configfile",
+        config,
+      ],
+      { env, timeoutMs: 120000, outputBytes: 8 * 1024 * 1024 },
+    );
+  } finally {
+    await unlink(config);
+  }
 }
 console.log(
   JSON.stringify(
