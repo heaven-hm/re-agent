@@ -1,0 +1,10 @@
+These are the fingerprints of the PuTTY PGP Master Keys. They can
+be used to establish a trust path from this executable to another
+one. See the manual for more information.
+(Note: these fingerprints have nothing to do with SSH!)
+
+PuTTY Master Key as of 2026 (RSA, 4096-bit):
+  371C 662B 855F 318F F63A  D091 D732 471F 094D 5FB5
+
+Previous Master Key (2023, RSA, 4096-bit):
+  28D4 7C46 55E7 65A6 D827  AC66 B15D 9EFC 216B 06A1

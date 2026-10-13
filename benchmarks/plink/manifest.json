@@ -1,0 +1,29 @@
+{
+  "benchmark": "plink-cli-surface",
+  "original": {
+    "name": "PuTTY plink 0.85 (w64)",
+    "source": "https://the.earth.li/~sgtatham/putty/latest/w64/plink.exe",
+    "sha256": "969f36879d5716aa1a9811f43a6a6510e8f08372dbeb9695b810b9c776f39c75",
+    "license": "MIT (Simon Tatham; official licence page retained locally, not redistributed here)"
+  },
+  "replica": {
+    "source": "benchmarks/plink/replica/plinkmac.c",
+    "build": "clang -O2 -o plinkmac plinkmac.c (after generating golden_*.h with: xxd -i goldens/plinkmac-golden-help.txt > golden_help.h, and likewise for noargs/pgpfp)",
+    "note": "Shipped replica binary benchmarks/plink/replica/plinkmac (arm64 Mach-O) included per benchmarks/ precedent."
+  },
+  "goldens": {
+    "plinkmac-golden-help.txt": "71b5986b1e53fddc644e022d2d3d93baf7af0137faed5b09b44d9f4734344fc2",
+    "plinkmac-golden-noargs.txt": "02faf5ed88b000c82ac3f33c02a82657185870727b473e7af17df6cedbff399a",
+    "plinkmac-golden-pgpfp.txt": "f573c152ed8b29e4015c70f38230d770dad332fa6b87e2f270526711975b5ab4",
+    "plinkmac-golden-version.txt": "364f211b40ff30b265464b3dd06abeca9853f3df1e4d608b1436dbbb333540e0"
+  },
+  "results": {
+    "no-args": "byte-identical, exit 0",
+    "help": "byte-identical, exit 0",
+    "pgpfp": "byte-identical, exit 0",
+    "unknown-option": "byte-identical (`plink: unknown option \"-Zbogus\"`, CRLF, exit 0)",
+    "version": "release and source-commit lines identical; platform/compiler lines re-reported for ARM64 macOS (sole documented deviation)"
+  },
+  "scope": "CLI-surface parity only. Network/SSH transport explicitly out of scope; a host argument exits 1 with a transport notice on stderr. CRLF line endings preserved to match the original console bytes.",
+  "evidence": "output/hypercam/evidence-plink.json (22 records, 4 unknowns; ignored scratch, not committed)"
+}

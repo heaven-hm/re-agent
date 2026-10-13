@@ -1,0 +1,4 @@
+plink: Release 0.85
+Build platform: 64-bit x86 Windows
+Compiler: clang 14.0.6 , emulating Visual Studio 2022 (17.2), _MSC_VER=1932, _MSC_FULL_VER=193231329
+Source commit: a3cce3a48d4ab12e0fccb32998b9042d4f7c3ff1
