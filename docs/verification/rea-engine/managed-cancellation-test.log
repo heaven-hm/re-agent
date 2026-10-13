@@ -1,0 +1,27 @@
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=886 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"cleanup","completed":0,"total":null,"message":"elapsed_ms=1063 frames=0 samples=0 interactions=0 disposition=cancelled owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":3}}
+{
+  "status": "passed",
+  "output": "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/rea-managed-cancel-PLV6VK",
+  "results": [
+    {
+      "mode": "command",
+      "pid": 14369,
+      "launched": true,
+      "cancellationRejected": true,
+      "processGone": true,
+      "cancellationReason": "Command cancelled.",
+      "cliCancellationExitCode": null
+    },
+    {
+      "mode": "capture",
+      "pid": 14428,
+      "launched": true,
+      "cancellationRejected": true,
+      "processGone": true,
+      "cancellationReason": "This operation was aborted",
+      "cliCancellationExitCode": 143
+    }
+  ]
+}

@@ -10,7 +10,10 @@ import {
   ProviderProcessSupervisor,
 } from "../dist/process/ProviderProcess.js";
 import { cleanupOwnedProcessGroup } from "../dist/process/ProcessOwnership.js";
-import { managedBenchmarkCommand as command } from "./lib/managed-benchmark-command.mjs";
+import {
+  managedBenchmarkCommand as command,
+  managedBenchmarkScope,
+} from "./lib/managed-benchmark-command.mjs";
 const root = resolve(import.meta.dirname, ".."),
   output = resolve(
     process.argv[2] ?? `output/autonomy/managed-suite-${Date.now()}`,
@@ -43,7 +46,10 @@ try {
     if (cause.code !== "ENOENT") throw cause;
     const response = await fetch(
       "https://static.ltr-data.se/files/net10.0/luhn.zip",
-      { redirect: "error", signal: AbortSignal.timeout(60000) },
+      {
+        redirect: "error",
+        signal: AbortSignal.any([abort.signal, AbortSignal.timeout(60000)]),
+      },
     );
     assert.ok(response.ok);
     const bytes = Buffer.from(await response.arrayBuffer());
@@ -72,13 +78,18 @@ try {
       .digest("hex"),
     "e30a028e8db474b8a3b17f7088efb8054b818f08b1e30011a50112480d5be353",
   );
-  const run = async (name, args, env = process.env) =>
-    command(process.execPath, [join(root, "scripts", name), ...args], {
-      cwd: root,
-      env,
-      signal: abort.signal,
-      timeoutMs: 300000,
-    });
+  const run = async (name, args, env = process.env) => {
+    const functions = {
+      "verify-luhn-reconstruction.mjs": "verifyLuhn",
+      "recover-tictactoe-replica.mjs": "recoverTicTacToe",
+      "verify-tictactoe-reconstruction.mjs": "verifyTicTacToe",
+    };
+    const stage = await import("./" + name);
+    const value = await managedBenchmarkScope(abort.signal, () =>
+      stage[functions[name]]([process.execPath, name, ...args], env),
+    );
+    return { stdout: JSON.stringify(value, null, 2) };
+  };
   const software = await run("verify-luhn-reconstruction.mjs", [
     original,
     join(output, "software"),

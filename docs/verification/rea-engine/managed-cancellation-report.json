@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "output": "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/rea-managed-cancel-PLV6VK",
+  "results": [
+    {
+      "mode": "command",
+      "pid": 14369,
+      "launched": true,
+      "cancellationRejected": true,
+      "processGone": true,
+      "cancellationReason": "Command cancelled.",
+      "cliCancellationExitCode": null
+    },
+    {
+      "mode": "capture",
+      "pid": 14428,
+      "launched": true,
+      "cancellationRejected": true,
+      "processGone": true,
+      "cancellationReason": "This operation was aborted",
+      "cliCancellationExitCode": 143
+    }
+  ]
+}

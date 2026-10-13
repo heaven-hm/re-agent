@@ -63,6 +63,16 @@
       "bytes": 3446
     },
     {
+      "file": "managed-cancellation-report.json",
+      "sha256": "0917259aa1fb2c1755889ba89c8b9b0390a241e2c770fe13a9923c4747a5c4df",
+      "bytes": 607
+    },
+    {
+      "file": "managed-cancellation-test.log",
+      "sha256": "3c6ffc80e535807085fc69f79d271eeb2ba36b6e867b343220f73051b9cf47bd",
+      "bytes": 1135
+    },
+    {
       "file": "managed-suite-report.json",
       "sha256": "73eeec281f0fd991e625272146f0a65645e9bb8b1a0b63251ce7d49bcf0839c7",
       "bytes": 7888
