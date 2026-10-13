@@ -13,6 +13,10 @@ const EXECUTION_WORDING =
   /\b(?:run|runs|running|launch|launches|launching|execute|executes|executing|execution|start|starts|install|installs|uninstall|uninstalls)\b/iu;
 
 const EXECUTION_WORDING_EXCEPTIONS: Readonly<Record<string, string>> = {
+  inspect_wasm_artifact:
+    "inspects static WebAssembly structures without executing target code",
+  project_harmony_application_graph:
+    "projects static application metadata without starting the target",
   inspect_native_load_image: "states that it does not execute the target",
   resolve_native_call_targets: "states that it does not execute code",
   inspect_pe_resources: "states that it does not execute the image",
@@ -106,6 +110,7 @@ describe("tool effects", () => {
       ({ effects }) => effects.executesForeignCode || effects.mutatesDevice,
     );
     expect(destructive.map(({ name }) => name).sort()).toEqual([
+      "autonomous_investigation",
       "capture_browser_scenario",
       "capture_electron_scenario",
       "capture_native_ui_scenario",

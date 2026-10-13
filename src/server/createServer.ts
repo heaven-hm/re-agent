@@ -1,4 +1,5 @@
 import type { WasmArtifactService } from "../application/wasm/WasmArtifactService.js";
+import { registerAutonomyTool } from "./registerAutonomyTool.js";
 import { createWasmArtifactService } from "../composition/wasm.js";
 import { registerWasmTools } from "./registerWasmTools.js";
 import { snapshotEnvironment } from "../process/snapshotEnvironment.js";
@@ -340,6 +341,7 @@ export const createServer = (
     analysisAdmission,
   );
   registerObservationTools(toolContext);
+  registerAutonomyTool(server, environment);
   registerGuidedPrompts(server, analysis, session);
   if (session !== undefined) {
     registerSessionTools(server, session, toolLogger, {

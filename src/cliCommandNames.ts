@@ -1,5 +1,14 @@
 /** Canonical names used by every one-shot CLI command registration. */
 export const CLI_COMMANDS = Object.freeze({
+  autonomyUi: "autonomy-ui",
+  autonomyProveAffine: "autonomy-prove-affine",
+  autonomyTools: "autonomy-tools",
+  autonomyInstallTools: "autonomy-install-tools",
+  autonomyTraceFrida: "autonomy-trace-frida",
+  autonomyRun: "autonomy-run",
+  autonomyStatus: "autonomy-status",
+  autonomyPause: "autonomy-pause",
+  autonomyStop: "autonomy-stop",
   inspectWasmArtifact: "inspect-wasm-artifact",
   inspectEvmInterface: "inspect-evm-interface",
   inspectWebNetworkCapture: "inspect-web-network-capture",

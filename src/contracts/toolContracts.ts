@@ -1,4 +1,5 @@
 import { WASM_TOOL_CONTRACTS } from "./wasm/wasmToolContracts.js";
+import { AUTONOMY_TOOL_CONTRACTS } from "./autonomyToolContracts.js";
 import { EVM_TOOL_CONTRACTS } from "./evm/evmToolContracts.js";
 import { ANALYSIS_VIEW_TOOL_CONTRACTS } from "./analysisViewToolContracts.js";
 import { BINARY_DIAGNOSTICS_TOOL_CONTRACTS } from "./native/binaryDiagnosticsToolContracts.js";
@@ -25,6 +26,7 @@ import { SESSION_TOOL_CONTRACTS } from "./sessionToolContracts.js";
 
 /** Complete ordered public inventory used by registration and verification. */
 export const TOOL_CONTRACTS = [
+  ...AUTONOMY_TOOL_CONTRACTS,
   ...OFFICIAL_TOOL_CONTRACTS,
   ...ENHANCED_TOOL_CONTRACTS,
   ...NATIVE_TOOL_CONTRACTS,

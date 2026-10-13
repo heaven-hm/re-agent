@@ -1,4 +1,5 @@
 import { registerWasmCommands } from "./cli/wasmCommands.js";
+import { registerAutonomyCommands } from "./cli/autonomyCommands.js";
 import { snapshotEnvironment } from "./process/snapshotEnvironment.js";
 import { createDirectAnalysis } from "./composition/directAnalysis.js";
 import { registerEvmCommands } from "./cli/evmCommands.js";
@@ -98,6 +99,7 @@ export const createCli = (
   registerElectronCommands(cli, logger, environment);
   registerJavaScriptRuntimeObservationCommands(cli, logger);
   registerApplicationCommands(cli, logger);
+  registerAutonomyCommands(cli, environment);
   presentOmittableDefaults(cli);
   if (resultOutput !== undefined) streamCliCommandResults(cli, resultOutput);
   return cli;
