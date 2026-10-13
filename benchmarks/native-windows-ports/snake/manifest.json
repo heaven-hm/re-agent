@@ -1,0 +1,53 @@
+{
+  "target": "snake",
+  "original": {
+    "name": "snake-game v1.1.0 (MiguelMochizuki/snake-game, MIT)",
+    "url": "https://github.com/MiguelMochizuki/snake-game/releases/download/v1.1.0/snake-windows-x86_64.exe",
+    "sha256": "207d311be674c17be31131df095534003e0120b1a00a6569b697e00ae0c2d373",
+    "bytes": 55296,
+    "format": "PE32+ x86-64 console, MSVC C++17",
+    "binary": "benchmarks/native-windows-ports/original-binaries/snake-windows-x86_64.exe"
+  },
+  "analysis": {
+    "procedures": 381,
+    "app_functions": 238,
+    "entry": "CRT -> __scrt chain -> invoke_main FUN_1400070d0 -> driver FUN_1400042e0",
+    "render": "FUN_140003210 (891B, ostringstream board)",
+    "strings": [
+      "Score: ",
+      "Best: ",
+      "Controls: WASD to move, Q to quit",
+      "/best_score.txt",
+      "/score_history.txt",
+      "/score_checksum.txt",
+      "Final Score:",
+      "Games Played:",
+      "Average Score:",
+      "[R]Restart[Q]Quit"
+    ],
+    "driver": "render -> input poll (anti-reverse pairs 0/1,2/3) -> move -> render -> QPC+Sleep tick; death -> stats -> menu -> restart loop"
+  },
+  "recovered_behavior": {
+    "field": "20x20 + # walls (22x22 render)",
+    "start": "len 3 horizontal, moving right",
+    "tick_ms": 200,
+    "controls": "WASD move, Q quit-to-menu, R restart",
+    "hud": "Score/Best + controls line, CRLF endings",
+    "gameover": "Final/Best/GamesPlayed/Average + [R]/[Q]",
+    "persistence": "best_score.txt, score_history.txt, score_checksum.txt"
+  },
+  "replica": {
+    "source": "benchmarks/native-windows-ports/snake/replica/snake.c",
+    "binary": "benchmarks/native-windows-ports/snake/replica/snakemac (arm64)",
+    "build": "clang -O2 -o snakemac snake.c"
+  },
+  "verification": {
+    "static_frame": "PASS (26 lines, wall rows + HUD bytes identical modulo snake/food cells)",
+    "gameover_screen": "PASS (structure + labels match observed bytes)",
+    "score_per_food": "UNVERIFIED (assumed +1)",
+    "food_rng": "UNVERIFIED (distribution unknown)",
+    "tick_wallclock": "UNVERIFIED (Wine console too slow to measure; 200ms from binary)",
+    "persistence_format": "UNVERIFIED (checksum scheme unknown)",
+    "input_path": "PARTIAL (PTY drives menus; piped stdin ignored by design)"
+  }
+}
