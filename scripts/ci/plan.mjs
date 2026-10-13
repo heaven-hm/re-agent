@@ -1,30 +1,20 @@
 import { execFileSync } from "node:child_process";
 import { appendFileSync } from "node:fs";
 import { matchesGlob } from "node:path";
-import { MANUAL_VERIFIERS, SCOPES } from "./scopes.mjs";
+import { CI_FLAGS as flags, MANUAL_VERIFIERS, SCOPES } from "./scopes.mjs";
+import { planTestSelection } from "./test-selection.mjs";
 
-const flags = [
-  ...new Set([
-    "code",
-    "runtime",
-    "package",
-    "apple",
-    "fixtures",
-    "readiness",
-    "docs",
-    "workflows",
-    ...Object.keys(SCOPES),
-  ]),
-];
-// Test files select the native-host lanes that run them explicitly. Provider
-// scopes remain implementation-owned, so test-only edits stay off those lanes.
-const NATIVE_TEST_OWNERS = ["apple", "package"];
+// Test files select the host/runtime lanes that execute their focused suites.
+const HOST_TEST_OWNERS = ["apple", "package", "sqlite"];
 // Actionlint validates workflow syntax only. The semantic suite asserts these
 // workflows' release, publication and self-hosted runner safeguards.
 const GUARDED_WORKFLOWS = new Set([
+  ".github/workflows/pr-title.yml",
+  ".github/workflows/ci-full-pr.yml",
   ".github/workflows/release.yml",
   ".github/workflows/real-ghidra-windows.yml",
   ".github/workflows/sqlite-runtime.yml",
+  ".github/workflows/ci-timings.yml",
 ]);
 // Sources compiled by build-conformance-fixtures.mjs. The readiness journey
 // analyzes the built C fixture as well as its own applications.
@@ -36,6 +26,15 @@ const FIXTURE_SOURCES = [
   "tests/conformance/versions/**",
 ];
 const READINESS_SOURCES = ["tests/conformance/readiness/**"];
+// These reporters affect CI output only; they do not select a host or provider
+// verification lane when changed on their own.
+const PORTABLE_CI_REPORTERS = new Set([
+  "scripts/ci/job-timings.mjs",
+  "scripts/ci/job-timings-batch.mjs",
+  "scripts/ci/test-report.mjs",
+  "scripts/ci/test-timing-reporter.mjs",
+  "scripts/ci/test-history.mjs",
+]);
 const matchesAny = (file, patterns) =>
   patterns.some((pattern) => matchesGlob(file, pattern));
 const selected = Object.fromEntries(flags.map((flag) => [flag, false]));
@@ -63,6 +62,10 @@ function classifyPackage(base, head) {
     ]),
   ].filter((key) => beforeScripts?.[key] !== afterScripts?.[key]);
   for (const script of changed) {
+    if (script === "test:sqlite" || script === "test:sqlite:run") {
+      selected.sqlite = true;
+      continue;
+    }
     if (
       /^(test(?::|$)|check(?::|$)|lint(?::|$)|format(?::|$)|knip$|jscpd$)/.test(
         script,
@@ -110,14 +113,24 @@ function classifyPackage(base, head) {
 const event = process.env.GITHUB_EVENT_NAME;
 if (!["pull_request", "push", "schedule", "workflow_dispatch"].includes(event))
   throw new Error(`Unsupported CI event: ${event}`);
-const tier =
+const requestedFull =
   event === "schedule" ||
   event === "workflow_dispatch" ||
-  process.env.CI_FULL === "true"
-    ? "full"
-    : "fast";
+  process.env.CI_FULL === "true";
+const tier =
+  event === "schedule" &&
+  process.env.CI_SKIP_FULL === "true" &&
+  process.env.CI_FULL !== "true"
+    ? "reused"
+    : requestedFull
+      ? "full"
+      : "fast";
 let files = [];
-if (tier === "full") {
+if (tier === "reused") {
+  reasons.push(
+    "Recent exact-SHA full qualification reused; no fresh provider observation",
+  );
+} else if (tier === "full") {
   full("Full baseline requested by event or ci:full label");
 } else if (event === "pull_request" || event === "push") {
   const head = process.env.HEAD_SHA;
@@ -162,7 +175,7 @@ if (tier === "full") {
       }
       if (/^(src|tests)\/.*\.(?:test|spec)\.[cm]?[jt]sx?$/.test(file)) {
         selected.code = true;
-        for (const owner of NATIVE_TEST_OWNERS)
+        for (const owner of HOST_TEST_OWNERS)
           selected[owner] ||= matchesAny(file, SCOPES[owner]);
         continue;
       }
@@ -197,6 +210,7 @@ if (tier === "full") {
       }
       if (matchesAny(file, READINESS_SOURCES)) selected.readiness = true;
       if (file.startsWith("tests/")) continue;
+      if (PORTABLE_CI_REPORTERS.has(file)) continue;
       if (
         /^(src\/process\/|src\/filesystem\/|src\/contracts\/tool|src\/server\/createServer|src\/cli\.ts|scripts\/ci\/)/.test(
           file,
@@ -237,11 +251,17 @@ const matrix = {
       ]
     : [linux],
 };
-const plan = { ...selected, tier, matrix, files, reasons };
+const testSelection = planTestSelection(files, event, tier);
+const plan = { ...selected, tier, matrix, files, reasons, testSelection };
 if (process.env.GITHUB_OUTPUT)
   appendFileSync(
     process.env.GITHUB_OUTPUT,
-    Object.entries({ ...selected, tier, matrix: JSON.stringify(matrix) })
+    Object.entries({
+      ...selected,
+      tier,
+      matrix: JSON.stringify(matrix),
+      test_selection: JSON.stringify(testSelection),
+    })
       .map(([key, value]) => `${key}=${value}\n`)
       .join(""),
   );

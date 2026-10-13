@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { buildCallPath } from "./callPath.js";
+import { combineFunctionRelationshipCoverage } from "./functionCallCoverage.js";
 import { callPathResultSchema, type CallPathInput } from "./callPathSchemas.js";
 import { createEvidence, type Evidence } from "./evidence.js";
 import type { JsonValue } from "./jsonValue.js";
@@ -396,6 +397,60 @@ describe("explicit call relationship coverage", () => {
     expect(result.limitations).toEqual([reason]);
   });
 
+  it("establishes not_found when only caller coverage is unknown", () => {
+    const reason =
+      "Callers: Upstream xrefs do not establish direct caller relationships.";
+    const result = run([
+      observe("0x1000", ["0x2000"], "rea-workflow", {
+        relationshipCoverage: { status: "unknown", reason },
+      }),
+      observe("0x2000", [], "rea-workflow", {
+        relationshipCoverage: { status: "unknown", reason },
+      }),
+    ]);
+    expect(result).toMatchObject({
+      status: "not_found",
+      search_scope: { exhaustive: true },
+    });
+    expect(result.limitations).toContain(reason);
+  });
+
+  it("stays unknown when callee coverage is unknown", () => {
+    const reason =
+      "Callees: Upstream callees capped results at 500; additional callees remain unknown.";
+    const result = run([
+      observe("0x1000", ["0x2000"], "rea-workflow", {
+        relationshipCoverage: { status: "unknown", reason },
+      }),
+      observe("0x2000", [], "rea-workflow", {
+        relationshipCoverage: { status: "unknown", reason },
+      }),
+    ]);
+    expect(result).toMatchObject({
+      status: "unknown",
+      search_scope: { exhaustive: false },
+    });
+    expect(result.limitations).toContain(reason);
+  });
+
+  it("stays unknown when both caller and callee coverage are unknown", () => {
+    const reason =
+      "Callers: Upstream xrefs do not establish direct caller relationships. Callees: Upstream callees are not observed.";
+    const result = run([
+      observe("0x1000", ["0x2000"], "rea-workflow", {
+        relationshipCoverage: { status: "unknown", reason },
+      }),
+      observe("0x2000", [], "rea-workflow", {
+        relationshipCoverage: { status: "unknown", reason },
+      }),
+    ]);
+    expect(result).toMatchObject({
+      status: "unknown",
+      search_scope: { exhaustive: false },
+    });
+    expect(result.limitations).toContain(reason);
+  });
+
   it("ignores incomplete relationship coverage outside the reachable search closure", () => {
     const reason = "An unrelated function's callees were not observed.";
     const result = run([
@@ -412,6 +467,34 @@ describe("explicit call relationship coverage", () => {
       explored: { nodes: 1 },
     });
     expect(result.limitations).toEqual([]);
+  });
+});
+
+describe("IDA-capped callee coverage beside unknown callers", () => {
+  it("keeps the search non-exhaustive for the combined coverage value", () => {
+    const combined = combineFunctionRelationshipCoverage(
+      {
+        status: "unknown",
+        reason: "Upstream xrefs do not establish direct caller relationships.",
+      },
+      {
+        status: "partial",
+        limitations: [
+          "Upstream callees capped results at 500; additional callees remain unknown.",
+        ],
+      },
+    );
+    expect(combined.status).toBe("unknown");
+    const result = run([
+      observe("0x1000", [], "rea-workflow", { relationshipCoverage: combined }),
+      observe("0x4000", []),
+    ]);
+    expect(result).toMatchObject({
+      status: "unknown",
+      search_scope: { exhaustive: false },
+      shortest_hops: null,
+      paths: [],
+    });
   });
 });
 

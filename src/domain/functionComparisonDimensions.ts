@@ -11,6 +11,7 @@ import {
   referenceProjection,
   sorted,
   stringAndNameProjection,
+  swiftLiteralSitesConflict,
 } from "./functionComparisonNormalization.js";
 import type {
   DimensionName,
@@ -139,8 +140,12 @@ const compareStringsAndNames = (
   right: FunctionSnapshot,
   context: ComparisonContext,
 ): FunctionDimension => {
-  const leftValues = stringAndNameProjection(left);
-  const rightValues = stringAndNameProjection(right);
+  const complete =
+    swiftLiteralCoverage(left) === swiftLiteralCoverage(right) &&
+    swiftLiteralCoverage(left) !== "partial";
+  // Facts both dossiers record decide a change before Swift literal coverage can.
+  const leftValues = stringAndNameProjection(left, complete);
+  const rightValues = stringAndNameProjection(right, complete);
   if (leftValues === null || rightValues === null)
     return unresolvedDimension({
       dimension: "strings_names",
@@ -151,8 +156,39 @@ const compareStringsAndNames = (
         "Reference source locations could not be normalized to function offsets.",
       ],
     });
-  return compareValues("strings_names", leftValues, rightValues, context);
+  const compared = compareValues(
+    "strings_names",
+    leftValues,
+    rightValues,
+    context,
+  );
+  if (complete || compared.status === "changed") return compared;
+  // A retained literal differs only when the opposite dossier establishes its absence.
+  if (swiftLiteralSitesConflict(left, right)) {
+    const leftAll = stringAndNameProjection(left);
+    const rightAll = stringAndNameProjection(right);
+    if (leftAll !== null && rightAll !== null)
+      return compareValues("strings_names", leftAll, rightAll, context);
+  }
+  return unresolvedDimension({
+    dimension: "strings_names",
+    links: context.links,
+    leftCount: null,
+    rightCount: null,
+    limitations: [
+      "Swift String literal coverage differs or is partial; referenced strings and names match, and complete coverage does not establish a differing literal.",
+    ],
+  });
 };
+
+const swiftLiteralCoverage = (
+  snapshot: FunctionSnapshot,
+): "absent" | "complete" | "partial" =>
+  (snapshot.dossier.swift_string_literal_omissions ?? []).length > 0
+    ? "partial"
+    : snapshot.dossier.swift_string_literals === undefined
+      ? "absent"
+      : "complete";
 
 const compareReferences = (
   left: FunctionSnapshot,

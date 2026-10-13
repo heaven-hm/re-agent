@@ -32,7 +32,10 @@ import { analysisErrorWithCleanupFailure } from "../../domain/analysisErrorClean
 import { ProviderAdapterError } from "../../domain/providerAdapterError.js";
 import { ProviderCleanupError } from "../../domain/providerCleanupError.js";
 import { err, ok, type Result } from "../../domain/result.js";
-import { runOwnedCommand } from "../../process/OwnedCommand.js";
+import {
+  ownedCommandResources,
+  runOwnedCommand,
+} from "../../process/OwnedCommand.js";
 import type {
   ProviderProcessSupervisor,
   OwnedProviderProcessSpawnOptions,
@@ -562,20 +565,16 @@ export class PwntoolsDecoder<
     const pending = this.#pendingCleanup;
     if (pending?.process === undefined) return undefined;
     const stopped = await pending.process.stop();
+    const ownership = pending.process.launch.ownership;
     if (stopped.status === "incomplete")
       return new ProviderCleanupError(
         this.identity.id,
-        [
-          pending.process.launch.ownership?.runId ?? "owned-decoder",
-          ...(pending.root === undefined ? [] : [pending.root.path]),
-          // The retained group may still be live; name it as OwnedCommand does.
-          ...(pending.process.launch.ownership === undefined
-            ? []
-            : [
-                `pid:${pending.process.launch.ownership.leaderPid}`,
-                `process-group:${pending.process.launch.ownership.processGroupId}`,
-              ]),
-        ],
+        ownership === undefined
+          ? [
+              "owned-decoder",
+              ...(pending.root === undefined ? [] : [pending.root.path]),
+            ]
+          : ownedCommandResources(ownership, pending.root?.path),
         {
           reason: stopped.reason,
           captured_output: {

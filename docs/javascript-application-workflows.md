@@ -208,6 +208,13 @@ arrays, and later explicit data properties and methods replace earlier object
 spread references. A known array prefix does not expose values from a following
 spread. Accessors, custom or uncertain iteration, unknown computed keys, and
 unknown spread lengths retain conservative uncertainty.
+Writes through an object getter's returned receiver retain that uncertainty
+when the object is an array element, nested inside mixed object/array
+containers, or assigned to a previously declared identifier. Saving the getter
+result in an alias does not make its old field values immutable. Known array
+indices include holes; an element after a spread has only a minimum possible
+index. Unrelated properties and known array prefixes remain precise, and a
+getter read without a write does not invalidate the receiver's fields.
 Nested callable returns are not assigned to their parent callable. Projected
 graph observations carry source ranges but never source text.
 

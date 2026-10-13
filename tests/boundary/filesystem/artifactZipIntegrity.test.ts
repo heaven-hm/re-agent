@@ -38,8 +38,19 @@ it("completes an empty ZIP extraction with an empty identity", async () => {
   expect(await readdir(output)).toEqual([]);
 });
 
+const legacyControlNames = [
+  ["legacy ASCII control", Buffer.from("Icon\r"), false, "Icon\r"],
+  [
+    "legacy CP437 control",
+    Buffer.from([0x82, 0x09, 0x7f, 0x2e, 0x61]),
+    false,
+    "é\t\u007F.a",
+  ],
+] as const;
+
 it.each([
   ["legacy CP437", Buffer.from([0x82, 0x2e, 0x74, 0x78, 0x74]), false, "é.txt"],
+  ...legacyControlNames,
   [
     "EFS with leading U+FEFF",
     Buffer.from([0xef, 0xbb, 0xbf, 0x61, 0x62]),
@@ -64,6 +75,38 @@ it.each([
         logical_path: logicalPath,
         hash_status: "verified",
       }),
+    );
+  },
+);
+
+it.skipIf(process.platform === "win32").each(legacyControlNames)(
+  "extracts %s ZIP members under their stored names",
+  async (_label, rawName, utf8Flag, logicalPath) => {
+    const root = await createTestTempDirectory("rea-zip-extracted-name-");
+    const path = join(root, "names.zip");
+    await writeSingleEntryZip(path, "x.txt");
+    const archive = await readFile(path);
+    await writeFile(
+      path,
+      rewriteSingleEntryName(archive, "x.txt", rawName, utf8Flag),
+    );
+    const target = await parseBinaryTarget(path);
+    if (!target.ok) throw target.error;
+
+    const output = join(root, "output");
+    const result = await withArtifactClient(target.value, (client) =>
+      client.execute("extract_artifact", { output_root: output }),
+    );
+    if (!result.ok) throw result.error;
+    const extraction = artifactExtractionResultSchema.parse(
+      result.value.result,
+    );
+    expect(
+      extraction.artifacts.map(({ relative_path }) => relative_path),
+    ).toEqual([logicalPath]);
+    expect(await readdir(output)).toEqual([logicalPath]);
+    expect(await readFile(join(output, logicalPath), "utf8")).toBe(
+      "member bytes",
     );
   },
 );
@@ -323,16 +366,11 @@ it("rejects overlapping ZIP member data ranges through artifact inventory", asyn
   bytes.writeUInt32LE(firstLocalOffset, second + 42);
   await writeFile(path, bytes);
 
-  const target = await parseBinaryTarget(path);
-  if (!target.ok) throw target.error;
-  const result = await withArtifactClient(target.value, (client) =>
-    client.execute("inventory_artifact", {}),
+  await expectInventoryFailure(
+    path,
+    "format",
+    "ZIP archive is malformed: Overlapping entry found",
   );
-
-  expect(result).toMatchObject({
-    ok: false,
-    error: { _tag: "ArtifactOperationError", reason: "io" },
-  });
 });
 
 it("preserves encrypted-member and corrupt-CRC observations", async () => {
@@ -395,16 +433,11 @@ it("preserves encrypted-member and corrupt-CRC observations", async () => {
   bytes[dataOffset] = firstByte ^ 1;
   await writeFile(corruptPath, bytes);
 
-  const corruptTarget = await parseBinaryTarget(corruptPath);
-  if (!corruptTarget.ok) throw corruptTarget.error;
-  const corruptResult = await withArtifactClient(
-    corruptTarget.value,
-    (client) => client.execute("inventory_artifact", {}),
+  await expectInventoryFailure(
+    corruptPath,
+    "format",
+    "ZIP archive is malformed: Invalid compressed data",
   );
-  expect(corruptResult).toMatchObject({
-    ok: false,
-    error: { _tag: "ArtifactOperationError", reason: "io" },
-  });
 });
 
 it("rejects a truncated ZIP through artifact inventory", async () => {
@@ -412,17 +445,51 @@ it("rejects a truncated ZIP through artifact inventory", async () => {
   const path = join(root, "truncated.zip");
   await writeFile(path, Buffer.from([0x50, 0x4b, 0x03, 0x04]));
 
+  await expectInventoryFailure(
+    path,
+    "format",
+    "ZIP archive is malformed: File format is not recognized",
+  );
+});
+
+it("reports an unsupported ZIP compression method as unavailable", async () => {
+  const root = await createTestTempDirectory("rea-zip-method-");
+  const path = join(root, "lzma.zip");
+  const writer = new ZipWriter(new Uint8ArrayWriter());
+  await writer.add("data.txt", new TextReader("member bytes"), { level: 0 });
+  const bytes = Buffer.from(await writer.close());
+  // Declare LZMA (14) in both headers; REA reads only stored and Deflate data.
+  const localHeader = bytes.indexOf(Buffer.from([0x50, 0x4b, 0x03, 0x04]));
+  const centralHeader = bytes.indexOf(Buffer.from([0x50, 0x4b, 0x01, 0x02]));
+  if (localHeader < 0 || centralHeader < 0)
+    throw new Error("Expected ZIP local and central headers");
+  bytes.writeUInt16LE(14, localHeader + 8);
+  bytes.writeUInt16LE(14, centralHeader + 10);
+  await writeFile(path, bytes);
+
+  await expectInventoryFailure(
+    path,
+    "unavailable",
+    "ZIP archive uses an unsupported feature: Compression method not supported",
+  );
+});
+
+/** Inventory one archive through the provider and expect a typed failure. */
+const expectInventoryFailure = async (
+  path: string,
+  reason: string,
+  detail: string,
+): Promise<void> => {
   const target = await parseBinaryTarget(path);
   if (!target.ok) throw target.error;
   const result = await withArtifactClient(target.value, (client) =>
     client.execute("inventory_artifact", {}),
   );
-
   expect(result).toMatchObject({
     ok: false,
-    error: { _tag: "ArtifactOperationError", reason: "io" },
+    error: { _tag: "ArtifactOperationError", reason, detail },
   });
-});
+};
 
 const writeSingleEntryZip = async (
   path: string,

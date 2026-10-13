@@ -1,6 +1,12 @@
 name: Real website runtime attribution
 on:
   workflow_call:
+    inputs:
+      build_cache_artifact:
+        description: Portable build cache artifact from the calling CI run.
+        required: false
+        type: string
+        default: ""
   workflow_dispatch:
 permissions:
   contents: read
@@ -18,6 +24,8 @@ jobs:
           cache: npm
       - run: npm ci
       - uses: ./.github/actions/portable-build-cache
+        with:
+          build_cache_artifact: ${{ inputs.build_cache_artifact }}
       - run: npm run verify:browser:runtime
         env:
           REA_BROWSER_EXECUTABLE: /usr/bin/google-chrome

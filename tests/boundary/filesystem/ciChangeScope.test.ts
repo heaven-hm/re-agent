@@ -8,6 +8,7 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { dirname, join, matchesGlob } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { afterAll, beforeAll, expect, it } from "vitest";
 import { parse } from "yaml";
@@ -79,12 +80,13 @@ async function classify(
   head: string,
   event = "pull_request",
   full = false,
+  skipFull = false,
 ) {
   const output = join(directory, "scope-output");
   await writeFile(output, "");
   const result = await execFileAsync(
     process.execPath,
-    [new URL("../../../scripts/ci/plan.mjs", import.meta.url).pathname],
+    [fileURLToPath(new URL("../../../scripts/ci/plan.mjs", import.meta.url))],
     {
       cwd: directory,
       env: {
@@ -93,12 +95,28 @@ async function classify(
         HEAD_SHA: head,
         GITHUB_EVENT_NAME: event,
         CI_FULL: String(full),
+        CI_SKIP_FULL: String(skipFull),
         GITHUB_OUTPUT: output,
       },
     },
   );
   return z.record(z.string(), z.unknown()).parse(JSON.parse(result.stdout));
 }
+
+it("reuses only scheduled qualification and preserves every explicit full request", async () => {
+  const { directory, base } = await fixture();
+  const reused = await classify(directory, base, base, "schedule", false, true);
+  expect(reused.tier).toBe("reused");
+  const { CI_FLAGS } = await loadScopes();
+  for (const flag of CI_FLAGS) expect(reused[flag]).toBe(false);
+  for (const event of ["workflow_dispatch", "pull_request", "schedule"])
+    expect(
+      (await classify(directory, base, base, event, true, true)).tier,
+    ).toBe("full");
+  expect(
+    (await classify(directory, base, base, "push", false, true)).tier,
+  ).toBe("fast");
+});
 
 it("keeps every translated root README and authored guide on the documentation lane", async () => {
   const { directory, base } = await fixture();
@@ -117,6 +135,64 @@ it("keeps every translated root README and authored guide on the documentation l
     package: false,
     docs: true,
   });
+});
+
+it.each([
+  "job-timings.mjs",
+  "job-timings-batch.mjs",
+  "test-report.mjs",
+  "test-timing-reporter.mjs",
+  "test-history.mjs",
+])(
+  "keeps portable CI reporter %s on static checks and portable tests",
+  async (name) => {
+    const { directory, base } = await fixture();
+    const head = await change(directory, [`scripts/ci/${name}`]);
+    const plan = await classify(directory, base, head);
+    const { CI_FLAGS } = await loadScopes();
+    expect(plan.code).toBe(true);
+    for (const flag of CI_FLAGS)
+      if (flag !== "code") expect(plan[flag]).toBe(false);
+  },
+);
+
+it("preserves a provider lane when a portable CI reporter changes with provider source", async () => {
+  const { directory, base } = await fixture();
+  const head = await change(directory, [
+    "scripts/ci/test-report.mjs",
+    "src/evm/Example.ts",
+  ]);
+  expect(await classify(directory, base, head)).toMatchObject({
+    code: true,
+    evm: true,
+    browser: false,
+    package: false,
+  });
+});
+
+it("keeps unknown CI scripts on complete qualification", async () => {
+  const { directory, base } = await fixture();
+  const head = await change(directory, ["scripts/ci/new-qualification.mjs"]);
+  const plan = await classify(directory, base, head);
+  const { CI_FLAGS } = await loadScopes();
+  for (const flag of CI_FLAGS) expect(plan[flag]).toBe(true);
+});
+
+it("emits an observational owner proposal without changing ordinary or full portable execution", async () => {
+  const { directory, base } = await fixture();
+  const head = await change(directory, ["src/evm/Example.ts"]);
+  expect(await classify(directory, base, head)).toMatchObject({
+    code: true,
+    testSelection: { mode: "candidate", owners: ["evm"] },
+  });
+  expect(
+    await classify(directory, base, head, "pull_request", true),
+  ).toMatchObject({
+    code: true,
+    testSelection: { mode: "full", owners: [] },
+  });
+  const output = await readFile(join(directory, "scope-output"), "utf8");
+  expect(output).toContain('test_selection={"version":1,"mode":"full"');
 });
 
 it("does not charge a documentation PR for unrelated implementation updates on main", async () => {
@@ -205,18 +281,8 @@ it.each(["", "not-a-commit"])(
       browser: true,
       reasons: expect.arrayContaining([expect.stringContaining("baseline")]),
     });
-    const { SCOPES } = await loadScopes();
-    for (const flag of [
-      "code",
-      "runtime",
-      "package",
-      "fixtures",
-      "readiness",
-      "docs",
-      "workflows",
-      ...Object.keys(SCOPES),
-    ])
-      expect(plan[flag]).toBe(true);
+    const { CI_FLAGS } = await loadScopes();
+    for (const flag of CI_FLAGS) expect(plan[flag]).toBe(true);
   },
 );
 
@@ -374,7 +440,14 @@ it("retains native Inspector verification on every documented package host", asy
 it.each([
   [
     "src/evm/client.ts",
-    { code: true, runtime: true, evm: true, browser: false, package: false },
+    {
+      code: true,
+      runtime: true,
+      evm: true,
+      browser: false,
+      package: false,
+      sqlite: false,
+    },
   ],
   [
     "src/browser/execution/evaluate.ts",
@@ -442,6 +515,10 @@ it.each([
     "src/windows/Example.ts",
     { code: true, runtime: true, package: true, apple: false, evm: false },
   ],
+  [
+    "src/domain/javascript/javascriptRuntimeStaticCandidates.ts",
+    { code: true, runtime: true, package: true, javascript_recovery: true },
+  ],
   ["install.sh", { code: true, runtime: true, package: true, evm: false }],
   [
     ".agents/skills/reverse-engineer-anything/SKILL.md",
@@ -471,6 +548,38 @@ it.each([
     "src/process/ProcessOwnership.test.ts",
     { code: true, package: true, apple: false, evm: false, browser: false },
   ],
+  [
+    "src/sqlite/SqliteDatabaseProvider.ts",
+    { code: true, sqlite: true, runtime: true, package: false },
+  ],
+  [
+    "src/application/sqlite/SqliteDatabaseService.test.ts",
+    { code: true, sqlite: true, runtime: false },
+  ],
+  [
+    "tests/boundary/sqlite/sqliteDatabaseProvider.test.ts",
+    { code: true, sqlite: true, runtime: false },
+  ],
+  [
+    "tests/fixtures/sqlite/database.ts",
+    { code: true, sqlite: true, runtime: false },
+  ],
+  ["tests/acceptance/sqliteDatabaseCli.test.ts", { code: true, sqlite: true }],
+  [
+    "tests/boundary/mcp/serverLifecycleMcp.test.ts",
+    { code: true, sqlite: true },
+  ],
+  ["src/process/OwnedCommand.ts", { code: true, sqlite: true, runtime: true }],
+  ["src/server/createServer.ts", { code: true, sqlite: true, runtime: true }],
+  [
+    "src/contracts/toolContracts.ts",
+    { code: true, sqlite: true, runtime: true },
+  ],
+  [
+    "src/domain/analysisErrorProjection.ts",
+    { code: true, sqlite: true, runtime: true },
+  ],
+  ["src/domain/javascript/example.ts", { code: true, sqlite: false }],
 ])("selects the appropriate lanes for %s", async (path, expected) => {
   const { directory, base } = await fixture();
   const head = await change(directory, [path]);
@@ -513,6 +622,52 @@ it("scopes package script edits while retaining broad dependency checks", async 
   });
 });
 
+it.each(["test:sqlite", "test:sqlite:run"])(
+  "routes %s script changes to the SQLite runtime matrix",
+  async (script) => {
+    const { directory } = await fixture();
+    const base = await change(
+      directory,
+      ["package.json"],
+      JSON.stringify({ scripts: { [script]: "vitest run" } }),
+    );
+    const head = await change(
+      directory,
+      ["package.json"],
+      JSON.stringify({
+        scripts: { [script]: "vitest run --reporter=default" },
+      }),
+    );
+    expect(await classify(directory, base, head)).toMatchObject({
+      code: true,
+      sqlite: true,
+      evm: false,
+      package: false,
+    });
+  },
+);
+
+it("keeps unrelated test script changes off the SQLite runtime matrix", async () => {
+  const { directory } = await fixture();
+  const base = await change(
+    directory,
+    ["package.json"],
+    JSON.stringify({ scripts: { "test:domain": "vitest run src/domain" } }),
+  );
+  const head = await change(
+    directory,
+    ["package.json"],
+    JSON.stringify({
+      scripts: { "test:domain": "vitest run src/domain --reporter=default" },
+    }),
+  );
+  expect(await classify(directory, base, head)).toMatchObject({
+    code: true,
+    sqlite: false,
+    evm: false,
+  });
+});
+
 it.each([
   ["browser", "real-browser"],
   ["binary_layout", "real-binary-layout"],
@@ -529,7 +684,9 @@ it.each([
   async (scope, name) => {
     const workflow = z
       .object({
-        on: z.object({ workflow_call: z.null() }).passthrough(),
+        on: z
+          .object({ workflow_call: z.object({}).passthrough().nullable() })
+          .passthrough(),
       })
       .parse(
         parse(
@@ -566,10 +723,19 @@ it.each([
 );
 
 it("rejects skipped selected work while allowing unselected lanes to skip", async () => {
-  const command = new URL("../../../scripts/ci/required.mjs", import.meta.url)
-    .pathname;
+  const command = fileURLToPath(
+    new URL("../../../scripts/ci/required.mjs", import.meta.url),
+  );
+  const { CI_FLAGS } = await loadScopes();
   const jobs = {
-    changes: { result: "success", outputs: { evm: "true" } },
+    changes: {
+      result: "success",
+      outputs: {
+        ...Object.fromEntries(CI_FLAGS.map((flag) => [flag, "false"])),
+        tier: "fast",
+        evm: "true",
+      },
+    },
     static: { result: "success" },
     test: { result: "success" },
     evm: { result: "success" },
@@ -605,7 +771,10 @@ it.each([
     "src/process/capture/example.test.ts",
     { code: true, runtime: false, browser: false, package: false },
   ],
-  [".nvmrc", { code: true, package: true, browser: true, evm: true }],
+  [
+    ".nvmrc",
+    { code: true, package: true, browser: true, evm: true, sqlite: true },
+  ],
   [
     "tsconfig.build.json",
     { code: true, package: true, browser: true, evm: true },
@@ -745,6 +914,7 @@ it.each(["workflow_dispatch", "schedule"])(
       tier: "full",
       code: true,
       package: true,
+      sqlite: true,
       evm: true,
       browser: true,
     });
@@ -762,6 +932,7 @@ it("honors ci:full for successive PR revisions", async () => {
       tier: "full",
       code: true,
       package: true,
+      sqlite: true,
       evm: true,
       browser: true,
     });
@@ -829,6 +1000,7 @@ const workflowFile = async (name: string): Promise<unknown> =>
   );
 
 const scopesSchema = z.object({
+  CI_FLAGS: z.array(z.string()),
   SCOPES: z.record(z.string(), z.array(z.string())),
   MANUAL_VERIFIERS: z.array(z.string()),
 });
