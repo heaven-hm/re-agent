@@ -10,3 +10,4 @@ licenses/npm-runtime-notices.txt whitespace=-blank-at-eol
 # Runtime byte evidence must survive checkout without newline conversion.
 docs/verification/rea-engine/*.bin -text
 benchmarks/plink/replica/goldens/* -text
+benchmarks/native-windows-ports/snake/original-run0.txt -text
