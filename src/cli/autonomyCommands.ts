@@ -78,7 +78,8 @@ export const registerAutonomyCommands = (
       ),
   });
   cli.command(CLI_COMMANDS.autonomyUi, {
-    description: "Open a local REA investigation dashboard for a declared plan",
+    description:
+      "Open a local REA Engine investigation dashboard for a declared plan",
     args: z.object({ plan: z.string(), checkpoint: z.string() }),
     options: z.object({ port: z.number().int().min(0).max(65535).default(0) }),
     run: async ({ args, options }) => {

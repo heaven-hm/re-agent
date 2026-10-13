@@ -1,16 +1,16 @@
 {
-  "name": "rea-agents",
-  "mcpName": "io.github.morluto/rea",
+  "name": "rea-engine",
+  "mcpName": "io.github.heaven-hm/rea-engine",
   "version": "6.4.0",
-  "description": "REA Extended: evidence-backed reverse engineering, bounded reconstruction and differential repair through CLI and MCP.",
+  "description": "Reverse Engineering Engine: static/runtime investigation, evidence-backed reconstruction and differential repair for coding agents.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/heaven-hm/rea-extended.git"
+    "url": "git+https://github.com/heaven-hm/rea-engine.git"
   },
-  "homepage": "https://github.com/heaven-hm/rea-extended#readme",
+  "homepage": "https://github.com/heaven-hm/rea-engine#readme",
   "bugs": {
-    "url": "https://github.com/heaven-hm/rea-extended/issues"
+    "url": "https://github.com/heaven-hm/rea-engine/issues"
   },
   "keywords": [
     "reverse-engineering",
@@ -36,7 +36,8 @@
   "bin": {
     "rea": "scripts/rea.mjs",
     "rea-agents": "scripts/rea.mjs",
-    "rea-extended": "scripts/rea.mjs"
+    "rea-extended": "scripts/rea.mjs",
+    "rea-engine": "scripts/rea.mjs"
   },
   "engines": {
     "node": "^22.19.0 || ^24.11.0 || >=26.0.0"
@@ -103,7 +104,19 @@
     "bridge/pwndbg/core_context.py",
     "third_party/pwndbg/README.md",
     "third_party/pwndbg/LICENSE.md",
-    "licenses"
+    "licenses",
+    "scripts/verify-luhn-reconstruction.mjs",
+    "scripts/benchmarks",
+    "third_party/ilspy",
+    "scripts/install-managed-analysis-tool.mjs",
+    "scripts/verify-tictactoe-reconstruction.mjs",
+    "benchmarks",
+    "docs/verification/rea-engine",
+    "third_party/libgdiplus",
+    "scripts/recover-tictactoe-replica.mjs",
+    "scripts/verify-managed-benchmarks.mjs",
+    "scripts/lib/managed-benchmark-command.mjs",
+    "third_party/ghidra"
   ],
   "scripts": {
     "verify:autonomy": "npm run build:cached && node scripts/verify-autonomous-reconstruction.mjs",
@@ -300,7 +313,10 @@
     "docs:prepare": "node scripts/generate-package-metadata.mjs && turbo run artifacts:product-catalog artifacts:managed-evidence artifacts:error-schema",
     "verify:web:qlog": "npm run build:cached && node scripts/verify-qlog-captures.mjs",
     "licenses:generate": "node scripts/generate-third-party-inventory.mjs",
-    "licenses:check": "node scripts/generate-third-party-inventory.mjs --check"
+    "licenses:check": "node scripts/generate-third-party-inventory.mjs --check",
+    "verify:autonomy:luhn": "npm run build:cached && node scripts/verify-luhn-reconstruction.mjs",
+    "verify:autonomy:game": "npm run build:cached && node scripts/verify-tictactoe-reconstruction.mjs",
+    "verify:autonomy:managed": "npm run build:cached && node scripts/verify-managed-benchmarks.mjs"
   },
   "lint-staged": {
     "*.{cjs,cts,js,jsx,mjs,mts,ts,tsx}": [

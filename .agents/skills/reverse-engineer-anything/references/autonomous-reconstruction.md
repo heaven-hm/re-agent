@@ -6,7 +6,7 @@ Use the installed server's actual schema. This fork adds `autonomous_investigati
 2. Use `action: tools` to discover existing installations. Executable/module health is distinct from successful integration. Reuse installed tools.
 3. If authorized dependencies are missing, `action: install-tools` with `binary` runs the workspace-local official-wheel profile. It records pinned hashes and health checks; failures/skips remain explicit. Ghidra/JDK reuse follows the existing provider compatibility policy. Proprietary tools are optional.
 4. Discover functions through existing `search_procedures` and `analyze_function`. Prefer unknown executable code over imported stubs. Do not require guessed addresses from the user.
-5. Generate a reconstruction plan with original/replica commands, a build command, declared cases and comparison dimensions. Use an explicit model provider if source generation needs a model. Keep model credentials in environment variables.
+5. Generate a reconstruction plan with original/replica commands, a build command, declared cases and comparison dimensions. Use the host coding agent (Codex, Claude Code or another compatible agent) to operate these tools and generate candidates from retained evidence. Direct model API backends are optional; routine host-agent use does not require API keys. Keep any explicitly selected model credentials in environment variables.
 6. Use `action: start` with local `plan` and `checkpoint` paths. Inspect `status`, request `pause` or `stop`, and `resume` the same validated checkpoint. Original binary and argument-file digests bind the investigation.
 7. Every mismatch becomes a regression input. Repair candidates must compile, pass targeted cases and preserve earlier passing behavior; rejected candidates roll back. Respect iteration/time/output budgets.
 8. Use existing native UI/browser tools to capture real interactions. Compare the same abstract events, observable state, and screenshots. Do not replace an unknown application with hardcoded answers to declared cases.
@@ -27,3 +27,9 @@ rea autonomy-ui /absolute/path/plan.json /absolute/path/checkpoint.json
 Report separately: observed behavior, declared test-suite results, visual comparison, coverage gaps, conditional proofs, and exact binary identity. Equal final numeric results do not establish UI fidelity. Equal extracted expressions do not establish executable identity. A byte-identical claim requires actual complete-byte comparison or matching cryptographic digests over the same declared files; an independent reconstruction normally produces a different executable.
 
 Use the shipped skill from Codex, Claude Code, or another compatible agent. Client installation does not grant target-execution authority, silently approve destructive operations, or prove unavailable capabilities.
+
+## Reproduce the real managed software/game slice
+
+From the built `heaven-hm/rea-engine` checkout, run `node scripts/verify-managed-benchmarks.mjs`. The verified macOS ARM64 profile reuses .NET 10, ARM Mono and XQuartz, installs bundled ILSpy offline when needed, recovers/rebuilds the declared game, runs original/replica REA process captures and checks owned display cleanup. See `benchmarks/README.md` for exact scope, binaries, licenses and dependencies.
+
+Report exact terminal/PNG/state-byte equality separately from complete executable identity. The recorded software suite and game board/image scope passed; arbitrary-program equivalence and whole-game AI/RNG behavior are unverified.

@@ -29,7 +29,7 @@ concurrency:
 jobs:
   release-proposal:
     name: Update release proposal
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && github.repository == 'morluto/rea'
     runs-on: ubuntu-latest
     permissions:
       contents: write
