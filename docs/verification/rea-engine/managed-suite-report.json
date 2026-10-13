@@ -1,0 +1,148 @@
+{
+  "status": "suite-passed",
+  "software": {
+    "status": "suite-passed",
+    "target": "LTRData published luhn .NET utility",
+    "originalSha256": "e30a028e8db474b8a3b17f7088efb8054b818f08b1e30011a50112480d5be353",
+    "replicaSha256": "97c2aa3d2798ca6b3afc3176399f606b4ad273c5a12e71ab8244775a2a316271",
+    "staticEvidenceId": "ev_a091cb8196f49422b1386148a152cacef4ec5c0b5e7a165b7e35de4ae77fc8a3",
+    "declaredSuites": 5,
+    "numericAndUnicodeLines": 230,
+    "results": [
+      {
+        "id": "normal",
+        "terminalBytesEqual": true,
+        "originalTerminalSha256": "a0ade25a25076b3fb0ed32341295f7028954f6b08a59975faa7e01fff8fe90c8",
+        "replicaTerminalSha256": "a0ade25a25076b3fb0ed32341295f7028954f6b08a59975faa7e01fff8fe90c8",
+        "originalEvidenceId": "ev_ee4651015b7e3a61676a3a4477eea19e7e49e8b52a5c8c404ae0a03a648a1d7c",
+        "replicaEvidenceId": "ev_f7f09252d5d0e51c4d19fbc13dc068fccea958cd92fc58ec9096ed3bb1a8724d",
+        "exitCodes": [0, 0]
+      },
+      {
+        "id": "counted",
+        "terminalBytesEqual": true,
+        "originalTerminalSha256": "9d209cc765ae8053057c0a057a53b569da350f48b2ba627b948897c4c4d2ac0c",
+        "replicaTerminalSha256": "9d209cc765ae8053057c0a057a53b569da350f48b2ba627b948897c4c4d2ac0c",
+        "originalEvidenceId": "ev_2befb2ecb87a881493dc173e742c1d68ecf052567bc84ebcceea150c643e6a06",
+        "replicaEvidenceId": "ev_10136808775739aa6d255e2311587a85ec13a9065bb79008a45733054d58f3cb",
+        "exitCodes": [0, 0]
+      },
+      {
+        "id": "case-insensitive",
+        "terminalBytesEqual": true,
+        "originalTerminalSha256": "52269216fda85a33078da44232a9119ab5a7166027decdab1cba15becc1a4df8",
+        "replicaTerminalSha256": "52269216fda85a33078da44232a9119ab5a7166027decdab1cba15becc1a4df8",
+        "originalEvidenceId": "ev_0f5899c4cc553d889dfbac71774eb9b3be2687106c9c24cd68b63730582d0cda",
+        "replicaEvidenceId": "ev_71350a328caf73ec4e5113671930a73ed68b29e61d745a15c8e4ebaa3dcafeed",
+        "exitCodes": [0, 0]
+      },
+      {
+        "id": "usage",
+        "terminalBytesEqual": true,
+        "originalTerminalSha256": "6699de16186da04e0d36c4115854c92ce4c2094601d92490b803c35e08c84132",
+        "replicaTerminalSha256": "6699de16186da04e0d36c4115854c92ce4c2094601d92490b803c35e08c84132",
+        "originalEvidenceId": "ev_2d2014d6345b443df72216de958811e447b16a22577852c69a0a8849111ac8fb",
+        "replicaEvidenceId": "ev_2a37d585ed768c2c9bd0eb6c4e4e705adddd40e62f559d1cdfff1299ab9ed622",
+        "exitCodes": [0, 0]
+      },
+      {
+        "id": "blank-termination",
+        "terminalBytesEqual": true,
+        "originalTerminalSha256": "2b403891138b8dd110c911902d7e8104c54c8d7e97bd429b7f48d46c711e0f96",
+        "replicaTerminalSha256": "2b403891138b8dd110c911902d7e8104c54c8d7e97bd429b7f48d46c711e0f96",
+        "originalEvidenceId": "ev_2b99074eb10c621db1d2774e8fea9a3e8bc71771ec2e22a6588e5cf4526555ed",
+        "replicaEvidenceId": "ev_a985620232482c5b118fc1fa5b9684e8856e472907f028c968cbfdb5d29aefab",
+        "exitCodes": [0, 0]
+      }
+    ],
+    "executableByteIdentity": false,
+    "limitations": [
+      "Exact captured UTF-8 terminal bytes for the declared suites only; no universal equivalence claim.",
+      "Original published managed PE assembly runs on installed macOS .NET 10; Windows OS execution is not established.",
+      "Launch runtime identity is separately recorded from the analyzed target DLL identity.",
+      "No original source was downloaded; replica was derived from binary CIL and runtime observations.",
+      "The original utility is not redistributed by this script."
+    ]
+  },
+  "game": {
+    "status": "suite-passed",
+    "target": "tatlead/TicTacToe-AI published managed Windows game",
+    "originalSha256": "df4aec7299b1e002ca0e1008b20a889e0cfe5b482a19958399fab16ac6090402",
+    "replicaSha256": "964bed8c068469e8f353fc36a4467a806d1ed47a4f57f67db12f1493c28d3d5e",
+    "probeSha256": "bd20737b41f4b70caa6a75ce021bea180cdf9261062f686b05f16b8a8cd11201",
+    "boardStates": 19683,
+    "terminalBytesEqual": true,
+    "originalTerminalSha256": "1f14c0601b21beec5567ff6837fa87df6a038a13425deb81ea3d41bd208bbea7",
+    "replicaTerminalSha256": "1f14c0601b21beec5567ff6837fa87df6a038a13425deb81ea3d41bd208bbea7",
+    "originalEvidenceId": "ev_0d4f8f5124e34a3d498357e837fa72b3c76af5b400e39fc115ff0ef45c2e0931",
+    "replicaEvidenceId": "ev_03c69c5c7cf4425c19f6f9a55b9b89208f2715862f29fd97ed8bbbf80bc2017f",
+    "staticEvidenceId": "ev_11ee08562ff1c937f7fd6542e7b58aca634a84098099ce2a1aa6cb4f52c423d8",
+    "frames": [
+      {
+        "name": "initial.png",
+        "pngBytesEqual": true,
+        "originalSha256": "a76da37de20139de512895623c13d74ed68d455b439d2ad3530ac0d6de69ba0a",
+        "replicaSha256": "a76da37de20139de512895623c13d74ed68d455b439d2ad3530ac0d6de69ba0a"
+      },
+      {
+        "name": "move-1.png",
+        "pngBytesEqual": true,
+        "originalSha256": "b149fb5e1eb3a6fb38c7e83d22811da17abfbcaeead0752ffda0462aac0a1b22",
+        "replicaSha256": "b149fb5e1eb3a6fb38c7e83d22811da17abfbcaeead0752ffda0462aac0a1b22"
+      },
+      {
+        "name": "move-2.png",
+        "pngBytesEqual": true,
+        "originalSha256": "a76da37de20139de512895623c13d74ed68d455b439d2ad3530ac0d6de69ba0a",
+        "replicaSha256": "a76da37de20139de512895623c13d74ed68d455b439d2ad3530ac0d6de69ba0a"
+      },
+      {
+        "name": "move-3.png",
+        "pngBytesEqual": true,
+        "originalSha256": "b149fb5e1eb3a6fb38c7e83d22811da17abfbcaeead0752ffda0462aac0a1b22",
+        "replicaSha256": "b149fb5e1eb3a6fb38c7e83d22811da17abfbcaeead0752ffda0462aac0a1b22"
+      },
+      {
+        "name": "move-4.png",
+        "pngBytesEqual": true,
+        "originalSha256": "a76da37de20139de512895623c13d74ed68d455b439d2ad3530ac0d6de69ba0a",
+        "replicaSha256": "a76da37de20139de512895623c13d74ed68d455b439d2ad3530ac0d6de69ba0a"
+      },
+      {
+        "name": "move-5.png",
+        "pngBytesEqual": true,
+        "originalSha256": "67673e4f3536084732a35c6da809ea5a69ea89afb0f336c3870a9b0baaa855be",
+        "replicaSha256": "67673e4f3536084732a35c6da809ea5a69ea89afb0f336c3870a9b0baaa855be"
+      }
+    ],
+    "executableByteIdentity": false,
+    "limitations": [
+      "Exhaustive board configurations cover only the CheckGameStatus method and observed indicator properties.",
+      "Six images are actual Form.DrawToBitmap renders following real button handlers; not Windows OS screenshots.",
+      "Original and replica are executed on the same macOS ARM Mono/X11 runtime.",
+      "AI, RNG, all menus, timing, sound and whole-game equivalence remain unverified.",
+      "Probe executes original and reconstructed code; no game logic is implemented in the probe."
+    ]
+  },
+  "recovery": {
+    "status": "built",
+    "originalSha256": "df4aec7299b1e002ca0e1008b20a889e0cfe5b482a19958399fab16ac6090402",
+    "replicaSha256": "964bed8c068469e8f353fc36a4467a806d1ed47a4f57f67db12f1493c28d3d5e",
+    "staticEvidenceId": "ev_11ee08562ff1c937f7fd6542e7b58aca634a84098099ce2a1aa6cb4f52c423d8",
+    "reconstructionEvidenceId": "ev_d6acd9a59be943443089c0d63e38aa22437ab5f6c8dbefef608b1c55df88be45",
+    "compilerRepairApplied": true,
+    "output": "/Users/haseeb-mir/Documents/Code/rea/output/autonomy/managed-suite-1791911571868/game-recovery",
+    "limitations": [
+      "This recovery adapter is scoped to the pinned game; it is not a universal decompiler policy.",
+      "Compilation alone establishes no behavioral equivalence; run the game verifier."
+    ]
+  },
+  "limitations": [
+    "Declared terminal/state/PNG comparisons only; whole executables differ.",
+    "This verified profile requires installed .NET 10, ARM Mono and its shared-library dependencies, plus XQuartz.",
+    "Binary recovery is scoped to the two declared targets; general arbitrary-program fidelity is unproven."
+  ],
+  "displayCleanup": {
+    "status": "verified-cleanup"
+  }
+}

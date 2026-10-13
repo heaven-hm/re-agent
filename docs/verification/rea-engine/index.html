@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>Reverse Engineering Engine — measured proof</title
+  ><style>
+    :root {
+      --ink: #20252b;
+      --muted: #5b6570;
+      --line: #e0e5e9;
+      --soft: #f4f6f8;
+      --accent: #294f82;
+      --page: #fff;
+      font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+        sans-serif;
+      color: var(--ink);
+      background: var(--page);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+    header {
+      padding: 24px 5vw;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    h1 {
+      font-size: 24px;
+      letter-spacing: -0.035em;
+      margin: 0;
+    }
+    h2 {
+      font-size: 18px;
+      margin: 0 0 12px;
+    }
+    main {
+      max-width: 1440px;
+      margin: auto;
+      padding: 28px 5vw;
+    }
+    button {
+      font: inherit;
+      background: white;
+      color: var(--accent);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 7px 16px;
+      cursor: pointer;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+    button:first-child {
+      background: var(--accent);
+      color: #fff;
+    }
+    button:focus-visible,
+    summary:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .overview {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .metric {
+      border-bottom: 3px solid var(--accent);
+      padding: 12px 0;
+      min-width: 0;
+    }
+    .metric strong {
+      display: block;
+      font-size: 26px;
+    }
+    .label,
+    .muted {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      gap: 28px;
+    }
+    .panel {
+      min-width: 0;
+      border: 1px solid var(--line);
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+    code,
+    pre {
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 12px;
+    }
+    pre {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      background: var(--soft);
+      padding: 12px;
+      max-height: 400px;
+      overflow: auto;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 13px;
+      table-layout: fixed;
+    }
+    th,
+    td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+    th {
+      color: var(--muted);
+    }
+    .pass {
+      color: #226440;
+    }
+    .fail {
+      color: #a33127;
+    }
+    .unknown {
+      color: #805d1b;
+    }
+    details {
+      margin: 8px 0;
+    }
+    summary {
+      cursor: pointer;
+    }
+    #error {
+      color: #a33127;
+      white-space: pre-wrap;
+    }
+    .limit {
+      background: var(--soft);
+      padding: 14px;
+      margin-top: 16px;
+      font-size: 13px;
+    }
+    .scroll {
+      max-height: 420px;
+      overflow: auto;
+    }
+    #target {
+      font-family: monospace;
+      font-size: 12px;
+      max-width: 100%;
+    }
+    @media (max-width: 800px) {
+      header {
+        display: block;
+      }
+      .controls {
+        margin-top: 16px;
+      }
+      .overview {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    .pair {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .pair > * {
+      min-width: 0;
+    }
+    img {
+      width: 100%;
+      height: auto;
+    }
+    .badge {
+      color: #226440;
+      font-weight: 600;
+    }
+    a {
+      color: var(--accent);
+    }
+    @media (max-width: 700px) {
+      .pair {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  </style>
+  <header>
+    <div>
+      <div class="label">heaven-hm / rea-engine</div>
+      <h1>Software + game reconstruction evidence</h1>
+    </div>
+    <span class="badge">Declared comparisons passed</span>
+  </header>
+  <main>
+    <p>
+      Real binary analysis, reconstruction, compilation and execution. Exact
+      captured bytes match in the defined scopes. Executable files differ.
+    </p>
+    <div class="overview">
+      <div class="metric">
+        <strong>5 / 5</strong
+        ><span class="label">Software terminal suites</span>
+      </div>
+      <div class="metric">
+        <strong>19,683</strong
+        ><span class="label">Game board configurations compared</span>
+      </div>
+      <div class="metric">
+        <strong>6 / 6</strong
+        ><span class="label">Byte-identical game PNG pairs</span>
+      </div>
+      <div class="metric">
+        <strong>Verified</strong
+        ><span class="label">Owned display cleanup</span>
+      </div>
+    </div>
+    <section class="panel">
+      <h2>Software: published Luhn utility → independent C# replica</h2>
+      <p>
+        230 numeric/Unicode input lines plus mode, usage and termination cases.
+        This viewer shows actual recorded terminal content; it is not an
+        original-app GUI screenshot. ANSI controls are removed only for this
+        displayed preview. Byte comparisons retain the complete capture.
+      </p>
+      <div class="pair">
+        <div>
+          <h3>Original captured terminal preview</h3>
+          <pre>
+0
+00
+1
+18
+9
+91
+10
+109
+99
+992
+123
+1230
+7992739871
+79927398713
+000000000
+0000000000
+12345678901234567890
+123456789012345678906</pre>
+        </div>
+        <div>
+          <h3>Replica captured terminal preview</h3>
+          <pre>
+0
+00
+1
+18
+9
+91
+10
+109
+99
+992
+123
+1230
+7992739871
+79927398713
+000000000
+0000000000
+12345678901234567890
+123456789012345678906</pre>
+        </div>
+      </div>
+      <button id="verify">Recompute preview-source byte hashes</button>
+      <p id="check" class="muted">
+        Uses the complete supplied original/replica normal-suite terminal files.
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Suite</th>
+            <th>Result</th>
+            <th>Original = replica SHA-256</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>normal</td>
+            <td>Identical bytes</td>
+            <td>
+              <code
+                >a0ade25a25076b3fb0ed32341295f7028954f6b08a59975faa7e01fff8fe90c8</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td>counted</td>
+            <td>Identical bytes</td>
+            <td>
+              <code
+                >9d209cc765ae8053057c0a057a53b569da350f48b2ba627b948897c4c4d2ac0c</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td>case-insensitive</td>
+            <td>Identical bytes</td>
+            <td>
+              <code
+                >52269216fda85a33078da44232a9119ab5a7166027decdab1cba15becc1a4df8</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td>usage</td>
+            <td>Identical bytes</td>
+            <td>
+              <code
+                >6699de16186da04e0d36c4115854c92ce4c2094601d92490b803c35e08c84132</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td>blank-termination</td>
+            <td>Identical bytes</td>
+            <td>
+              <code
+                >2b403891138b8dd110c911902d7e8104c54c8d7e97bd429b7f48d46c711e0f96</code
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        <a href="software-execution-evidence.zip"
+          >Complete original/replica REA execution evidence</a
+        >
+        · <a href="luhn-report.json">Machine-readable report</a>
+      </p>
+    </section>
+    <section class="panel">
+      <h2>Game: original compiled TicTacToe-AI → rebuilt code and resources</h2>
+      <p>
+        The actual win/draw method ran over all 3⁹ board configurations. The
+        actual button handlers produced six rendered frames. Below is one pair
+        of actual Mono Form.DrawToBitmap renders on macOS, not Windows desktop
+        screenshots.
+      </p>
+      <div class="pair">
+        <figure>
+          <figcaption>Original compiled game</figcaption>
+          <img src="game-original.png" alt="Actual original game render" />
+        </figure>
+        <figure>
+          <figcaption>Rebuilt game</figcaption>
+          <img src="game-replica.png" alt="Actual rebuilt game render" />
+        </figure>
+      </div>
+      <p>
+        <code
+          >PNG SHA-256:
+          67673e4f3536084732a35c6da809ea5a69ea89afb0f336c3870a9b0baaa855be</code
+        >
+      </p>
+      <p>
+        <a href="game-execution-evidence.zip"
+          >Complete original/replica REA execution evidence</a
+        >
+        · <a href="game-report.json">Machine-readable report</a>
+      </p>
+    </section>
+    <div class="limit">
+      <strong>What this proves:</strong> exact terminal/state/image bytes in
+      these declared experiments.
+      <strong>What remains unverified:</strong> complete executable identity,
+      whole-game AI/RNG/menu/timing behavior, native Windows OS execution, and
+      general arbitrary-program equivalence. Game assets retain GPL-3.0
+      licensing. The proof viewer uses the engine dashboard’s existing design
+      tokens.
+    </div>
+  </main>
+  <script>
+    document.getElementById("verify").onclick = async () => {
+      const files = await Promise.all(
+        ["software-original.bin", "software-replica.bin"].map(async (p) => {
+          const b = await (await fetch(p)).arrayBuffer();
+          return Array.from(
+            new Uint8Array(await crypto.subtle.digest("SHA-256", b)),
+          )
+            .map((v) => v.toString(16).padStart(2, "0"))
+            .join("");
+        }),
+      );
+      document.getElementById("check").textContent =
+        (files[0] === files[1]
+          ? "Identical complete captured bytes: "
+          : "Mismatch: ") + files.join(" = ");
+    };
+  </script>
+</html>

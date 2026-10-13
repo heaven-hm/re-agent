@@ -1,0 +1,199 @@
+
+ RUN  v5.0.3 /Users/haseeb-mir/Documents/Code/rea
+
+ ✓ |acceptance| tests/acceptance/autonomyDashboard.test.ts (1 test) 235ms
+ ↓ |boundary| tests/boundary/autonomyAffineSolver.test.ts (1 test | 1 skipped)
+ ✓ |composition| tests/composition/autonomyEnvironment.test.ts (3 tests) 1196ms
+   ✓ autonomous reuse of local Ghidra and JDK installations (3)
+     ✓ selects a supported release and healthy JDK within declared bounds without changing caller environment 1190ms
+ ✓ |composition| tests/composition/autonomousDiscovery.test.ts (1 test) 1ms
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=227 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=350 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=562 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=155 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=283 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=512 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=174 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=278 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=942 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=180 frames=0 samples=0 interactions=0","sequence":2}}
+ ✓ |acceptance| tests/acceptance/autonomy.test.ts (1 test) 4393ms
+   ✓ autonomy CLI executes identical cases and MCP exposes persisted evidence and resume 4392ms
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=297 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=979 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=166 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=272 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=476 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=157 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=263 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=472 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=153 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=261 frames=1 samples=0 interactions=0","sequence":3}}
+ ✓ |services| src/application/autonomy/AffineRecovery.test.ts (3 tests) 3087ms
+   ✓ bounded affine runtime recovery (3)
+     ✓ derives coefficients from original execution, repairs unseen sign branch, compiles independently 1923ms
+     ✓ rejects nonlinear observations and absent static provenance 636ms
+     ✓ rejects unsupported range and arithmetic overflow 527ms
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=476 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=169 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=281 frames=1 samples=0 interactions=0","sequence":3}}
+ ✓ |services| src/application/autonomy/ToolDiscovery.test.ts (6 tests | 1 skipped) 391ms
+   ✓ pinned standalone installation (2)
+     ✓ verifies bytes before execution, installs and reuses healthy executable 388ms
+ ✓ |services| src/application/autonomy/ModelBackend.test.ts (8 tests) 3ms
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=707 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=162 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=266 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=460 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=158 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=261 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=450 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=161 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=266 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=458 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=155 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=257 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=455 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=156 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=262 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=555 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=162 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=268 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=466 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=160 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=266 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=463 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=160 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=263 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=468 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=169 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=281 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=939 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=159 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=269 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=468 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=168 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=274 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=473 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=165 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=273 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=471 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=161 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=268 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=467 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=155 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=264 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=462 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=163 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=270 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=489 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=170 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=274 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=487 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=168 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=282 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=477 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=148 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=254 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=475 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=188 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=307 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=959 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=162 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=273 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=479 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=163 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=266 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=476 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=154 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=257 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=445 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=155 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=260 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=447 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=150 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=256 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=875 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=168 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=274 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=460 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=155 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=258 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=444 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=154 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=255 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=444 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=152 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=254 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=454 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=156 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=259 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=445 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=159 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=263 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=448 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=158 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=260 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=449 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+{"rea_progress":{"phase":"prepare","completed":0,"total":null,"message":"elapsed_ms=0 frames=0 samples=0 interactions=0","sequence":1}}
+{"rea_progress":{"phase":"running","completed":0,"total":null,"message":"elapsed_ms=151 frames=0 samples=0 interactions=0","sequence":2}}
+{"rea_progress":{"phase":"settling","completed":1,"total":null,"message":"elapsed_ms=254 frames=1 samples=0 interactions=0","sequence":3}}
+{"rea_progress":{"phase":"cleanup","completed":1,"total":null,"message":"elapsed_ms=439 frames=1 samples=0 interactions=0 disposition=exited owned_process_group=cleaned terminal_renderer=cleaned temporary_root=cleaned","terminal":true,"sequence":4}}
+ ✓ |services| src/application/autonomy/AutonomousInvestigation.test.ts (15 tests) 28088ms
+   ✓ autonomous reconstruction checkpoint and workspace safety (5)
+     ✓ rejects stale in-memory checkpoints without overwriting newer evidence 1020ms
+     ✓ holds a live checkpoint lock and honors external pause controls 522ms
+     ✓ repairs a failed initial reconstruction before retrying the build 3483ms
+   ✓ autonomous reconstruction cancellation and resume (4)
+     ✓ resumes an interrupted final iteration without consuming another attempt 3045ms
+     ✓ rolls back interrupted candidate bytes and replays them on resume 2844ms
+   ✓ autonomous reconstruction differential controller (6)
+     ✓ rejects matching output with a different replica exit code 2233ms
+     ✓ records real differential failures, repairs, and retains a regression corpus 4799ms
+     ✓ rejects a repair that regresses previously passing cases and restores source bytes 6929ms
+     ✓ rejects candidate files outside the replica workspace 2063ms
+
+ Test Files  8 passed | 1 skipped (9)
+      Tests  37 passed | 2 skipped (39)
+   Start at  22:43:29
+   Duration  31.66s (tests 87%, transform 8%, import 4%)
+

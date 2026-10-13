@@ -1,11 +1,11 @@
-# REA Extended
+# Reverse Engineering Engine
 
-**Repository: [heaven-hm/rea-extended](https://github.com/heaven-hm/rea-extended).**
-REA Extended builds directly on [morluto/rea](https://github.com/morluto/rea), retaining its MIT license, attribution and working integrations. The compatible package and CLI names currently remain `rea-agents` and `rea`.
+**Repository: [heaven-hm/rea-engine](https://github.com/heaven-hm/rea-engine).**
+Reverse Engineering Engine builds directly on [morluto/rea](https://github.com/morluto/rea), retaining its MIT license, attribution and working integrations. The package identity is `rea-engine`; compatible `rea` and `rea-agents` command aliases are retained. Registry metadata is configured for `io.github.heaven-hm/rea-engine`; this does not imply npm or MCP Registry publication.
 
 ### What differs from upstream REA
 
-| Area                           | REA Extended addition                                                                                                         | Source / reproducible evidence                                                                                                                          |
+| Area                           | Reverse Engineering Engine addition                                                                                           | Source / reproducible evidence                                                                                                                          |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Autonomous reconstruction      | Persistent checkpoints, bounded build/test/repair, rollback, mismatch regression inputs                                       | [Controller](src/application/autonomy/AutonomousInvestigation.ts), [25/25 fixture report](docs/verification/rea-extended/fixture-report.json)           |
 | Unknown function investigation | Existing static providers feed runtime hypotheses and independent bounded affine reconstruction                               | [Discovery](src/composition/autonomousDiscovery.ts), [recovery](src/application/autonomy/AffineRecovery.ts)                                             |
@@ -17,35 +17,51 @@ REA Extended builds directly on [morluto/rea](https://github.com/morluto/rea), r
 
 These are additions to the upstream tool ecosystem. Ghidra, native UI, browser analysis and general Frida capabilities already exist upstream and are not claimed as inventions of this fork.
 
-### All completed reconstruction demonstrations
+### Software and game: exact measured comparisons
 
-| Target                                                       | Recorded result                                                                        | What remains unproven                                                                                                                       |
-| ------------------------------------------------------------ | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| Authored native branch fixture (software validation fixture) | 25/25 declared cases after two iterations; 10 regression inputs; 217 evidence records  | General software reconstruction and byte-identical executables                                                                              |
-| Installed Apple Calculator (proprietary desktop software)    | 10/10 declared final numeric display comparisons; original and replica hashes recorded | Full UI, complete behavior and byte identity; expanded suite interrupted at percent presentation, and a later correction still needs replay |
-| Authored Frida fixture                                       | Five real instrumented calls with static/runtime correlation and verified cleanup      | This is instrumentation validation, not reconstruction of a game                                                                            |
-| Games / Windows-to-macOS ports                               | **No completed, verified demonstration yet**                                           | All game and cross-platform fidelity claims                                                                                                 |
+| Target                                                                             | Result                                                                                                     | Proof                                                                                                                                                                                                                                                                                     |
+| ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| LTRData Luhn utility, reconstructed from its published .NET binary                 | **5/5 suites: identical terminal bytes**, 230 numeric/Unicode lines plus mode, usage and termination cases | [Report](docs/verification/rea-engine/luhn-report.json), [complete execution evidence](docs/verification/rea-engine/software-execution-evidence.zip), [reconstructed executable](benchmarks/luhn/replica/Replica.dll)                                                                     |
+| Published TicTacToe-AI Windows managed game, rebuilt from recovered code/resources | **19,683/19,683 board configurations: identical observed state bytes; 6/6 frames: identical PNG bytes**    | [Report](docs/verification/rea-engine/game-report.json), [complete execution evidence](docs/verification/rea-engine/game-execution-evidence.zip), [original executable](benchmarks/tictactoe/original/TicTacToe.exe), [rebuilt executable and source](benchmarks/tictactoe/reconstructed) |
+| Native branch validation fixture                                                   | 25/25 declared cases after repair                                                                          | [Report](docs/verification/rea-extended/fixture-report.json)                                                                                                                                                                                                                              |
+| Installed Apple Calculator                                                         | 10/10 final numeric-display comparisons in the recorded smaller suite                                      | [Report](docs/verification/rea-extended/calculator-report.json); complete UI and expanded suite remain unverified                                                                                                                                                                         |
 
-**100% byte-to-byte reconstructed games: none. 100% byte-to-byte reconstructed complete applications: none.** Passing a finite suite does not establish universal equivalence. Calculator's different executable hashes explicitly disprove byte identity for that demonstration. Native Windows PE and macOS Mach-O builds also require separate behavioral claims.
+**These results prove exact equality of the listed captured bytes, not byte-identical executable files or universal equivalence.** Every original/replica executable hash differs. The game comparison exhausts the defined board input space for its win/draw function; AI, RNG, all menus, timing and whole-game behavior remain unverified. The Windows managed artifacts ran on macOS .NET/Mono; this is not proof of native Windows OS execution or native AppKit port fidelity.
 
-[Recorded reports and SHA-256 manifest](docs/verification/rea-extended/manifest.json) preserve actual development results. Re-run `npm run verify:autonomy`, `npm run verify:autonomy:calculator` and `npm run verify:autonomy:frida` to generate fresh local evidence; required tools and OS permissions are documented in the linked guides. A recorded report is evidence of its recorded run, not a promise a later expanded suite passes.
+The analysis used REA's `inspect-managed-members`, `import-managed-reconstruction` and `capture-process` workflows, with ILSpy recovery and real compilation. The host coding agent operated the engine; no model API key was required. Game source was recovered from the binary, not consulted from the original repository. A pinned original source archive was subsequently retained solely for GPL redistribution obligations. The independent software implementation preserves a recovered quirk: checksum parity counts UTF-16 string length, including punctuation.
+
+#### Software capture proof viewer
+
+This is an actual screenshot of the engine's proof viewer, captured through REA's owned browser scenario after recomputing the supplied terminal-file hashes. It shows recorded original/replica CLI output; it is not an original-app GUI screenshot. [Browser evidence and verified cleanup](docs/verification/rea-engine/proof-browser-evidence.json).
+
+![Engine software byte-comparison proof viewer](docs/verification/rea-engine/software-proof-view.png)
+
+#### Actual original and rebuilt game renders
+
+These are actual `Form.DrawToBitmap` renders after the same button-handler sequence on the same Mono/X11 runtime. They are not Windows desktop screenshots. Their PNG SHA-256 is identical: `67673e4f3536084732a35c6da809ea5a69ea89afb0f336c3870a9b0baaa855be`.
+
+| Original compiled game                                                          | Rebuilt game                                                                  |
+| ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| ![Original game rendered frame](docs/verification/rea-engine/game-original.png) | ![Rebuilt game rendered frame](docs/verification/rea-engine/game-replica.png) |
+
+[Interactive proof report](docs/verification/rea-engine/index.html) · [Reproduction and scope](benchmarks/README.md) · [artifact SHA-256 inventory](docs/verification/rea-engine/manifest.json)
 
 ### Installed tools versus distributed tools
 
-Development health checks confirmed Frida 17.23.3, LIEF 1.0.0, Z3 5.1.0.0, Capstone 5.0.9 and Pillow 12.3.0. Ghidra/radare2 and native compilers are reused locally. **A clone does not contain every installed external tool binary.** The installer and offline bundle builder are shipped in source; generated local bundles are not a license-approved public distribution. Frida/LIEF native dependency source and license coverage require further audit. Optional licensed tools and Apple Calculator are not redistributed. See [tool profiles and limitations](docs/autonomy-tool-bootstrap.md).
+Development health checks confirmed Frida 17.23.3, LIEF 1.0.0, Z3 5.1.0.0, Capstone 5.0.9 and Pillow 12.3.0. Ghidra/radare2 and native compilers are reused locally. **Bundled now:** the signature-verified ILSpy package and the built X11 libgdiplus library with source and licenses. The [preview release](https://github.com/heaven-hm/rea-engine/releases/tag/engine-preview-2026-10-13) also carries the checksum-verified, unmodified Ghidra 12.1.2 archive; see its [manifest](third_party/ghidra/manifest.json). **A clone does not contain every installed external tool binary.** The installer and offline bundle builder are shipped in source; generated local bundles are not a license-approved public distribution. Frida/LIEF native dependency source and license coverage require further audit. Optional licensed tools and Apple Calculator are not redistributed. See [tool profiles and limitations](docs/autonomy-tool-bootstrap.md).
 
 ## Build and use this repository
 
 ```sh
-git clone https://github.com/heaven-hm/rea-extended.git
-cd rea-extended
+git clone https://github.com/heaven-hm/rea-engine.git
+cd rea-engine
 npm ci
 npm run build:cached
-node scripts/rea.mjs setup
+node scripts/print-mcp-config.mjs /absolute/path/to/target --local
 node scripts/rea.mjs --help
 ```
 
-Use the built repository CLI to register its MCP server and packaged agent skill. A published upstream npm package is not this fork. The implementation retains compatible command names while the product identity is REA Extended.
+Use the printed local MCP configuration with your host coding agent and the built packaged skill. A published upstream npm package is not this fork. The implementation retains compatible command names while the product identity is Reverse Engineering Engine.
 
 ## Documentation
 
@@ -58,4 +74,6 @@ Use the built repository CLI to register its MCP server and packaged agent skill
 - [MCP contracts](docs/mcp-contracts.md)
 - [Licensing](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md)
 
-Report issues and contribute at [heaven-hm/rea-extended](https://github.com/heaven-hm/rea-extended).
+Report issues and contribute at [heaven-hm/rea-engine](https://github.com/heaven-hm/rea-engine).
+
+Latest validation: the complete managed benchmark command passed again with verified owned-display cleanup. The focused autonomy regression batch passed 37 tests with 2 skipped; type and lint checks passed. [Execution logs and checksum inventory](docs/verification/rea-engine/manifest.json). These are scoped development checks, not certification of all REA capabilities.

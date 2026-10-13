@@ -1,0 +1,130 @@
+{
+  "evidence_id": "ev_e101c0e84390a0660bdabb968986fb6aca4ea9362837eaec05e4d0ef8e419634",
+  "subject": {
+    "name": "luhn.dll",
+    "digest": {
+      "sha256": "e30a028e8db474b8a3b17f7088efb8054b818f08b1e30011a50112480d5be353"
+    },
+    "format": "pe",
+    "architecture": null,
+    "local_path": "/Users/haseeb-mir/Documents/Code/rea/output/autonomy/windows-software/original/luhn.dll"
+  },
+  "provider": {
+    "id": "rea-dotnet-workflows",
+    "name": "REA managed-code workflows",
+    "version": "1"
+  },
+  "analysis_profile": null,
+  "predicate_type": "rea.managed-reconstruction-import",
+  "operation": "import_managed_reconstruction",
+  "parameters": {
+    "static_members_evidence_id": "ev_a091cb8196f49422b1386148a152cacef4ec5c0b5e7a165b7e35de4ae77fc8a3",
+    "decompiler": {
+      "name": "ilspycmd",
+      "version": "9.1.0.7988",
+      "family": "ilspy",
+      "executable_sha256": "00d4f9ac24575ea9a7750d1be060019d542539f4b01dedff8abf05a4f0e7f309",
+      "options": ["--type", "luhn.Program"],
+      "options_sha256": "500f65634f8a707824068032b0df20ebd6b736baf23aefa3cba9e2249ed530ee"
+    },
+    "method_locks": [
+      {
+        "token": "0x06000003",
+        "signature_sha256": "5fb3215fb5ab7a64123f7bd92d9bbeaf3255a3289ead44b319ba96913e9a6207",
+        "normalized_il_sha256": "e8c5b90ba04692449c302512889aa835406ee0b0e94ae9ada6ef83b96a36b9aa"
+      }
+    ],
+    "notes": [
+      "Recovered only from published compiled artifact; output is inference until separately tested."
+    ]
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "reconstruction_id": "mre_82849f872d02f7e37e0b1c7bd26885199cb2f2993f741b3fae6eafeca21b4a2d",
+    "phase": "reconstruction-import",
+    "executed": false,
+    "static_observation": {
+      "evidence_id": "ev_a091cb8196f49422b1386148a152cacef4ec5c0b5e7a165b7e35de4ae77fc8a3",
+      "artifact_sha256": "e30a028e8db474b8a3b17f7088efb8054b818f08b1e30011a50112480d5be353",
+      "artifact_path": "/Users/haseeb-mir/Documents/Code/rea/output/autonomy/windows-software/original/luhn.dll",
+      "byte_length": 6144,
+      "module_name": "luhn.dll",
+      "mvid": "b094ada2-5663-4a1d-a632-06c1e81d3ba8",
+      "metadata_status": "complete"
+    },
+    "decompiler": {
+      "name": "ilspycmd",
+      "version": "9.1.0.7988",
+      "family": "ilspy",
+      "executable_sha256": "00d4f9ac24575ea9a7750d1be060019d542539f4b01dedff8abf05a4f0e7f309",
+      "options": ["--type", "luhn.Program"],
+      "options_sha256": "500f65634f8a707824068032b0df20ebd6b736baf23aefa3cba9e2249ed530ee"
+    },
+    "summary": {
+      "imported_methods": 1,
+      "decompiled_csharp_methods": 1,
+      "decompiled_il_methods": 0,
+      "pseudocode_methods": 0,
+      "total_text_bytes": 316
+    },
+    "methods": [
+      {
+        "token": "0x06000003",
+        "declaring_type": "luhn.Program",
+        "name": "CalculateLuhn",
+        "signature_sha256": "5fb3215fb5ab7a64123f7bd92d9bbeaf3255a3289ead44b319ba96913e9a6207",
+        "normalized_il_sha256": "e8c5b90ba04692449c302512889aa835406ee0b0e94ae9ada6ef83b96a36b9aa",
+        "body_sha256": "3840665a39b130f5c0f56a19490903ea515e8e2b4f6283e316e0e06d59ab69e5",
+        "il_size": 110,
+        "reconstruction": {
+          "kind": "decompiled-csharp",
+          "language": "csharp",
+          "text": "public static char CalculateLuhn(string str)\n\t{\n\t\tint num = 0;\n\t\tint num2 = str.Length & 1;\n\t\tforeach (char c in str)\n\t\t{\n\t\t\tif ((c >= '0' && c <= '9') || 1 == 0)\n\t\t\t{\n\t\t\t\tint num3 = c - 48 << num2;\n\t\t\t\tnum += num3 / 10 + num3 % 10;\n\t\t\t\tnum2 ^= 1;\n\t\t\t}\n\t\t}\n\t\tnum = (10 - num % 10) % 10;\n\t\treturn (char)(num + 48);\n\t}",
+          "text_sha256": "678bdade0eb1c3c01fe8762b64ae5a36e16da49fdf0207bcc3c08f613151a698",
+          "text_length": 316,
+          "line_count": 16,
+          "source_path": "/Users/haseeb-mir/Documents/Code/rea/output/autonomy/windows-software/recovered.cs",
+          "start_line": null,
+          "end_line": null
+        },
+        "validation": {
+          "matched_static_member": true,
+          "exact_build_required": true,
+          "canonical_observation": false,
+          "confidence_floor": "inference"
+        }
+      }
+    ],
+    "notes": [
+      "Recovered only from published compiled artifact; output is inference until separately tested."
+    ],
+    "evidence_links": [
+      "ev_a091cb8196f49422b1386148a152cacef4ec5c0b5e7a165b7e35de4ae77fc8a3"
+    ],
+    "limitations": [
+      "Decompiler output is imported as reconstruction evidence and analyst inference; metadata and IL observations remain canonical.",
+      "This operation did not execute, load, reflect over, debug, instrument, patch, or decompile the target artifact.",
+      "The imported reconstruction is valid only for the exact artifact SHA-256, MVID, method signature, and normalized IL shape recorded here.",
+      "Obfuscated names, decompiler variables, and control-flow restructuring are not treated as proof without separate validation."
+    ]
+  },
+  "confidence": "inferred",
+  "authority": "analyst-inference",
+  "environment": null,
+  "limitations": [
+    "Decompiler output is imported as reconstruction evidence and analyst inference; metadata and IL observations remain canonical.",
+    "This operation did not execute, load, reflect over, debug, instrument, patch, or decompile the target artifact.",
+    "The imported reconstruction is valid only for the exact artifact SHA-256, MVID, method signature, and normalized IL shape recorded here.",
+    "Obfuscated names, decompiler variables, and control-flow restructuring are not treated as proof without separate validation."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "artifact-path",
+      "path": "/Users/haseeb-mir/Documents/Code/rea/output/autonomy/windows-software/original/luhn.dll"
+    }
+  ],
+  "evidence_links": [
+    "ev_a091cb8196f49422b1386148a152cacef4ec5c0b5e7a165b7e35de4ae77fc8a3"
+  ]
+}

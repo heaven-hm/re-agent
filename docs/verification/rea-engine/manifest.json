@@ -1,0 +1,97 @@
+{
+  "identity": "Reverse Engineering Engine",
+  "repository": "https://github.com/heaven-hm/rea-engine",
+  "artifacts": [
+    {
+      "file": "autonomy-regression-tests.log",
+      "sha256": "cad3f971c96ed6e48a848ec1e7f5841ccca5ad04e08dbc987621e7a0b1e9c4a4",
+      "bytes": 29111
+    },
+    {
+      "file": "checkpoint-controls-tests.log",
+      "sha256": "4c00c26d26fd24b9684ccff4fb2f930c2f0b28bd8cec7048f69e2fe6c134d46f",
+      "bytes": 27890
+    },
+    {
+      "file": "display-cleanup.json",
+      "sha256": "ca009b9330823e1bc56f06631c9f9ca0819cb0d5489d569fc853c33bcb3853ba",
+      "bytes": 35
+    },
+    {
+      "file": "game-execution-evidence.zip",
+      "sha256": "7587965fa128d6c4f9aad55522255e95a5a239bb5804a685e12e71b1a21a6720",
+      "bytes": 1913855
+    },
+    {
+      "file": "game-original.png",
+      "sha256": "67673e4f3536084732a35c6da809ea5a69ea89afb0f336c3870a9b0baaa855be",
+      "bytes": 13893
+    },
+    {
+      "file": "game-reconstruction-evidence.json",
+      "sha256": "85838f07ad5dab628faf2c91ab6ca9e2c46755fefcd7b5ec4dabb636866cd12e",
+      "bytes": 8374
+    },
+    {
+      "file": "game-replica.png",
+      "sha256": "67673e4f3536084732a35c6da809ea5a69ea89afb0f336c3870a9b0baaa855be",
+      "bytes": 13893
+    },
+    {
+      "file": "game-report.json",
+      "sha256": "3fb1bf9c49d7579a42ed9cee12199efaabb8df1273bb044d64efc55a9b97e463",
+      "bytes": 2967
+    },
+    {
+      "file": "index.html",
+      "sha256": "3401f51bd99d8f3abbbbb97ead049b4e476651866e85465eb2f0c18d029ce692",
+      "bytes": 10336
+    },
+    {
+      "file": "luhn-reconstruction-evidence.json",
+      "sha256": "be173edc328283eb87e7159c207523c47d0a737b24d4bed6e9e8209a1eddb4a7",
+      "bytes": 5937
+    },
+    {
+      "file": "luhn-report.json",
+      "sha256": "1b80b573fdb6c72d837502d17fbf08e2822bafba094dc670f509d657b3a41c79",
+      "bytes": 3446
+    },
+    {
+      "file": "managed-suite-report.json",
+      "sha256": "73eeec281f0fd991e625272146f0a65645e9bb8b1a0b63251ce7d49bcf0839c7",
+      "bytes": 7888
+    },
+    {
+      "file": "proof-browser-evidence.json",
+      "sha256": "53a5d0bcd0304d37cf138daca1c62cd3100601362e19bfd81eba5344d1b93c76",
+      "bytes": 208329
+    },
+    {
+      "file": "software-execution-evidence.zip",
+      "sha256": "57a2c904627fd6bfc27090a8c7bcd36a60d0012df02f1fa04409f648833d6e8a",
+      "bytes": 68580
+    },
+    {
+      "file": "software-original.bin",
+      "sha256": "a0ade25a25076b3fb0ed32341295f7028954f6b08a59975faa7e01fff8fe90c8",
+      "bytes": 1714
+    },
+    {
+      "file": "software-proof-view.png",
+      "sha256": "93eb56920b475c9f6622e50082a23d4a252d33516beadbf7bd3729f1ea876136",
+      "bytes": 144516
+    },
+    {
+      "file": "software-replica.bin",
+      "sha256": "a0ade25a25076b3fb0ed32341295f7028954f6b08a59975faa7e01fff8fe90c8",
+      "bytes": 1714
+    },
+    {
+      "file": "type-and-lint-check.log",
+      "sha256": "8f91f681aacc15d3f9918c0bc3328a7698a5b0c1a8670a0215a39e85029684ae",
+      "bytes": 385
+    }
+  ],
+  "scope": "Recorded managed software terminal-byte and game state/PNG comparisons; no complete executable equivalence claim."
+}

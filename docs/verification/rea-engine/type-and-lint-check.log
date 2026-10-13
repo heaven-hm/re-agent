@@ -1,0 +1,22 @@
+
+> rea-engine@6.4.0 precheck:fast
+> npm run deps:check
+
+
+> rea-engine@6.4.0 deps:check
+> node scripts/check-dependency-install.mjs
+
+
+> rea-engine@6.4.0 check:fast
+> turbo run typecheck lint --output-logs=errors-only
+
+
+   • turbo 2.11.7
+   • Running typecheck, lint
+   • Remote caching disabled
+
+
+ Tasks:    2 successful, 2 total
+Cached:    0 cached, 2 total
+  Time:    13.876s 
+

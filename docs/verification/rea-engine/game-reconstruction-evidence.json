@@ -1,0 +1,130 @@
+{
+  "evidence_id": "ev_7de995dab0dd453095af5b81c7986bfd7fdf07f531c20c1b5091e6ef9dd8ce8d",
+  "subject": {
+    "name": "TicTacToe.exe",
+    "digest": {
+      "sha256": "df4aec7299b1e002ca0e1008b20a889e0cfe5b482a19958399fab16ac6090402"
+    },
+    "format": "pe",
+    "architecture": null,
+    "local_path": "/Users/haseeb-mir/Documents/Code/rea/output/autonomy/windows-game/original/TicTacToe.exe"
+  },
+  "provider": {
+    "id": "rea-dotnet-workflows",
+    "name": "REA managed-code workflows",
+    "version": "1"
+  },
+  "analysis_profile": null,
+  "predicate_type": "rea.managed-reconstruction-import",
+  "operation": "import_managed_reconstruction",
+  "parameters": {
+    "static_members_evidence_id": "ev_b70ae8487f536d59ad37833ae72bb808ba274949aa25527b7910320f65150322",
+    "decompiler": {
+      "name": "ilspycmd",
+      "version": "9.1.0.7988",
+      "family": "ilspy",
+      "executable_sha256": "00d4f9ac24575ea9a7750d1be060019d542539f4b01dedff8abf05a4f0e7f309",
+      "options": ["--type", "TicTacToe.Form1"],
+      "options_sha256": "fba1f2645e7ce805a88ce9b08949677b36728c095dcb63be27eac64965e6b5e7"
+    },
+    "method_locks": [
+      {
+        "token": "0x06000017",
+        "signature_sha256": "19e1bd1daf2ae492b895802f55c905ef2d25aea509c6010868e218adb408c010",
+        "normalized_il_sha256": "b4525a31d93024bcf43d381533a8e0ef612178002e302d87dc5c50eafc9fde55"
+      }
+    ],
+    "notes": [
+      "Recovered only from published compiled artifact; output is inference until separately tested."
+    ]
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "reconstruction_id": "mre_1c8e62412db43c9ad3844c7e43552f671b34950c5eb79024637e66cf880c3f71",
+    "phase": "reconstruction-import",
+    "executed": false,
+    "static_observation": {
+      "evidence_id": "ev_b70ae8487f536d59ad37833ae72bb808ba274949aa25527b7910320f65150322",
+      "artifact_sha256": "df4aec7299b1e002ca0e1008b20a889e0cfe5b482a19958399fab16ac6090402",
+      "artifact_path": "/Users/haseeb-mir/Documents/Code/rea/output/autonomy/windows-game/original/TicTacToe.exe",
+      "byte_length": 59392,
+      "module_name": "TicTacToe.exe",
+      "mvid": "13ef1a6a-aa2f-4e3d-a162-c8ae7cb0d796",
+      "metadata_status": "complete"
+    },
+    "decompiler": {
+      "name": "ilspycmd",
+      "version": "9.1.0.7988",
+      "family": "ilspy",
+      "executable_sha256": "00d4f9ac24575ea9a7750d1be060019d542539f4b01dedff8abf05a4f0e7f309",
+      "options": ["--type", "TicTacToe.Form1"],
+      "options_sha256": "fba1f2645e7ce805a88ce9b08949677b36728c095dcb63be27eac64965e6b5e7"
+    },
+    "summary": {
+      "imported_methods": 1,
+      "decompiled_csharp_methods": 1,
+      "decompiled_il_methods": 0,
+      "pseudocode_methods": 0,
+      "total_text_bytes": 2404
+    },
+    "methods": [
+      {
+        "token": "0x06000017",
+        "declaring_type": "TicTacToe.Form1",
+        "name": "CheckGameStatus",
+        "signature_sha256": "19e1bd1daf2ae492b895802f55c905ef2d25aea509c6010868e218adb408c010",
+        "normalized_il_sha256": "b4525a31d93024bcf43d381533a8e0ef612178002e302d87dc5c50eafc9fde55",
+        "body_sha256": "8b0e9d75758599b6ee75dd3cbd8650da5a80898e76b063a25fa2792878373a12",
+        "il_size": 1203,
+        "reconstruction": {
+          "kind": "decompiled-csharp",
+          "language": "csharp",
+          "text": "private int CheckGameStatus()\n\t{\n\t\tif (iData[0] != 0 && iData[0] == iData[1] && iData[1] == iData[2])\n\t\t{\n\t\t\t((Control)panel4).Location = new Point(202, 49);\n\t\t\tif (iData[0] == -1)\n\t\t\t{\n\t\t\t\t((Control)panel4).BackColor = Color.Black;\n\t\t\t}\n\t\t\telse\n\t\t\t{\n\t\t\t\t((Control)panel4).BackColor = Color.White;\n\t\t\t}\n\t\t\t((Control)panel4).Visible = true;\n\t\t\treturn iData[0];\n\t\t}\n\t\tif (iData[3] != 0 && iData[3] == iData[4] && iData[4] == iData[5])\n\t\t{\n\t\t\t((Control)panel4).Location = new Point(202, 114);\n\t\t\tif (iData[3] == -1)\n\t\t\t{\n\t\t\t\t((Control)panel4).BackColor = Color.Black;\n\t\t\t}\n\t\t\telse\n\t\t\t{\n\t\t\t\t((Control)panel4).BackColor = Color.White;\n\t\t\t}\n\t\t\t((Control)panel4).Visible = true;\n\t\t\treturn iData[3];\n\t\t}\n\t\tif (iData[6] != 0 && iData[6] == iData[7] && iData[7] == iData[8])\n\t\t{\n\t\t\t((Control)panel4).Location = new Point(202, 178);\n\t\t\tif (iData[6] == -1)\n\t\t\t{\n\t\t\t\t((Control)panel4).BackColor = Color.Black;\n\t\t\t}\n\t\t\telse\n\t\t\t{\n\t\t\t\t((Control)panel4).BackColor = Color.White;\n\t\t\t}\n\t\t\t((Control)panel4).Visible = true;\n\t\t\treturn iData[6];\n\t\t}\n\t\tif (iData[0] != 0 && iData[0] == iData[3] && iData[3] == iData[6])\n\t\t{\n\t\t\t((Control)panel5).Location = new Point(247, 5);\n\t\t\tif (iData[0] == -1)\n\t\t\t{\n\t\t\t\t((Control)panel5).BackColor = Color.Black;\n\t\t\t}\n\t\t\telse\n\t\t\t{\n\t\t\t\t((Control)panel5).BackColor = Color.White;\n\t\t\t}\n\t\t\t((Control)panel5).Visible = true;\n\t\t\treturn iData[0];\n\t\t}\n\t\tif (iData[1] != 0 && iData[1] == iData[4] && iData[4] == iData[7])\n\t\t{\n\t\t\t((Control)panel5).Location = new Point(311, 5);\n\t\t\tif (iData[1] == -1)\n\t\t\t{\n\t\t\t\t((Control)panel5).BackColor = Color.Black;\n\t\t\t}\n\t\t\telse\n\t\t\t{\n\t\t\t\t((Control)panel5).BackColor = Color.White;\n\t\t\t}\n\t\t\t((Control)panel5).Visible = true;\n\t\t\treturn iData[1];\n\t\t}\n\t\tif (iData[2] != 0 && iData[2] == iData[5] && iData[5] == iData[8])\n\t\t{\n\t\t\t((Control)panel5).Location = new Point(378, 5);\n\t\t\tif (iData[2] == -1)\n\t\t\t{\n\t\t\t\t((Control)panel5).BackColor = Color.Black;\n\t\t\t}\n\t\t\telse\n\t\t\t{\n\t\t\t\t((Control)panel5).BackColor = Color.White;\n\t\t\t}\n\t\t\t((Control)panel5).Visible = true;\n\t\t\treturn iData[2];\n\t\t}\n\t\tif (iData[0] != 0 && iData[0] == iData[4] && iData[4] == iData[8])\n\t\t{\n\t\t\treturn iData[0];\n\t\t}\n\t\tif (iData[2] != 0 && iData[2] == iData[4] && iData[4] == iData[6])\n\t\t{\n\t\t\treturn iData[2];\n\t\t}\n\t\tif (iData[0] != 0 && iData[1] != 0 && iData[2] != 0 && iData[3] != 0 && iData[4] != 0 && iData[5] != 0 && iData[6] != 0 && iData[7] != 0 && iData[8] != 0)\n\t\t{\n\t\t\treturn 0;\n\t\t}\n\t\treturn 2;\n\t}",
+          "text_sha256": "01c80d86bcadd50451bed1f751dec80d373376ab9102743e478ddac84cb34d13",
+          "text_length": 2404,
+          "line_count": 100,
+          "source_path": "/Users/haseeb-mir/Documents/Code/rea/output/autonomy/windows-game/recovered.cs",
+          "start_line": null,
+          "end_line": null
+        },
+        "validation": {
+          "matched_static_member": true,
+          "exact_build_required": true,
+          "canonical_observation": false,
+          "confidence_floor": "inference"
+        }
+      }
+    ],
+    "notes": [
+      "Recovered only from published compiled artifact; output is inference until separately tested."
+    ],
+    "evidence_links": [
+      "ev_b70ae8487f536d59ad37833ae72bb808ba274949aa25527b7910320f65150322"
+    ],
+    "limitations": [
+      "Decompiler output is imported as reconstruction evidence and analyst inference; metadata and IL observations remain canonical.",
+      "This operation did not execute, load, reflect over, debug, instrument, patch, or decompile the target artifact.",
+      "The imported reconstruction is valid only for the exact artifact SHA-256, MVID, method signature, and normalized IL shape recorded here.",
+      "Obfuscated names, decompiler variables, and control-flow restructuring are not treated as proof without separate validation."
+    ]
+  },
+  "confidence": "inferred",
+  "authority": "analyst-inference",
+  "environment": null,
+  "limitations": [
+    "Decompiler output is imported as reconstruction evidence and analyst inference; metadata and IL observations remain canonical.",
+    "This operation did not execute, load, reflect over, debug, instrument, patch, or decompile the target artifact.",
+    "The imported reconstruction is valid only for the exact artifact SHA-256, MVID, method signature, and normalized IL shape recorded here.",
+    "Obfuscated names, decompiler variables, and control-flow restructuring are not treated as proof without separate validation."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "artifact-path",
+      "path": "/Users/haseeb-mir/Documents/Code/rea/output/autonomy/windows-game/original/TicTacToe.exe"
+    }
+  ],
+  "evidence_links": [
+    "ev_b70ae8487f536d59ad37833ae72bb808ba274949aa25527b7910320f65150322"
+  ]
+}

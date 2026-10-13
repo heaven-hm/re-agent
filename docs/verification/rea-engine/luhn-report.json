@@ -1,0 +1,64 @@
+{
+  "status": "suite-passed",
+  "target": "LTRData published luhn .NET utility",
+  "originalSha256": "e30a028e8db474b8a3b17f7088efb8054b818f08b1e30011a50112480d5be353",
+  "replicaSha256": "e7a3eff9898f229104d4e5ec2dc68a6efbea567c4393668db44b73254cfedfa3",
+  "staticEvidenceId": "ev_a091cb8196f49422b1386148a152cacef4ec5c0b5e7a165b7e35de4ae77fc8a3",
+  "declaredSuites": 5,
+  "numericAndUnicodeLines": 230,
+  "results": [
+    {
+      "id": "normal",
+      "terminalBytesEqual": true,
+      "originalTerminalSha256": "a0ade25a25076b3fb0ed32341295f7028954f6b08a59975faa7e01fff8fe90c8",
+      "replicaTerminalSha256": "a0ade25a25076b3fb0ed32341295f7028954f6b08a59975faa7e01fff8fe90c8",
+      "originalEvidenceId": "ev_44a9bfb2d0e53581f198d01c9bf938ef1af991bbd6c3498eadb5044835b7eff3",
+      "replicaEvidenceId": "ev_722c93eb587be689201263cd3c0c0f3082cd8fda0e8da900c06bef8b834a4caa",
+      "exitCodes": [0, 0]
+    },
+    {
+      "id": "counted",
+      "terminalBytesEqual": true,
+      "originalTerminalSha256": "9d209cc765ae8053057c0a057a53b569da350f48b2ba627b948897c4c4d2ac0c",
+      "replicaTerminalSha256": "9d209cc765ae8053057c0a057a53b569da350f48b2ba627b948897c4c4d2ac0c",
+      "originalEvidenceId": "ev_d55c6b2f7d77cab20b6af227b81c686420905b8bd26dd5387dc18e854b5e7f98",
+      "replicaEvidenceId": "ev_1833638e437396de78fad3361207426382a005a55e3c215743f001cfa1f43b7a",
+      "exitCodes": [0, 0]
+    },
+    {
+      "id": "case-insensitive",
+      "terminalBytesEqual": true,
+      "originalTerminalSha256": "52269216fda85a33078da44232a9119ab5a7166027decdab1cba15becc1a4df8",
+      "replicaTerminalSha256": "52269216fda85a33078da44232a9119ab5a7166027decdab1cba15becc1a4df8",
+      "originalEvidenceId": "ev_50b431f42987f68809339c4c685344a2ba054199a1032bbf77d05d443e2be440",
+      "replicaEvidenceId": "ev_bfc3b852f9b064cf64bdb5ad81c28a1111894eb9289db6d671ca4db87096d2a7",
+      "exitCodes": [0, 0]
+    },
+    {
+      "id": "usage",
+      "terminalBytesEqual": true,
+      "originalTerminalSha256": "6699de16186da04e0d36c4115854c92ce4c2094601d92490b803c35e08c84132",
+      "replicaTerminalSha256": "6699de16186da04e0d36c4115854c92ce4c2094601d92490b803c35e08c84132",
+      "originalEvidenceId": "ev_000cdc10c39fbb2e47f3ae00f5479a2e5249ee1c22e8431a212debe8f5cd4987",
+      "replicaEvidenceId": "ev_37d066db04d06f279da236d47abb633cfcc56a5e6ac8de0a62e6433772ccb358",
+      "exitCodes": [0, 0]
+    },
+    {
+      "id": "blank-termination",
+      "terminalBytesEqual": true,
+      "originalTerminalSha256": "2b403891138b8dd110c911902d7e8104c54c8d7e97bd429b7f48d46c711e0f96",
+      "replicaTerminalSha256": "2b403891138b8dd110c911902d7e8104c54c8d7e97bd429b7f48d46c711e0f96",
+      "originalEvidenceId": "ev_49c7cca3fa6e13550d8b70588a51359e2c3eb5af66b69b28b778a804ef4294d6",
+      "replicaEvidenceId": "ev_189a58d758a8d23e82941678ae947d1aef0331fc96bd71e938f863ed13e6c667",
+      "exitCodes": [0, 0]
+    }
+  ],
+  "executableByteIdentity": false,
+  "limitations": [
+    "Exact captured UTF-8 terminal bytes for the declared suites only; no universal equivalence claim.",
+    "Original published managed PE assembly runs on installed macOS .NET 10; Windows OS execution is not established.",
+    "Launch runtime identity is separately recorded from the analyzed target DLL identity.",
+    "No original source was downloaded; replica was derived from binary CIL and runtime observations.",
+    "The original utility is not redistributed by this script."
+  ]
+}
