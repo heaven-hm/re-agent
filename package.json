@@ -2,15 +2,15 @@
   "name": "rea-agents",
   "mcpName": "io.github.morluto/rea",
   "version": "6.4.0",
-  "description": "Reverse engineer anything from your terminal or agent with one CLI and MCP server.",
+  "description": "REA Extended: evidence-backed reverse engineering, bounded reconstruction and differential repair through CLI and MCP.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/morluto/rea.git"
+    "url": "git+https://github.com/heaven-hm/rea-extended.git"
   },
-  "homepage": "https://github.com/morluto/rea#readme",
+  "homepage": "https://github.com/heaven-hm/rea-extended#readme",
   "bugs": {
-    "url": "https://github.com/morluto/rea/issues"
+    "url": "https://github.com/heaven-hm/rea-extended/issues"
   },
   "keywords": [
     "reverse-engineering",
@@ -35,7 +35,8 @@
   },
   "bin": {
     "rea": "scripts/rea.mjs",
-    "rea-agents": "scripts/rea.mjs"
+    "rea-agents": "scripts/rea.mjs",
+    "rea-extended": "scripts/rea.mjs"
   },
   "engines": {
     "node": "^22.19.0 || ^24.11.0 || >=26.0.0"

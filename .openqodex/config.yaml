@@ -1,0 +1,32 @@
+# OpenQodex settings for this repo. Every key is optional; these are the defaults.
+# Each key is explained by: openqodex guide config
+# The file format version. 1 is the only one.
+version: 1
+review:
+  # Findings below this severity stay out of the report; one at or above block_on_severity is always shown.
+  severity_threshold: minor
+  # Exit 1 and deny the push when a finding on a changed line is at or above this severity; null never blocks.
+  block_on_severity: null
+  paths:
+    # Globs of files left out of the change.
+    exclude: []
+  # Globs on a finding's citation, such as gitleaks:generic-api-key or lens:react-*.
+  disabled_rules: []
+  # The branch or ref to diff against when the branch has no upstream; null uses the remote's default branch.
+  default_base: null
+  # Keep scanner findings in test fixtures, mocks and snapshots.
+  include_fixtures: false
+scanners:
+  # Built-in scanners to switch off, by name.
+  disable: []
+  # Open source scanners to add by GitHub link; each runs only after openqodex trust.
+  custom: []
+graph:
+  # Show the callers and importers of the changed code in the brief.
+  enabled: true
+  # Time the code graph may take, in milliseconds.
+  budget_ms: 10000
+  # Files past this count are left out of the code graph.
+  max_files: 4000
+  # Files larger than this, in bytes, are left out of the code graph.
+  max_file_bytes: 524288
