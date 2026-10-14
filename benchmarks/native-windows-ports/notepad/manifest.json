@@ -21,9 +21,19 @@
     "source": "benchmarks/native-windows-ports/notepad/replica/main.swift",
     "binary": "benchmarks/native-windows-ports/notepad/replica/notepadmac (arm64)",
     "build": "swiftc -O -o notepadmac main.swift -framework Cocoa",
-    "screenshot": "benchmarks/native-windows-ports/screenshots/notepadmac-hello.png (real window capture: Unicode file loaded, title set from cmdline open)"
+    "screenshot": "benchmarks/native-windows-ports/screenshots/notepadmac-hello.png (real window capture: Unicode file loaded, title set from cmdline open)",
+    "screenshots": [
+      "benchmarks/native-windows-ports/screenshots/notepadmac-hello.png",
+      "benchmarks/native-windows-ports/screenshots/notepadmac-typed2.png"
+    ]
   },
   "verification": {
-    "replica": "QUEUED next build"
+    "window": "PASS (real Unicode capture)",
+    "typing": "PASS (scripted keystrokes rendered on-screen)",
+    "save_roundtrip": "PASS (append + Cmd+S wrote exact UTF-8 bytes)",
+    "reopen": "UNVERIFIED",
+    "find_replace": "UNVERIFIED",
+    "font_persist": "UNVERIFIED",
+    "print": "UNVERIFIED"
   }
 }

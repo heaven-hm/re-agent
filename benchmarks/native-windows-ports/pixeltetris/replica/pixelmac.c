@@ -121,8 +121,7 @@ static void reset_game(void) {
     hold = -1; refill(); spawn();
 }
 
-static SDL_Texture *img(const char *name) {
-    char p[256];
+static SDL_Texture *img(const char *name) {    char p[256];
     snprintf(p, sizeof(p), "assets/%s", name);
     SDL_Surface *s = IMG_Load(p);
     if (!s) { fprintf(stderr, "img %s: %s\n", name, IMG_GetError()); return 0; }
@@ -130,8 +129,9 @@ static SDL_Texture *img(const char *name) {
     SDL_FreeSurface(s);
     return t;
 }
+static int text_r = 255, text_g = 255, text_b = 255;
 static void text(int x, int y, const char *s, TTF_Font *f) {
-    SDL_Color c = {255, 255, 255, 255};
+    SDL_Color c = {(Uint8)text_r, (Uint8)text_g, (Uint8)text_b, 255};
     SDL_Surface *su = TTF_RenderText_Solid(f, s, c);
     if (!su) return;
     SDL_Texture *t = SDL_CreateTextureFromSurface(ren, su);
@@ -172,7 +172,7 @@ static int poll_action(void) {
 static int menu_idx;
 static void run_menu(void) {
     SDL_Texture *bp = img("button-play.png"), *bo = img("button-options.png"),
-                *bq = img("button-quit.png");
+                *bq = img("button-exit.png");
     menu_idx = 0;
     for (;;) {
         int a = poll_action();
@@ -184,8 +184,9 @@ static void run_menu(void) {
             if (menu_idx == 1) { in_opts = 1; return; }
             in_menu = 0; break;
         }
-        SDL_SetRenderDrawColor(ren, 20, 20, 30, 255);
+        SDL_SetRenderDrawColor(ren, 249, 230, 207, 255);
         SDL_RenderClear(ren);
+        text_r = 0; text_g = 0; text_b = 0;
         text(270, 60, "Pixeltetris!", font);
         SDL_Rect r = {250, 130, 140, 40};
         if (bp) SDL_RenderCopy(ren, bp, 0, &r);
@@ -195,7 +196,7 @@ static void run_menu(void) {
         else text(260, 190, "Options", font);
         r.y = 230;
         if (bq) SDL_RenderCopy(ren, bq, 0, &r);
-        else text(270, 240, "Quit", font);
+        else text(270, 240, "Exit", font);
         SDL_SetRenderDrawColor(ren, 255, 255, 0, 255);
         SDL_Rect h = {245, 130 + menu_idx * 50, 150, 44};
         SDL_RenderDrawRect(ren, &h);
