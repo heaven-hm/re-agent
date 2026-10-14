@@ -10,6 +10,7 @@ import type { Logger } from "pino";
 import { createEvidence } from "../domain/evidence.js";
 import type { Evidence } from "../domain/evidence.js";
 import type { NativeToolName } from "../contracts/native/nativeToolContracts.js";
+import type { Radare2ToolName } from "../contracts/native/radare2ToolContracts.js";
 import type { ArtifactAnalysisOperation } from "../contracts/artifactToolContracts.js";
 import {
   isManagedToolName,
@@ -56,6 +57,7 @@ import {
 } from "./DirectAnalysisCleanup.js";
 
 type DirectAnalysisTool =
+  | Radare2ToolName
   | "annotate_native_function"
   | "inspect_native_load_image"
   | "read_bytes"
@@ -121,7 +123,11 @@ export const runProviderAnalysis = async (
   dependencies: DirectAnalysisDependencies,
   ...[path, tool, arguments_, logger = silentLogger, signal]: readonly [
     path: string,
-    tool: NativeToolName | ArtifactAnalysisOperation | ManagedToolName,
+    tool:
+      | NativeToolName
+      | Radare2ToolName
+      | ArtifactAnalysisOperation
+      | ManagedToolName,
     arguments_: Readonly<Record<string, JsonValue>>,
     logger?: Logger,
     signal?: AbortSignal,

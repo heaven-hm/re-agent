@@ -4,6 +4,8 @@ import { WASM_TOOL_CONTRACTS } from "./wasm/wasmToolContracts.js";
 import { AUTONOMY_TOOL_CONTRACTS } from "./autonomyToolContracts.js";
 import { EVM_TOOL_CONTRACTS } from "./evm/evmToolContracts.js";
 import { GO_TOOL_CONTRACTS } from "./go/goToolContracts.js";
+import { CAPA_TOOL_CONTRACTS } from "./native/capaToolContracts.js";
+import { RADARE2_TOOL_CONTRACTS } from "./native/radare2ToolContracts.js";
 import { SQLITE_TOOL_CONTRACTS } from "./sqlite/sqliteToolContracts.js";
 import { ANALYSIS_VIEW_TOOL_CONTRACTS } from "./analysisViewToolContracts.js";
 import { BINARY_DIAGNOSTICS_TOOL_CONTRACTS } from "./native/binaryDiagnosticsToolContracts.js";
@@ -44,6 +46,8 @@ export const TOOL_CONTRACTS = [
   ...GO_TOOL_CONTRACTS,
   ...WASM_TOOL_CONTRACTS,
   ...SQLITE_TOOL_CONTRACTS,
+  ...CAPA_TOOL_CONTRACTS,
+  ...RADARE2_TOOL_CONTRACTS,
   ...CAPTURE_TOOL_CONTRACTS,
   ...SIGNAL_TOOL_CONTRACTS,
   ...MANAGED_TOOL_CONTRACTS,

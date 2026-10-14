@@ -15,6 +15,11 @@ import { registerPeResourcesTool } from "./registerPeResourcesTool.js";
 import type { EvmInterfaceService } from "../application/evm/EvmInterfaceService.js";
 import { evmInterfaceModule } from "../composition/evm.js";
 import { registerEvmTools } from "./registerEvmTools.js";
+import type { CapaCapabilitiesService } from "../application/native/CapaCapabilitiesService.js";
+import { capaCapabilities as declaredCapaCapabilities } from "../capa/CapaProviderMetadata.js";
+import { createCapaCapabilitiesService } from "../composition/capa.js";
+import { registerCapaTools } from "./registerCapaTools.js";
+import { registerRadare2Tools } from "./registerRadare2Tools.js";
 import type { SqliteDatabaseService } from "../application/sqlite/SqliteDatabaseService.js";
 import { createSqliteDatabaseService } from "../composition/sqlite.js";
 import { registerSqliteTools } from "./registerSqliteTools.js";
@@ -139,6 +144,7 @@ export interface CreateServerOptions {
   readonly wasmArtifact?: WasmArtifactService;
   readonly evmInterface?: EvmInterfaceService;
   readonly sqliteDatabase?: SqliteDatabaseService;
+  readonly capaCapabilities?: CapaCapabilitiesService;
   readonly logger?: Logger;
   readonly binaryLayout?: BinaryLayoutService;
   readonly goBinary?: GoBinaryService;
@@ -179,6 +185,9 @@ const installSessionToolAvailability = (
   const basePolicy = sessionAvailabilityPolicy(options.availabilityPolicy, {
     optionalProviderLoadFailures: options.optionalProviderLoadFailures,
     optionalFeatures: {
+      capaEnabled:
+        options.capaCapabilities !== undefined ||
+        declaredCapaCapabilities(environment)[0]?.available === true,
       packetCaptureEnabled:
         options.packetCapture !== undefined ||
         (linux && isAbsolute(environment.REA_TSHARK_COMMAND ?? "")),
@@ -272,6 +281,8 @@ export const createServer = (
   const delivery = selectToolResultDelivery(environment, options.delivery);
   const evmInterface =
     options.evmInterface ?? evmInterfaceModule.create(environment);
+  const capaCapabilities =
+    options.capaCapabilities ?? createCapaCapabilitiesService(environment);
   const sqliteDatabase =
     options.sqliteDatabase ?? createSqliteDatabaseService(environment);
   const binaryLayout =
@@ -298,6 +309,7 @@ export const createServer = (
     delivery,
     evmInterface,
     sqliteDatabase,
+    capaCapabilities,
     binaryLayout,
     recordedCrash,
     webSourceLocation,
@@ -347,6 +359,7 @@ export const createServer = (
       pcap.close(),
       evmInterface.close(),
       sqliteDatabase.close(),
+      capaCapabilities.close(),
       binaryLayout.close(),
       recordedCrash.close(),
       webSourceLocation.close(),
@@ -600,6 +613,13 @@ const registerConfiguredAnalysisTools = (
     withAdmittedAnalysis,
     evidenceById,
   );
+  registerCapaTools(
+    server,
+    options.capaCapabilities ?? createCapaCapabilitiesService(environment),
+    toolLogger,
+    recordEvidence,
+    withAdmittedAnalysis,
+  );
   registerSqliteTools(
     server,
     options.sqliteDatabase ?? createSqliteDatabaseService(environment),
@@ -744,6 +764,7 @@ const registerBinaryAnalysisTools = ({
     withAdmittedAnalysis,
   };
   registerNativeTools(server, { ...evidenceOptions, evidenceById });
+  registerRadare2Tools(server, evidenceOptions);
   registerArtifactTools(server, { ...evidenceOptions, evidenceById });
   registerManagedTools(server, { ...evidenceOptions, evidenceById });
   if (session !== undefined)
