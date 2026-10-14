@@ -4,6 +4,11 @@ import { names } from "./catalog-core.mjs";
 export const toolFamilyCatalog = (sources) => {
   const families = [
     {
+      id: "autonomy",
+      surface: "autonomy-controller",
+      contracts: sources.autonomyContracts.AUTONOMY_TOOL_CONTRACTS,
+    },
+    {
       id: "direct",
       surface: "official-proxy",
       contracts: sources.officialContracts.OFFICIAL_TOOL_CONTRACTS,
@@ -19,7 +24,13 @@ export const toolFamilyCatalog = (sources) => {
       contracts: [
         ...sources.nativeContracts.NATIVE_TOOL_CONTRACTS,
         ...sources.binaryDiagnosticsContracts.BINARY_DIAGNOSTICS_TOOL_CONTRACTS,
+        ...sources.radare2Contracts.RADARE2_TOOL_CONTRACTS,
       ],
+    },
+    {
+      id: "capa",
+      surface: "capa-provider",
+      contracts: sources.capaContracts.CAPA_TOOL_CONTRACTS,
     },
     {
       id: "artifact",
@@ -131,11 +142,19 @@ export const toolFamilyCatalog = (sources) => {
     (total, family) => total + family.count,
     0,
   );
+  const familyNames = families.flatMap((family) => family.tools);
+  const contractNames = names(sources.toolContracts.TOOL_CONTRACTS);
+  const familyNameSet = new Set(familyNames);
+  const contractNameSet = new Set(contractNames);
+  const missing = contractNames.filter((name) => !familyNameSet.has(name));
+  const extra = familyNames.filter((name) => !contractNameSet.has(name));
   if (
     familyTotal !== sources.toolContracts.TOOL_CONTRACTS.length ||
     familyTotal !== sources.catalogIdentity.CATALOG_IDENTITY.counts.mcp_tools
   )
-    throw new Error("Tool family inventory does not match TOOL_CONTRACTS");
+    throw new Error(
+      `Tool family inventory mismatch (families=${familyTotal}, contracts=${sources.toolContracts.TOOL_CONTRACTS.length}, identity=${sources.catalogIdentity.CATALOG_IDENTITY.counts.mcp_tools}; missing: ${missing.join(", ") || "none"}; extra: ${extra.join(", ") || "none"})`,
+    );
   return { total: familyTotal, families };
 };
 
@@ -188,6 +207,14 @@ export const providerCatalog = (sources) => {
     {
       identity: sources.nativeProvider.NATIVE_MACOS_PROVIDER_IDENTITY,
       contracts: sources.nativeContracts.NATIVE_TOOL_CONTRACTS,
+    },
+    {
+      identity: sources.radare2Provider.RADARE2_PROVIDER_IDENTITY,
+      contracts: sources.radare2Contracts.RADARE2_TOOL_CONTRACTS,
+    },
+    {
+      identity: sources.capaProvider.CAPA_PROVIDER_IDENTITY,
+      contracts: sources.capaContracts.CAPA_TOOL_CONTRACTS,
     },
     {
       identity: sources.pwntoolsProvider.PWNTOOLS_PROVIDER_IDENTITY,

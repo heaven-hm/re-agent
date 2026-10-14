@@ -3,7 +3,32 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { discoverTools, installPinnedExecutable } from "./ToolDiscovery.js";
+import {
+  autonomyTools,
+  discoverTools,
+  installPinnedExecutable,
+} from "./ToolDiscovery.js";
+
+describe("game analysis tool inventory", () => {
+  it("discovers FFmpeg metrics and graphics trace replay independently", () => {
+    expect(autonomyTools).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "ffmpeg",
+          capabilities: expect.arrayContaining(["game-frame-quality-metrics"]),
+        }),
+        expect.objectContaining({
+          id: "apitrace",
+          capabilities: expect.arrayContaining([
+            "graphics-api-tracing",
+            "graphics-trace-replay",
+          ]),
+        }),
+        expect.objectContaining({ id: "renderdoc" }),
+      ]),
+    );
+  });
+});
 
 describe("pinned standalone installation", () => {
   it("verifies bytes before execution, installs and reuses healthy executable", async () => {

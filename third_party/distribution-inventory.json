@@ -1,0 +1,584 @@
+{
+  "schemaVersion": 1,
+  "policy": "A tool is not redistributable merely because it is open source, discoverable, or present as a submodule. `redistributionApproved` is a release decision and must be supported by locally verifiable artifacts, license evidence, and notices.",
+  "entries": [
+    {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.2",
+      "integration": "production-provider",
+      "distribution": "release-only",
+      "redistributionApproved": false,
+      "spdx": "Apache-2.0",
+      "licenseStatus": "conditional",
+      "licenseEvidence": [
+        {
+          "path": "third_party/ghidra/LICENSE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        },
+        {
+          "path": "third_party/ghidra/license-inventory.json",
+          "sha256": "f77e1e52aab40f62a17a01bfef167db12a05a54365e7cec7ac94f3c32c471250"
+        }
+      ],
+      "notices": [
+        {
+          "path": "third_party/ghidra/license-inventory.json",
+          "sha256": "f77e1e52aab40f62a17a01bfef167db12a05a54365e7cec7ac94f3c32c471250"
+        }
+      ],
+      "artifacts": [
+        {
+          "fileName": "ghidra_12.1.2_PUBLIC_20260605.zip",
+          "sha256": "b62e81a0390618466c019c60d8c2f796ced2509c4c1aea4a37644a77272cf99d",
+          "sourceUrl": "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_12.1.2_build/ghidra_12.1.2_PUBLIC_20260605.zip",
+          "availability": "external-release-record"
+        }
+      ],
+      "limitations": [
+        "The archive is attached to a GitHub release and is not in this checkout.",
+        "Its embedded license inventory exists, but its full component-license and release-specific redistribution audit is not represented as approved here."
+      ]
+    },
+    {
+      "id": "ilspycmd",
+      "name": "ILSpy command-line decompiler",
+      "version": "9.1.0.7988",
+      "integration": "managed-analysis-tool",
+      "distribution": "not-approved",
+      "redistributionApproved": false,
+      "spdx": "MIT",
+      "licenseStatus": "incomplete",
+      "licenseEvidence": [
+        {
+          "path": "third_party/ilspy/LICENSE",
+          "sha256": "5527fe802347740da8ec2b510cffa4d22939c7f0773ae342a85a2e2b64e4a34b"
+        },
+        {
+          "path": "third_party/ilspy/manifest.json",
+          "sha256": "b048c13cffb8ef641fedfd4e2786a72e5857423c6d4b74e3a2efc33d6a4a5e5e"
+        }
+      ],
+      "notices": [
+        {
+          "path": "third_party/ilspy/NOTICE.txt",
+          "sha256": "9a49867a4473319648bb4710350c4c938a775e0f21f5f644211c6434043ae3e6"
+        },
+        {
+          "path": "third_party/ilspy/dependency-notices.json",
+          "sha256": "1f0a667bf2a4bbe5434a4384902a4fa97522be48ddea4006c098616b1284f2a4"
+        }
+      ],
+      "artifacts": [
+        {
+          "fileName": "ilspycmd.9.1.0.7988.nupkg",
+          "path": "third_party/ilspy/ilspycmd.9.1.0.7988.nupkg",
+          "sha256": "2b5058f5ccc164c33b7aabf1a5eb0cf3d3a6af6c145aaf58efd3ed891443af7c",
+          "availability": "local"
+        }
+      ],
+      "limitations": [
+        "The source checkout has the exact local NuGet package, but the npm archive contains metadata only; the .nupkg is excluded.",
+        "NuGet signature verification did not complete successfully on the current host.",
+        "Transitive notice provenance is incomplete; current notice-path checks are not a legal-completeness review."
+      ]
+    },
+    {
+      "id": "libgdiplus-macos-arm64",
+      "name": "libgdiplus",
+      "version": "6.1",
+      "integration": "benchmark-runtime-dependency",
+      "distribution": "not-approved",
+      "redistributionApproved": false,
+      "spdx": "MIT",
+      "licenseStatus": "incomplete",
+      "licenseEvidence": [
+        {
+          "path": "third_party/libgdiplus/LICENSE",
+          "sha256": "81317bf837e02a116dc20b032fa1d0cbf9ec357621f141ff2c2daf26c17cbb5d"
+        },
+        {
+          "path": "third_party/libgdiplus/manifest.json",
+          "sha256": "0e54b2d3c2f67af07423b73c9aba631ed79eb825e42d3fa21082f4b1f33ae5d9"
+        }
+      ],
+      "notices": [
+        {
+          "path": "third_party/libgdiplus/NOTICE.txt",
+          "sha256": "08a7930fa458a63f95f028fb923580bb4a9dc9757618752664c9c10e46eb730c"
+        }
+      ],
+      "artifacts": [
+        {
+          "fileName": "libgdiplus.0.dylib",
+          "path": "third_party/libgdiplus/libgdiplus.0.dylib",
+          "sha256": "ca89fbe31b58f84c06b3209930441cb315e95b26484fac7b8971803339675459",
+          "availability": "local"
+        },
+        {
+          "fileName": "libgdiplus-6.1.tar.gz",
+          "path": "third_party/libgdiplus/libgdiplus-6.1.tar.gz",
+          "sha256": "97d5a83d6d6d8f96c27fb7626f4ae11d3b38bc88a1726b4466aeb91451f3255b",
+          "availability": "local"
+        }
+      ],
+      "limitations": [
+        "The source checkout has a macOS ARM64 dylib and source archive, but the npm archive contains metadata only; both artifacts are excluded.",
+        "macOS ARM64 only; requires externally installed Homebrew libraries and X11.",
+        "The vendored dylib's complete dependency notice closure is not audited here."
+      ]
+    },
+    {
+      "id": "frida",
+      "name": "Frida",
+      "version": "17.23.2",
+      "integration": "production-runtime-instrumentation",
+      "distribution": "not-approved",
+      "redistributionApproved": false,
+      "spdx": "NOASSERTION",
+      "licenseStatus": "incomplete",
+      "licenseEvidence": [
+        {
+          "path": "licenses/frida-17.23.2-COPYING.txt",
+          "sha256": "5ea1544b51a28bc823b03159190d4108f9fb4f4ef912389f5137c6d295e175b2"
+        }
+      ],
+      "notices": [
+        {
+          "path": "licenses/frida-17.23.2-COPYING.txt",
+          "sha256": "5ea1544b51a28bc823b03159190d4108f9fb4f4ef912389f5137c6d295e175b2"
+        },
+        {
+          "path": "licenses/LGPL-2.0.txt",
+          "sha256": "cc535c21133c895b56b374c8a1dc1eb948d99003ed2b47372069456b62f42b24"
+        }
+      ],
+      "artifacts": [],
+      "limitations": [
+        "REA adapter exists; aggregate Python/native bundle explicitly withholds public redistribution approval due incomplete native dependency/source and notice coverage.",
+        "The declared npm optional dependency is not treated as approval to redistribute embedded native components."
+      ]
+    },
+    {
+      "id": "capa",
+      "name": "capa",
+      "version": "9.4.0",
+      "integration": "production-static-capability-adapter",
+      "distribution": "byo",
+      "redistributionApproved": false,
+      "spdx": "Apache-2.0",
+      "licenseStatus": "declared",
+      "licenseEvidence": [
+        {
+          "path": "docs/verification/rea-engine/integration-metadata/capa-9.4.0-license.json",
+          "sha256": "f9dfcc1ae8a5c9f52b4c5e65fb1916c76a2070b1cd3461210e938e7d1b9d842e"
+        }
+      ],
+      "notices": [],
+      "artifacts": [],
+      "limitations": [
+        "Executable is caller-supplied through REA_CAPA_PATH; no capa binary is in the package.",
+        "Exact release asset dependency and notice closure is not approved for redistribution."
+      ]
+    },
+    {
+      "id": "python-analysis-tool-bundle",
+      "name": "Frida, Capstone, Keystone, LIEF, Z3, and Pillow Python bundle",
+      "version": "host-profile",
+      "integration": "discovery-and-selected-adapters",
+      "distribution": "not-approved",
+      "redistributionApproved": false,
+      "spdx": "NOASSERTION",
+      "licenseStatus": "incomplete",
+      "licenseEvidence": [
+        {
+          "path": "scripts/package-autonomy-tool-bundle.mjs",
+          "sha256": "eb513943975a79bd1a6a0c3d33207cbdd9efd678e6ba034d6d322bae06cd2b01"
+        }
+      ],
+      "notices": [],
+      "artifacts": [],
+      "limitations": [
+        "The bundle builder supports a macOS ARM64/Python 3.12 local artifact profile and sets publicRedistributionApproved=false.",
+        "angr is omitted when wheel-only dependency resolution fails; no cross-platform bundle is established."
+      ]
+    },
+    {
+      "id": "binwalk-source",
+      "name": "Binwalk v3 source",
+      "version": "3.1.0",
+      "integration": "firmware-provider-uses-byo-engine",
+      "distribution": "source-only",
+      "redistributionApproved": false,
+      "spdx": "MIT",
+      "licenseStatus": "declared",
+      "licenseEvidence": [
+        {
+          "path": "third_party/binwalk/LICENSE",
+          "sha256": "479efc8ae5488a8fa1c6718fe37713d0641f04d4069f37d4a09e727ed6febf3a"
+        }
+      ],
+      "notices": [],
+      "artifacts": [],
+      "sourceCommit": "4fdab3d464d97b68e0af9088df3f9e2e1545b21c",
+      "limitations": [
+        "Git submodule is not in the npm allowlist; REA uses a caller-supplied engine executable."
+      ]
+    },
+    {
+      "id": "unblob-source",
+      "name": "Unblob 26 source",
+      "version": "26.6.4",
+      "integration": "firmware-provider-uses-byo-engine",
+      "distribution": "source-only",
+      "redistributionApproved": false,
+      "spdx": "MIT",
+      "licenseStatus": "declared",
+      "licenseEvidence": [
+        {
+          "path": "third_party/unblob/LICENSE",
+          "sha256": "67303bbde385e13f69e8019f6f8bc77d4ebfce58c2a409952645e3fe4f4d922e"
+        }
+      ],
+      "notices": [],
+      "artifacts": [],
+      "sourceCommit": "1fcc7a0a584a70a96c31f5a276c20944d199a089",
+      "limitations": [
+        "Git submodule is not in the npm allowlist; REA uses a caller-supplied engine executable."
+      ]
+    },
+    {
+      "id": "jadx-headless-mcp-source",
+      "name": "JADX headless MCP source",
+      "version": "0.7.1",
+      "integration": "android-adapter-uses-byo-jar",
+      "distribution": "source-only",
+      "redistributionApproved": false,
+      "spdx": "Apache-2.0",
+      "licenseStatus": "declared",
+      "licenseEvidence": [
+        {
+          "path": "third_party/jadx-headless-mcp/LICENSE",
+          "sha256": "612097054771e7268f449b9d479bd47e7ef0901961d1515804e03f1d84e1920d"
+        }
+      ],
+      "notices": [],
+      "artifacts": [],
+      "sourceCommit": "5844800a486d2248fa949b74c9896285f5b54de2",
+      "limitations": [
+        "Submodule source is excluded from npm. Runtime JAR is BYO and is not bundled."
+      ]
+    },
+    {
+      "id": "ghidra-nativeaot-source",
+      "name": "Ghidra NativeAOT parser source",
+      "version": "pinned-source",
+      "integration": "derived-parser-attribution",
+      "distribution": "source-only",
+      "redistributionApproved": false,
+      "spdx": "MIT",
+      "licenseStatus": "declared",
+      "licenseEvidence": [
+        {
+          "path": "third_party/ghidra-nativeaot/LICENSE.md",
+          "sha256": "53ac4fa98c36bef004ebc0d31320bcfc66b8063e7d938703981b1a84b0a2d329"
+        }
+      ],
+      "notices": [],
+      "artifacts": [],
+      "sourceCommit": "effeb734fc570c32650f88b159608979dc7b423e",
+      "limitations": [
+        "Submodule source is excluded from npm; only separately attributed derived parser material is in REA."
+      ]
+    },
+    {
+      "id": "wakaru-source",
+      "name": "Wakaru source",
+      "version": "pinned-source",
+      "integration": "javascript-recovery-provider",
+      "distribution": "source-only",
+      "redistributionApproved": false,
+      "spdx": "MIT",
+      "licenseStatus": "declared",
+      "licenseEvidence": [
+        {
+          "path": "third_party/wakaru/LICENSE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        }
+      ],
+      "notices": [],
+      "artifacts": [],
+      "sourceCommit": "8219bf5016a063d7fb215101a8c45d5959ec733f",
+      "limitations": [
+        "Submodule source is excluded from npm; the provider uses a separately supplied runtime."
+      ]
+    },
+    {
+      "id": "radare2",
+      "name": "radare2",
+      "version": "host-dependent; verified smoke 6.2.0",
+      "integration": "production-static-provider",
+      "distribution": "byo",
+      "redistributionApproved": false,
+      "spdx": "LGPL-3.0-only",
+      "licenseStatus": "declared",
+      "licenseEvidence": [],
+      "notices": [],
+      "artifacts": [],
+      "limitations": [
+        "REA exposes bounded read-only function inventory and caller-addressed disassembly through provider, CLI, and MCP routes. Function inventory smoke evidence is in docs/verification/rea-engine/radare2-integration-smoke.json; the disassembly provider attempt and raw tool output are in docs/verification/rea-engine/radare2-disassembly-smoke-2026-10-14/.",
+        "The raw radare2 disassembly command succeeded, but the REA provider operation remains unverified because this host denied owned-process cleanup inspection (spawn EPERM). CFG recovery, call-graph analysis, decompilation, and complete function recovery are not established.",
+        "Radare2 must be installed separately; the tool and plugins are not bundled, and plugins have independent license terms."
+      ]
+    },
+    {
+      "id": "rizin",
+      "name": "Rizin",
+      "version": "host-dependent",
+      "integration": "discovery-only",
+      "distribution": "byo",
+      "redistributionApproved": false,
+      "spdx": "LGPL-3.0-only",
+      "licenseStatus": "declared",
+      "licenseEvidence": [],
+      "notices": [],
+      "artifacts": [],
+      "limitations": [
+        "Tool discovery exists; no production native binary provider is registered.",
+        "GPL components/plugins and dependency closure require exact-build review."
+      ]
+    },
+    {
+      "id": "capstone-python",
+      "name": "Capstone Python module",
+      "version": "host-dependent",
+      "integration": "discovery-only",
+      "distribution": "byo",
+      "redistributionApproved": false,
+      "spdx": "BSD-3-Clause",
+      "licenseStatus": "declared",
+      "licenseEvidence": [],
+      "notices": [],
+      "artifacts": [],
+      "limitations": [
+        "Only a module-health probe is established; no general target-wide Capstone adapter is registered.",
+        "The optional aggregate bundle is not approved for redistribution."
+      ]
+    },
+    {
+      "id": "lief-python",
+      "name": "LIEF Python module",
+      "version": "host-dependent",
+      "integration": "discovery-only",
+      "distribution": "byo",
+      "redistributionApproved": false,
+      "spdx": "Apache-2.0",
+      "licenseStatus": "incomplete",
+      "licenseEvidence": [],
+      "notices": [],
+      "artifacts": [],
+      "limitations": [
+        "Only import/API health is established; no general target parser adapter is registered.",
+        "Native dependency/source notice closure is unresolved."
+      ]
+    },
+    {
+      "id": "angr",
+      "name": "angr",
+      "version": "not-installed",
+      "integration": "no-production-provider",
+      "distribution": "not-approved",
+      "redistributionApproved": false,
+      "spdx": "BSD-2-Clause",
+      "licenseStatus": "declared",
+      "licenseEvidence": [],
+      "notices": [],
+      "artifacts": [],
+      "limitations": [
+        "Current host bundle attempt omitted angr because a required dependency had no usable wheel; native symbolic execution is not integrated."
+      ]
+    },
+    {
+      "id": "qbdi",
+      "name": "QBDI",
+      "version": "not-integrated",
+      "integration": "none",
+      "distribution": "not-present",
+      "redistributionApproved": false,
+      "spdx": "Apache-2.0",
+      "licenseStatus": "declared",
+      "licenseEvidence": [],
+      "notices": [],
+      "artifacts": [],
+      "limitations": [
+        "No upstream code, runtime binary, adapter, or integration test is present in this checkout.",
+        "Exact build dependency licenses need review before distribution."
+      ]
+    },
+    {
+      "id": "dynamorio",
+      "name": "DynamoRIO",
+      "version": "not-integrated",
+      "integration": "none",
+      "distribution": "not-present",
+      "redistributionApproved": false,
+      "spdx": "BSD-3-Clause",
+      "licenseStatus": "declared",
+      "licenseEvidence": [],
+      "notices": [],
+      "artifacts": [],
+      "limitations": [
+        "No upstream code, runtime binary, adapter, or integration test is present in this checkout.",
+        "macOS support and exact component notices require platform-specific review."
+      ]
+    },
+    {
+      "id": "evmole-runtime-metadata",
+      "name": "EVMole 0.9.3 provenance and license record",
+      "version": "0.9.3",
+      "integration": "npm-runtime-dependency",
+      "distribution": "npm-allowlisted",
+      "redistributionApproved": false,
+      "spdx": "MIT",
+      "licenseStatus": "verified",
+      "licenseEvidence": [
+        {
+          "path": "third_party/evmole/LICENSE",
+          "sha256": "701d6a12a5032369058ad20f89f46af29873c8896e09f7cd3ef4f8de588d8575"
+        }
+      ],
+      "notices": [],
+      "artifacts": [],
+      "limitations": [
+        "The code/runtime arrives through the locked npm dependency; this directory contains the license and provenance record only.",
+        "This inventory entry does not approve any separate binary or runtime bundle."
+      ]
+    },
+    {
+      "id": "pwndbg-source-profile",
+      "name": "pwndbg source provenance profile",
+      "version": "2026.09.15",
+      "integration": "caller-supplied-gdb-extension",
+      "distribution": "byo",
+      "redistributionApproved": false,
+      "spdx": "MIT",
+      "licenseStatus": "verified",
+      "licenseEvidence": [
+        {
+          "path": "third_party/pwndbg/LICENSE.md",
+          "sha256": "74cea7f91601cc4bd9ccd9333fd4c8b29b0245cda0675c5c3edecd6bfedd3a8d"
+        }
+      ],
+      "notices": [],
+      "artifacts": [],
+      "limitations": [
+        "Only the license and provenance notes are retained here; the executable GDB environment and dependency closure are caller-supplied."
+      ]
+    },
+    {
+      "id": "pwntools-source-profile",
+      "name": "pwntools / pyelftools / Unicorn provenance profile",
+      "version": "pwntools 4.15.0; pyelftools 0.33; Unicorn 2.1.2",
+      "integration": "caller-supplied-offline-elf-adapters",
+      "distribution": "byo",
+      "redistributionApproved": false,
+      "spdx": "NOASSERTION",
+      "licenseStatus": "incomplete",
+      "licenseEvidence": [],
+      "notices": [],
+      "artifacts": [],
+      "limitations": [
+        "README records the upstream profile and MIT/GPL/BSD component qualifications, but this directory has no exact upstream license/notice file set.",
+        "The Python packages and Unicorn are caller-supplied; no implementation is vendored here."
+      ]
+    },
+    {
+      "id": "wabt-source-profile",
+      "name": "WABT provenance profile",
+      "version": "1.0.42",
+      "integration": "caller-supplied-webassembly-tools",
+      "distribution": "byo",
+      "redistributionApproved": false,
+      "spdx": "Apache-2.0",
+      "licenseStatus": "declared",
+      "licenseEvidence": [],
+      "notices": [],
+      "artifacts": [],
+      "limitations": [
+        "README identifies the upstream Apache-2.0 license and release profile, but no upstream license text or executable is retained in this directory.",
+        "REA requires caller-supplied WABT binaries; this entry is not a redistribution approval."
+      ]
+    },
+    {
+      "id": "web-network-captures-provenance",
+      "name": "Web network capture dependency provenance records",
+      "version": "mixed pinned profiles",
+      "integration": "capture-parser-provenance",
+      "distribution": "byo",
+      "redistributionApproved": false,
+      "spdx": "NOASSERTION",
+      "licenseStatus": "incomplete",
+      "licenseEvidence": [],
+      "notices": [],
+      "artifacts": [],
+      "limitations": [
+        "README documents multiple npm libraries plus caller-supplied mitmproxy; this aggregate has no single SPDX expression.",
+        "No native mitmproxy binary or third-party parser implementation is vendored in this directory."
+      ]
+    }
+  ],
+  "repositoryComponents": [
+    {
+      "path": "third_party/binwalk",
+      "entryId": "binwalk-source"
+    },
+    {
+      "path": "third_party/evmole",
+      "entryId": "evmole-runtime-metadata"
+    },
+    {
+      "path": "third_party/ghidra",
+      "entryId": "ghidra"
+    },
+    {
+      "path": "third_party/ghidra-nativeaot",
+      "entryId": "ghidra-nativeaot-source"
+    },
+    {
+      "path": "third_party/ilspy",
+      "entryId": "ilspycmd"
+    },
+    {
+      "path": "third_party/jadx-headless-mcp",
+      "entryId": "jadx-headless-mcp-source"
+    },
+    {
+      "path": "third_party/libgdiplus",
+      "entryId": "libgdiplus-macos-arm64"
+    },
+    {
+      "path": "third_party/pwndbg",
+      "entryId": "pwndbg-source-profile"
+    },
+    {
+      "path": "third_party/pwntools",
+      "entryId": "pwntools-source-profile"
+    },
+    {
+      "path": "third_party/unblob",
+      "entryId": "unblob-source"
+    },
+    {
+      "path": "third_party/wabt",
+      "entryId": "wabt-source-profile"
+    },
+    {
+      "path": "third_party/wakaru",
+      "entryId": "wakaru-source"
+    },
+    {
+      "path": "third_party/web-network-captures",
+      "entryId": "web-network-captures-provenance"
+    }
+  ]
+}

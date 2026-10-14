@@ -1,6 +1,7 @@
 {
   "tool": "Ghidra",
   "version": "12.1.2",
+  "versionScope": "optional distributed archive; not the bridge verification runtime",
   "file": "ghidra_12.1.2_PUBLIC_20260605.zip",
   "bytes": 572803866,
   "sha256": "b62e81a0390618466c019c60d8c2f796ced2509c4c1aea4a37644a77272cf99d",
@@ -13,5 +14,10 @@
     "JDK 21 or newer",
     "Platform-compatible native helper binaries; ARM64 may require compiling native helpers"
   ],
+  "bridgeVerification": {
+    "verifiedVersion": "12.1.4",
+    "acceptedReleaseLine": "12.1.x",
+    "evidence": "src/ghidra/GhidraInstallationPolicy.ts and the real Ghidra 12.1.4 verification workflows"
+  },
   "scope": "Archive integrity verified. Existing installed Ghidra reused; this is not proof of every integration or a complete license audit."
 }

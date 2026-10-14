@@ -1,0 +1,78 @@
+name: Native Batch 2 original Windows observations
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [develop, main]
+    paths:
+      - ".github/workflows/native-batch-2-originals.yml"
+      - "benchmarks/native-batch-2/scripts/verify-originals-windows.py"
+      - "benchmarks/native-batch-2/manifests/*-acquisition.json"
+      - "benchmarks/native-batch-2/tests/runtime-fixtures/*-probes.json"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-originals-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  HUSKY: "0"
+
+jobs:
+  native-authority:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - run: sudo apt-get update
+      - run: sudo apt-get install --no-install-recommends -y g++-mingw-w64-x86-64
+      - run: npm run build:windows-native
+      - run: npm run verify:windows-native:artifact
+      - uses: actions/upload-artifact@v4
+        with:
+          name: native-originals-windows-authority
+          path: native/windows/build/
+          if-no-files-found: error
+          retention-days: 7
+
+  original-observations:
+    name: Original execution observations (no fidelity verdict)
+    needs: native-authority
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@v4
+        with:
+          name: native-originals-windows-authority
+          path: native/windows/build/
+      - run: npm ci
+      - run: npm run verify:windows-native:artifact
+      - run: npm run build:cached
+      - name: Acquire pinned originals and observe bounded commands
+        run: python benchmarks/native-batch-2/scripts/verify-originals-windows.py
+      - name: Retain original observations and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-batch-2-original-windows-observations
+          path: |
+            benchmarks/native-batch-2/logs/runtime/windows-originals/*.json
+            benchmarks/native-batch-2/logs/runtime/windows-originals/*.bin
+          if-no-files-found: warn
+          retention-days: 14
