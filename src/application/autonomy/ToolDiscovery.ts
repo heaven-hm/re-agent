@@ -138,6 +138,13 @@ const pythonToolProbes = [
       "Disassembly of one ARM64 instruction; target analysis unverified",
   },
   {
+    id: "keystone-python",
+    module: "keystone",
+    distribution: "keystone-engine",
+    healthScope:
+      "Assembly of one ARM64 instruction; target patching unverified",
+  },
+  {
     id: "lief-python",
     module: "lief",
     distribution: "lief",
@@ -173,6 +180,7 @@ try:
  module=importlib.import_module(name); version=importlib.metadata.version(distribution)
  if name=='frida': assert module.get_local_device().type=='local'
  elif name=='capstone': assert len(list(module.Cs(module.CS_ARCH_ARM64,module.CS_MODE_ARM).disasm(bytes.fromhex('1f2003d5'),0)))==1
+ elif name=='keystone': assert bytes(module.Ks(module.KS_ARCH_ARM64,module.KS_MODE_LITTLE_ENDIAN).asm('nop')[0])==bytes.fromhex('1f2003d5')
  elif name=='lief': assert callable(module.parse)
  elif name=='z3':
   x=module.Int('rea_health_x'); solver=module.Solver(); solver.add(x>4,x<6); assert solver.check()==module.sat and solver.model()[x].as_long()==5

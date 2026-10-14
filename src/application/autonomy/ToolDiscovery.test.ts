@@ -77,7 +77,7 @@ describe("Python module discovery contract", () => {
     "probes the actual selected host's installed Python modules",
     async () => {
       const report = await discoverTools({ tools: [] });
-      expect(report.pythonTools).toHaveLength(6);
+      expect(report.pythonTools).toHaveLength(7);
       expect(
         report.pythonTools?.filter((item) => item.state === "healthy").length,
       ).toBeGreaterThan(0);
@@ -111,9 +111,9 @@ describe("Python module discovery contract", () => {
         };
       },
     });
-    expect(calls).toEqual(Array(6).fill("/chosen/python"));
+    expect(calls).toEqual(Array(7).fill("/chosen/python"));
     expect(report.tools).toEqual([]);
-    expect(report.pythonTools).toHaveLength(6);
+    expect(report.pythonTools).toHaveLength(7);
     expect(
       report.pythonTools?.find((item) => item.id === "frida-python"),
     ).toMatchObject({
@@ -162,6 +162,9 @@ describe("Python module discovery contract", () => {
     expect(
       report.pythonTools?.find((item) => item.module === "angr"),
     ).toMatchObject({ state: "unhealthy", reason: "native dependency failed" });
+    expect(
+      report.pythonTools?.find((item) => item.module === "keystone"),
+    ).toMatchObject({ state: "healthy", interpreter: "python3" });
     expect(
       report.pythonTools?.find((item) => item.module === "frida"),
     ).toMatchObject({
