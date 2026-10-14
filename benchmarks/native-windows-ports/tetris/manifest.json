@@ -35,7 +35,15 @@
     ]
   },
   "verification": {
-    "original_runtime": "UNVERIFIED (GUI screenshot pending; X11 window not captured yet)",
-    "replica": "QUEUED behind pixeltetris"
+    "original_runtime": "PASS (process alive under Wine/X11, no crash; GUI screenshot pending)",
+    "mac_build": "PASS (52KB SDL2, clean)",
+    "mac_menu": "PASS (real window capture: TETRIS + 6 entries + hints)",
+    "replica": {
+      "source": "benchmarks/native-windows-ports/tetris/replica/tetris.c",
+      "binary": "benchmarks/native-windows-ports/tetris/replica/tetrismac (arm64)",
+      "assets": "benchmarks/native-windows-ports/tetris/replica/assets (fonts+images only; audio excluded)",
+      "screenshot": "benchmarks/native-windows-ports/screenshots/tetrismac-menu.png",
+      "build": "clang -O2 -o tetrismac tetris.c -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer"
+    }
   }
 }
