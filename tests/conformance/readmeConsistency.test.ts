@@ -2,7 +2,6 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
-import { PRODUCT_IDENTITY } from "../../src/identity.js";
 
 const translatedReadmes = [
   "README_zh.md",
@@ -35,26 +34,35 @@ const shellExamples = (content: string): string[] =>
   );
 
 describe("onboarding documentation product facts", () => {
-  it("keeps the installation MCP example aligned with the package registration command", async () => {
+  it("labels the public upstream MCP example separately from this repository", async () => {
     const content = await readFile(resolve("docs/installation.md"), "utf8");
-    expect(jsonExamples(content)).toContainEqual(
-      expect.objectContaining({
-        mcpServers: expect.objectContaining({
-          rea: expect.objectContaining({
-            command: "npx",
-            args: ["-y", PRODUCT_IDENTITY.registrationPackageSpecifier, "mcp"],
-          }),
-        }),
+    expect(content).toContain("This checkout builds the `rea-engine` package");
+    expect(content).toContain("is not installed by that package");
+    expect(
+      jsonExamples(content).some((example) => {
+        if (typeof example !== "object" || example === null) return false;
+        const servers = Reflect.get(example, "mcpServers");
+        if (typeof servers !== "object" || servers === null) return false;
+        const server = Reflect.get(servers, "rea");
+        if (typeof server !== "object" || server === null) return false;
+        return (
+          Reflect.get(server, "command") === "npx" &&
+          JSON.stringify(Reflect.get(server, "args")) ===
+            JSON.stringify(["-y", "rea-agents@6.4.0", "mcp"])
+        );
       }),
-    );
+    ).toBe(true);
   });
 
-  it("keeps translated onboarding commands aligned with the English examples", async () => {
-    const english = shellExamples(await readFile(resolve("README.md"), "utf8"));
-    for (const path of translatedReadmes)
+  it("keeps translated onboarding commands aligned across locales", async () => {
+    const baseline = shellExamples(
+      await readFile(resolve(translatedReadmes[0]), "utf8"),
+    );
+    expect(baseline.length).toBeGreaterThan(0);
+    for (const path of translatedReadmes.slice(1))
       expect(
         shellExamples(await readFile(resolve(path), "utf8")),
         path,
-      ).toEqual(english);
+      ).toEqual(baseline);
   });
 });
