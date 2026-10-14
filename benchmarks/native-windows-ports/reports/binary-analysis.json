@@ -1,0 +1,57 @@
+{
+  "snake": {
+    "sha256": "207d311be674c17be31131df095534003e0120b1a00a6569b697e00ae0c2d373",
+    "bytes": 55296,
+    "format": "PE32+ x86-64 console, MSVC C++17",
+    "procedures": 381,
+    "strings": 220,
+    "entry": "CRT->invoke_main->FUN_1400042e0 driver",
+    "render": "FUN_140003210 (891B)",
+    "persistence_strings": [
+      "/best_score.txt",
+      "/score_history.txt",
+      "/score_checksum.txt"
+    ]
+  },
+  "pixeltetris": {
+    "sha256": "3eabbe4a4de93c9d0b91589511203313697f60500e58f18dd67eb37f8e25ca81",
+    "bytes": 1118208,
+    "format": "PE32+ x86-64 GUI, MSVC C++, SDL2 dynamic",
+    "procedures": 4945,
+    "strings": 771,
+    "init": "FUN_140013ce0 (640x360 logical)",
+    "input_mapper": "FUN_140015e90 (10 action codes)"
+  },
+  "tetris": {
+    "sha256": "846b7cf2db372981b5989863a8d560f7abfacb9c7f8219a7c059275d68760351",
+    "bytes": 2173952,
+    "format": "PE32+ x86-64 console-subsystem, MSVC DEBUG C++, SDL2/TTF/Mixer",
+    "procedures": 11157,
+    "strings": 1567,
+    "architecture": "namespace Tetris: Application/Page/MainMenuPage/GuidePage/ControlsPage/SettingsPage/ScoreValuesPage/PlayPage (96 RTTI records)"
+  },
+  "legacy-notepad": {
+    "sha256": "00e67923f531e5590ab404aa5b906470b7c1505ec75cf69f22db99509de9fb56",
+    "bytes": 262656,
+    "format": "PE32+ x86-64 GUI, MSVC C++17, pure Win32+GDI++RichEdit",
+    "procedures": 895,
+    "strings": 587,
+    "winmain": "FUN_140004910 (NotepadClass, menu 0x65, accel 0x66)",
+    "wndproc": "FUN_140003450 (91 callees, cmd map 0x9c41+)"
+  },
+  "clipjar": {
+    "sha256": "8841b01b45ac984d6e2b2521be7a7bc527949e92eb1da6eaf85db82ccf1bf8f4",
+    "bytes": 5338624,
+    "format": "PE32+ x86-64 GUI, Rust egui-0.29.1/eframe/rusqlite-0.32.1",
+    "ghidra": "UNAVAILABLE (>330s budget x3)",
+    "strings": 53494,
+    "schema": "clipboard_items(11 cols)+user_settings+4 indexes (verbatim DDL)"
+  },
+  "imgview": {
+    "sha256": "a7e07c4c629912ba710d8a181860d4f114c523f77768c4b02855dc624e106ddb",
+    "bytes": 11776,
+    "format": "PE32+ x86-64 GUI, UPX-packed stub (UPX0 28KB/UPX1 12KB)",
+    "procedures": 11,
+    "note": "real viewer compressed inside; needs upx to unpack"
+  }
+}

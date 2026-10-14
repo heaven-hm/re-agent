@@ -1,0 +1,56 @@
+{
+  "snake": {
+    "status": "PASS",
+    "artifact": "snake/replica/snakemac (34KB arm64)",
+    "evidence": "26-line frames structurally identical modulo RNG cells; HUD bytes + CRLF exact; game-over + persistence implemented",
+    "unverified": [
+      "score-per-food",
+      "food RNG",
+      "wallclock tick",
+      "checksum scheme"
+    ]
+  },
+  "pixeltetris": {
+    "status": "PARTIAL",
+    "artifact": "pixeltetris/replica/pixelmac (36KB arm64 SDL2)",
+    "evidence": "builds clean; menu render UNVERIFIED on-screen",
+    "unverified": [
+      "gameplay",
+      "piece RNG/colors",
+      "gravity/scoring",
+      "action semantics 6-10"
+    ]
+  },
+  "tetris": {
+    "status": "PARTIAL",
+    "artifact": "tetris/replica/tetrismac (52KB arm64 SDL2)",
+    "evidence": "real menu screenshot (TETRIS + 6 entries)",
+    "unverified": ["gameplay", "key bindings", "scoring", "audio"]
+  },
+  "legacy-notepad": {
+    "status": "PARTIAL",
+    "artifact": "notepad/replica/notepadmac (111KB arm64 AppKit)",
+    "evidence": "real Unicode window screenshot; cmdline open + title verified",
+    "unverified": [
+      "save/reopen roundtrip",
+      "find/replace paths",
+      "font persistence",
+      "print"
+    ]
+  },
+  "clipjar": {
+    "status": "PARTIAL",
+    "artifact": "clipjar/replica/clipjarmac (117KB arm64 menu-bar)",
+    "evidence": "synthetic capture/restart/dedupe SQLite tests PASS",
+    "unverified": [
+      "search/delete UI",
+      "global hotkey",
+      "image clipboard",
+      "autopaste"
+    ]
+  },
+  "imgview": {
+    "status": "FAIL",
+    "blocker": "UPX-packed stub; upx binary not installed (needs `brew install upx`)"
+  }
+}

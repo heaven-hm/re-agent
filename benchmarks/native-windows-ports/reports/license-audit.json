@@ -1,0 +1,34 @@
+{
+  "generated": "2026-10-14",
+  "method": "GitHub release metadata API only; no application source inspected",
+  "targets": {
+    "snake": {
+      "repo": "MiguelMochizuki/snake-game",
+      "release": "v1.1.0",
+      "license": "MIT"
+    },
+    "pixeltetris": {
+      "repo": "mvlassis/pixeltetris",
+      "release": "v1.0.0",
+      "license": "MIT"
+    },
+    "tetris": {
+      "repo": "oleh-maliuta/tetris",
+      "release": "v1.0.0",
+      "license": "MIT"
+    },
+    "legacy-notepad": {
+      "repo": "ForLoopCodes/legacy-notepad",
+      "release": "v1.2.1",
+      "license": "MIT"
+    },
+    "clipjar": {
+      "repo": "Startrek666/Clipjar",
+      "release": "v1.2.0",
+      "license": "MIT"
+    },
+    "imgview": { "repo": "nakst/imgview", "release": "v0.3", "license": "MIT" }
+  },
+  "redistribution": "All six MIT; originals retained with attribution. Shipped game assets (pixeltetris PNG/TTF incl. OFL fonts; tetris fonts/images) kept under replica dirs with manifests. No copyleft obligations in batch 1.",
+  "refused": "HyperCam (Hyperionics EULA bans RE/adaptation) and HyCam2 (same) were explicitly declined despite user pressure; CrossOver use and clean-room builds offered instead."
+}
