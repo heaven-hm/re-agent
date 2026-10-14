@@ -1,0 +1,39 @@
+{
+  "target": "clipjar",
+  "original": {
+    "name": "Clipjar v1.2.0 (Startrek666/Clipjar, MIT)",
+    "url": "https://github.com/Startrek666/Clipjar/releases/download/v1.2.0/clipjar.exe",
+    "sha256": "8841b01b45ac984d6e2b2521be7a7bc527949e92eb1da6eaf85db82ccf1bf8f4",
+    "bytes": 5338624,
+    "format": "PE32+ x86-64 GUI, Rust (egui 0.29.1/eframe/winit/arboard, rusqlite 0.32.1)",
+    "binary": "benchmarks/native-windows-ports/original-binaries/clipjar.exe"
+  },
+  "analysis": {
+    "ghidra_import": "UNAVAILABLE (5.3MB static Rust exceeds 330s provider budget, 3 attempts)",
+    "strings": 53494,
+    "schema": "clipboard_items(id,content_type,text_content,text_preview,image_path,image_thumb,content_hash,content_size,is_favorite,created_at,source_app) + user_settings + 4 indexes (verbatim DDL recovered)",
+    "queries": "INSERT OR IGNORE, SELECT/DELETE by id, retention cleanup (non-favorites FIFO + image caps), created_at touch",
+    "settings": "14 AppSettings fields (retention days, storage path, auto-start, max items/images/size, preview length, geometry, shortcut, auto-paste, language, first-launch)",
+    "modules": [
+      "clipboard/handler",
+      "system/hotkey",
+      "system/tray",
+      "system/autopaste",
+      "utils/image_utils"
+    ],
+    "runtime": "PASS (launches clean under Wine/X11, no errors; tray-only, no main window by design)"
+  },
+  "replica": {
+    "source": "benchmarks/native-windows-ports/clipjar/replica/main.swift",
+    "binary": "benchmarks/native-windows-ports/clipjar/replica/clipjarmac (arm64, menu-bar)",
+    "build": "swiftc -O -o clipjarmac main.swift -framework Cocoa -framework CryptoKit -lsqlite3",
+    "mapping": "tray->NSStatusItem menu-bar, egui->popover NSTableView+search, rusqlite->libsqlite3 same DDL, hotkey/autopaste/image-clipboard: partial/unverified"
+  },
+  "verification": {
+    "synthetic_capture": "PASS (controlled string -> SHA-256 row in same-schema SQLite)",
+    "restart_persistence": "PASS (rows survive relaunch)",
+    "hash_dedupe": "PASS (double copy -> single row + timestamp touch)",
+    "search_delete_fav": "UNVERIFIED (UI paths untested)",
+    "global_hotkey": "UNVERIFIED (needs Accessibility permission flow)"
+  }
+}
