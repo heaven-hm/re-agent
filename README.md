@@ -184,7 +184,7 @@ Notepad macOS port, live Unicode window:
 
 PixelTetris macOS port, live menu + gameplay windows:
 
-![pixelmac menu](benchmarks/native-windows-ports/screenshots/pixelmac-menu3.png)
+![pixelmac menu](benchmarks/native-windows-ports/screenshots/pixelmac-menu4.png)
 ![pixelmac gameplay](benchmarks/native-windows-ports/screenshots/pixelmac-play.png)
 
 Snake: 26-line terminal frames byte-identical modulo RNG cells
