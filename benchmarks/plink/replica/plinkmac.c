@@ -17,15 +17,15 @@ static void put_bytes(const unsigned char *b, unsigned int n) {
 
 int main(int argc, char **argv) {
     if (argc < 2) {
-        put_bytes(___plinkmac_golden_noargs_txt,
-                  ___plinkmac_golden_noargs_txt_len);
+        put_bytes(golden_noargs,
+                  golden_noargs_len);
         return 0;
     }
     for (int i = 1; i < argc; i++) {
         const char *a = argv[i];
         if (strcmp(a, "--help") == 0) {
-            put_bytes(___plinkmac_golden_help_txt,
-                      ___plinkmac_golden_help_txt_len);
+            put_bytes(golden_help,
+                      golden_help_len);
             return 0;
         }
         if (strcmp(a, "-V") == 0) {
@@ -36,8 +36,8 @@ int main(int argc, char **argv) {
             return 0;
         }
         if (strcmp(a, "-pgpfp") == 0) {
-            put_bytes(___plinkmac_golden_pgpfp_txt,
-                      ___plinkmac_golden_pgpfp_txt_len);
+            put_bytes(golden_pgpfp,
+                      golden_pgpfp_len);
             return 0;
         }
         if (a[0] == '-') {

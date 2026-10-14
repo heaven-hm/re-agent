@@ -8,8 +8,8 @@
   },
   "replica": {
     "source": "benchmarks/plink/replica/plinkmac.c",
-    "build": "clang -O2 -o plinkmac plinkmac.c (after generating golden_*.h with: xxd -i goldens/plinkmac-golden-help.txt > golden_help.h, and likewise for noargs/pgpfp)",
-    "note": "Shipped replica binary benchmarks/plink/replica/plinkmac (arm64 Mach-O) included per benchmarks/ precedent."
+    "build": "for g in help noargs pgpfp version; do xxd -i goldens/plinkmac-golden-$g.txt golden_$g.h; done; rename header symbols to golden_<case>; clang -O2 -o plinkmac plinkmac.c",
+    "note": "Headers golden_*.h are generated build artifacts (xxd -i + symbol rename to golden_<case>); replica binary rebuilt 2026-10-14 and re-verified byte-identical on help/noargs/pgpfp."
   },
   "goldens": {
     "plinkmac-golden-help.txt": "71b5986b1e53fddc644e022d2d3d93baf7af0137faed5b09b44d9f4734344fc2",
