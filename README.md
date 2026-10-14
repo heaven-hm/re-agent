@@ -157,19 +157,20 @@ Development health checks confirmed Frida 17.23.3, LIEF 1.0.0, Z3 5.1.0.0, Capst
 
 # Native Windows → macOS ports (Batch 1)
 
-Independent macOS reconstructions of six MIT-licensed native Windows
-binaries, recovered binary-first with REA (no original source consulted).
-Windows originals and macOS binaries are committed under
+Independent macOS reconstructions and one explicitly blocked investigation of
+six MIT-licensed native Windows targets, recovered binary-first with REA (no
+original source consulted). Five Windows originals and the available macOS
+replicas are committed under
 `benchmarks/native-windows-ports/` with manifests, goldens and reports.
 
-| Target                | Original (Windows x64)                                      | macOS port                                     | Status                             |
-| --------------------- | ----------------------------------------------------------- | ---------------------------------------------- | ---------------------------------- |
-| Snake v1.1.0          | `original-binaries/snake-windows-x86_64.exe` (55KB)         | `snake/replica/snakemac` (C, terminal)         | Structural frame parity            |
-| PixelTetris v1.0.0    | `original-binaries/Pixeltetris.exe` (1.1MB, SDL2)           | `pixeltetris/replica/pixelmac` (C, SDL2)       | Menu+gameplay; shots pending       |
-| Tetris v1.0.0         | `original-binaries/Tetris.exe` (2.2MB, SDL2)                | `tetris/replica/tetrismac` (C, SDL2)           | Menu screenshot verified           |
-| legacy-notepad v1.2.1 | `original-binaries/legacy-notepad-x64.exe` (263KB, Win32)   | `notepad/replica/notepadmac` (Swift, AppKit)   | Unicode window verified            |
-| Clipjar v1.2.0        | `original-binaries/clipjar.exe` (5.3MB, Rust)               | `clipjar/replica/clipjarmac` (Swift, menu-bar) | SQLite capture/persist/dedupe PASS |
-| imgview v0.3          | `imgview64.exe` (UPX stub — in `_reference`, not committed) | BLOCKED                                        | Needs `upx` to unpack              |
+| Target                | Original (Windows x64)                                           | macOS port                                     | Status                             |
+| --------------------- | ---------------------------------------------------------------- | ---------------------------------------------- | ---------------------------------- |
+| Snake v1.1.0          | `original-binaries/snake-windows-x86_64.exe` (55KB)              | `snake/replica/snakemac` (C, terminal)         | Structural frame parity            |
+| PixelTetris v1.0.0    | `original-binaries/Pixeltetris.exe` (1.1MB, SDL2)                | `pixeltetris/replica/pixelmac` (C, SDL2)       | Menu+gameplay; shots pending       |
+| Tetris v1.0.0         | `original-binaries/Tetris.exe` (2.2MB, SDL2)                     | `tetris/replica/tetrismac` (C, SDL2)           | Menu screenshot verified           |
+| legacy-notepad v1.2.1 | `original-binaries/legacy-notepad-x64.exe` (263KB, Win32)        | `notepad/replica/notepadmac` (Swift, AppKit)   | Unicode window verified            |
+| Clipjar v1.2.0        | `original-binaries/clipjar.exe` (5.3MB, Rust)                    | `clipjar/replica/clipjarmac` (Swift, menu-bar) | SQLite capture/persist/dedupe PASS |
+| imgview v0.3          | `original-binaries/imgview64.exe` (UPX stub, unpacked upx 5.2.1) | `imgview/replica/imgviewmac` (Swift, AppKit)   | PNG render verified                |
 
 ## Port evidence
 
@@ -197,19 +198,21 @@ not claimed; unverified items are listed per target, not hidden.
 
 ## Native Binary Reconstruction — Benchmark Batch 2
 
+The complete app/game inventory across managed examples, Batch 1 and Batch 2 is in the [package-checked benchmark catalog](benchmarks/catalog.json), with per-target implementation and evidence links in the [benchmark index](benchmarks/README.md).
+
 **Current result: incomplete; all six application-level results are UNVERIFIED.**
 All six requested official Windows assets were downloaded, publisher SHA-256
 verified, and actual native x64 PE executables inventoried. No upstream
 implementation source was used. Originals and runtime assets stay private.
 
-| Target                    | Windows release and binary                                                                                                                 | macOS reconstruction                              | Functional comparison |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------- | --------------------- |
-| OpenLieroX — C++ game     | [20260912.1 ZIP](https://github.com/openlierox/openlierox/releases/download/20260912.1/openlierox-20260912.1-windows.zip)                  | Unimplemented                                     | UNVERIFIED            |
-| SuperTux — C++ game       | [v0.7.0 portable ZIP](https://github.com/SuperTux/supertux/releases/download/v0.7.0/SuperTux-v0.7.0-win64-portable.zip)                    | Unimplemented                                     | UNVERIFIED            |
-| The Powder Toy — C++ game | [v100.1.400 EXE](https://github.com/The-Powder-Toy/The-Powder-Toy/releases/download/v100.1.400/powder-v100.1.400-x86_64-windows-mingw.exe) | Unimplemented                                     | UNVERIFIED            |
-| ripgrep — Rust utility    | [15.2.0 ZIP](https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15.2.0-x86_64-pc-windows-msvc.zip)                     | Unimplemented                                     | UNVERIFIED            |
-| fd — Rust utility         | [v10.5.0 ZIP](https://github.com/sharkdp/fd/releases/download/v10.5.0/fd-v10.5.0-x86_64-pc-windows-msvc.zip)                               | Exploratory C++ ARM64 candidate compiled/executed | UNVERIFIED            |
-| bat — Rust utility        | [v0.26.1 ZIP](https://github.com/sharkdp/bat/releases/download/v0.26.1/bat-v0.26.1-x86_64-pc-windows-msvc.zip)                             | Unimplemented                                     | UNVERIFIED            |
+| Target                    | Windows release and binary                                                                                                                 | macOS reconstruction                                                                                         | Functional comparison                    |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | ---------------------------------------- |
+| OpenLieroX — C++ game     | [20260912.1 ZIP](https://github.com/openlierox/openlierox/releases/download/20260912.1/openlierox-20260912.1-windows.zip)                  | Unimplemented                                                                                                | UNVERIFIED                               |
+| SuperTux — C++ game       | [v0.7.0 portable ZIP](https://github.com/SuperTux/supertux/releases/download/v0.7.0/SuperTux-v0.7.0-win64-portable.zip)                    | Unimplemented                                                                                                | UNVERIFIED                               |
+| The Powder Toy — C++ game | [v100.1.400 EXE](https://github.com/The-Powder-Toy/The-Powder-Toy/releases/download/v100.1.400/powder-v100.1.400-x86_64-windows-mingw.exe) | Unimplemented                                                                                                | UNVERIFIED                               |
+| ripgrep — Rust utility    | [15.2.0 ZIP](https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15.2.0-x86_64-pc-windows-msvc.zip)                     | Independent C++17 macOS subset; 7/8 retained CrossOver observations match after path-separator normalization | PARTIAL feature / application UNVERIFIED |
+| fd — Rust utility         | [v10.5.0 ZIP](https://github.com/sharkdp/fd/releases/download/v10.5.0/fd-v10.5.0-x86_64-pc-windows-msvc.zip)                               | C++ ARM64 candidate; 2 raw, 9 normalized search cases pass                                                   | PARTIAL feature / application UNVERIFIED |
+| bat — Rust utility        | [v0.26.1 ZIP](https://github.com/sharkdp/bat/releases/download/v0.26.1/bat-v0.26.1-x86_64-pc-windows-msvc.zip)                             | C++ ARM64 candidate; 8/8 plain-output cases pass                                                             | PARTIAL feature / application UNVERIFIED |
 
 Original executable SHA-256 values, distinct from release archive hashes:
 
@@ -236,12 +239,16 @@ Its infrastructure tests use actual child processes; they are separate from
 application fidelity tests. Windows workers, complete native recovery, FLOSS/capa
 integration and game reconstruction remain future work.
 
-The fdmac candidate is a real 161,944-byte ARM64 Mach-O, with 13 observed replica
-executions and two timeouts across 15 probes. It is independently engineered and
-has no completed original comparison or verified recovered algorithm. **Zero
-of 67 declared Batch 2 scenarios has established equivalence.** No game or
-utility terminal screenshots, rendered-frame parity, repair result or formal
-proof was produced. A private host screenshot documents memory exhaustion.
+Receipt-derived records currently contain **23 completed utility comparisons:
+10 raw byte/exit passes, 13 raw differences, and 9 additional fd search cases
+that pass only under declared path/order normalization**. fd has 2 raw passes
+among 15 cases; bat has 8/8 raw passes for its declared plain-output cases.
+These are feature-level results; all six Batch 2 applications remain PARTIAL
+or UNVERIFIED overall. fd has a completed bounded repair loop, while gameplay,
+game screenshots, original Windows OS execution, whole-application equivalence
+and formal proofs remain unavailable. See the
+[receipt-derived Batch 2 summary](benchmarks/native-batch-2/README.md) and
+[target reports](benchmarks/native-batch-2/reports/).
 
 [Full Batch 2 report](benchmarks/native-batch-2/reports/batch-2-overview.md) ·
 [binary/import inventory](benchmarks/native-batch-2/reports/binary-inventory.json) ·

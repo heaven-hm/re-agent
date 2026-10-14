@@ -51,7 +51,9 @@
     "sha256": "a7e07c4c629912ba710d8a181860d4f114c523f77768c4b02855dc624e106ddb",
     "bytes": 11776,
     "format": "PE32+ x86-64 GUI, UPX-packed stub (UPX0 28KB/UPX1 12KB)",
-    "procedures": 11,
-    "note": "real viewer compressed inside; needs upx to unpack"
+    "procedures": 116,
+    "note": "UPX 5.2.1 -d reveals GDI+ viewer; Gdip* imports, folder nav, clipboard, statusbar strings",
+    "unpacked_sha256": "42c04793768b949cdd193e7f5eb2fea2752ae85604ffbe04ea31fe18cd76f59c",
+    "unpacked_bytes": 18944
   }
 }

@@ -50,7 +50,12 @@
     ]
   },
   "imgview": {
-    "status": "FAIL",
-    "blocker": "UPX-packed stub; upx binary not installed (needs `brew install upx`)"
+    "status": "PARTIAL",
+    "artifact": "imgview/replica/imgviewmac (117KB arm64 AppKit)",
+    "evidence": "real window render of PNG sample with live status bar",
+    "unverified": [
+      "JPEG path (sample made, render untested)",
+      "zoom/pan/clipboard/dark/count paths"
+    ]
   }
 }

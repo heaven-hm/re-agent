@@ -1,0 +1,52 @@
+{
+  "target": "imgview",
+  "original": {
+    "name": "imgview v0.3 (nakst/imgview, MIT)",
+    "url": "https://github.com/nakst/imgview/releases/download/v0.3/imgview64.exe",
+    "sha256": "a7e07c4c629912ba710d8a181860d4f114c523f77768c4b02855dc624e106ddb",
+    "bytes": 11776,
+    "format": "PE32+ x86-64 GUI, UPX-packed (UPX0 28KB/UPX1 12KB)",
+    "unpacked_sha256": "42c04793768b949cdd193e7f5eb2fea2752ae85604ffbe04ea31fe18cd76f59c",
+    "unpacked_bytes": 18944,
+    "binary": "benchmarks/native-windows-ports/original-binaries/imgview64.exe"
+  },
+  "analysis": {
+    "procedures": 116,
+    "loader": "GdipCreateBitmapFromStream image load; folder scan for prev/next; zoom/pan; clipboard copy/path; status bar (size/coords/color/anchor); dark toggle; fit/actual-size; color count",
+    "formats": [
+      "bmp",
+      "gif",
+      "jpeg",
+      "jpg",
+      "png",
+      "tif",
+      "tiff",
+      "wmf",
+      "emf"
+    ],
+    "shortcuts": [
+      "Ctrl+O show-in-folder",
+      "Ctrl+C copy",
+      "Ctrl+Shift+C copy path",
+      "Left/Right prev/next",
+      "F5 refresh",
+      "Ctrl+M anchor",
+      "Ctrl+D dark",
+      "Ctrl+B statusbar",
+      "Ctrl+0 fit",
+      "Ctrl+1 actual",
+      "Ctrl+L count colors"
+    ]
+  },
+  "replica": {
+    "source": "benchmarks/native-windows-ports/imgview/replica/main.swift",
+    "binary": "benchmarks/native-windows-ports/imgview/replica/imgviewmac (arm64, AppKit + ImageIO)",
+    "build": "swiftc -O -o imgviewmac main.swift -framework Cocoa",
+    "screenshot": "benchmarks/native-windows-ports/screenshots/imgviewmac-app.png"
+  },
+  "verification": {
+    "png_render": "PASS (real window: sample PNG rendered + live status bar)",
+    "jpeg_path": "UNVERIFIED",
+    "zoom_pan_clipboard_dark_count": "UNVERIFIED (implemented, not exercised)"
+  }
+}

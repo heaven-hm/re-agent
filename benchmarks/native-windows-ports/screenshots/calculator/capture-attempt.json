@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "captureAttemptUtc": "2026-10-14T13:50:26Z",
+  "host": {
+    "os": "macOS Darwin 24.3.0",
+    "architecture": "arm64",
+    "displayCapture": "unavailable: screencapture reported could not create image from display 0"
+  },
+  "original": {
+    "application": "/System/Applications/Calculator.app",
+    "executable": "/System/Applications/Calculator.app/Contents/MacOS/Calculator",
+    "executableExists": true,
+    "executableSha256": "0ebdae8618cd675bcf492d6fc8f48dd79c4712e0532c80f1a1cb59269fd76be9",
+    "launchAttempt": "/usr/bin/open /System/Applications/Calculator.app",
+    "launchResult": "failed",
+    "launchError": "NSOSStatusErrorDomain Code=-10827 kLSNoExecutableErr: The executable is missing",
+    "pid": null,
+    "windowId": null
+  },
+  "replica": {
+    "sourceFiles": [
+      {
+        "path": "scripts/calculator/CalculatorEngine.swift",
+        "sha256": "3834cef91ce2b5c7a94f5d86c87ad0c3135623129c7affe5d8e818ff7e9e56bf"
+      },
+      {
+        "path": "scripts/calculator/CalculatorWindow.swift",
+        "sha256": "b33cb895a83fdd6478a34bad2c082bf1f13d34b242cc32a2ee267e1427bbd888"
+      }
+    ],
+    "launchAttempt": "The existing scripts/verify-calculator-reconstruction.mjs workflow was invoked; it stopped while opening the original, before building or launching the replica.",
+    "pid": null,
+    "windowId": null
+  },
+  "historicalImageNotAcceptedAsRuntimeEvidence": {
+    "path": "output/autonomy/calculator.png",
+    "sha256": "6d337408444d030b7f45f922f9c3eb7aeab552ebe84cf34fa1c52eeb80ca2d98",
+    "dimensions": "198x350",
+    "modifiedLocal": "2026-10-13T02:07:34+0530",
+    "reason": "No contemporaneous process/window identity is available. Image appearance and its dimensions do not prove which executable produced it."
+  },
+  "result": {
+    "status": "UNVERIFIED",
+    "newScreenshotsCaptured": 0,
+    "sideBySideComparison": null,
+    "blockers": [
+      "LaunchServices could not launch the installed Calculator app in this environment, despite the executable existing at the reported path.",
+      "The host has no capturable display (display index 0 unavailable), so process-bound screenshots could not be produced."
+    ],
+    "claim": "No fresh process-bound screenshot or visual equivalence claim is made."
+  }
+}
