@@ -1,0 +1,3 @@
+# Local Swift executable and compiler cache are reproducible build output.
+build
+build/**

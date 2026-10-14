@@ -212,7 +212,11 @@
         "scripts/generate-completion-ledger.mjs",
         "scripts/lib/generated-file.mjs",
         "scripts/verify/managed/**",
-        "scripts/fixtures/managed/**"
+        "scripts/fixtures/managed/**",
+        {
+          "mode": "dependencyOutputs",
+          "globs": ["skills/**"]
+        }
       ],
       "outputs": [
         "docs/verification/managed-conformance-manifest.json",
