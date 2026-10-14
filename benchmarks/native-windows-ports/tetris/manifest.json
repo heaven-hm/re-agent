@@ -42,7 +42,11 @@
       "source": "benchmarks/native-windows-ports/tetris/replica/tetris.c",
       "binary": "benchmarks/native-windows-ports/tetris/replica/tetrismac (arm64)",
       "assets": "benchmarks/native-windows-ports/tetris/replica/assets (fonts+images only; audio excluded)",
-      "screenshot": "benchmarks/native-windows-ports/screenshots/tetrismac-menu.png",
+      "screenshots": [
+        "benchmarks/native-windows-ports/screenshots/tetrismac-menu.png",
+        "benchmarks/native-windows-ports/screenshots/tetrismac-play.png"
+      ],
+      "gameplay": "PASS (Enter starts game from menu; falling piece + ghost + HUD live)",
       "build": "clang -O2 -o tetrismac tetris.c -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer"
     }
   }

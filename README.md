@@ -155,6 +155,103 @@ These are actual `Form.DrawToBitmap` renders after the same button-handler seque
 
 Development health checks confirmed Frida 17.23.3, LIEF 1.0.0, Z3 5.1.0.0, Capstone 5.0.9 and Pillow 12.3.0. Ghidra/radare2 and native compilers are reused locally. **Bundled now:** the signature-verified ILSpy package and the built X11 libgdiplus library with source and licenses. The [preview release](https://github.com/heaven-hm/rea-engine/releases/tag/engine-preview-2026-10-13) also carries the checksum-verified, unmodified Ghidra 12.1.2 archive; see its [manifest](third_party/ghidra/manifest.json). **A clone does not contain every installed external tool binary.** The installer and offline bundle builder are shipped in source; generated local bundles are not a license-approved public distribution. Frida/LIEF native dependency source and license coverage require further audit. Optional licensed tools and Apple Calculator are not redistributed. See [tool profiles and limitations](docs/autonomy-tool-bootstrap.md).
 
+# Native Windows → macOS ports (Batch 1)
+
+Independent macOS reconstructions of six MIT-licensed native Windows
+binaries, recovered binary-first with REA (no original source consulted).
+Windows originals and macOS binaries are committed under
+`benchmarks/native-windows-ports/` with manifests, goldens and reports.
+
+| Target                | Original (Windows x64)                                      | macOS port                                     | Status                             |
+| --------------------- | ----------------------------------------------------------- | ---------------------------------------------- | ---------------------------------- |
+| Snake v1.1.0          | `original-binaries/snake-windows-x86_64.exe` (55KB)         | `snake/replica/snakemac` (C, terminal)         | Structural frame parity            |
+| PixelTetris v1.0.0    | `original-binaries/Pixeltetris.exe` (1.1MB, SDL2)           | `pixeltetris/replica/pixelmac` (C, SDL2)       | Menu+gameplay; shots pending       |
+| Tetris v1.0.0         | `original-binaries/Tetris.exe` (2.2MB, SDL2)                | `tetris/replica/tetrismac` (C, SDL2)           | Menu screenshot verified           |
+| legacy-notepad v1.2.1 | `original-binaries/legacy-notepad-x64.exe` (263KB, Win32)   | `notepad/replica/notepadmac` (Swift, AppKit)   | Unicode window verified            |
+| Clipjar v1.2.0        | `original-binaries/clipjar.exe` (5.3MB, Rust)               | `clipjar/replica/clipjarmac` (Swift, menu-bar) | SQLite capture/persist/dedupe PASS |
+| imgview v0.3          | `imgview64.exe` (UPX stub — in `_reference`, not committed) | BLOCKED                                        | Needs `upx` to unpack              |
+
+## Port evidence
+
+Tetris macOS port, live menu + gameplay windows:
+
+![tetrismac menu](benchmarks/native-windows-ports/screenshots/tetrismac-menu.png)
+![tetrismac gameplay](benchmarks/native-windows-ports/screenshots/tetrismac-play.png)
+
+Notepad macOS port, live Unicode window:
+
+![notepadmac window](benchmarks/native-windows-ports/screenshots/notepadmac-hello.png)
+
+PixelTetris macOS port, live menu + gameplay windows:
+
+![pixelmac menu](benchmarks/native-windows-ports/screenshots/pixelmac-menu3.png)
+![pixelmac gameplay](benchmarks/native-windows-ports/screenshots/pixelmac-play.png)
+
+Snake: 26-line terminal frames byte-identical modulo RNG cells
+(`snake/original-run0.txt`); Clipjar: synthetic capture → SHA-256 row,
+restart persistence and hash-dedupe verified against live SQLite.
+
+See `benchmarks/native-windows-ports/reports/` (license audit, binary
+analysis, functional results, limitations). Whole-executable identity is
+not claimed; unverified items are listed per target, not hidden.
+
+## Native Binary Reconstruction — Benchmark Batch 2
+
+**Current result: incomplete; all six application-level results are UNVERIFIED.**
+All six requested official Windows assets were downloaded, publisher SHA-256
+verified, and actual native x64 PE executables inventoried. No upstream
+implementation source was used. Originals and runtime assets stay private.
+
+| Target                    | Windows release and binary                                                                                                                 | macOS reconstruction                              | Functional comparison |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------- | --------------------- |
+| OpenLieroX — C++ game     | [20260912.1 ZIP](https://github.com/openlierox/openlierox/releases/download/20260912.1/openlierox-20260912.1-windows.zip)                  | Unimplemented                                     | UNVERIFIED            |
+| SuperTux — C++ game       | [v0.7.0 portable ZIP](https://github.com/SuperTux/supertux/releases/download/v0.7.0/SuperTux-v0.7.0-win64-portable.zip)                    | Unimplemented                                     | UNVERIFIED            |
+| The Powder Toy — C++ game | [v100.1.400 EXE](https://github.com/The-Powder-Toy/The-Powder-Toy/releases/download/v100.1.400/powder-v100.1.400-x86_64-windows-mingw.exe) | Unimplemented                                     | UNVERIFIED            |
+| ripgrep — Rust utility    | [15.2.0 ZIP](https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15.2.0-x86_64-pc-windows-msvc.zip)                     | Unimplemented                                     | UNVERIFIED            |
+| fd — Rust utility         | [v10.5.0 ZIP](https://github.com/sharkdp/fd/releases/download/v10.5.0/fd-v10.5.0-x86_64-pc-windows-msvc.zip)                               | Exploratory C++ ARM64 candidate compiled/executed | UNVERIFIED            |
+| bat — Rust utility        | [v0.26.1 ZIP](https://github.com/sharkdp/bat/releases/download/v0.26.1/bat-v0.26.1-x86_64-pc-windows-msvc.zip)                             | Unimplemented                                     | UNVERIFIED            |
+
+Original executable SHA-256 values, distinct from release archive hashes:
+
+| Target         | Original PE SHA-256                                                |
+| -------------- | ------------------------------------------------------------------ |
+| OpenLieroX     | `0f79c968ab9aabd8cb99e173500fa241e883846fd3e0c9ca2f7f0bf3771fa5c1` |
+| SuperTux       | `6249f25a6ac1cc3d27955ca09852b8368618ce58ad9c13e0c5084051c2c02b43` |
+| The Powder Toy | `df32b616b31dabae10b82028731ebdfd6867c872198b81f29d418cbafbf460c3` |
+| ripgrep        | `14231169855ec5205cf5a1b6f1db358ff4aed4247c86b69ce8aae647c77f6680` |
+| fd             | `d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9` |
+| bat            | `9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd` |
+
+**Actual capabilities used:** existing REA MCP/Ghidra workflows and PE resource
+Evidence, installed compilers, tool health inventory, owned process supervision,
+and the existing autonomous controller's checkpoint creation/reopening. Deep
+analysis timed out or was cancelled under host memory/disk pressure. No Batch 2
+native function recovery is verified. Original utility probes through CrossOver
+timed out; actual Windows OS behavior remains unverified. The controller also
+rejected a compatibility launcher that differed from its hash-bound target.
+
+**New extension:** a reusable bounded file differential benchmark runner compares
+exact output-file bytes, diagnostics and exit outcomes in independent workdirs.
+Its infrastructure tests use actual child processes; they are separate from
+application fidelity tests. Windows workers, complete native recovery, FLOSS/capa
+integration and game reconstruction remain future work.
+
+The fdmac candidate is a real 161,944-byte ARM64 Mach-O, with 13 observed replica
+executions and two timeouts across 15 probes. It is independently engineered and
+has no completed original comparison or verified recovered algorithm. **Zero
+of 67 declared Batch 2 scenarios has established equivalence.** No game or
+utility terminal screenshots, rendered-frame parity, repair result or formal
+proof was produced. A private host screenshot documents memory exhaustion.
+
+[Full Batch 2 report](benchmarks/native-batch-2/reports/batch-2-overview.md) ·
+[binary/import inventory](benchmarks/native-batch-2/reports/binary-inventory.json) ·
+[license audit](benchmarks/native-batch-2/reports/license-audit.md) ·
+[native build/execution results](benchmarks/native-batch-2/reports/macos-build-results.md) ·
+[functional cases](benchmarks/native-batch-2/reports/functional-tests.json) ·
+[measured metrics](benchmarks/native-batch-2/reports/performance-results.json) ·
+[visual evidence status](benchmarks/native-batch-2/reports/visual-comparisons.md) ·
+[known blockers](benchmarks/native-batch-2/reports/known-limitations.md)
+
 ## Build and use this repository
 
 ```sh
