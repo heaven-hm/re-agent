@@ -1,0 +1,9 @@
+{
+  "result": {
+    "path": "/Users/haseeb-mir/Downloads/tools/vqdll.dll",
+    "format": "pe",
+    "kind": "executable",
+    "sha256": "2491892b539d9072ca0704972ceac83bf5cb9fbcc3938be6a01495f9cbf40a69",
+    "architecture": "x86"
+  }
+}

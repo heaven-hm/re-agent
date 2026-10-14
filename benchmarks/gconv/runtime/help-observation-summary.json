@@ -1,0 +1,17 @@
+{
+  "status": "observed-compatibility-runtime",
+  "original_target": "/Users/haseeb-mir/Downloads/tools/gconv.exe",
+  "arguments_observed": [["-h"], ["/?"]],
+  "exit_codes": [0, 0],
+  "help_bytes": 3913,
+  "help_sha256": "4a8459cf34d6426e09401d6cf5ae05680af10f515c99697ad3047d3f8df6f875",
+  "help_aliases_byte_equal": true,
+  "raw_newlines": "CR CR LF",
+  "static_support": "analysis-dll/gconvapi-function-0x10007160.json gcParseCommandLine help generation",
+  "unknowns": [
+    "No conversion experiment completed",
+    "No original GUI window screenshot",
+    "Actual Windows OS unverified",
+    "No reconstructed implementation compared"
+  ]
+}

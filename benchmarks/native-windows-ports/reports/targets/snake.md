@@ -1,6 +1,6 @@
 # Snake — Windows binary to native macOS reconstruction
 
-**Overall status: PARTIAL.** A narrow board-rendering structure and observed game-over text were reproduced. This does not establish full game behavior or byte-identical binaries.
+**Overall status: PARTIAL; original-versus-replica parity is unverified.** Static observations and one original transcript are retained, but a paired replica transcript and repeatable comparison receipt are missing. The former “26-line parity” claim cannot be reproduced from committed evidence.
 
 ## Inputs and implementation
 
@@ -10,9 +10,9 @@
 
 ## Evidence
 
-- Reported comparison: 26 rendered lines with wall rows and HUD bytes matching the observed original, excluding dynamic snake/food cells; game-over structure and labels match observed bytes. The retained original capture is [original-run0.txt](../../snake/original-run0.txt).
+- Retained original observation: [original-run0.txt](../../snake/original-run0.txt). No paired replica transcript or machine-readable diff is included, so no exact frame or game-over parity result is claimed here.
 - Scenario and limitations: [functional results](../functional-results.json), [known limitations](../limitations.md).
 
 ## Open behavior
 
-Score-per-food, RNG, wall-clock tick timing, persistence checksum, and some PTY input behavior remain unverified. Do not interpret the structural comparisons as a full deterministic game test.
+Score-per-food, RNG, wall-clock tick timing, persistence checksum, PTY input behavior, and the reported original-versus-replica frame match remain unverified. The replica source exists and builds, but feature parity is not established by a retained paired run.

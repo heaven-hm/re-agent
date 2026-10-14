@@ -1,0 +1,18 @@
+{
+  "name": "LICENSE-MIT",
+  "path": "LICENSE-MIT",
+  "sha": "dfc8683cfb605eeb4949f7ca68b4a60352a27e6d",
+  "size": 1082,
+  "url": "https://api.github.com/repos/sharkdp/fd/contents/LICENSE-MIT?ref=v10.5.0",
+  "html_url": "https://github.com/sharkdp/fd/blob/v10.5.0/LICENSE-MIT",
+  "git_url": "https://api.github.com/repos/sharkdp/fd/git/blobs/dfc8683cfb605eeb4949f7ca68b4a60352a27e6d",
+  "download_url": "https://raw.githubusercontent.com/sharkdp/fd/v10.5.0/LICENSE-MIT",
+  "type": "file",
+  "content": "TUlUIExpY2Vuc2UKCkNvcHlyaWdodCAoYykgMjAxNy1wcmVzZW50IFRoZSBm\nZCBkZXZlbG9wZXJzCgpQZXJtaXNzaW9uIGlzIGhlcmVieSBncmFudGVkLCBm\ncmVlIG9mIGNoYXJnZSwgdG8gYW55IHBlcnNvbiBvYnRhaW5pbmcgYSBjb3B5\nCm9mIHRoaXMgc29mdHdhcmUgYW5kIGFzc29jaWF0ZWQgZG9jdW1lbnRhdGlv\nbiBmaWxlcyAodGhlICJTb2Z0d2FyZSIpLCB0byBkZWFsCmluIHRoZSBTb2Z0\nd2FyZSB3aXRob3V0IHJlc3RyaWN0aW9uLCBpbmNsdWRpbmcgd2l0aG91dCBs\naW1pdGF0aW9uIHRoZSByaWdodHMKdG8gdXNlLCBjb3B5LCBtb2RpZnksIG1l\ncmdlLCBwdWJsaXNoLCBkaXN0cmlidXRlLCBzdWJsaWNlbnNlLCBhbmQvb3Ig\nc2VsbApjb3BpZXMgb2YgdGhlIFNvZnR3YXJlLCBhbmQgdG8gcGVybWl0IHBl\ncnNvbnMgdG8gd2hvbSB0aGUgU29mdHdhcmUgaXMKZnVybmlzaGVkIHRvIGRv\nIHNvLCBzdWJqZWN0IHRvIHRoZSBmb2xsb3dpbmcgY29uZGl0aW9uczoKClRo\nZSBhYm92ZSBjb3B5cmlnaHQgbm90aWNlIGFuZCB0aGlzIHBlcm1pc3Npb24g\nbm90aWNlIHNoYWxsIGJlIGluY2x1ZGVkIGluIGFsbApjb3BpZXMgb3Igc3Vi\nc3RhbnRpYWwgcG9ydGlvbnMgb2YgdGhlIFNvZnR3YXJlLgoKVEhFIFNPRlRX\nQVJFIElTIFBST1ZJREVEICJBUyBJUyIsIFdJVEhPVVQgV0FSUkFOVFkgT0Yg\nQU5ZIEtJTkQsIEVYUFJFU1MgT1IKSU1QTElFRCwgSU5DTFVESU5HIEJVVCBO\nT1QgTElNSVRFRCBUTyBUSEUgV0FSUkFOVElFUyBPRiBNRVJDSEFOVEFCSUxJ\nVFksCkZJVE5FU1MgRk9SIEEgUEFSVElDVUxBUiBQVVJQT1NFIEFORCBOT05J\nTkZSSU5HRU1FTlQuIElOIE5PIEVWRU5UIFNIQUxMIFRIRQpBVVRIT1JTIE9S\nIENPUFlSSUdIVCBIT0xERVJTIEJFIExJQUJMRSBGT1IgQU5ZIENMQUlNLCBE\nQU1BR0VTIE9SIE9USEVSCkxJQUJJTElUWSwgV0hFVEhFUiBJTiBBTiBBQ1RJ\nT04gT0YgQ09OVFJBQ1QsIFRPUlQgT1IgT1RIRVJXSVNFLCBBUklTSU5HIEZS\nT00sCk9VVCBPRiBPUiBJTiBDT05ORUNUSU9OIFdJVEggVEhFIFNPRlRXQVJF\nIE9SIFRIRSBVU0UgT1IgT1RIRVIgREVBTElOR1MgSU4gVEhFClNPRlRXQVJF\nLgo=\n",
+  "encoding": "base64",
+  "_links": {
+    "self": "https://api.github.com/repos/sharkdp/fd/contents/LICENSE-MIT?ref=v10.5.0",
+    "git": "https://api.github.com/repos/sharkdp/fd/git/blobs/dfc8683cfb605eeb4949f7ca68b4a60352a27e6d",
+    "html": "https://github.com/sharkdp/fd/blob/v10.5.0/LICENSE-MIT"
+  }
+}

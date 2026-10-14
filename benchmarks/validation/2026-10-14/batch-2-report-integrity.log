@@ -1,0 +1,32 @@
+$ python3 -m unittest discover -s benchmarks/native-batch-2/scripts -p test_*.py -v
+exit_code=0
+
+[stdout]
+
+[stderr]
+test_caps_retained_streams_and_rejects_the_attempt (test_probe_originals.OriginalCaptureTests.test_caps_retained_streams_and_rejects_the_attempt) ... ok
+test_captures_a_completed_target (test_probe_originals.OriginalCaptureTests.test_captures_a_completed_target) ... ok
+test_records_timeouts_and_spawn_errors (test_probe_originals.OriginalCaptureTests.test_records_timeouts_and_spawn_errors) ... ok
+test_rejects_a_cross_over_wineserver_crash_even_with_zero_exit (test_probe_originals.OriginalCaptureTests.test_rejects_a_cross_over_wineserver_crash_even_with_zero_exit) ... ok
+test_attempt_history_keeps_failed_then_successful_original_runs (test_report_integrity.ReportIntegrityTests.test_attempt_history_keeps_failed_then_successful_original_runs) ... ok
+test_raw_and_normalized_results_recompute_from_captured_streams (test_report_integrity.ReportIntegrityTests.test_raw_and_normalized_results_recompute_from_captured_streams) ... ok
+test_tampered_normalized_claim_cannot_be_used_as_authority (test_report_integrity.ReportIntegrityTests.test_tampered_normalized_claim_cannot_be_used_as_authority) ... ok
+test_tampered_original_stdout_cannot_retain_normalized_pass (test_report_integrity.ReportIntegrityTests.test_tampered_original_stdout_cannot_retain_normalized_pass) ... ok
+test_tampered_stream_for_invalid_target_observation_is_still_a_validation_failure (test_report_integrity.ReportIntegrityTests.test_tampered_stream_for_invalid_target_observation_is_still_a_validation_failure) ... ok
+test_failed_replace_preserves_existing_directory_and_cleans_temp (test_report_output.AtomicWriteTests.test_failed_replace_preserves_existing_directory_and_cleans_temp) ... ok
+test_replaces_complete_utf8_report_without_temporary_files (test_report_output.AtomicWriteTests.test_replaces_complete_utf8_report_without_temporary_files) ... ok
+test_accepts_well_formed_run_id (test_run_binding.RunBindingTests.test_accepts_well_formed_run_id) ... ok
+test_fixture_digest_changes_when_content_changes (test_run_binding.RunBindingTests.test_fixture_digest_changes_when_content_changes) ... ok
+test_fixture_digest_is_independent_of_creation_order (test_run_binding.RunBindingTests.test_fixture_digest_is_independent_of_creation_order) ... ok
+test_rejects_missing_or_wrong_kind_run_id (test_run_binding.RunBindingTests.test_rejects_missing_or_wrong_kind_run_id) ... ok
+test_requires_comparison_to_reference_the_original_and_replica_runs (test_run_binding.RunBindingTests.test_requires_comparison_to_reference_the_original_and_replica_runs) ... ok
+test_normalizes_backslash_path_separators (test_search_comparison.FdSearchComparisonTests.test_normalizes_backslash_path_separators) ... ok
+test_normalizes_only_path_prefix_and_separator (test_search_comparison.FdSearchComparisonTests.test_normalizes_only_path_prefix_and_separator) ... ok
+test_preserves_line_ending_bytes (test_search_comparison.FdSearchComparisonTests.test_preserves_line_ending_bytes) ... ok
+test_preserves_order (test_search_comparison.FdSearchComparisonTests.test_preserves_order) ... ok
+test_rejects_non_utf8_output (test_search_comparison.FdSearchComparisonTests.test_rejects_non_utf8_output) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 2.009s
+
+OK

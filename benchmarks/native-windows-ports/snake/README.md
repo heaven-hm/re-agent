@@ -35,17 +35,19 @@ Build string source: `manifest.json:39-43`. Reported artifact: `snake/replica/sn
 
 ## Verification
 
-| Case                                                          | Status     | Basis                                                      |
-| ------------------------------------------------------------- | ---------- | ---------------------------------------------------------- |
-| Static frame (26 lines, walls + HUD, modulo snake/food cells) | PASS       | `manifest.json:46`, `reports/functional-results.json:5`    |
-| Game-over screen (structure + labels)                         | PASS       | `manifest.json:46`, `reports/functional-results.json:5`    |
-| Input path (PTY drives menus; piped stdin ignored by design)  | PARTIAL    | `manifest.json:51`                                         |
-| Score per food (+1 assumed)                                   | UNVERIFIED | `manifest.json:47`, `reports/functional-results.json:6-11` |
-| Food RNG distribution                                         | UNVERIFIED | `manifest.json:48`, `reports/functional-results.json:6-11` |
-| Tick wall-clock (200 ms from binary; Wine console too slow)   | UNVERIFIED | `manifest.json:49`, `reports/limitations.md:8-9`           |
-| Persistence format (checksum scheme unknown)                  | UNVERIFIED | `manifest.json:50`, `reports/functional-results.json:6-11` |
+| Case                                                         | Status     | Basis                                                      |
+| ------------------------------------------------------------ | ---------- | ---------------------------------------------------------- |
+| Original transcript captured                                 | OBSERVED   | `original-run0.txt`; no paired replica output is retained  |
+| Static frame parity (26 lines, modulo dynamic cells)         | UNVERIFIED | No paired transcript or comparison receipt is included     |
+| Game-over parity                                             | UNVERIFIED | No paired original/replica receipt is retained             |
+| Replica build                                                | PASS       | `replica/build.sh` compiles the current ARM64 candidate    |
+| Input path (PTY drives menus; piped stdin ignored by design) | PARTIAL    | `manifest.json:51`                                         |
+| Score per food (+1 assumed)                                  | UNVERIFIED | `manifest.json:47`, `reports/functional-results.json:6-11` |
+| Food RNG distribution                                        | UNVERIFIED | `manifest.json:48`, `reports/functional-results.json:6-11` |
+| Tick wall-clock (200 ms from binary; Wine console too slow)  | UNVERIFIED | `manifest.json:49`, `reports/limitations.md:8-9`           |
+| Persistence format (checksum scheme unknown)                 | UNVERIFIED | `manifest.json:50`, `reports/functional-results.json:6-11` |
 
-Overall functional status: `PASS` (`reports/functional-results.json:3`).
+Overall functional status: `PARTIAL`; the retained evidence does not establish original-versus-replica equality.
 
 ## Non-goals
 

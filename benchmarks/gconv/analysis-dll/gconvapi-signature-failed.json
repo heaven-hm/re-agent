@@ -1,0 +1,23 @@
+{
+  "error": "Analysis failed",
+  "code": "execution_failure",
+  "category": "execution_failure",
+  "message": "Analysis could not complete. Run `rea doctor` and review the reported details; repeating the unchanged request is not expected to succeed.",
+  "retryable": false,
+  "remediation": {
+    "action": "Analysis could not complete. Run `rea doctor` and review the reported details; repeating the unchanged request is not expected to succeed."
+  },
+  "details": {
+    "provider_id": "native-macos",
+    "operation": "inspect_signature",
+    "diagnostics": {
+      "tool": "codesign",
+      "reason": "io",
+      "exit_code": null,
+      "signal": null,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0,
+      "detail": "macOS process ownership helper compilation failed via xcrun (compiler result: exit code 1): <unknown>:0: error: unable to open output file '/Users/haseeb-mir/.cache/clang/ModuleCache/1025DYQKWKBAF/SwiftShims-22LOMWGXQBUM1.pcm': 'Operation not permitted'\n/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib/swift/Swift.swiftmodule/arm64e-apple-macos.swiftinterface:5:8: error: could not build Objective-C module 'SwiftShims'\n    3 | // swift-module-flags: -disable-objc-attr-requires-foundation-module -target arm64e-apple-macosx15.2 -target-variant arm64e-apple-ios14.5-macabi -enable-objc-intero… [diagnostics truncated]"
+    }
+  }
+}

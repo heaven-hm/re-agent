@@ -1,0 +1,74 @@
+{
+  "evidence_id": "ev_fee1c80d311bcd6e889a7603c4bf96b7ba2ec33b7d127bbcec875dde8a936ee6",
+  "subject": {
+    "name": "bat.exe",
+    "digest": {
+      "sha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd"
+    },
+    "format": "pe",
+    "architecture": "x86_64",
+    "local_path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/bat/extracted/bat-v0.26.1-x86_64-pc-windows-msvc/bat.exe"
+  },
+  "provider": {
+    "id": "rea-engine-native-cli-benchmark",
+    "name": "REA Engine recorded CLI byte comparison",
+    "version": "1"
+  },
+  "analysis_profile": null,
+  "predicate_type": "rea.analysis",
+  "operation": "compare_recorded_native_cli_bytes",
+  "parameters": {
+    "case": "invalid-path",
+    "original_record_sha256": "9b491b0d39c2cfee20a9045609d101bd4a6d678516eca05cdb8a520d84abce79",
+    "candidate_sha256": "e41a5f460ef97aefad098020acd8c1ce9d91ac3896daa0528e3f8b50bbbc9116",
+    "candidate_source_sha256": "975ca15632e4983d3175b768203157d6353d28454594a58195c0b354e6040025",
+    "original_run_id": "rea-original-190d308114a7471fb90272cffd7189c4",
+    "replica_run_id": "rea-replica-0e5284dbf42046e5b9006182354d9dc3",
+    "comparison_run_id": "rea-comparison-89c4915a08d64d9cb32c13ad63b1b29a",
+    "fixture_tree_sha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+    "fixture_bound": true,
+    "working_directory": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/tests/runtime-fixtures/tree",
+    "arguments": [
+      "--color",
+      "never",
+      "--paging",
+      "never",
+      "--style",
+      "plain",
+      "does-not-exist"
+    ]
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "status": "PASS",
+    "dimensions": {
+      "stdoutBytes": true,
+      "stderrBytes": true,
+      "exitCode": true
+    },
+    "original": {
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "7eb21a6bc9c753875b8be2cb543b1a8a620ea65abf1237c7c03d4f116da8541d",
+      "exitCode": 1
+    },
+    "replica": {
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "7eb21a6bc9c753875b8be2cb543b1a8a620ea65abf1237c7c03d4f116da8541d",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "\u001b[31m[bat error]\u001b[0m: 'does-not-exist': File not found. (os error 2)\n"
+    }
+  },
+  "confidence": "observed",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Original is a retained CrossOver compatibility observation, not actual Windows OS verification.",
+    "Only the declared stdout/stderr/outcome cases are compared. Source/runtime algorithms, tty modes and full program equivalence remain unverified.",
+    "Candidate diagnostic capture is exact for these valid UTF-8 cases; arbitrary invalid UTF-8 output is unsupported.",
+    "Original observation did not bind a full filesystem snapshot; fixture ownership/unchanged contents are a stated assumption."
+  ],
+  "relationship_coverage": null,
+  "locations": [],
+  "evidence_links": []
+}

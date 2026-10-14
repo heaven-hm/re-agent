@@ -1,0 +1,61 @@
+{
+  "evidence_id": "ev_b98653c91dc16ee36dba8778108c31137d6ae8628e2484260a0bffe339e0cc6b",
+  "subject": {
+    "name": "bat.exe",
+    "digest": {
+      "sha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd"
+    },
+    "format": "pe",
+    "architecture": null,
+    "local_path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/bat/extracted/bat-v0.26.1-x86_64-pc-windows-msvc/bat.exe"
+  },
+  "provider": {
+    "id": "rea-pe-resources",
+    "name": "REA PE resource parser",
+    "version": "1"
+  },
+  "analysis_profile": null,
+  "predicate_type": "rea.analysis",
+  "operation": "inspect_pe_resources",
+  "parameters": {
+    "path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/bat/extracted/bat-v0.26.1-x86_64-pc-windows-msvc/bat.exe",
+    "max_file_bytes": 67108864,
+    "max_entries": 16384
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "artifact": {
+      "path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/bat/extracted/bat-v0.26.1-x86_64-pc-windows-msvc/bat.exe",
+      "sha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+      "bytes": 7342592
+    },
+    "format": "pe32-plus",
+    "machine": 34404,
+    "directory": null,
+    "directories": [],
+    "resources": [],
+    "icon_groups": [],
+    "coverage": { "status": "complete", "examined_entries": 0, "resources": 0 },
+    "limitations": [
+      "Static PE32/PE32+ type/name/language resource inventory; payloads other than RT_GROUP_ICON remain opaque.",
+      "Icon candidates are resource-table relationships. Language fallback, image decoding and actual shell/window loading are not observed.",
+      "Exact shared byte ranges are retained; non-identical overlapping resource structures or payloads are rejected."
+    ]
+  },
+  "confidence": "observed",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Static PE32/PE32+ type/name/language resource inventory; payloads other than RT_GROUP_ICON remain opaque.",
+    "Icon candidates are resource-table relationships. Language fallback, image decoding and actual shell/window loading are not observed.",
+    "Exact shared byte ranges are retained; non-identical overlapping resource structures or payloads are rejected."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "artifact-path",
+      "path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/bat/extracted/bat-v0.26.1-x86_64-pc-windows-msvc/bat.exe"
+    }
+  ],
+  "evidence_links": []
+}

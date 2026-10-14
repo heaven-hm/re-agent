@@ -13,6 +13,10 @@
 - [Menu](../../screenshots/tetrismac-menu.png) — SHA-256 `57005667ac2927751096d8cde88bbbd98939ad71e986931819a4fe98bd8e1bfe`.
 - [Gameplay](../../screenshots/tetrismac-play.png) — SHA-256 `2de390eaee69d4449695450ae3c6e44b63289cb22a25ef4ea4a95c95430a826a`.
 
+![Tetris macOS replica menu](../../screenshots/tetrismac-menu.png)
+
+![Tetris macOS replica gameplay](../../screenshots/tetrismac-play.png)
+
 The screenshots show the macOS replica; original-side GUI comparison is not evidenced here.
 
 ## Open behavior

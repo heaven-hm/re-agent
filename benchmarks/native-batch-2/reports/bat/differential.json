@@ -1,0 +1,136 @@
+{
+  "target": "bat",
+  "originalSha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+  "candidateSha256": "e41a5f460ef97aefad098020acd8c1ce9d91ac3896daa0528e3f8b50bbbc9116",
+  "candidateSourceSha256": "975ca15632e4983d3175b768203157d6353d28454594a58195c0b354e6040025",
+  "candidate": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/reconstructed/bat/build/batmac",
+  "os": "darwin",
+  "architecture": "arm64",
+  "comparison": "Raw stdout/stderr bytes and exit codes; no normalization.",
+  "results": [
+    {
+      "case": "version",
+      "status": "PASS",
+      "dimensions": {
+        "stdoutBytes": true,
+        "stderrBytes": true,
+        "exitCode": true
+      },
+      "evidenceId": "ev_eceed9df497ce8aac340f8d9d0b5615ce3ef6937827099922d064867160933ad",
+      "file": "case-version.json",
+      "originalRunId": "rea-original-8df9d38486454f8fb6355b97010504c3",
+      "replicaRunId": "rea-replica-863694e9d4b9400ea1635ac767c59c63",
+      "comparisonRunId": "rea-comparison-8ecf265b326c44dc9332d77fc3a85526",
+      "fixtureBound": true
+    },
+    {
+      "case": "plain",
+      "status": "PASS",
+      "dimensions": {
+        "stdoutBytes": true,
+        "stderrBytes": true,
+        "exitCode": true
+      },
+      "evidenceId": "ev_3792498a434bb205b56300d91aa5ddf950205709dd82f354046cb32a54189b0a",
+      "file": "case-plain.json",
+      "originalRunId": "rea-original-66fe6e97b0b741428c84cd022a92b0b8",
+      "replicaRunId": "rea-replica-76c2911ee79c4b25987e809f363d3536",
+      "comparisonRunId": "rea-comparison-69cc53e093b14668ba788aa99d82de38",
+      "fixtureBound": true
+    },
+    {
+      "case": "crlf",
+      "status": "PASS",
+      "dimensions": {
+        "stdoutBytes": true,
+        "stderrBytes": true,
+        "exitCode": true
+      },
+      "evidenceId": "ev_83ffcd919049d258f1bce3a5af6454efc45af09f99c285205d6476444447610c",
+      "file": "case-crlf.json",
+      "originalRunId": "rea-original-84166d7d2ef54f1e9ca8cfd6b6d9c7cb",
+      "replicaRunId": "rea-replica-f388923e88694f3c88ff87d28b502562",
+      "comparisonRunId": "rea-comparison-eb9d2d3bfc6b4b4e8d31883a8e5eca2a",
+      "fixtureBound": true
+    },
+    {
+      "case": "unicode",
+      "status": "PASS",
+      "dimensions": {
+        "stdoutBytes": true,
+        "stderrBytes": true,
+        "exitCode": true
+      },
+      "evidenceId": "ev_e4e763e4ee971c240466cad659d2efc7d96ffca24f2be75f501c205be973e31a",
+      "file": "case-unicode.json",
+      "originalRunId": "rea-original-3dfc55c45e2c42028388febf4bdc9421",
+      "replicaRunId": "rea-replica-545e1d6602cc4011b6972665e0129bff",
+      "comparisonRunId": "rea-comparison-742b778c904645ac9169bc6fec8b8c34",
+      "fixtureBound": true
+    },
+    {
+      "case": "empty",
+      "status": "PASS",
+      "dimensions": {
+        "stdoutBytes": true,
+        "stderrBytes": true,
+        "exitCode": true
+      },
+      "evidenceId": "ev_0540988c00618469542cd9ce242bd79c2a7f3080cc16994733017f40fbddfe7d",
+      "file": "case-empty.json",
+      "originalRunId": "rea-original-7dff78c6ad8e4eda867d795f250f1ddc",
+      "replicaRunId": "rea-replica-2c16aa222bb040bda4fb04432ab139e4",
+      "comparisonRunId": "rea-comparison-322f719261dd45c2a98c4e1e116759b9",
+      "fixtureBound": true
+    },
+    {
+      "case": "invalid-path",
+      "status": "PASS",
+      "dimensions": {
+        "stdoutBytes": true,
+        "stderrBytes": true,
+        "exitCode": true
+      },
+      "evidenceId": "ev_fee1c80d311bcd6e889a7603c4bf96b7ba2ec33b7d127bbcec875dde8a936ee6",
+      "file": "case-invalid-path.json",
+      "originalRunId": "rea-original-190d308114a7471fb90272cffd7189c4",
+      "replicaRunId": "rea-replica-0e5284dbf42046e5b9006182354d9dc3",
+      "comparisonRunId": "rea-comparison-89c4915a08d64d9cb32c13ad63b1b29a",
+      "fixtureBound": true
+    },
+    {
+      "case": "concat",
+      "status": "PASS",
+      "dimensions": {
+        "stdoutBytes": true,
+        "stderrBytes": true,
+        "exitCode": true
+      },
+      "evidenceId": "ev_bffa0184dab8ac109cc919071f8debda12c20315ef3c7f9e9d0af0e174db0a7b",
+      "file": "case-concat.json",
+      "originalRunId": "rea-original-ac553efac94449c895fe334e448d7d6c",
+      "replicaRunId": "rea-replica-2cc7332097f4413d86da650492a2309d",
+      "comparisonRunId": "rea-comparison-d471b98d17dc448cb236fe17106624d6",
+      "fixtureBound": true
+    },
+    {
+      "case": "number",
+      "status": "PASS",
+      "dimensions": {
+        "stdoutBytes": true,
+        "stderrBytes": true,
+        "exitCode": true
+      },
+      "evidenceId": "ev_9c9074a36e2bf9f21960a8f1d35bb5c23af5ad0662966f8d1ac5fcf5d5d7fb80",
+      "file": "case-number.json",
+      "originalRunId": "rea-original-d54a0fda37e34d639db2a975ae6a7576",
+      "replicaRunId": "rea-replica-b1b7178daebb4af79d90c1ddf6a85297",
+      "comparisonRunId": "rea-comparison-4bd2b76ab0304ab7b6018ac6ebb30f55",
+      "fixtureBound": true
+    }
+  ],
+  "passed": 8,
+  "failed": 0,
+  "unverified": 0,
+  "scope": "Declared compatibility observations only; whole application remains PARTIAL, no whole-binary or universal-equivalence proof."
+}

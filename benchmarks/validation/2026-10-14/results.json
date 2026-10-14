@@ -1,0 +1,211 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-14T17:17:02Z",
+  "host": {
+    "os": "macOS",
+    "osVersion": "15.3.1",
+    "architecture": "arm64",
+    "clang": "Apple clang version 16.0.0 (clang-1600.0.26.6)",
+    "swift": "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
+  },
+  "scope": "Host build and bounded local test receipts only. This report does not establish original-versus-replica fidelity, complete target behavior, GUI execution, or Windows-native execution.",
+  "builds": [
+    {
+      "id": "calculator",
+      "command": "sh scripts/calculator/build.sh",
+      "exitCode": 0,
+      "signal": null,
+      "binary": "scripts/calculator/build/calculatormac",
+      "sha256": "fd15168f8c87c6ebbb7112ec47e35242aae2de34de56c77d20e227704a126473",
+      "file": "scripts/calculator/build/calculatormac: Mach-O 64-bit executable arm64",
+      "sourceHashes": {
+        "scripts/calculator/CalculatorEngine.swift": "3834cef91ce2b5c7a94f5d86c87ad0c3135623129c7affe5d8e818ff7e9e56bf",
+        "scripts/calculator/CalculatorWindow.swift": "b33cb895a83fdd6478a34bad2c082bf1f13d34b242cc32a2ee267e1427bbd888",
+        "scripts/calculator/CalculatorApp.swift": "52e30a7182e34fe7105915067a226247a04cc61ccf01b55d0de14d70262609b7"
+      },
+      "log": "benchmarks/validation/2026-10-14/calculator-build.log",
+      "warningCount": 0
+    },
+    {
+      "id": "snake",
+      "command": "sh benchmarks/native-windows-ports/snake/replica/build.sh",
+      "exitCode": 0,
+      "signal": null,
+      "binary": "benchmarks/native-windows-ports/snake/replica/build/snakemac",
+      "sha256": "f39070e04948864df3fc1f9417eea8c24213a2e21c4d2b0d6d26e6a8569d9ba2",
+      "file": "benchmarks/native-windows-ports/snake/replica/build/snakemac: Mach-O 64-bit executable arm64",
+      "sourceHashes": {
+        "benchmarks/native-windows-ports/snake/replica/snake.c": "b68f95773a0e3d4d9c089379d2590ff030550fba0485c1fd4f79509febd51357"
+      },
+      "log": "benchmarks/validation/2026-10-14/snake-build.log",
+      "warningCount": 1
+    },
+    {
+      "id": "pixeltetris",
+      "command": "sh benchmarks/native-windows-ports/pixeltetris/replica/build.sh",
+      "exitCode": 0,
+      "signal": null,
+      "binary": "benchmarks/native-windows-ports/pixeltetris/replica/build/pixelmac",
+      "sha256": "0a6de00214a60752b1f656fcac2d9ca388ee73d2ebc408c7fc0ac67c758d533f",
+      "file": "benchmarks/native-windows-ports/pixeltetris/replica/build/pixelmac: Mach-O 64-bit executable arm64",
+      "sourceHashes": {
+        "benchmarks/native-windows-ports/pixeltetris/replica/pixelmac.c": "4daf64878d8425528a1a484646dffabaa52856bb995d104c11984a341e5c7604"
+      },
+      "log": "benchmarks/validation/2026-10-14/pixeltetris-build.log",
+      "warningCount": 5
+    },
+    {
+      "id": "tetris",
+      "command": "sh benchmarks/native-windows-ports/tetris/replica/build.sh",
+      "exitCode": 0,
+      "signal": null,
+      "binary": "benchmarks/native-windows-ports/tetris/replica/build/tetrismac",
+      "sha256": "a4ef296c2cc6294389b19c878abcea26d83b2216d7ea4f825ede92a770b0a988",
+      "file": "benchmarks/native-windows-ports/tetris/replica/build/tetrismac: Mach-O 64-bit executable arm64",
+      "sourceHashes": {
+        "benchmarks/native-windows-ports/tetris/replica/tetris.c": "9da4e3e28f1d0c6d7dfd29cd381b7529b573fd18301730b3f7f4bc4cea69690f"
+      },
+      "log": "benchmarks/validation/2026-10-14/tetris-build.log",
+      "warningCount": 0
+    },
+    {
+      "id": "notepad",
+      "command": "sh benchmarks/native-windows-ports/notepad/replica/build.sh",
+      "exitCode": 0,
+      "signal": null,
+      "binary": "benchmarks/native-windows-ports/notepad/replica/build/notepadmac",
+      "sha256": "ce7b650792eb2fef803813dd4bf11cc77aeead64559201909821ffc59a05cf94",
+      "file": "benchmarks/native-windows-ports/notepad/replica/build/notepadmac: Mach-O 64-bit executable arm64",
+      "sourceHashes": {
+        "benchmarks/native-windows-ports/notepad/replica/main.swift": "3fc0e4a89433d01bf7236c9f4beb6e736d0c74f0341286380a66f95ce7278338"
+      },
+      "log": "benchmarks/validation/2026-10-14/notepad-build.log",
+      "warningCount": 6
+    },
+    {
+      "id": "clipjar",
+      "command": "sh benchmarks/native-windows-ports/clipjar/replica/build.sh",
+      "exitCode": 0,
+      "signal": null,
+      "binary": "benchmarks/native-windows-ports/clipjar/replica/build/clipjarmac",
+      "sha256": "d72642725fa5389e2889b550639251c18e9aba132eaeafcc3a9e73aa1573b43c",
+      "file": "benchmarks/native-windows-ports/clipjar/replica/build/clipjarmac: Mach-O 64-bit executable arm64",
+      "sourceHashes": {
+        "benchmarks/native-windows-ports/clipjar/replica/main.swift": "13fbafb4b381e4d63801cc840bf4bd929877cd91fe635e9847197128957f405f"
+      },
+      "log": "benchmarks/validation/2026-10-14/clipjar-build.log",
+      "warningCount": 0
+    },
+    {
+      "id": "gconv",
+      "command": "sh benchmarks/native-windows-ports/gconv/replica/build.sh",
+      "exitCode": 0,
+      "signal": null,
+      "binary": "benchmarks/native-windows-ports/gconv/replica/build/qvmtool",
+      "sha256": "e29c35f62dee91fdabff46b0ee291e32304531fce8117cc08eba46e38fb7c983",
+      "file": "benchmarks/native-windows-ports/gconv/replica/build/qvmtool: Mach-O 64-bit executable arm64",
+      "sourceHashes": {
+        "benchmarks/native-windows-ports/gconv/replica/qvmtool.c": "81708f438b5020a2a8dd0fdbdfc1cdf827a1fca1a2e427c0456b1e1245217d8d"
+      },
+      "log": "benchmarks/validation/2026-10-14/gconv-build.log",
+      "warningCount": 0
+    },
+    {
+      "id": "imgview",
+      "command": "sh benchmarks/native-windows-ports/imgview/replica/build.sh",
+      "exitCode": 0,
+      "signal": null,
+      "binary": "benchmarks/native-windows-ports/imgview/replica/build/imgviewmac",
+      "sha256": "6248c820642b3e424c89d4a1b33e49443204090c6e48a9865e4608446a188945",
+      "file": "benchmarks/native-windows-ports/imgview/replica/build/imgviewmac: Mach-O 64-bit executable arm64",
+      "sourceHashes": {
+        "benchmarks/native-windows-ports/imgview/replica/main.swift": "c1a961392c9addf77cc3b737bda1683a04ce4d4202da0070c0f3ae8055c6d053"
+      },
+      "log": "benchmarks/validation/2026-10-14/imgview-build.log",
+      "warningCount": 2
+    },
+    {
+      "id": "plink",
+      "command": "sh benchmarks/plink/replica/build.sh",
+      "exitCode": 0,
+      "signal": null,
+      "binary": "benchmarks/plink/replica/build/plinkmac",
+      "sha256": "71055b60a418eecea82ffdb18d35a906a760f8c8710b6b651667652d21f464ee",
+      "file": "benchmarks/plink/replica/build/plinkmac: Mach-O 64-bit executable arm64",
+      "sourceHashes": {
+        "benchmarks/plink/replica/plinkmac.c": "9eb9c6daa8769fb366fe25032b562251f20d2dd03649b25b414b6f25f7d409d5"
+      },
+      "log": "benchmarks/validation/2026-10-14/plink-build.log",
+      "warningCount": 0
+    },
+    {
+      "id": "fd",
+      "command": "sh benchmarks/native-batch-2/reconstructed/fd/build.sh",
+      "exitCode": 0,
+      "signal": null,
+      "binary": "benchmarks/native-batch-2/reconstructed/fd/build/fdmac",
+      "sha256": "91332a6075aeb5acc7a3be95a8200fbac071fb7f85514b3488e245a3533fc8b9",
+      "file": "benchmarks/native-batch-2/reconstructed/fd/build/fdmac: Mach-O 64-bit executable arm64",
+      "sourceHashes": {
+        "benchmarks/native-batch-2/reconstructed/fd/fdmac.cpp": "17372f673c6109cd756a1b1c51058cb04e41c19b3e27858b4f89168f878654cd"
+      },
+      "log": "benchmarks/validation/2026-10-14/fd-build.log",
+      "warningCount": 0
+    },
+    {
+      "id": "ripgrep",
+      "command": "sh benchmarks/native-batch-2/reconstructed/ripgrep/build.sh",
+      "exitCode": 0,
+      "signal": null,
+      "binary": "benchmarks/native-batch-2/reconstructed/ripgrep/build/rea-rg",
+      "sha256": "a4a9ffa3d11f58b4ff33bd1f1c9e7b4fd4e80c9f80eeb0be52381cb8977c4fd7",
+      "file": "benchmarks/native-batch-2/reconstructed/ripgrep/build/rea-rg: Mach-O 64-bit executable arm64",
+      "sourceHashes": {
+        "benchmarks/native-batch-2/reconstructed/ripgrep/rea-rg.cpp": "e7b08e801b46148c1788fdee559e524812fb3a2ab9408a6059e3f07f445128f5"
+      },
+      "log": "benchmarks/validation/2026-10-14/ripgrep-build.log",
+      "warningCount": 0
+    },
+    {
+      "id": "bat",
+      "command": "sh benchmarks/native-batch-2/reconstructed/bat/build.sh",
+      "exitCode": 0,
+      "signal": null,
+      "binary": "benchmarks/native-batch-2/reconstructed/bat/build/batmac",
+      "sha256": "e41a5f460ef97aefad098020acd8c1ce9d91ac3896daa0528e3f8b50bbbc9116",
+      "file": "benchmarks/native-batch-2/reconstructed/bat/build/batmac: Mach-O 64-bit executable arm64",
+      "sourceHashes": {
+        "benchmarks/native-batch-2/reconstructed/bat/batmac.cpp": "975ca15632e4983d3175b768203157d6353d28454594a58195c0b354e6040025"
+      },
+      "log": "benchmarks/validation/2026-10-14/bat-build.log",
+      "warningCount": 0
+    }
+  ],
+  "tests": [
+    {
+      "id": "plink-golden",
+      "command": "sh benchmarks/plink/replica/test.sh",
+      "exitCode": 0,
+      "log": "benchmarks/validation/2026-10-14/plink-golden.log",
+      "summary": "4 byte-golden checks"
+    },
+    {
+      "id": "ripgrep-local",
+      "command": "sh benchmarks/native-batch-2/reconstructed/ripgrep/test.sh",
+      "exitCode": 0,
+      "log": "benchmarks/validation/2026-10-14/ripgrep-local.log",
+      "summary": "7 local CLI behavior checks"
+    },
+    {
+      "id": "batch-2-report-integrity",
+      "command": "python3 -m unittest discover -s benchmarks/native-batch-2/scripts -p test_*.py -v",
+      "exitCode": 0,
+      "log": "benchmarks/validation/2026-10-14/batch-2-report-integrity.log",
+      "summary": "21 report/capture integrity unit tests"
+    }
+  ],
+  "visualCapture": {
+    "status": "unavailable",
+    "attempt": "screencapture -x failed with \"could not create image from display 0\"; no screenshot was generated by this run"
+  }
+}

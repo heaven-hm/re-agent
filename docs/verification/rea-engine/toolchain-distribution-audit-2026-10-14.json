@@ -1,0 +1,178 @@
+{
+  "schema": "rea.toolchain-distribution-audit.v1",
+  "observedAt": "2026-10-14",
+  "repository": "https://github.com/heaven-hm/rea-engine",
+  "host": {
+    "os": "macOS",
+    "architecture": "arm64",
+    "probe": "rea autonomy-tools --json",
+    "rawProbeOutsideRepository": "/private/tmp/rea-engine-tool-audit.json"
+  },
+  "engine": {
+    "npmVersion": "6.4.0",
+    "mcpToolsDiscovered": 192,
+    "cliCommandsDiscovered": 151,
+    "mcpPromptsDiscovered": 6,
+    "skillPackage": "reverse-engineer-anything",
+    "skillInstalledVersion": 37,
+    "skillExpectedVersion": 43,
+    "skillState": "stale",
+    "catalogDigest": "2a89c9c799d65670fafaf1c2bed042eab9659df6db0bd82a7f91e6e8b6c5f136",
+    "evidence": "The existing REA CLI/MCP discovery output is included. Counts describe the built local 6.4.0 engine, not every host registration."
+  },
+  "components": [
+    {
+      "id": "ghidra",
+      "class": "external-tool",
+      "distribution": "official release archive is available in the engine release; separate from npm source payload",
+      "license": "Apache-2.0 with bundled third-party components requiring retained notices",
+      "macosArm64": "used in prior benchmark analysis; full application proof is task-specific",
+      "windows": "not verified in this audit",
+      "linux": "not verified in this audit",
+      "redistribution": "conditional on release-specific notices and dependency audit",
+      "integration": "existing Ghidra provider and bridge; do not install a duplicate MCP server"
+    },
+    {
+      "id": "radare2",
+      "class": "external-tool",
+      "distribution": "host-installed; not bundled by this audit",
+      "license": "LGPL-3.0-only for radare2; plugins can have different licenses, so inspect the exact release build and plugin set",
+      "macosArm64": "healthy, version 6.2.0 discovered",
+      "windows": "not verified",
+      "linux": "not verified",
+      "redistribution": "not approved for this release",
+      "integration": "bounded read-only aflj function inventory and caller-addressed pdj disassembly routes exist through provider, CLI, and MCP; function-inventory provider smoke passed, while disassembly provider execution failed cleanup inspection with spawn EPERM"
+    },
+    {
+      "id": "frida",
+      "class": "python-tool-and-REA-adapter",
+      "distribution": "official wheel bundle builder exists; bundle explicitly marks public redistribution unapproved",
+      "license": "Frida COPYING includes binary exception; complete native dependency source/license coverage remains unproven",
+      "macosArm64": "Python 17.23.3 import and local device query healthy; hook execution is not established by this probe",
+      "windows": "not verified",
+      "linux": "not verified",
+      "redistribution": "not approved",
+      "integration": "existing trace-frida workflow for supported owned host targets"
+    },
+    {
+      "id": "capstone",
+      "class": "python-library",
+      "distribution": "host Python module; optional bundle can preserve wheel/source/notices",
+      "license": "BSD-3-Clause; artifact-level notices must travel with the bundle",
+      "macosArm64": "Python 5.0.9; one ARM64 instruction probe healthy",
+      "windows": "not verified",
+      "linux": "not verified",
+      "redistribution": "not approved as part of the optional aggregate tool bundle",
+      "integration": "the one-instruction health probe does not prove target-wide disassembly"
+    },
+    {
+      "id": "lief",
+      "class": "python-library",
+      "distribution": "host Python module; optional bundle can preserve artifacts and notices",
+      "license": "Apache-2.0; PyPI artifacts omit some notices, exact upstream notices are retained by bundle builder",
+      "macosArm64": "Python 1.0.0 import/API probe healthy",
+      "windows": "not verified",
+      "linux": "not verified",
+      "redistribution": "not approved until embedded native dependency source/license coverage is complete",
+      "integration": "no arbitrary target parse is asserted by this module-health result"
+    },
+    {
+      "id": "z3",
+      "class": "python-library-and-solver",
+      "distribution": "system executable and Python module discovered",
+      "license": "MIT",
+      "macosArm64": "Z3 4.16.0 executable and z3-solver 5.1.0.0 constraint smoke test healthy",
+      "windows": "not verified",
+      "linux": "not verified",
+      "redistribution": "not approved as a bundled binary",
+      "integration": "a satisfiable integer smoke test does not prove binary equivalence"
+    },
+    {
+      "id": "angr",
+      "class": "python-analysis-framework",
+      "distribution": "not installed in this host profile; wheel-only resolver omitted it",
+      "license": "BSD-2-Clause for angr; every transitive/native dependency still requires audit",
+      "macosArm64": "missing",
+      "windows": "not verified",
+      "linux": "not verified",
+      "redistribution": "not bundled",
+      "integration": "no target symbolic execution performed"
+    },
+    {
+      "id": "capa",
+      "class": "optional-REA-provider",
+      "distribution": "standalone official executable can be selected through REA_CAPA_PATH",
+      "license": "Apache-2.0; standalone binary is not placed in the source repository by this audit",
+      "macosArm64": "provider implementation, CLI/MCP registration and focused unit tests are present in this checkout; end-to-end acceptance against an official capa binary and real authorized PE is not recorded",
+      "windows": "not verified",
+      "linux": "not verified",
+      "redistribution": "optional external install; no binary bundle claim",
+      "integration": "existing REA CLI and MCP server; no duplicate capa MCP server; see docs/capa-capabilities.md and src/application/native/CapaCapabilitiesService.test.ts"
+    },
+    {
+      "id": "browser-and-desktop-control",
+      "class": "REA-capability",
+      "distribution": "existing REA native UI/browser workflows and client adapters",
+      "license": "per-platform system framework and external browser licenses apply",
+      "macosArm64": "native UI tooling present; host doctor reports client-registration drift",
+      "windows": "not verified in this audit",
+      "linux": "not verified in this audit",
+      "redistribution": "REA code only; operating-system accessibility frameworks and browsers are not bundled",
+      "integration": "existing REA MCP server; client registration is host-specific and must be refreshed with rea setup"
+    },
+    {
+      "id": "cheat-engine",
+      "class": "optional-third-party-tool",
+      "distribution": "not bundled",
+      "license": "unresolved: official repository has no repository-wide LICENSE; official FAQ says macOS version is trialware unless Patreon membership applies",
+      "macosArm64": "not verified",
+      "windows": "not verified",
+      "linux": "not verified",
+      "redistribution": "excluded; do not ship until the publisher grants clear redistribution terms and artifact provenance is reviewed",
+      "integration": "not integrated; target/process-specific permission and operating-system support required"
+    },
+    {
+      "id": "compiler-debugger-media",
+      "class": "system-tools",
+      "distribution": "reuse host installs; no compilers, package managers, or proprietary apps installed by rea setup",
+      "license": "system/vendor-specific",
+      "macosArm64": "Apple clang 16, LLDB, Rust 1.97.1, .NET 10.0.400 and FFmpeg 9.0.2 discovered healthy",
+      "windows": "not verified in this audit",
+      "linux": "not verified in this audit",
+      "redistribution": "not bundled",
+      "integration": "discovery records availability, not complete reverse-engineering capability"
+    }
+  ],
+  "packageRules": {
+    "observedNpmPackDryRun": {
+      "package": "rea-engine@6.4.0",
+      "fileCount": 2137,
+      "packedBytes": 25034759,
+      "unpackedBytes": 64476207,
+      "reconstructionPayloadRequirementsSatisfied": 144,
+      "privateGconvAnalysisPathsExcluded": 73,
+      "privateGconvAnalysisPathsIncluded": 0,
+      "gconvReplicaSourceIncluded": true,
+      "gconvPublicReportIncluded": true,
+      "privateBatch2PathsIncluded": 0,
+      "artifactProduced": false,
+      "verification": "Re-run after adding the 17-target catalog, nine native sample build recipes, source/resource/assets coverage, and build-output exclusions. npm pack --dry-run --json --ignore-scripts --offline with isolated npm cache; package listing checked by verifyReconstructionPayload.",
+      "generatedBenchmarkBuildPathsIncluded": 0,
+      "calculatorSwiftBuildCachesIncluded": 0
+    },
+    "originalTargets": "six Batch 1 MIT inputs included under the recorded acquisition/license audit; Batch 2 original release binaries excluded",
+    "runtimeWorkers": "private local state, excluded from Git and the npm package",
+    "replicas": "publish source, build recipes, tests, evidence and only those executable/assets whose license and notices permit redistribution",
+    "claimLimit": "A discovered executable, installed package, MCP server or skill does not by itself establish that the integration works against arbitrary native binaries."
+  },
+  "hostHealth": {
+    "overall": "partial",
+    "reasons": [
+      "Hopper missing",
+      "installed skill stale",
+      "most coding-agent MCP registrations missing or stale",
+      "GDB, Rizin, Frida CLI, RenderDoc and angr missing"
+    ],
+    "scope": "One macOS ARM64 host snapshot; not a Windows/Linux compatibility statement"
+  }
+}

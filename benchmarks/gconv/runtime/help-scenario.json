@@ -1,0 +1,17 @@
+{
+  "executable": "/Users/haseeb-mir/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin/wine",
+  "arguments": [
+    "--bottle",
+    "project-igi",
+    "--no-update",
+    "--no-gui",
+    "/Users/haseeb-mir/Downloads/tools/gconv.exe",
+    "--help"
+  ],
+  "working_directory": "/Users/haseeb-mir/Downloads/tools",
+  "timeout_ms": 12000,
+  "environment": {
+    "WINEDEBUG": "-all",
+    "LC_ALL": "en_US.UTF-8"
+  }
+}

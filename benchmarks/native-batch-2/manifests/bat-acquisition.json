@@ -1,0 +1,95 @@
+{
+  "target": "bat",
+  "version": "v0.26.1",
+  "download_url": "https://github.com/sharkdp/bat/releases/download/v0.26.1/bat-v0.26.1-x86_64-pc-windows-msvc.zip",
+  "started_utc": "2026-10-13T22:24:02.332200+00:00",
+  "status": "PASS",
+  "release_url": "https://github.com/sharkdp/bat/releases/tag/v0.26.1",
+  "publisher_digest": "sha256:0f729b4b6f5f28d395c641eacc2e9ff68d0096b85aa0eec344aa62425144b69b",
+  "archive_sha256": "0f729b4b6f5f28d395c641eacc2e9ff68d0096b85aa0eec344aa62425144b69b",
+  "archive_bytes": 3613318,
+  "publisher_digest_verified": true,
+  "archive_entries": 11,
+  "asset_extraction": "complete",
+  "executables": [
+    {
+      "path": "originals/bat/extracted/bat-v0.26.1-x86_64-pc-windows-msvc/bat.exe",
+      "sha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+      "bytes": 7342592,
+      "format": "PE32+",
+      "machine": "0x8664",
+      "architecture": "x86_64",
+      "image_base": "0x140000000",
+      "entry_rva": "0x400b9c",
+      "clr_directory": [0, 0],
+      "imports": [
+        "api-ms-win-core-synch-l1-2-0.dll",
+        "kernel32.dll",
+        "userenv.dll",
+        "api-ms-win-core-handle-l1-1-0.dll",
+        "shell32.dll",
+        "combase.dll",
+        "ntdll.dll",
+        "oleaut32.dll",
+        "bcryptprimitives.dll",
+        "user32.dll",
+        "advapi32.dll",
+        "ws2_32.dll",
+        "secur32.dll",
+        "VCRUNTIME140.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-filesystem-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-time-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-locale-l1-1-0.dll"
+      ],
+      "sections": [
+        {
+          "name": ".text",
+          "rva": 4096,
+          "virtual_bytes": 4297533,
+          "file_offset": 1024,
+          "file_bytes": 4297728
+        },
+        {
+          "name": ".rdata",
+          "rva": 4304896,
+          "virtual_bytes": 2782658,
+          "file_offset": 4298752,
+          "file_bytes": 2782720
+        },
+        {
+          "name": ".data",
+          "rva": 7090176,
+          "virtual_bytes": 99624,
+          "file_offset": 7081472,
+          "file_bytes": 77824
+        },
+        {
+          "name": ".pdata",
+          "rva": 7192576,
+          "virtual_bytes": 158724,
+          "file_offset": 7159296,
+          "file_bytes": 159232
+        },
+        {
+          "name": ".reloc",
+          "rva": 7352320,
+          "virtual_bytes": 23740,
+          "file_offset": 7318528,
+          "file_bytes": 24064
+        }
+      ]
+    }
+  ],
+  "bundled_dlls": [],
+  "license_notice_files": [
+    "originals/bat/extracted/bat-v0.26.1-x86_64-pc-windows-msvc/LICENSE-APACHE",
+    "originals/bat/extracted/bat-v0.26.1-x86_64-pc-windows-msvc/LICENSE-MIT"
+  ],
+  "duration_seconds": 0.6422345000028145
+}

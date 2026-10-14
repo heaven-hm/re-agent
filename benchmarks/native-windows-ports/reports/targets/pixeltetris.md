@@ -13,6 +13,10 @@
 - [Menu](../../screenshots/pixelmac-menu4.png) — SHA-256 `a780d65b6afe4be8a6def4ca6715ac6074b9d6cf7f76699e6d65eed45d62747e`.
 - [Gameplay](../../screenshots/pixelmac-play.png) — SHA-256 `317b5a6f5c7bc804c7a72bdeb10d23f074d3487adfb7ec608a3aba557b5e1966`.
 
+![PixelTetris macOS replica menu](../../screenshots/pixelmac-menu4.png)
+
+![PixelTetris macOS replica gameplay](../../screenshots/pixelmac-play.png)
+
 These are captures of the macOS replica, not of the original Windows game. The target manifest records original runtime as process-start/no-crash evidence and marks original GUI capture unverified.
 
 ## Open behavior

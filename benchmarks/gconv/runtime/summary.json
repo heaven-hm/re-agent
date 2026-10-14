@@ -1,0 +1,60 @@
+{
+  "status": "blocked",
+  "engine": "REA Engine capture-process",
+  "original_invocation": {
+    "executable": "/Users/haseeb-mir/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin/wine",
+    "arguments": [
+      "--bottle",
+      "project-igi",
+      "--no-update",
+      "--no-gui",
+      "/Users/haseeb-mir/Downloads/tools/gconv.exe"
+    ],
+    "working_directory": "/Users/haseeb-mir/Downloads/tools",
+    "environment": {
+      "WINEDEBUG": "-all",
+      "LC_ALL": "en_US.UTF-8"
+    },
+    "filesystem_observation_paths": [],
+    "terminal": {
+      "columns": 80,
+      "rows": 24,
+      "scrollback": 1000
+    },
+    "events": [],
+    "timeout_ms": 12000,
+    "idle_timeout_ms": 30000,
+    "settle_ms": 100,
+    "limits": {
+      "output_bytes": 1000000,
+      "files": 10000,
+      "file_bytes": 10000000,
+      "processes": 1000,
+      "filesystem_depth": 16
+    },
+    "normalization": {
+      "paths": false,
+      "pids": true,
+      "ports": true,
+      "time_bucket_ms": 10,
+      "patterns": []
+    },
+    "executable_sha256": "04da13c940c57919334520f2fee4adb2186edb41904faf8f86647a0a03114953"
+  },
+  "terminal_bytes_observed": 0,
+  "exit": {
+    "code": null,
+    "signal": 9,
+    "reason": "timeout"
+  },
+  "settlement": {
+    "state": "unverifiable",
+    "elapsed_ms": 171,
+    "cleanup_outcome": "failed"
+  },
+  "blocker_code": "cleanup_incomplete",
+  "blocker": "owned_process_group: process ownership token could not be read for 6 live process(es): ambiguous_environment_boundary=6; live candidates 89444=ambiguous_environment_boundary, 89466=ambiguous_environment_boundary, 89498=ambiguous_environment_boundary, 89605=ambiguous_environment_boundary, 89653=ambiguous_environment_boundary, 90160=ambiguous_environment_boundary; temporary_root: temporary root retained because owned process cleanup is unverified: process ownership token could not be read for 6 live process(es): ambiguous_environment_boundary=6; live candidates 89444=ambiguous_environment_boundary, 89466=ambiguous_environment_boundary, 89498=ambiguous_environment_boundary, 89605=ambiguous_environment_boundary, 89653=ambiguous_environment_boundary, 90160=ambiguous_environment_boundary",
+  "root_cause_hypothesis": "Wine process argv/environment rewriting conflicts with inferred cleared Apple vector boundary. Unproven pending raw procargs fixture.",
+  "coverage": "No gconv computation, UI, or conversion was observed. No equivalence claim.",
+  "source_evidence": "noargs-capture.json"
+}

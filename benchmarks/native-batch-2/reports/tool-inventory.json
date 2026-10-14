@@ -1,0 +1,624 @@
+{
+  "platform": "darwin",
+  "architecture": "arm64",
+  "tools": [
+    {
+      "id": "clang",
+      "executable": "clang",
+      "versionArguments": ["--version"],
+      "capabilities": ["compile-c", "compile-cpp"],
+      "state": "healthy",
+      "path": "/usr/bin/clang",
+      "version": "Apple clang version 16.0.0 (clang-1600.0.26.6)\nTarget: arm64-apple-darwin24.3.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin"
+    },
+    {
+      "id": "lldb",
+      "executable": "lldb",
+      "versionArguments": ["--version"],
+      "capabilities": ["runtime-debugging"],
+      "state": "healthy",
+      "path": "/usr/bin/lldb",
+      "version": "lldb-1600.0.39.109\nApple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
+    },
+    {
+      "id": "gdb",
+      "executable": "gdb",
+      "versionArguments": ["--version"],
+      "capabilities": ["runtime-debugging"],
+      "state": "missing",
+      "reason": "Not found on PATH; no unpinned download attempted"
+    },
+    {
+      "id": "radare2",
+      "executable": "r2",
+      "versionArguments": ["-v"],
+      "capabilities": ["static-analysis", "function-discovery"],
+      "state": "healthy",
+      "path": "/opt/homebrew/bin/r2",
+      "version": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64\nbirth: git.6.2.0 2026-08-07__17:28:34\ncommit: 6.2.0\noptions: gpl release -Os cs:5 cl:2 make"
+    },
+    {
+      "id": "rizin",
+      "executable": "rizin",
+      "versionArguments": ["-v"],
+      "capabilities": ["static-analysis"],
+      "state": "missing",
+      "reason": "Not found on PATH; no unpinned download attempted"
+    },
+    {
+      "id": "frida",
+      "executable": "frida",
+      "versionArguments": ["--version"],
+      "capabilities": ["runtime-instrumentation"],
+      "state": "missing",
+      "reason": "Not found on PATH; no unpinned download attempted"
+    },
+    {
+      "id": "rust",
+      "executable": "rustc",
+      "versionArguments": ["--version"],
+      "capabilities": ["compile-rust"],
+      "state": "healthy",
+      "path": "/opt/homebrew/bin/rustc",
+      "version": "rustc 1.97.1 (8bab26f4f 2026-07-14) (Homebrew)"
+    },
+    {
+      "id": "dotnet",
+      "executable": "dotnet",
+      "versionArguments": ["--version"],
+      "capabilities": ["compile-csharp"],
+      "state": "healthy",
+      "path": "/opt/homebrew/bin/dotnet",
+      "version": "10.0.400"
+    },
+    {
+      "id": "ffmpeg",
+      "executable": "ffmpeg",
+      "versionArguments": ["-version"],
+      "capabilities": ["audio-video-comparison"],
+      "state": "healthy",
+      "path": "/opt/homebrew/bin/ffmpeg",
+      "version": "ffmpeg version 9.0.2 Copyright (c) 2000-2026 the FFmpeg developers\nbuilt with Apple clang version 17.0.0 (clang-1700.6.4.2)\nconfiguration: --prefix=/opt/homebrew/Cellar/ffmpeg/9.0.2 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gpl --enable-libsvtav1 --enable-libopus --enable-libx264 --enable-libmp3lame --enable-libdav1d --enable-libvmaf --enable-libvpx --enable-libx265 --enable-openssl --enable-videotoolbox --enable-audiotoolbox --enable-neon\nlibavutil      61.  1.102 / 61.  1.102\nlibavcodec     63.  1.102 / 63.  1.102\nlibavformat    63.  1.102 / 63.  1.102\nlibavdevice    63.  1.102 / 63.  1.102\nlibavfilter    12.  1.102 / 12.  1.102\nlibswscale     10.  1.102 / 10.  1.102\nlibswresample   7.  1.102 /  7.  1.102\n\nExiting with exit code 0"
+    },
+    {
+      "id": "renderdoc",
+      "executable": "renderdoccmd",
+      "versionArguments": ["--version"],
+      "capabilities": ["frame-capture"],
+      "state": "missing",
+      "reason": "Not found on PATH; no unpinned download attempted"
+    },
+    {
+      "id": "z3",
+      "executable": "z3",
+      "versionArguments": ["-version"],
+      "capabilities": ["smt"],
+      "state": "healthy",
+      "path": "/opt/homebrew/bin/z3",
+      "version": "Z3 version 4.16.0 - 64 bit"
+    },
+    {
+      "id": "brew",
+      "executable": "brew",
+      "versionArguments": ["--version"],
+      "capabilities": ["package-manager"],
+      "state": "healthy",
+      "path": "/opt/homebrew/bin/brew",
+      "version": "Homebrew 7.0.9"
+    },
+    {
+      "id": "apt",
+      "executable": "apt",
+      "versionArguments": ["--version"],
+      "capabilities": ["package-manager"],
+      "state": "missing",
+      "reason": "Not found on PATH; no unpinned download attempted"
+    },
+    {
+      "id": "winget",
+      "executable": "winget",
+      "versionArguments": ["--version"],
+      "capabilities": ["package-manager"],
+      "state": "missing",
+      "reason": "Not found on PATH; no unpinned download attempted"
+    }
+  ],
+  "pythonTools": [
+    {
+      "id": "frida-python",
+      "module": "frida",
+      "distribution": "frida",
+      "healthScope": "Import, version and local device query; runtime hooks unverified",
+      "interpreter": "/Users/haseeb-mir/Documents/Code/rea/output/autonomy/tools-python/venv/bin/python",
+      "state": "healthy",
+      "version": "17.23.3"
+    },
+    {
+      "id": "capstone-python",
+      "module": "capstone",
+      "distribution": "capstone",
+      "healthScope": "Disassembly of one ARM64 instruction; target analysis unverified",
+      "interpreter": "python3",
+      "state": "healthy",
+      "version": "5.0.9"
+    },
+    {
+      "id": "lief-python",
+      "module": "lief",
+      "distribution": "lief",
+      "healthScope": "Import, version and parser API availability; target parsing unverified",
+      "interpreter": "/Users/haseeb-mir/Documents/Code/rea/output/autonomy/tools-python/venv/bin/python",
+      "state": "healthy",
+      "version": "1.0.0"
+    },
+    {
+      "id": "z3-python",
+      "module": "z3",
+      "distribution": "z3-solver",
+      "healthScope": "Solve a satisfiable integer constraint; equivalence unverified",
+      "interpreter": "/Users/haseeb-mir/Documents/Code/rea/output/autonomy/tools-python/venv/bin/python",
+      "state": "healthy",
+      "version": "5.1.0.0"
+    },
+    {
+      "id": "angr-python",
+      "module": "angr",
+      "distribution": "angr",
+      "healthScope": "Import, version and project API availability; target symbolic execution unverified",
+      "interpreter": "python3",
+      "state": "missing",
+      "reason": "No module named 'angr'"
+    },
+    {
+      "id": "pillow-python",
+      "module": "PIL",
+      "distribution": "Pillow",
+      "healthScope": "PNG encode/decode pixel comparison; application image fidelity unverified",
+      "interpreter": "python3",
+      "state": "healthy",
+      "version": "12.3.0"
+    }
+  ],
+  "doctor": {
+    "healthy": false,
+    "environment_healthy": false,
+    "scope": {
+      "mode": "audit-wide",
+      "clients": [],
+      "providers": [],
+      "skill": false,
+      "target": null
+    },
+    "scope_checks": [
+      {
+        "name": "node",
+        "ok": true,
+        "classification": "healthy",
+        "detail": "22.23.2",
+        "details": { "runtime": "node", "version": "22.23.2" }
+      },
+      {
+        "name": "host",
+        "ok": true,
+        "classification": "healthy",
+        "detail": "15.3.1"
+      },
+      {
+        "name": "hopper",
+        "ok": false,
+        "classification": "missing_analysis_engine",
+        "remediation": "Run rea setup to install Hopper, or set HOPPER_LAUNCHER_PATH."
+      },
+      {
+        "name": "skill:identity",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "Installed REA skill identity is stale.",
+        "remediation": "Run rea setup to update the installed REA skill."
+      },
+      {
+        "name": "registration:antigravity",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.gemini/config/mcp_config.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:claude_code",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.claude.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:codex",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.codex/config.toml",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:commandcode",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.commandcode/mcp.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:copilot_cli",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.copilot/mcp-config.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:cursor",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.cursor/mcp.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:devin",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.config/devin/mcp_config.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:gemini_cli",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.gemini/settings.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:grok_build",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.grok/config.toml",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:hermes",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.hermes/config.yaml",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:opencode",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.config/opencode/opencode.jsonc",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:pi",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.pi/agent/mcp.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:qoder",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.qoder/settings.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:qwen_code",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.qwen/settings.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:vscode",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/Library/Application Support/Code/User/mcp.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:windsurf",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.codeium/windsurf/mcp_config.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      }
+    ],
+    "informational_checks": [],
+    "checks": [
+      {
+        "name": "node",
+        "ok": true,
+        "classification": "healthy",
+        "detail": "22.23.2",
+        "details": { "runtime": "node", "version": "22.23.2" }
+      },
+      {
+        "name": "host",
+        "ok": true,
+        "classification": "healthy",
+        "detail": "15.3.1"
+      },
+      {
+        "name": "hopper",
+        "ok": false,
+        "classification": "missing_analysis_engine",
+        "remediation": "Run rea setup to install Hopper, or set HOPPER_LAUNCHER_PATH."
+      },
+      {
+        "name": "skill:identity",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "Installed REA skill identity is stale.",
+        "remediation": "Run rea setup to update the installed REA skill."
+      },
+      {
+        "name": "registration:antigravity",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.gemini/config/mcp_config.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:claude_code",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.claude.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:codex",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.codex/config.toml",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:commandcode",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.commandcode/mcp.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:copilot_cli",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.copilot/mcp-config.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:cursor",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.cursor/mcp.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:devin",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.config/devin/mcp_config.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:gemini_cli",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.gemini/settings.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:grok_build",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.grok/config.toml",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:hermes",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.hermes/config.yaml",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:opencode",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.config/opencode/opencode.jsonc",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:pi",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.pi/agent/mcp.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:qoder",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.qoder/settings.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:qwen_code",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.qwen/settings.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:vscode",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/Library/Application Support/Code/User/mcp.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      },
+      {
+        "name": "registration:windsurf",
+        "ok": false,
+        "classification": "config_drift",
+        "detail": "/Users/haseeb-mir/.codeium/windsurf/mcp_config.json",
+        "remediation": "Run rea setup to refresh this registration, then restart the client."
+      }
+    ],
+    "identity": {
+      "cli_package_version": "6.4.0",
+      "expected_skill_version": "43",
+      "sdk": { "server": "2.3.1", "client_test": "2.3.1", "core": "2.3.1" },
+      "catalog": {
+        "counts": { "cli_commands": 151, "mcp_tools": 192, "mcp_prompts": 6 },
+        "digests": {
+          "tools_sha256": "f5e3753de40afd4c19484eb58ecfa550ce7c89e8e63389471343101a6e20b025",
+          "prompts_sha256": "5296f0301566cadaf89243e774512011f11045af36d48405f76a3ff9a8947ac2",
+          "combined_sha256": "2a89c9c799d65670fafaf1c2bed042eab9659df6db0bd82a7f91e6e8b6c5f136"
+        }
+      },
+      "live_server": {
+        "state": "unknown",
+        "remediation": "Call binary_session in the active client to inspect the running server identity."
+      },
+      "installations": { "paths": [], "state": "unknown" },
+      "skill": {
+        "installed_version": "37",
+        "installed_tool_count": 170,
+        "state": "stale",
+        "remediation": "Run rea setup to update the installed REA skill."
+      },
+      "registrations": [
+        {
+          "client": "antigravity",
+          "config_path": "/Users/haseeb-mir/.gemini/config/mcp_config.json",
+          "command": [],
+          "state": "missing",
+          "remediation": "Run rea setup to refresh this registration, then restart the client."
+        },
+        {
+          "client": "claude_code",
+          "config_path": "/Users/haseeb-mir/.claude.json",
+          "command": [],
+          "state": "missing",
+          "remediation": "Run rea setup to refresh this registration, then restart the client."
+        },
+        {
+          "client": "codex",
+          "config_path": "/Users/haseeb-mir/.codex/config.toml",
+          "command": [
+            "/Users/haseeb-mir/.local/bin/node",
+            "/Users/haseeb-mir/.npm/_npx/dea9475797100b20/node_modules/rea-agents/scripts/rea.mjs",
+            "mcp"
+          ],
+          "state": "stale",
+          "remediation": "Run rea setup to refresh this registration, then restart the client."
+        },
+        {
+          "client": "commandcode",
+          "config_path": "/Users/haseeb-mir/.commandcode/mcp.json",
+          "command": [],
+          "state": "missing",
+          "remediation": "Run rea setup to refresh this registration, then restart the client."
+        },
+        {
+          "client": "copilot_cli",
+          "config_path": "/Users/haseeb-mir/.copilot/mcp-config.json",
+          "command": [],
+          "state": "missing",
+          "remediation": "Run rea setup to refresh this registration, then restart the client."
+        },
+        {
+          "client": "cursor",
+          "config_path": "/Users/haseeb-mir/.cursor/mcp.json",
+          "command": [],
+          "state": "missing",
+          "remediation": "Run rea setup to refresh this registration, then restart the client."
+        },
+        {
+          "client": "devin",
+          "config_path": "/Users/haseeb-mir/.config/devin/mcp_config.json",
+          "command": [],
+          "state": "missing",
+          "remediation": "Run rea setup to refresh this registration, then restart the client."
+        },
+        {
+          "client": "gemini_cli",
+          "config_path": "/Users/haseeb-mir/.gemini/settings.json",
+          "command": [],
+          "state": "missing",
+          "remediation": "Run rea setup to refresh this registration, then restart the client."
+        },
+        {
+          "client": "grok_bot",
+          "config_path": "/Users/haseeb-mir/.grokbot",
+          "command": [],
+          "state": "manual",
+          "remediation": "Grok Bot keeps connectors in the signed-in account and runs them on its hosted computer. Setup does not write that account store, and a data-directory mcp.json is not a registration. In the Grok Bot chat, add a custom MCP server named rea that runs on the Bot's computer with `npx -y rea-agents@<version> mcp`. Do not put credentials in the command or arguments. A stdio server on this machine is not attached."
+        },
+        {
+          "client": "grok_build",
+          "config_path": "/Users/haseeb-mir/.grok/config.toml",
+          "command": [],
+          "state": "missing",
+          "remediation": "Run rea setup to refresh this registration, then restart the client."
+        },
+        {
+          "client": "hermes",
+          "config_path": "/Users/haseeb-mir/.hermes/config.yaml",
+          "command": [],
+          "state": "missing",
+          "remediation": "Run rea setup to refresh this registration, then restart the client."
+        },
+        {
+          "client": "opencode",
+          "config_path": "/Users/haseeb-mir/.config/opencode/opencode.jsonc",
+          "command": ["npx", "-y", "rea-agents@6.4.0", "mcp"],
+          "state": "stale",
+          "remediation": "Run rea setup to refresh this registration, then restart the client."
+        },
+        {
+          "client": "pi",
+          "config_path": "/Users/haseeb-mir/.pi/agent/mcp.json",
+          "command": [],
+          "state": "missing",
+          "remediation": "Run rea setup to refresh this registration, then restart the client."
+        },
+        {
+          "client": "qoder",
+          "config_path": "/Users/haseeb-mir/.qoder/settings.json",
+          "command": [],
+          "state": "missing",
+          "remediation": "Run rea setup to refresh this registration, then restart the client."
+        },
+        {
+          "client": "qwen_code",
+          "config_path": "/Users/haseeb-mir/.qwen/settings.json",
+          "command": [],
+          "state": "missing",
+          "remediation": "Run rea setup to refresh this registration, then restart the client."
+        },
+        {
+          "client": "vscode",
+          "config_path": "/Users/haseeb-mir/Library/Application Support/Code/User/mcp.json",
+          "command": [],
+          "state": "missing",
+          "remediation": "Run rea setup to refresh this registration, then restart the client."
+        },
+        {
+          "client": "windsurf",
+          "config_path": "/Users/haseeb-mir/.codeium/windsurf/mcp_config.json",
+          "command": [],
+          "state": "missing",
+          "remediation": "Run rea setup to refresh this registration, then restart the client."
+        }
+      ]
+    }
+  },
+  "installationPolicy": "Reuse installed tools. REA setup does not install Java, Ghidra, package managers, or proprietary tools. Separate redistributable executable installation requires an explicit official HTTPS URL, pinned SHA-256, license, and integration health probe."
+}

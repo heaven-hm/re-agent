@@ -42,8 +42,8 @@
     "build": "clang -O2 -o snakemac snake.c"
   },
   "verification": {
-    "static_frame": "PASS (26 lines, wall rows + HUD bytes identical modulo snake/food cells)",
-    "gameover_screen": "PASS (structure + labels match observed bytes)",
+    "static_frame": "UNVERIFIED for original-versus-replica parity (the retained original transcript has no paired replica transcript or comparison receipt)",
+    "gameover_screen": "UNVERIFIED for original-versus-replica parity (structure and labels are described from observations, but no paired receipt is retained)",
     "score_per_food": "UNVERIFIED (assumed +1)",
     "food_rng": "UNVERIFIED (distribution unknown)",
     "tick_wallclock": "UNVERIFIED (Wine console too slow to measure; 200ms from binary)",

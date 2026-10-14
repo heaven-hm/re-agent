@@ -1,0 +1,51 @@
+[
+  {
+    "id": "all",
+    "arguments": ["--color", "never", "--threads", "1", ".", "."]
+  },
+  {
+    "id": "logs",
+    "arguments": ["--color", "never", "--threads", "1", "--glob", "*.log", "."]
+  },
+  {
+    "id": "binary",
+    "arguments": ["--color", "never", "--threads", "1", "-e", "bin", ".", "."]
+  },
+  {
+    "id": "depth-two",
+    "arguments": [
+      "--color",
+      "never",
+      "--threads",
+      "1",
+      "--max-depth",
+      "2",
+      ".",
+      "."
+    ]
+  },
+  {
+    "id": "hidden",
+    "arguments": ["--color", "never", "--threads", "1", "--hidden", ".", "."]
+  },
+  {
+    "id": "sensitive",
+    "arguments": ["--color", "never", "--threads", "1", "-s", "NODE", "."]
+  },
+  {
+    "id": "insensitive",
+    "arguments": ["--color", "never", "--threads", "1", "-i", "NODE", "."]
+  },
+  {
+    "id": "regex",
+    "arguments": ["--color", "never", "--threads", "1", "node[0-9a-f]+", "."]
+  },
+  {
+    "id": "unicode",
+    "arguments": ["--color", "never", "--threads", "1", "café", "."]
+  },
+  {
+    "id": "directories",
+    "arguments": ["--color", "never", "--threads", "1", "--type", "d", ".", "."]
+  }
+]

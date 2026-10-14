@@ -18,12 +18,12 @@
     "plinkmac-golden-version.txt": "364f211b40ff30b265464b3dd06abeca9853f3df1e4d608b1436dbbb333540e0"
   },
   "results": {
-    "no-args": "byte-identical, exit 0",
-    "help": "byte-identical, exit 0",
-    "pgpfp": "byte-identical, exit 0",
-    "unknown-option": "byte-identical (`plink: unknown option \"-Zbogus\"`, CRLF, exit 0)",
-    "version": "release and source-commit lines identical; platform/compiler lines re-reported for ARM64 macOS (sole documented deviation)"
+    "no-args": "Candidate stdout hash matches retained golden; exit 0. Original-side provenance of the golden is not independently verified.",
+    "help": "Candidate stdout hash matches retained golden; exit 0. Original-side provenance of the golden is not independently verified.",
+    "pgpfp": "Candidate stdout hash matches retained golden; exit 0. Original-side provenance of the golden is not independently verified.",
+    "unknown-option": "Not included in the current reproducible comparison receipt.",
+    "version": "Host-aware semantic assertions cover release, source commit, CRLF framing, macOS platform/compiler fields, exit status, and stderr; this does not claim byte identity against the Windows capture."
   },
   "scope": "CLI-surface parity only. Network/SSH transport explicitly out of scope; a host argument exits 1 with a transport notice on stderr. CRLF line endings preserved to match the original console bytes.",
-  "evidence": "output/hypercam/evidence-plink.json (22 records, 4 unknowns; ignored scratch, not committed)"
+  "evidence": "reports/replica-golden-comparison.json; candidate-versus-retained-golden only, with original-side provenance explicitly unverified"
 }

@@ -1,0 +1,9 @@
+{
+  "kind": "host-resource-blocker",
+  "notTargetVisualEvidence": true,
+  "targetScreenshots": 0,
+  "path": "logs/runtime/worker-screen.png",
+  "sha256": "e2c1e901048f006031ebb3d9ea881f9b6f58e98a8dbaf6ee5e20fa64d458d5f7",
+  "filesystemModifiedUtc": "2026-10-13T22:21:36.005922+00:00",
+  "timestampLimitation": "Filesystem mtime, not an authenticated target capture timestamp"
+}

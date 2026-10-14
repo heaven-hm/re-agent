@@ -1,0 +1,30 @@
+$ sh benchmarks/native-windows-ports/notepad/replica/build.sh
+exit_code=0
+
+[stdout]
+/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-windows-ports/notepad/replica/build/notepadmac: Mach-O 64-bit executable arm64
+
+[stderr]
+/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-windows-ports/notepad/replica/main.swift:134:11: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead
+132 |     @objc func openDlg() {
+133 |         let p = NSOpenPanel(); p.allowsMultipleSelection = false
+134 |         p.allowedFileTypes = ["txt", "md", "log", "csv", "json", "xml", "png", "jpg", "jpeg", "bmp", "gif", "ico"]
+    |           `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead
+135 |         if p.runModal() == .OK, let u = p.url { openFile(u) }
+136 |     }
+
+/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-windows-ports/notepad/replica/main.swift:155:34: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead
+153 |     }
+154 |     @objc func saveAsDlg() {
+155 |         let p = NSSavePanel(); p.allowedFileTypes = ["txt"]; p.nameFieldStringValue = fileURL?.lastPathComponent ?? "Untitled.txt"
+    |                                  `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead
+156 |         if p.runModal() == .OK, let u = p.url { fileURL = u; writeFile(u) }
+157 |     }
+
+/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-windows-ports/notepad/replica/main.swift:216:13: warning: variable 'loc' was never mutated; consider changing to 'let' constant
+214 |         guard let q = findField?.stringValue, !q.isEmpty else { return }
+215 |         let s = textView.string as NSString
+216 |         var loc = textView.selectedRange().location + (dir > 0 ? textView.selectedRange().length : -1)
+    |             `- warning: variable 'loc' was never mutated; consider changing to 'let' constant
+217 |         var r: NSRange
+218 |         if dir > 0 {

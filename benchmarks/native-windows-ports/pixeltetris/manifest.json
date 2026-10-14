@@ -38,13 +38,13 @@
     "assets": "benchmarks/native-windows-ports/pixeltetris/replica/assets (verbatim MIT release assets + OFL fonts)",
     "build": "clang -O2 -o pixelmac pixelmac.c -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2 -lSDL2_image -lSDL2_ttf",
     "screenshots": [
-      "benchmarks/native-windows-ports/screenshots/pixelmac-menu3.png",
+      "benchmarks/native-windows-ports/screenshots/pixelmac-menu4.png",
       "benchmarks/native-windows-ports/screenshots/pixelmac-play.png"
     ]
   },
   "verification": {
     "mac_build": "PASS (36KB, clean)",
-    "mac_menu_render": "UNVERIFIED (SDL window not observed in screenshots yet)",
+    "mac_menu_render": "PASS (genuine replica screenshot retained; original comparison remains unverified)",
     "original_runtime": "PASS (process alive, no crash from own dir; font-crash CWD issue recorded)",
     "original_screenshot": "UNVERIFIED (X11 window not captured)",
     "input_semantics": "PARTIAL (codes exact; actions 6-10 meanings guideline-inferred)",

@@ -1,0 +1,9 @@
+{
+  "result": {
+    "path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+    "format": "pe",
+    "kind": "executable",
+    "sha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+    "architecture": "x86_64"
+  }
+}

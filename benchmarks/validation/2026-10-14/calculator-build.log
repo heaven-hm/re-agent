@@ -1,0 +1,7 @@
+$ sh scripts/calculator/build.sh
+exit_code=0
+
+[stdout]
+/Users/haseeb-mir/Documents/Code/rea/scripts/calculator/build/calculatormac: Mach-O 64-bit executable arm64
+
+[stderr]

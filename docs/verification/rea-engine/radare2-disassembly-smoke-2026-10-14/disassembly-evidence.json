@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "kind": "radare2-pdj-disassembly-evidence",
+  "capturedAt": "2026-10-14T15:58:05.613Z",
+  "operation": "r2 -q -c \"pdj 8 @ 0x100003a58\" /bin/ls",
+  "exitCode": 0,
+  "target": {
+    "path": "/bin/ls",
+    "sha256": "db6beb98b2aed48f48634c59f1f6a82c2f719ce2334b2080634efb01e14c8344",
+    "format": "Mach-O universal",
+    "sliceArchitecture": "arm64",
+    "sizeBytes": 154624,
+    "selectedAddress": "0x100003a58",
+    "addressSource": "rabin2 -e output, captured in imports evidence folder prior to disassembly"
+  },
+  "tool": {
+    "path": "/opt/homebrew/Cellar/radare2/6.2.0/bin/radare2",
+    "sha256": "0706936e12301c2541818f6d3a1b58c60bbbf49f8d723459cd526a9153f3572d",
+    "version": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64"
+  },
+  "result": {
+    "stdoutPath": "disassembly.json",
+    "stdoutSha256": "d676c83108f55dc8c148ef754ffbbcc851f34007a3a2bddc41bcb88b1505391e",
+    "stdoutBytes": 2155,
+    "stderrPath": "disassembly.stderr",
+    "stderrSha256": "3b37393b2359a00a919fdfc54ea0569e10d5fcc06f545e09220ca6c0213e3041",
+    "instructionCount": 8,
+    "requestedMaximum": 8,
+    "firstAddress": "0x100003a58",
+    "lastAddress": "0x100003a74",
+    "sequentialAddresses": true,
+    "normalizedFields": [
+      "addr -> address",
+      "size",
+      "opcode",
+      "disasm -> disassembly",
+      "bytes"
+    ]
+  },
+  "precedingImportEvidence": {
+    "path": "imports-evidence.json",
+    "sha256": "4f352ebb87547f247f47853c1e0b2a6bd08f276618083cd718bfa588866a764a",
+    "rabin2Command": "rabin2 -i /bin/ls",
+    "exitCode": 0,
+    "fullStdoutPreserved": true
+  },
+  "limitations": [
+    "This verifies radare2 6.2.0 pdj output on host /bin/ls only; it is not a Batch 2 benchmark or evidence of application equivalence.",
+    "The REA provider integration smoke could not complete because the host sandbox denied Swift process-ownership helper compilation/cache access and the attempted owned-process cleanup could not be confirmed. See provider-result.json."
+  ]
+}

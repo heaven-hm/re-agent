@@ -1,0 +1,61 @@
+{
+  "evidence_id": "ev_e83b6f51ca190525f75e69d4a9e5510cc2dbe068a351da43bb0c44f8bc34eafd",
+  "subject": {
+    "name": "fd.exe",
+    "digest": {
+      "sha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9"
+    },
+    "format": "pe",
+    "architecture": null,
+    "local_path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe"
+  },
+  "provider": {
+    "id": "rea-pe-resources",
+    "name": "REA PE resource parser",
+    "version": "1"
+  },
+  "analysis_profile": null,
+  "predicate_type": "rea.analysis",
+  "operation": "inspect_pe_resources",
+  "parameters": {
+    "path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+    "max_file_bytes": 67108864,
+    "max_entries": 16384
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "artifact": {
+      "path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+      "sha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "bytes": 4104192
+    },
+    "format": "pe32-plus",
+    "machine": 34404,
+    "directory": null,
+    "directories": [],
+    "resources": [],
+    "icon_groups": [],
+    "coverage": { "status": "complete", "examined_entries": 0, "resources": 0 },
+    "limitations": [
+      "Static PE32/PE32+ type/name/language resource inventory; payloads other than RT_GROUP_ICON remain opaque.",
+      "Icon candidates are resource-table relationships. Language fallback, image decoding and actual shell/window loading are not observed.",
+      "Exact shared byte ranges are retained; non-identical overlapping resource structures or payloads are rejected."
+    ]
+  },
+  "confidence": "observed",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Static PE32/PE32+ type/name/language resource inventory; payloads other than RT_GROUP_ICON remain opaque.",
+    "Icon candidates are resource-table relationships. Language fallback, image decoding and actual shell/window loading are not observed.",
+    "Exact shared byte ranges are retained; non-identical overlapping resource structures or payloads are rejected."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "artifact-path",
+      "path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe"
+    }
+  ],
+  "evidence_links": []
+}

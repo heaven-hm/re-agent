@@ -1,0 +1,14 @@
+{
+  "status": "completed",
+  "exit_code": 0,
+  "arguments": ["/?"],
+  "target_sha256": "5616139f4f94e7299b0703954d6a3eeda36fdda5cb17e19fa32163ba6b326c78",
+  "runtime": "CrossOver macOS compatibility, actual Windows unverified",
+  "cwd": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/gconv/runtime/working",
+  "timeout_seconds": 10,
+  "streams": {
+    "stdout": "",
+    "stderr": "wineserver crashed, please enable coredumps (ulimit -c unlimited) and restart.\n"
+  },
+  "cleanup": "Direct child bounded; Wine service cleanup unverified"
+}

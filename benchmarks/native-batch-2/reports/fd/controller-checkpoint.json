@@ -1,0 +1,14 @@
+{
+  "status": "ready",
+  "binarySha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+  "checkpoint": "logs/checkpoints/fd.json",
+  "createdAndReopened": true,
+  "iterations": 0,
+  "cases": ["glob", "extension"],
+  "evidenceRecords": 0,
+  "compatibilityLauncher": {
+    "status": "rejected",
+    "reason": "Error: Original command must be the hash-bound binaryPath"
+  },
+  "limitation": "Only checkpoint creation/reopening was executed. Configuration binds original command to actual PE and cannot execute natively on macOS. No controller reconstruction, differential run or repair completed; isolated Windows worker support remains absent. Compatibility wrapper launch was rejected by the existing identity guard."
+}

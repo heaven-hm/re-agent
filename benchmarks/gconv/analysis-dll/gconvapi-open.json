@@ -1,0 +1,9 @@
+{
+  "result": {
+    "path": "/Users/haseeb-mir/Downloads/tools/gconvapi.dll",
+    "format": "pe",
+    "kind": "executable",
+    "sha256": "f76ce99b51402bba2b93b43135c1e6a622545e82b895f810309dad6fbaf4b6de",
+    "architecture": "x86"
+  }
+}

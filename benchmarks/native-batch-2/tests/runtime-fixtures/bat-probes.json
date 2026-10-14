@@ -1,0 +1,91 @@
+[
+  {
+    "id": "version",
+    "arguments": ["--version"]
+  },
+  {
+    "id": "plain",
+    "arguments": [
+      "--color",
+      "never",
+      "--paging",
+      "never",
+      "--style",
+      "plain",
+      "alpha.txt"
+    ]
+  },
+  {
+    "id": "crlf",
+    "arguments": [
+      "--color",
+      "never",
+      "--paging",
+      "never",
+      "--style",
+      "plain",
+      "crlf.txt"
+    ]
+  },
+  {
+    "id": "unicode",
+    "arguments": [
+      "--color",
+      "never",
+      "--paging",
+      "never",
+      "--style",
+      "plain",
+      "unicode.txt"
+    ]
+  },
+  {
+    "id": "empty",
+    "arguments": [
+      "--color",
+      "never",
+      "--paging",
+      "never",
+      "--style",
+      "plain",
+      "empty.txt"
+    ]
+  },
+  {
+    "id": "invalid-path",
+    "arguments": [
+      "--color",
+      "never",
+      "--paging",
+      "never",
+      "--style",
+      "plain",
+      "does-not-exist"
+    ]
+  },
+  {
+    "id": "concat",
+    "arguments": [
+      "--color",
+      "never",
+      "--paging",
+      "never",
+      "--style",
+      "plain",
+      "alpha.txt",
+      "crlf.txt"
+    ]
+  },
+  {
+    "id": "number",
+    "arguments": [
+      "--color",
+      "never",
+      "--paging",
+      "never",
+      "--style",
+      "numbers",
+      "alpha.txt"
+    ]
+  }
+]

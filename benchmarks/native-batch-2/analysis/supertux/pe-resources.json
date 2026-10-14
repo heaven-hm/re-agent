@@ -1,0 +1,113 @@
+{
+  "evidence_id": "ev_34d4d7b4a718806589e62d4f3970327162fbc370ab38069bb805ebdff4219f35",
+  "subject": {
+    "name": "supertux2.exe",
+    "digest": {
+      "sha256": "6249f25a6ac1cc3d27955ca09852b8368618ce58ad9c13e0c5084051c2c02b43"
+    },
+    "format": "pe",
+    "architecture": null,
+    "local_path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/supertux/extracted/SuperTux-portable/bin/supertux2.exe"
+  },
+  "provider": {
+    "id": "rea-pe-resources",
+    "name": "REA PE resource parser",
+    "version": "1"
+  },
+  "analysis_profile": null,
+  "predicate_type": "rea.analysis",
+  "operation": "inspect_pe_resources",
+  "parameters": {
+    "path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/supertux/extracted/SuperTux-portable/bin/supertux2.exe",
+    "max_file_bytes": 67108864,
+    "max_entries": 16384
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "artifact": {
+      "path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/supertux/extracted/SuperTux-portable/bin/supertux2.exe",
+      "sha256": "6249f25a6ac1cc3d27955ca09852b8368618ce58ad9c13e0c5084051c2c02b43",
+      "bytes": 7259648
+    },
+    "format": "pe32-plus",
+    "machine": 34404,
+    "directory": {
+      "rva": 7499776,
+      "location": { "offset": 7190528, "bytes": 1084 },
+      "data_directory_location": { "offset": 416, "bytes": 8 }
+    },
+    "directories": [
+      {
+        "location": { "offset": 7190528, "bytes": 24 },
+        "characteristics": 0,
+        "timestamp": 0,
+        "major_version": 0,
+        "minor_version": 0,
+        "named_entries": 0,
+        "id_entries": 1
+      },
+      {
+        "location": { "offset": 7190552, "bytes": 24 },
+        "characteristics": 0,
+        "timestamp": 0,
+        "major_version": 0,
+        "minor_version": 0,
+        "named_entries": 0,
+        "id_entries": 1
+      },
+      {
+        "location": { "offset": 7190576, "bytes": 24 },
+        "characteristics": 0,
+        "timestamp": 0,
+        "major_version": 0,
+        "minor_version": 0,
+        "named_entries": 0,
+        "id_entries": 1
+      }
+    ],
+    "resources": [
+      {
+        "index": 0,
+        "type": { "kind": "id", "id": 24 },
+        "name": { "kind": "id", "id": 1 },
+        "language": { "kind": "id", "id": 1033 },
+        "entry_locations": [
+          { "offset": 7190544, "bytes": 8 },
+          { "offset": 7190568, "bytes": 8 },
+          { "offset": 7190592, "bytes": 8 }
+        ],
+        "data_entry_location": { "offset": 7190600, "bytes": 16 },
+        "code_page": 0,
+        "reserved": 0,
+        "payload": {
+          "rva": 7500144,
+          "location": { "offset": 7190896, "bytes": 381 },
+          "sha256": "4bb79dcea0a901f7d9eac5aa05728ae92acb42e0cb22e5dd14134f4421a3d8df"
+        }
+      }
+    ],
+    "icon_groups": [],
+    "coverage": { "status": "complete", "examined_entries": 3, "resources": 1 },
+    "limitations": [
+      "Static PE32/PE32+ type/name/language resource inventory; payloads other than RT_GROUP_ICON remain opaque.",
+      "Icon candidates are resource-table relationships. Language fallback, image decoding and actual shell/window loading are not observed.",
+      "Exact shared byte ranges are retained; non-identical overlapping resource structures or payloads are rejected."
+    ]
+  },
+  "confidence": "observed",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Static PE32/PE32+ type/name/language resource inventory; payloads other than RT_GROUP_ICON remain opaque.",
+    "Icon candidates are resource-table relationships. Language fallback, image decoding and actual shell/window loading are not observed.",
+    "Exact shared byte ranges are retained; non-identical overlapping resource structures or payloads are rejected."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "artifact-path",
+      "path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/supertux/extracted/SuperTux-portable/bin/supertux2.exe"
+    }
+  ],
+  "evidence_links": []
+}

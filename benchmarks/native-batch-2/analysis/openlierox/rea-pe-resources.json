@@ -1,0 +1,379 @@
+{
+  "evidence_id": "ev_416d2dda3a137a4a85fb92b16e4f1bcafc2c1f2125c591a1f805581038534786",
+  "subject": {
+    "name": "openlierox.exe",
+    "digest": {
+      "sha256": "0f79c968ab9aabd8cb99e173500fa241e883846fd3e0c9ca2f7f0bf3771fa5c1"
+    },
+    "format": "pe",
+    "architecture": null,
+    "local_path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/openlierox/analysis-input/openlierox.exe"
+  },
+  "provider": {
+    "id": "rea-pe-resources",
+    "name": "REA PE resource parser",
+    "version": "1"
+  },
+  "analysis_profile": null,
+  "predicate_type": "rea.analysis",
+  "operation": "inspect_pe_resources",
+  "parameters": {
+    "path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/openlierox/analysis-input/openlierox.exe",
+    "max_file_bytes": 67108864,
+    "max_entries": 16384
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "artifact": {
+      "path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/openlierox/analysis-input/openlierox.exe",
+      "sha256": "0f79c968ab9aabd8cb99e173500fa241e883846fd3e0c9ca2f7f0bf3771fa5c1",
+      "bytes": 12853347
+    },
+    "format": "pe32-plus",
+    "machine": 34404,
+    "directory": {
+      "rva": 9191424,
+      "location": { "offset": 8890880, "bytes": 55528 },
+      "data_directory_location": { "offset": 280, "bytes": 8 }
+    },
+    "directories": [
+      {
+        "location": { "offset": 8890880, "bytes": 40 },
+        "characteristics": 0,
+        "timestamp": 0,
+        "major_version": 0,
+        "minor_version": 0,
+        "named_entries": 0,
+        "id_entries": 3
+      },
+      {
+        "location": { "offset": 8890920, "bytes": 56 },
+        "characteristics": 0,
+        "timestamp": 0,
+        "major_version": 0,
+        "minor_version": 0,
+        "named_entries": 0,
+        "id_entries": 5
+      },
+      {
+        "location": { "offset": 8890976, "bytes": 24 },
+        "characteristics": 0,
+        "timestamp": 0,
+        "major_version": 0,
+        "minor_version": 0,
+        "named_entries": 0,
+        "id_entries": 1
+      },
+      {
+        "location": { "offset": 8891000, "bytes": 24 },
+        "characteristics": 0,
+        "timestamp": 0,
+        "major_version": 0,
+        "minor_version": 0,
+        "named_entries": 0,
+        "id_entries": 1
+      },
+      {
+        "location": { "offset": 8891024, "bytes": 24 },
+        "characteristics": 0,
+        "timestamp": 0,
+        "major_version": 0,
+        "minor_version": 0,
+        "named_entries": 0,
+        "id_entries": 1
+      },
+      {
+        "location": { "offset": 8891048, "bytes": 24 },
+        "characteristics": 0,
+        "timestamp": 0,
+        "major_version": 0,
+        "minor_version": 0,
+        "named_entries": 0,
+        "id_entries": 1
+      },
+      {
+        "location": { "offset": 8891072, "bytes": 24 },
+        "characteristics": 0,
+        "timestamp": 0,
+        "major_version": 0,
+        "minor_version": 0,
+        "named_entries": 0,
+        "id_entries": 1
+      },
+      {
+        "location": { "offset": 8891096, "bytes": 24 },
+        "characteristics": 0,
+        "timestamp": 0,
+        "major_version": 0,
+        "minor_version": 0,
+        "named_entries": 0,
+        "id_entries": 1
+      },
+      {
+        "location": { "offset": 8891120, "bytes": 24 },
+        "characteristics": 0,
+        "timestamp": 0,
+        "major_version": 0,
+        "minor_version": 0,
+        "named_entries": 0,
+        "id_entries": 1
+      },
+      {
+        "location": { "offset": 8891144, "bytes": 24 },
+        "characteristics": 0,
+        "timestamp": 0,
+        "major_version": 0,
+        "minor_version": 0,
+        "named_entries": 0,
+        "id_entries": 1
+      },
+      {
+        "location": { "offset": 8891168, "bytes": 24 },
+        "characteristics": 0,
+        "timestamp": 0,
+        "major_version": 0,
+        "minor_version": 0,
+        "named_entries": 0,
+        "id_entries": 1
+      }
+    ],
+    "resources": [
+      {
+        "index": 0,
+        "type": { "kind": "id", "id": 3 },
+        "name": { "kind": "id", "id": 1 },
+        "language": { "kind": "id", "id": 1033 },
+        "entry_locations": [
+          { "offset": 8890896, "bytes": 8 },
+          { "offset": 8890936, "bytes": 8 },
+          { "offset": 8890992, "bytes": 8 }
+        ],
+        "data_entry_location": { "offset": 8891192, "bytes": 16 },
+        "code_page": 0,
+        "reserved": 0,
+        "payload": {
+          "rva": 9191848,
+          "location": { "offset": 8891304, "bytes": 21417 },
+          "sha256": "0ad71dccada7e2747bd979c12110b8e3f0df01c5eaf6eb3ee5292a388e9fbbd5"
+        }
+      },
+      {
+        "index": 1,
+        "type": { "kind": "id", "id": 3 },
+        "name": { "kind": "id", "id": 2 },
+        "language": { "kind": "id", "id": 1033 },
+        "entry_locations": [
+          { "offset": 8890896, "bytes": 8 },
+          { "offset": 8890944, "bytes": 8 },
+          { "offset": 8891016, "bytes": 8 }
+        ],
+        "data_entry_location": { "offset": 8891208, "bytes": 16 },
+        "code_page": 0,
+        "reserved": 0,
+        "payload": {
+          "rva": 9213272,
+          "location": { "offset": 8912728, "bytes": 16936 },
+          "sha256": "b245e70e9304f54a3d8265bbbfafde2ca38cb9583b3d2fc743b9424fd03de962"
+        }
+      },
+      {
+        "index": 2,
+        "type": { "kind": "id", "id": 3 },
+        "name": { "kind": "id", "id": 3 },
+        "language": { "kind": "id", "id": 1033 },
+        "entry_locations": [
+          { "offset": 8890896, "bytes": 8 },
+          { "offset": 8890952, "bytes": 8 },
+          { "offset": 8891040, "bytes": 8 }
+        ],
+        "data_entry_location": { "offset": 8891224, "bytes": 16 },
+        "code_page": 0,
+        "reserved": 0,
+        "payload": {
+          "rva": 9230208,
+          "location": { "offset": 8929664, "bytes": 9640 },
+          "sha256": "6706b896136459eaf0e828c25b279268ac2191ae3b0208b8df85710557bb55bb"
+        }
+      },
+      {
+        "index": 3,
+        "type": { "kind": "id", "id": 3 },
+        "name": { "kind": "id", "id": 4 },
+        "language": { "kind": "id", "id": 1033 },
+        "entry_locations": [
+          { "offset": 8890896, "bytes": 8 },
+          { "offset": 8890960, "bytes": 8 },
+          { "offset": 8891064, "bytes": 8 }
+        ],
+        "data_entry_location": { "offset": 8891240, "bytes": 16 },
+        "code_page": 0,
+        "reserved": 0,
+        "payload": {
+          "rva": 9239848,
+          "location": { "offset": 8939304, "bytes": 4264 },
+          "sha256": "c7ea794e5c8f77b7df38417fe90a41cf2a5a4b501b52935581cefdf36cc4f685"
+        }
+      },
+      {
+        "index": 4,
+        "type": { "kind": "id", "id": 3 },
+        "name": { "kind": "id", "id": 5 },
+        "language": { "kind": "id", "id": 1033 },
+        "entry_locations": [
+          { "offset": 8890896, "bytes": 8 },
+          { "offset": 8890968, "bytes": 8 },
+          { "offset": 8891088, "bytes": 8 }
+        ],
+        "data_entry_location": { "offset": 8891256, "bytes": 16 },
+        "code_page": 0,
+        "reserved": 0,
+        "payload": {
+          "rva": 9244112,
+          "location": { "offset": 8943568, "bytes": 1128 },
+          "sha256": "daef5dbe306870a30e47bb70d87b453922ba9b8722c448fbe9942df27998790e"
+        }
+      },
+      {
+        "index": 5,
+        "type": { "kind": "id", "id": 14 },
+        "name": { "kind": "id", "id": 1 },
+        "language": { "kind": "id", "id": 1033 },
+        "entry_locations": [
+          { "offset": 8890904, "bytes": 8 },
+          { "offset": 8891112, "bytes": 8 },
+          { "offset": 8891136, "bytes": 8 }
+        ],
+        "data_entry_location": { "offset": 8891272, "bytes": 16 },
+        "code_page": 0,
+        "reserved": 0,
+        "payload": {
+          "rva": 9245240,
+          "location": { "offset": 8944696, "bytes": 76 },
+          "sha256": "9e1b27b29fda53ce0de84b9d7ef69079a86fe9b0808a123dc66b029718f871c6"
+        }
+      },
+      {
+        "index": 6,
+        "type": { "kind": "id", "id": 24 },
+        "name": { "kind": "id", "id": 1 },
+        "language": { "kind": "id", "id": 1033 },
+        "entry_locations": [
+          { "offset": 8890912, "bytes": 8 },
+          { "offset": 8891160, "bytes": 8 },
+          { "offset": 8891184, "bytes": 8 }
+        ],
+        "data_entry_location": { "offset": 8891288, "bytes": 16 },
+        "code_page": 0,
+        "reserved": 0,
+        "payload": {
+          "rva": 9245320,
+          "location": { "offset": 8944776, "bytes": 827 },
+          "sha256": "3d084e8cf63586cae23d2ca2d64f3112360fad1c20f8c4006635a775fe9e912d"
+        }
+      }
+    ],
+    "icon_groups": [
+      {
+        "resource_index": 5,
+        "images": [
+          {
+            "location": { "offset": 8944702, "bytes": 14 },
+            "width": 0,
+            "height": 0,
+            "color_count": 0,
+            "reserved": 0,
+            "planes": 1,
+            "bit_count": 32,
+            "declared_bytes": 21417,
+            "resource_id": 1,
+            "candidate_resource_indices": [0],
+            "same_language_resource_index": 0,
+            "size_matches": true
+          },
+          {
+            "location": { "offset": 8944716, "bytes": 14 },
+            "width": 64,
+            "height": 64,
+            "color_count": 0,
+            "reserved": 0,
+            "planes": 1,
+            "bit_count": 32,
+            "declared_bytes": 16936,
+            "resource_id": 2,
+            "candidate_resource_indices": [1],
+            "same_language_resource_index": 1,
+            "size_matches": true
+          },
+          {
+            "location": { "offset": 8944730, "bytes": 14 },
+            "width": 48,
+            "height": 48,
+            "color_count": 0,
+            "reserved": 0,
+            "planes": 1,
+            "bit_count": 32,
+            "declared_bytes": 9640,
+            "resource_id": 3,
+            "candidate_resource_indices": [2],
+            "same_language_resource_index": 2,
+            "size_matches": true
+          },
+          {
+            "location": { "offset": 8944744, "bytes": 14 },
+            "width": 32,
+            "height": 32,
+            "color_count": 0,
+            "reserved": 0,
+            "planes": 1,
+            "bit_count": 32,
+            "declared_bytes": 4264,
+            "resource_id": 4,
+            "candidate_resource_indices": [3],
+            "same_language_resource_index": 3,
+            "size_matches": true
+          },
+          {
+            "location": { "offset": 8944758, "bytes": 14 },
+            "width": 16,
+            "height": 16,
+            "color_count": 0,
+            "reserved": 0,
+            "planes": 1,
+            "bit_count": 32,
+            "declared_bytes": 1128,
+            "resource_id": 5,
+            "candidate_resource_indices": [4],
+            "same_language_resource_index": 4,
+            "size_matches": true
+          }
+        ]
+      }
+    ],
+    "coverage": {
+      "status": "complete",
+      "examined_entries": 17,
+      "resources": 7
+    },
+    "limitations": [
+      "Static PE32/PE32+ type/name/language resource inventory; payloads other than RT_GROUP_ICON remain opaque.",
+      "Icon candidates are resource-table relationships. Language fallback, image decoding and actual shell/window loading are not observed.",
+      "Exact shared byte ranges are retained; non-identical overlapping resource structures or payloads are rejected."
+    ]
+  },
+  "confidence": "observed",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Static PE32/PE32+ type/name/language resource inventory; payloads other than RT_GROUP_ICON remain opaque.",
+    "Icon candidates are resource-table relationships. Language fallback, image decoding and actual shell/window loading are not observed.",
+    "Exact shared byte ranges are retained; non-identical overlapping resource structures or payloads are rejected."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "artifact-path",
+      "path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/openlierox/analysis-input/openlierox.exe"
+    }
+  ],
+  "evidence_links": []
+}

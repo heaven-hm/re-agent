@@ -1,0 +1,63 @@
+{
+  "status": "suite-passed",
+  "target": "tatlead/TicTacToe-AI published managed Windows game",
+  "originalSha256": "df4aec7299b1e002ca0e1008b20a889e0cfe5b482a19958399fab16ac6090402",
+  "replicaSha256": "3ff72d01eb5e1529886f24c759fd568ab1057df5eb799f3a3b9603a2793724fb",
+  "probeSha256": "bd20737b41f4b70caa6a75ce021bea180cdf9261062f686b05f16b8a8cd11201",
+  "boardStates": 19683,
+  "boardRecordsEqual": true,
+  "boardRecordMismatchCount": 0,
+  "terminalBytesEqual": false,
+  "originalTerminalSha256": "7f696fd49eefdba04372b33f547dd8cb90cac2afd30268b485d281de0515b790",
+  "replicaTerminalSha256": "1f14c0601b21beec5567ff6837fa87df6a038a13425deb81ea3d41bd208bbea7",
+  "originalEvidenceId": "ev_05e1045a52fff2799dca5e3116b028114eb1e0e2ab71bf066e13ea367e14bf6b",
+  "replicaEvidenceId": "ev_6d1a1d526159cd40869d14accef60cf724f20ab899d733883b85fcf86ef8d6f9",
+  "staticEvidenceId": "ev_11ee08562ff1c937f7fd6542e7b58aca634a84098099ce2a1aa6cb4f52c423d8",
+  "frames": [
+    {
+      "name": "initial.png",
+      "pngBytesEqual": true,
+      "originalSha256": "a76da37de20139de512895623c13d74ed68d455b439d2ad3530ac0d6de69ba0a",
+      "replicaSha256": "a76da37de20139de512895623c13d74ed68d455b439d2ad3530ac0d6de69ba0a"
+    },
+    {
+      "name": "move-1.png",
+      "pngBytesEqual": true,
+      "originalSha256": "b149fb5e1eb3a6fb38c7e83d22811da17abfbcaeead0752ffda0462aac0a1b22",
+      "replicaSha256": "b149fb5e1eb3a6fb38c7e83d22811da17abfbcaeead0752ffda0462aac0a1b22"
+    },
+    {
+      "name": "move-2.png",
+      "pngBytesEqual": true,
+      "originalSha256": "a76da37de20139de512895623c13d74ed68d455b439d2ad3530ac0d6de69ba0a",
+      "replicaSha256": "a76da37de20139de512895623c13d74ed68d455b439d2ad3530ac0d6de69ba0a"
+    },
+    {
+      "name": "move-3.png",
+      "pngBytesEqual": true,
+      "originalSha256": "b149fb5e1eb3a6fb38c7e83d22811da17abfbcaeead0752ffda0462aac0a1b22",
+      "replicaSha256": "b149fb5e1eb3a6fb38c7e83d22811da17abfbcaeead0752ffda0462aac0a1b22"
+    },
+    {
+      "name": "move-4.png",
+      "pngBytesEqual": true,
+      "originalSha256": "a76da37de20139de512895623c13d74ed68d455b439d2ad3530ac0d6de69ba0a",
+      "replicaSha256": "a76da37de20139de512895623c13d74ed68d455b439d2ad3530ac0d6de69ba0a"
+    },
+    {
+      "name": "move-5.png",
+      "pngBytesEqual": true,
+      "originalSha256": "67673e4f3536084732a35c6da809ea5a69ea89afb0f336c3870a9b0baaa855be",
+      "replicaSha256": "67673e4f3536084732a35c6da809ea5a69ea89afb0f336c3870a9b0baaa855be"
+    }
+  ],
+  "executableByteIdentity": false,
+  "limitations": [
+    "Exhaustive board configurations cover only the CheckGameStatus method and observed indicator properties.",
+    "Six images are actual Form.DrawToBitmap renders following real button handlers; not Windows OS screenshots.",
+    "Raw PTY terminal bytes are retained separately from exact board-record comparisons; an extra carriage return in the terminal capture can make raw streams differ while all 19,683 board records and rendered frames match.",
+    "Original and replica are executed on the same macOS ARM Mono/X11 runtime.",
+    "AI, RNG, all menus, timing, sound and whole-game equivalence remain unverified.",
+    "Probe executes original and reconstructed code; no game logic is implemented in the probe."
+  ]
+}

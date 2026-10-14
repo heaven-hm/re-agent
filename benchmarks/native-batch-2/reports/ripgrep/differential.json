@@ -1,0 +1,144 @@
+{
+  "target": "ripgrep",
+  "originalSha256": "14231169855ec5205cf5a1b6f1db358ff4aed4247c86b69ce8aae647c77f6680",
+  "candidateSha256": "9bebc344297bc9e99ddeae4500c055e23e5acae280e80d4603873efb6068f4f1",
+  "candidateSourceSha256": "44ae2244a491ffe486551bd1a861a6b8dbd0a6e0b33ed1ccaf6ef9d8920f73a2",
+  "candidate": "/Users/haseeb-mir/Documents/Code/rea-engine/benchmarks/native-batch-2/reconstructed/ripgrep/build/rea-rg",
+  "os": "darwin",
+  "architecture": "arm64",
+  "comparison": "Raw stdout/stderr bytes and exit codes, plus a separately reported normalization of only the leading relative-path separator (`.\\` to `./`) in stdout.",
+  "results": [
+    {
+      "case": "version",
+      "status": "PASS",
+      "dimensions": {
+        "stdoutBytes": true,
+        "stderrBytes": true,
+        "exitCode": true,
+        "stdoutAfterRelativePathSeparatorNormalization": true
+      },
+      "evidenceId": "ev_42676f42a3dc73747c6ae7c58cc62749b3b8bd9db9973db89ee878da01885a50",
+      "file": "case-version.json",
+      "originalRunId": "rea-original-8a0192eee819400ca4e03bd8ee359feb",
+      "replicaRunId": "rea-replica-306afa90fb454350849f273f61bb4951",
+      "comparisonRunId": "rea-comparison-0ab794f5dea54b6998af4122f1d902f7",
+      "fixtureBound": true
+    },
+    {
+      "case": "search",
+      "status": "PASS",
+      "dimensions": {
+        "stdoutBytes": false,
+        "stderrBytes": true,
+        "exitCode": true,
+        "stdoutAfterRelativePathSeparatorNormalization": true
+      },
+      "evidenceId": "ev_3008def9e6af08f568b319b2458c9b2cf7f4b0d308fc3091f105294a238b010f",
+      "file": "case-search.json",
+      "originalRunId": "rea-original-a6fabe3c5503443f8e56b68f83d171f2",
+      "replicaRunId": "rea-replica-5c669f4f0bf94c6888272df1291653f0",
+      "comparisonRunId": "rea-comparison-70c39a63527a4eaeb2a8b894a2311238",
+      "fixtureBound": true
+    },
+    {
+      "case": "number",
+      "status": "PASS",
+      "dimensions": {
+        "stdoutBytes": false,
+        "stderrBytes": true,
+        "exitCode": true,
+        "stdoutAfterRelativePathSeparatorNormalization": true
+      },
+      "evidenceId": "ev_6103b4f16ad1b0730d1755a9fb6d784e5e7f0727d3c7353460edd4a15fffa60a",
+      "file": "case-number.json",
+      "originalRunId": "rea-original-0045d395ed9b4b6dab1817f506c5d434",
+      "replicaRunId": "rea-replica-d3b84ed803db45cbb2780431716c5042",
+      "comparisonRunId": "rea-comparison-003618e14aed41baa5b6961f7b946eee",
+      "fixtureBound": true
+    },
+    {
+      "case": "ignorecase",
+      "status": "PASS",
+      "dimensions": {
+        "stdoutBytes": false,
+        "stderrBytes": true,
+        "exitCode": true,
+        "stdoutAfterRelativePathSeparatorNormalization": true
+      },
+      "evidenceId": "ev_1b831a383c4969b6dc4acdfeb4751feb96445aac056614a1216ff5289ad2c582",
+      "file": "case-ignorecase.json",
+      "originalRunId": "rea-original-22c515c301eb440d842e613458227823",
+      "replicaRunId": "rea-replica-d35e042a23d641d485de9920870e0cea",
+      "comparisonRunId": "rea-comparison-dd6732cb050947a5b0c3aa059ea32c1b",
+      "fixtureBound": true
+    },
+    {
+      "case": "fixed",
+      "status": "PASS",
+      "dimensions": {
+        "stdoutBytes": false,
+        "stderrBytes": true,
+        "exitCode": true,
+        "stdoutAfterRelativePathSeparatorNormalization": true
+      },
+      "evidenceId": "ev_61177c98a07a8853de8c8f52bfa49e97c258ec5685c0456056bd4ee721afa3ee",
+      "file": "case-fixed.json",
+      "originalRunId": "rea-original-a88880fec3404906aa68d59170007c20",
+      "replicaRunId": "rea-replica-214ab2e86da443f389070585f9f1f791",
+      "comparisonRunId": "rea-comparison-e6174a5c9670471399657cf4e8164153",
+      "fixtureBound": true
+    },
+    {
+      "case": "hidden",
+      "status": "PASS",
+      "dimensions": {
+        "stdoutBytes": false,
+        "stderrBytes": true,
+        "exitCode": true,
+        "stdoutAfterRelativePathSeparatorNormalization": true
+      },
+      "evidenceId": "ev_6a6bf52be25961b8598468c2dec7fe2b3e42f8767364cdf5fea5700d6cd333bf",
+      "file": "case-hidden.json",
+      "originalRunId": "rea-original-ae0cc9bdc04049198dbf025e3644a75b",
+      "replicaRunId": "rea-replica-58116acb8ab042de83e2fc9d42721619",
+      "comparisonRunId": "rea-comparison-17a4a8d9291743f8a18eff1d06f0f1e5",
+      "fixtureBound": true
+    },
+    {
+      "case": "no-ignore",
+      "status": "PASS",
+      "dimensions": {
+        "stdoutBytes": false,
+        "stderrBytes": true,
+        "exitCode": true,
+        "stdoutAfterRelativePathSeparatorNormalization": true
+      },
+      "evidenceId": "ev_17253ec219c62cd802acbc8ffa16419fa9b535edac8edd84fed8d3d276590907",
+      "file": "case-no-ignore.json",
+      "originalRunId": "rea-original-6e1dc184a72347398129a2ee6faf436f",
+      "replicaRunId": "rea-replica-be4963dd9a75410f99f7198d5da6039a",
+      "comparisonRunId": "rea-comparison-d2911d722cd244699336ab5d0992ee14",
+      "fixtureBound": true
+    },
+    {
+      "case": "invalid-regex",
+      "status": "PASS",
+      "dimensions": {
+        "stdoutBytes": true,
+        "stderrBytes": true,
+        "exitCode": true,
+        "stdoutAfterRelativePathSeparatorNormalization": true
+      },
+      "evidenceId": "ev_2af96d24d599708a32c84eddb340d1ea6d6521e8c6918d2a1c32524db3bdd15e",
+      "file": "case-invalid-regex.json",
+      "originalRunId": "rea-original-92fffe66539541649b92d20b8a69cfec",
+      "replicaRunId": "rea-replica-ec6e8060119f4be292a1dc4f6a9ac7aa",
+      "comparisonRunId": "rea-comparison-fce17eb382304b7689cac00e214c57f0",
+      "fixtureBound": true
+    }
+  ],
+  "passed": 8,
+  "failed": 0,
+  "unverified": 0,
+  "scope": "Declared compatibility observations only; whole application remains PARTIAL, no whole-binary or universal-equivalence proof."
+}

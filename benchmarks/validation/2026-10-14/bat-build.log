@@ -1,0 +1,7 @@
+$ sh benchmarks/native-batch-2/reconstructed/bat/build.sh
+exit_code=0
+
+[stdout]
+/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/reconstructed/bat/build/batmac: Mach-O 64-bit executable arm64
+
+[stderr]

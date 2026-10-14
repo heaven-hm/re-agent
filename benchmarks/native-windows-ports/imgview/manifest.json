@@ -47,6 +47,8 @@
   "verification": {
     "png_render": "PASS (real window: sample PNG rendered + live status bar)",
     "jpeg_path": "UNVERIFIED",
-    "zoom_pan_clipboard_dark_count": "UNVERIFIED (implemented, not exercised)"
+    "zoom_pan_clipboard_dark_count": "UNVERIFIED (implemented, not exercised)",
+    "original_replica_gui_comparison": "UNVERIFIED (host could not capture display 0; original was not launched)",
+    "capture_attempt": "benchmarks/native-windows-ports/screenshots/imgview-capture-attempt.json"
   }
 }

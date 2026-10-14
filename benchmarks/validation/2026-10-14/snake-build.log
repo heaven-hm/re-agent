@@ -1,0 +1,11 @@
+$ sh benchmarks/native-windows-ports/snake/replica/build.sh
+exit_code=0
+
+[stdout]
+/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-windows-ports/snake/replica/build/snakemac: Mach-O 64-bit executable arm64
+
+[stderr]
+/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-windows-ports/snake/replica/snake.c:31:61: warning: unused variable 'games' [-Wunused-variable]
+   31 | static int body_x[400], body_y[400], len, dir, score, best, games;
+      |                                                             ^~~~~
+1 warning generated.

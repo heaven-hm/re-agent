@@ -1,0 +1,7 @@
+$ sh benchmarks/native-batch-2/reconstructed/ripgrep/build.sh
+exit_code=0
+
+[stdout]
+build/rea-rg: Mach-O 64-bit executable arm64
+
+[stderr]

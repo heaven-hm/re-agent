@@ -1,0 +1,79 @@
+{
+  "evidence_id": "ev_6a6bf52be25961b8598468c2dec7fe2b3e42f8767364cdf5fea5700d6cd333bf",
+  "subject": {
+    "name": "rg.exe",
+    "digest": {
+      "sha256": "14231169855ec5205cf5a1b6f1db358ff4aed4247c86b69ce8aae647c77f6680"
+    },
+    "format": "pe",
+    "architecture": "x86_64",
+    "local_path": "/Users/haseeb-mir/Documents/Code/rea-engine/benchmarks/native-batch-2/originals/ripgrep/extracted/ripgrep-15.2.0-x86_64-pc-windows-msvc/rg.exe"
+  },
+  "provider": {
+    "id": "rea-engine-native-cli-benchmark",
+    "name": "REA Engine recorded CLI byte comparison",
+    "version": "1"
+  },
+  "analysis_profile": null,
+  "predicate_type": "rea.analysis",
+  "operation": "compare_recorded_native_cli_bytes",
+  "parameters": {
+    "case": "hidden",
+    "original_record_sha256": "a7b41a271de41c6577da48e3e68f1d1c16e09676f15f0286a87984880f6db5dd",
+    "candidate_sha256": "9bebc344297bc9e99ddeae4500c055e23e5acae280e80d4603873efb6068f4f1",
+    "candidate_source_sha256": "44ae2244a491ffe486551bd1a861a6b8dbd0a6e0b33ed1ccaf6ef9d8920f73a2",
+    "original_run_id": "rea-original-ae0cc9bdc04049198dbf025e3644a75b",
+    "replica_run_id": "rea-replica-58116acb8ab042de83e2fc9d42721619",
+    "comparison_run_id": "rea-comparison-17a4a8d9291743f8a18eff1d06f0f1e5",
+    "fixture_tree_sha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+    "fixture_bound": true,
+    "working_directory": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/tests/runtime-fixtures/tree",
+    "replica_working_directory": "/Users/haseeb-mir/Documents/Code/rea-engine/benchmarks/native-batch-2/tests/runtime-fixtures/tree",
+    "arguments": [
+      "--color",
+      "never",
+      "--sort",
+      "path",
+      "--no-heading",
+      "--hidden",
+      "needle",
+      "."
+    ]
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "status": "PASS",
+    "dimensions": {
+      "stdoutBytes": false,
+      "stderrBytes": true,
+      "exitCode": true,
+      "stdoutAfterRelativePathSeparatorNormalization": true
+    },
+    "original": {
+      "stdoutSha256": "fb4425384875cd71aea3df4f558345c095167576a3881ad0a6437284327518e6",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutAfterRelativePathSeparatorNormalizationSha256": "02a7263e07f77bd2c83dbfa73aa1ba1037ded51eac3ab940b8c4c2df9ac8a540",
+      "exitCode": 0
+    },
+    "replica": {
+      "stdoutSha256": "02a7263e07f77bd2c83dbfa73aa1ba1037ded51eac3ab940b8c4c2df9ac8a540",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutAfterRelativePathSeparatorNormalizationSha256": "02a7263e07f77bd2c83dbfa73aa1ba1037ded51eac3ab940b8c4c2df9ac8a540",
+      "exitCode": 0,
+      "stdout": "./.secret.txt:secret needle\n./alpha.txt:alpha needle\n./sub/gamma.txt:gamma needle\n./unicode.txt:café 日本語 needle\n",
+      "stderr": ""
+    }
+  },
+  "confidence": "observed",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Original is a retained CrossOver compatibility observation, not actual Windows OS verification.",
+    "Only the declared stdout/stderr/outcome cases are compared. Source/runtime algorithms, tty modes and full program equivalence remain unverified.",
+    "Candidate diagnostic capture is exact for these valid UTF-8 cases; arbitrary invalid UTF-8 output is unsupported.",
+    "Original observation did not bind a full filesystem snapshot; fixture ownership/unchanged contents are a stated assumption."
+  ],
+  "relationship_coverage": null,
+  "locations": [],
+  "evidence_links": []
+}

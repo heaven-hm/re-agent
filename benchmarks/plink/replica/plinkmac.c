@@ -1,7 +1,8 @@
 /* plinkmac v1: macOS CLI-surface replica of plink 0.85 (MIT, HyperCam-free).
  * Declared dimensions: --help, -V, -pgpfp, no-args, unknown-option.
- * -V platform/compiler lines are re-reported for the actual Mac build;
- * every other byte matches the golden captures. SSH transport: out of scope.
+ * -V keeps release/source-commit fields and reports the actual host;
+ * --help, -pgpfp, and no-args are retained byte-output cases. SSH transport:
+ * out of scope.
  */
 #include <stdio.h>
 #include <string.h>

@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-14T15:57:10.699Z",
+  "operation": "inspect_radare2_disassembly",
+  "testCase": "static entry-point decode, 8 instruction bound",
+  "precedingImportEvidence": "imports-evidence.json",
+  "result": {
+    "ok": false,
+    "error": {
+      "diagnostics": {
+        "reason": "Radare2 process cleanup remains unresolved."
+      },
+      "cleanupIncomplete": true,
+      "cleanupResources": [],
+      "userMessage": "Provider cleanup could not be fully confirmed. Review the reported local resources before opening another target.",
+      "providerId": "radare2",
+      "operation": "inspect_radare2_function_inventory",
+      "_tag": "ProviderAdapterError"
+    }
+  },
+  "close": {
+    "ok": false,
+    "error": {
+      "diagnostics": {
+        "reason": "process table could not be inspected: spawn EPERM"
+      },
+      "cleanupIncomplete": true,
+      "cleanupResources": [],
+      "userMessage": "Provider cleanup could not be fully confirmed. Review the reported local resources before opening another target.",
+      "providerId": "radare2",
+      "operation": "inspect_radare2_function_inventory",
+      "_tag": "ProviderAdapterError"
+    }
+  }
+}

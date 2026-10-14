@@ -1,0 +1,171 @@
+{
+  "status": "PARTIAL",
+  "target": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+  "limits": {
+    "startupMs": 240000,
+    "totalMs": 300000,
+    "javaHeap": "1G",
+    "familyRssBytes": 1610612736,
+    "freeDiskReserveBytes": 1073741824
+  },
+  "phase": "close",
+  "startedAt": "2026-10-14T08:34:55.455Z",
+  "samples": [
+    {
+      "at": "2026-10-14T08:34:56.288Z",
+      "familyRssBytes": 361922560,
+      "freeDiskBytes": 2553786368
+    },
+    {
+      "at": "2026-10-14T08:34:58.474Z",
+      "familyRssBytes": 339476480,
+      "freeDiskBytes": 2548072448
+    },
+    {
+      "at": "2026-10-14T08:35:01.478Z",
+      "familyRssBytes": 508690432,
+      "freeDiskBytes": 2545180672
+    },
+    {
+      "at": "2026-10-14T08:35:04.477Z",
+      "familyRssBytes": 682672128,
+      "freeDiskBytes": 2550239232
+    },
+    {
+      "at": "2026-10-14T08:35:07.481Z",
+      "familyRssBytes": 346816512,
+      "freeDiskBytes": 2548174848
+    },
+    {
+      "at": "2026-10-14T08:35:10.499Z",
+      "familyRssBytes": 114900992,
+      "freeDiskBytes": 2547933184
+    },
+    {
+      "at": "2026-10-14T08:35:13.500Z",
+      "familyRssBytes": 206454784,
+      "freeDiskBytes": 2547523584
+    },
+    {
+      "at": "2026-10-14T08:35:16.522Z",
+      "familyRssBytes": 282525696,
+      "freeDiskBytes": 2206269440
+    },
+    {
+      "at": "2026-10-14T08:35:19.594Z",
+      "familyRssBytes": 467206144,
+      "freeDiskBytes": 1445220352
+    },
+    {
+      "at": "2026-10-14T08:35:22.562Z",
+      "familyRssBytes": 523485184,
+      "freeDiskBytes": 1444798464
+    },
+    {
+      "at": "2026-10-14T08:35:25.500Z",
+      "familyRssBytes": 713195520,
+      "freeDiskBytes": 1442037760
+    },
+    {
+      "at": "2026-10-14T08:35:28.504Z",
+      "familyRssBytes": 665190400,
+      "freeDiskBytes": 1429762048
+    },
+    {
+      "at": "2026-10-14T08:35:31.534Z",
+      "familyRssBytes": 724238336,
+      "freeDiskBytes": 1420316672
+    },
+    {
+      "at": "2026-10-14T08:35:34.711Z",
+      "familyRssBytes": 774651904,
+      "freeDiskBytes": 1418989568
+    },
+    {
+      "at": "2026-10-14T08:35:37.511Z",
+      "familyRssBytes": 715194368,
+      "freeDiskBytes": 1417953280
+    },
+    {
+      "at": "2026-10-14T08:35:40.513Z",
+      "familyRssBytes": 809041920,
+      "freeDiskBytes": 1417494528
+    },
+    {
+      "at": "2026-10-14T08:35:43.507Z",
+      "familyRssBytes": 881197056,
+      "freeDiskBytes": 1360093184
+    },
+    {
+      "at": "2026-10-14T08:35:46.509Z",
+      "familyRssBytes": 947470336,
+      "freeDiskBytes": 1347186688
+    },
+    {
+      "at": "2026-10-14T08:35:49.509Z",
+      "familyRssBytes": 1003061248,
+      "freeDiskBytes": 1344954368
+    },
+    {
+      "at": "2026-10-14T08:35:52.513Z",
+      "familyRssBytes": 1018757120,
+      "freeDiskBytes": 1313353728
+    },
+    {
+      "at": "2026-10-14T08:35:55.513Z",
+      "familyRssBytes": 1094893568,
+      "freeDiskBytes": 1295867904
+    },
+    {
+      "at": "2026-10-14T08:35:58.516Z",
+      "familyRssBytes": 1077542912,
+      "freeDiskBytes": 1292300288
+    },
+    {
+      "at": "2026-10-14T08:36:01.517Z",
+      "familyRssBytes": 1079246848,
+      "freeDiskBytes": 1288224768
+    },
+    {
+      "at": "2026-10-14T08:36:04.516Z",
+      "familyRssBytes": 1081540608,
+      "freeDiskBytes": 1284153344
+    },
+    {
+      "at": "2026-10-14T08:36:07.521Z",
+      "familyRssBytes": 1090076672,
+      "freeDiskBytes": 1282072576
+    },
+    {
+      "at": "2026-10-14T08:36:10.536Z",
+      "familyRssBytes": 1133658112,
+      "freeDiskBytes": 1281146880
+    }
+  ],
+  "completedOperations": [
+    "open",
+    "overview",
+    "procedures",
+    "entry-dossier",
+    "crt-dossier",
+    "startup-candidate-0x140092b20",
+    "rust-start-wrapper-dossier",
+    "application-main-candidate-dossier",
+    "close"
+  ],
+  "limitations": [
+    "RSS monitoring is observed, not an enforced OS memory limit.",
+    "Disabled decompiler auto-analyzers change analysis coverage; function dossiers still require actual evidence.",
+    "Static inventory or function pseudocode does not establish runtime behavior or reconstructed equivalence."
+  ],
+  "preflightFreeDiskBytes": 2554904576,
+  "applicationMainCandidates": [
+    {
+      "address": "0x140092b20",
+      "name": "FUN_140092b20",
+      "status": "INFERRED_CANDIDATE"
+    }
+  ],
+  "reason": "Entry dossier and inventory only; application main identity and runtime behavior unverified",
+  "finishedAt": "2026-10-14T08:36:13.368Z"
+}

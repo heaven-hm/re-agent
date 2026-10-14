@@ -1,0 +1,113 @@
+{
+  "evidence_id": "ev_b3e239d051fd4fda7bf3038d0d3cccc270d08b198aed1ebb1cbc78ea6e562bcb",
+  "subject": {
+    "name": "rg.exe",
+    "digest": {
+      "sha256": "14231169855ec5205cf5a1b6f1db358ff4aed4247c86b69ce8aae647c77f6680"
+    },
+    "format": "pe",
+    "architecture": null,
+    "local_path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/ripgrep/extracted/ripgrep-15.2.0-x86_64-pc-windows-msvc/rg.exe"
+  },
+  "provider": {
+    "id": "rea-pe-resources",
+    "name": "REA PE resource parser",
+    "version": "1"
+  },
+  "analysis_profile": null,
+  "predicate_type": "rea.analysis",
+  "operation": "inspect_pe_resources",
+  "parameters": {
+    "path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/ripgrep/extracted/ripgrep-15.2.0-x86_64-pc-windows-msvc/rg.exe",
+    "max_file_bytes": 67108864,
+    "max_entries": 16384
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "artifact": {
+      "path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/ripgrep/extracted/ripgrep-15.2.0-x86_64-pc-windows-msvc/rg.exe",
+      "sha256": "14231169855ec5205cf5a1b6f1db358ff4aed4247c86b69ce8aae647c77f6680",
+      "bytes": 4218880
+    },
+    "format": "pe32-plus",
+    "machine": 34404,
+    "directory": {
+      "rva": 4206592,
+      "location": { "offset": 4189696, "bytes": 1808 },
+      "data_directory_location": { "offset": 424, "bytes": 8 }
+    },
+    "directories": [
+      {
+        "location": { "offset": 4189696, "bytes": 24 },
+        "characteristics": 0,
+        "timestamp": 0,
+        "major_version": 0,
+        "minor_version": 0,
+        "named_entries": 0,
+        "id_entries": 1
+      },
+      {
+        "location": { "offset": 4189720, "bytes": 24 },
+        "characteristics": 0,
+        "timestamp": 0,
+        "major_version": 0,
+        "minor_version": 0,
+        "named_entries": 0,
+        "id_entries": 1
+      },
+      {
+        "location": { "offset": 4189744, "bytes": 24 },
+        "characteristics": 0,
+        "timestamp": 0,
+        "major_version": 0,
+        "minor_version": 0,
+        "named_entries": 0,
+        "id_entries": 1
+      }
+    ],
+    "resources": [
+      {
+        "index": 0,
+        "type": { "kind": "id", "id": 24 },
+        "name": { "kind": "id", "id": 1 },
+        "language": { "kind": "id", "id": 1033 },
+        "entry_locations": [
+          { "offset": 4189712, "bytes": 8 },
+          { "offset": 4189736, "bytes": 8 },
+          { "offset": 4189760, "bytes": 8 }
+        ],
+        "data_entry_location": { "offset": 4189768, "bytes": 16 },
+        "code_page": 0,
+        "reserved": 0,
+        "payload": {
+          "rva": 4206688,
+          "location": { "offset": 4189792, "bytes": 1705 },
+          "sha256": "dee23ef92440fccbd4dd451345c094eceb06c4ec4ccddd477343816268b3cdfb"
+        }
+      }
+    ],
+    "icon_groups": [],
+    "coverage": { "status": "complete", "examined_entries": 3, "resources": 1 },
+    "limitations": [
+      "Static PE32/PE32+ type/name/language resource inventory; payloads other than RT_GROUP_ICON remain opaque.",
+      "Icon candidates are resource-table relationships. Language fallback, image decoding and actual shell/window loading are not observed.",
+      "Exact shared byte ranges are retained; non-identical overlapping resource structures or payloads are rejected."
+    ]
+  },
+  "confidence": "observed",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Static PE32/PE32+ type/name/language resource inventory; payloads other than RT_GROUP_ICON remain opaque.",
+    "Icon candidates are resource-table relationships. Language fallback, image decoding and actual shell/window loading are not observed.",
+    "Exact shared byte ranges are retained; non-identical overlapping resource structures or payloads are rejected."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "artifact-path",
+      "path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/ripgrep/extracted/ripgrep-15.2.0-x86_64-pc-windows-msvc/rg.exe"
+    }
+  ],
+  "evidence_links": []
+}
