@@ -27,3 +27,51 @@ it("rejects nondeterministic observations rather than retaining flaky counterexa
     reference:new Uint8Array([++n%2]),candidate:new Uint8Array([3]),
   }))).rejects.toThrow(/Nondeterministic/u);
 });
+
+it("cancels running observer on timeout via abort signal and reaps active observer", async () => {
+  let observerAborted = false;
+  let observerCleanedUp = false;
+  const observe = async (_input: Uint8Array, context?: { readonly signal: AbortSignal }) => {
+    return new Promise<{ reference: Uint8Array; candidate: Uint8Array }>((resolve, reject) => {
+      const timer = setTimeout(() => {
+        resolve({ reference: new Uint8Array([1]), candidate: new Uint8Array([0]) });
+      }, 500);
+      context?.signal.addEventListener("abort", () => {
+        clearTimeout(timer);
+        observerAborted = true;
+        observerCleanedUp = true;
+        reject(context.signal.reason);
+      }, { once: true });
+    });
+  };
+  await expect(
+    minimizeDifferentialInput(new Uint8Array([1, 2, 3]), observe, 256, undefined, { timeoutMs: 25 }),
+  ).rejects.toThrow(/Differential observation timeout/u);
+  expect(observerAborted).toBe(true);
+  expect(observerCleanedUp).toBe(true);
+});
+
+it("cancels running observer and awaits cleanup when external signal aborts", async () => {
+  const controller = new AbortController();
+  let observerAborted = false;
+  let observerCleanedUp = false;
+  const observe = async (_input: Uint8Array, context?: { readonly signal: AbortSignal }) => {
+    return new Promise<{ reference: Uint8Array; candidate: Uint8Array }>((resolve, reject) => {
+      const timer = setTimeout(() => {
+        resolve({ reference: new Uint8Array([1]), candidate: new Uint8Array([0]) });
+      }, 500);
+      context?.signal.addEventListener("abort", () => {
+        clearTimeout(timer);
+        observerAborted = true;
+        observerCleanedUp = true;
+        reject(context.signal.reason);
+      }, { once: true });
+    });
+  };
+  setTimeout(() => controller.abort(new Error("caller cancellation")), 25);
+  await expect(
+    minimizeDifferentialInput(new Uint8Array([1, 2, 3]), observe, 256, undefined, { signal: controller.signal }),
+  ).rejects.toThrow(/caller cancellation/u);
+  expect(observerAborted).toBe(true);
+  expect(observerCleanedUp).toBe(true);
+});
