@@ -1,3 +1,5 @@
+import type { CapaToolName } from "../contracts/native/capaToolContracts.js";
+import type { Radare2ToolName } from "../contracts/native/radare2ToolContracts.js";
 import type { BinaryTarget } from "../domain/binaryTargetTypes.js";
 import type { OfficialToolName } from "../contracts/officialToolContracts.js";
 import type { EnhancedToolName } from "../contracts/enhancedInputs.js";
@@ -39,6 +41,8 @@ export type AnalysisOperation =
   | NativeToolName
   | ArtifactAnalysisOperation
   | ManagedToolName
+  | CapaToolName
+  | Radare2ToolName
   | "health";
 
 /** Atomic successful provider observation with exact producing provenance. */

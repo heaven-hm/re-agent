@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "application": "REA Engine radare2 provider integration smoke",
+  "capturedAt": "2026-10-14T15:27:47Z",
+  "invocation": "node scripts/rea.mjs inspect-radare2-function-inventory /bin/ls --json",
+  "exitCode": 0,
+  "evidenceId": "ev_5b095506cec473f2f4fc78e6321cef700a5dd963571afa56a25eef2f268274cc",
+  "target": {
+    "path": "/bin/ls",
+    "sha256": "db6beb98b2aed48f48634c59f1f6a82c2f719ce2334b2080634efb01e14c8344",
+    "format": "mach-o-universal",
+    "architecture": "arm64",
+    "size_bytes": 154624
+  },
+  "engine": {
+    "path": "/opt/homebrew/Cellar/radare2/6.2.0/bin/radare2",
+    "sha256": "0706936e12301c2541818f6d3a1b58c60bbbf49f8d723459cd526a9153f3572d",
+    "version": "6.2.0"
+  },
+  "command": [
+    "-q",
+    "-A",
+    "-c",
+    "aflj",
+    "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/rea-radare2-b3E08V/target.macho"
+  ],
+  "analysisExitCode": 0,
+  "analysisOutput": {
+    "sha256": "5c5397896fd19d0c760bf52afd43dbca39387d49ea9a369f902d0ff97a1c8341",
+    "bytes": 66589,
+    "complete": true
+  },
+  "inventory": {
+    "state": "complete",
+    "totalRows": 139,
+    "returnedRows": 139
+  },
+  "limitations": [
+    "Function records and boundaries are radare2 analysis inferences; this inventory does not prove that all true functions were discovered.",
+    "The target is analyzed from a provider-owned byte-for-byte snapshot and is never executed by this operation.",
+    "The process is isolated and resource-bounded, but this is not a security sandbox for the analysis engine."
+  ],
+  "claim": "Observed successful static inventory operation for this target and tool version; does not prove complete function recovery or behavioral equivalence."
+}

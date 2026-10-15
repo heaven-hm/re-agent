@@ -79,7 +79,13 @@ export const autonomyTools: readonly ToolProbe[] = [
     id: "ffmpeg",
     executable: "ffmpeg",
     versionArguments: ["-version"],
-    capabilities: ["audio-video-comparison"],
+    capabilities: ["audio-video-comparison", "game-frame-quality-metrics"],
+  },
+  {
+    id: "apitrace",
+    executable: "apitrace",
+    versionArguments: ["--version"],
+    capabilities: ["graphics-api-tracing", "graphics-trace-replay"],
   },
   {
     id: "renderdoc",

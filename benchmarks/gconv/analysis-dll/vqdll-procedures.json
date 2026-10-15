@@ -1,0 +1,4366 @@
+{
+  "evidence_id": "ev_146c2102adcdb11a728506d867b76b5f47eb8c3c7389a7191ca4b30b7daea244",
+  "subject": {
+    "name": "vqdll.dll",
+    "digest": {
+      "sha256": "2491892b539d9072ca0704972ceac83bf5cb9fbcc3938be6a01495f9cbf40a69"
+    },
+    "format": "pe",
+    "architecture": "x86",
+    "local_path": "/Users/haseeb-mir/Downloads/tools/vqdll.dll"
+  },
+  "provider": {
+    "id": "ghidra",
+    "name": "Ghidra",
+    "version": "12.1.2"
+  },
+  "analysis_profile": {
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.2"
+    },
+    "parameters": {
+      "target_kind": "executable",
+      "target_format": "pe",
+      "executable_role": "shared-library",
+      "managed": false,
+      "native_aot_metadata": {
+        "contract_revision": "rtr-9.1-x64-pe-read-only-v3",
+        "source_bytes": 134217728,
+        "work_units": 67108864,
+        "working_memory_bytes": 67108864,
+        "report_bytes": 4194304
+      },
+      "architecture": "x86",
+      "available_architectures": ["x86"],
+      "import_mode": "ephemeral-source-immutable",
+      "annotation_policy": "atomic-function-entry-metadata-v1",
+      "load_image_observations": "source-mappings-entry-context-v2",
+      "function_body_evidence": "complete-inclusive-ranges-v1",
+      "function_references": "complete-body-and-entry-reference-manager-v2",
+      "call_relationship_coverage": "resolved-call-reference-diagnostics-v1",
+      "string_inventory_evidence": "defined-data-coverage-v1",
+      "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+      "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+      "instruction_flow_evidence": "decoded-return-pcode-v1",
+      "instruction_references": "exact-address-incoming-v1",
+      "function_boundary_observations": "ghidra-terminal-call-limitations-v1",
+      "no_return_repair": "returning-imports-decoded-return-v2",
+      "process_launch": "inspected-jvm-launch-support-v1",
+      "jump_table_evidence": "typed-case-default-blocks-v1",
+      "decompiler_jump_loads": true,
+      "loader": "auto-from-header",
+      "language_id": "auto-from-header",
+      "compiler_spec_id": "auto-default",
+      "analyzer_preset": "ghidra-default"
+    },
+    "digest": "805fc3c4d08c6e55ed9b3c02c6cd5000d29eaa566876b747267b1559986657fa"
+  },
+  "predicate_type": "rea.analysis",
+  "operation": "list_procedures",
+  "parameters": {},
+  "raw_result": [
+    {
+      "address": "EXTERNAL:0x1",
+      "value": "KERNEL32.DLL::TlsGetValue",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x2",
+      "value": "KERNEL32.DLL::ExitProcess",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x3",
+      "value": "KERNEL32.DLL::GetModuleFileNameA",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x4",
+      "value": "KERNEL32.DLL::TerminateProcess",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x5",
+      "value": "KERNEL32.DLL::GetCurrentProcess",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x6",
+      "value": "KERNEL32.DLL::HeapAlloc",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x7",
+      "value": "KERNEL32.DLL::HeapFree",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x8",
+      "value": "KERNEL32.DLL::GetCommandLineA",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x9",
+      "value": "KERNEL32.DLL::GetVersion",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0xa",
+      "value": "KERNEL32.DLL::InitializeCriticalSection",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0xb",
+      "value": "KERNEL32.DLL::DeleteCriticalSection",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0xc",
+      "value": "KERNEL32.DLL::EnterCriticalSection",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0xd",
+      "value": "KERNEL32.DLL::LeaveCriticalSection",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0xe",
+      "value": "KERNEL32.DLL::HeapDestroy",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0xf",
+      "value": "KERNEL32.DLL::HeapCreate",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x10",
+      "value": "KERNEL32.DLL::VirtualFree",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x11",
+      "value": "KERNEL32.DLL::VirtualAlloc",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x12",
+      "value": "KERNEL32.DLL::GetProcAddress",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x13",
+      "value": "KERNEL32.DLL::GetModuleHandleA",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x14",
+      "value": "KERNEL32.DLL::GetLastError",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x15",
+      "value": "KERNEL32.DLL::FlushFileBuffers",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x16",
+      "value": "KERNEL32.DLL::WriteFile",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x17",
+      "value": "KERNEL32.DLL::SetHandleCount",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x18",
+      "value": "KERNEL32.DLL::GetStdHandle",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x19",
+      "value": "KERNEL32.DLL::GetFileType",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x1a",
+      "value": "KERNEL32.DLL::GetStartupInfoA",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x1b",
+      "value": "KERNEL32.DLL::GetCurrentThreadId",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x1c",
+      "value": "KERNEL32.DLL::TlsSetValue",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x1d",
+      "value": "KERNEL32.DLL::TlsAlloc",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x1e",
+      "value": "KERNEL32.DLL::TlsFree",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x1f",
+      "value": "KERNEL32.DLL::SetLastError",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x20",
+      "value": "KERNEL32.DLL::OutputDebugStringA",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x21",
+      "value": "KERNEL32.DLL::GetCPInfo",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x24",
+      "value": "KERNEL32.DLL::FreeEnvironmentStringsA",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x25",
+      "value": "KERNEL32.DLL::MultiByteToWideChar",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x26",
+      "value": "KERNEL32.DLL::FreeEnvironmentStringsW",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x27",
+      "value": "KERNEL32.DLL::GetEnvironmentStrings",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x28",
+      "value": "KERNEL32.DLL::GetEnvironmentStringsW",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x29",
+      "value": "KERNEL32.DLL::WideCharToMultiByte",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x2a",
+      "value": "KERNEL32.DLL::InterlockedDecrement",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x2b",
+      "value": "KERNEL32.DLL::InterlockedIncrement",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x2c",
+      "value": "KERNEL32.DLL::SetStdHandle",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x2d",
+      "value": "KERNEL32.DLL::SetFilePointer",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x2e",
+      "value": "KERNEL32.DLL::LCMapStringA",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x2f",
+      "value": "KERNEL32.DLL::LCMapStringW",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x30",
+      "value": "KERNEL32.DLL::GetStringTypeA",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x31",
+      "value": "KERNEL32.DLL::GetStringTypeW",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x32",
+      "value": "KERNEL32.DLL::LoadLibraryA",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x33",
+      "value": "KERNEL32.DLL::CloseHandle",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x34",
+      "value": "KERNEL32.DLL::GetLocaleInfoA",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x35",
+      "value": "KERNEL32.DLL::GetLocaleInfoW",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x36",
+      "value": "USER32.DLL::wvsprintfA",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10001000",
+      "value": "FUN_10001000",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100013f0",
+      "value": "FUN_100013f0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100014b0",
+      "value": "FUN_100014b0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10001560",
+      "value": "FUN_10001560",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10001610",
+      "value": "FUN_10001610",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10001640",
+      "value": "FUN_10001640",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10001d70",
+      "value": "FUN_10001d70",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10001e00",
+      "value": "FUN_10001e00",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10001e50",
+      "value": "FUN_10001e50",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10001e90",
+      "value": "FUN_10001e90",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10001ea0",
+      "value": "FUN_10001ea0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10002150",
+      "value": "FUN_10002150",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10002490",
+      "value": "FUN_10002490",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10002590",
+      "value": "FUN_10002590",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10002650",
+      "value": "FUN_10002650",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100027b0",
+      "value": "FUN_100027b0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10002a20",
+      "value": "FUN_10002a20",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10002bf0",
+      "value": "FUN_10002bf0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10002c40",
+      "value": "FUN_10002c40",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10002d00",
+      "value": "FUN_10002d00",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10003000",
+      "value": "FUN_10003000",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10003520",
+      "value": "FUN_10003520",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100035e0",
+      "value": "FUN_100035e0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100035f0",
+      "value": "VqCalc",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10003990",
+      "value": "FUN_10003990",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100039b0",
+      "value": "FUN_100039b0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10003ea0",
+      "value": "FUN_10003ea0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10003ed0",
+      "value": "FUN_10003ed0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10003f30",
+      "value": "FUN_10003f30",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10003f60",
+      "value": "FUN_10003f60",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10003f80",
+      "value": "__exit",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10003fa0",
+      "value": "FUN_10003fa0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10003fb0",
+      "value": "FUN_10003fb0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004070",
+      "value": "FUN_10004070",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004080",
+      "value": "FUN_10004080",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004090",
+      "value": "FUN_10004090",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100040b0",
+      "value": "FUN_100040b0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004110",
+      "value": "FUN_10004110",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004130",
+      "value": "FUN_10004130",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004180",
+      "value": "FUN_10004180",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100041e0",
+      "value": "__fpmath",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004210",
+      "value": "FUN_10004210",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004250",
+      "value": "__ftol",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004280",
+      "value": "FUN_10004280",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004430",
+      "value": "FUN_10004430",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004490",
+      "value": "FUN_10004490",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004500",
+      "value": "FUN_10004500",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004720",
+      "value": "FUN_10004720",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004750",
+      "value": "FUN_10004750",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100047c0",
+      "value": "FUN_100047c0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004830",
+      "value": "FUN_10004830",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004950",
+      "value": "entry",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004a00",
+      "value": "__amsg_exit",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004a40",
+      "value": "FUN_10004a40",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004a70",
+      "value": "FUN_10004a70",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004af0",
+      "value": "FUN_10004af0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004b70",
+      "value": "FUN_10004b70",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004b90",
+      "value": "FUN_10004b90",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004bd0",
+      "value": "FUN_10004bd0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004c00",
+      "value": "FUN_10004c00",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004c40",
+      "value": "FUN_10004c40",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004c70",
+      "value": "FUN_10004c70",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004d30",
+      "value": "FUN_10004d30",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004d70",
+      "value": "FUN_10004d70",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005700",
+      "value": "FUN_10005700",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005750",
+      "value": "FUN_10005750",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005790",
+      "value": "FUN_10005790",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100057d0",
+      "value": "FUN_100057d0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100057f0",
+      "value": "FUN_100057f0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005810",
+      "value": "FUN_10005810",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005830",
+      "value": "FUN_10005830",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005850",
+      "value": "FUN_10005850",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005890",
+      "value": "FUN_10005890",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100058d0",
+      "value": "FUN_100058d0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005a40",
+      "value": "FUN_10005a40",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005aa0",
+      "value": "FUN_10005aa0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005b70",
+      "value": "FUN_10005b70",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005bd0",
+      "value": "FUN_10005bd0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005c30",
+      "value": "FUN_10005c30",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005e70",
+      "value": "FUN_10005e70",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005ff0",
+      "value": "__setdefaultprecision",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006010",
+      "value": "FUN_10006010",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006060",
+      "value": "FUN_10006060",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006090",
+      "value": "FUN_10006090",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100061e0",
+      "value": "FUN_100061e0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006260",
+      "value": "FUN_10006260",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006360",
+      "value": "FUN_10006360",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100063d0",
+      "value": "FUN_100063d0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006490",
+      "value": "FUN_10006490",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100065c0",
+      "value": "FUN_100065c0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006690",
+      "value": "FUN_10006690",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006710",
+      "value": "FUN_10006710",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006920",
+      "value": "FUN_10006920",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006b30",
+      "value": "FUN_10006b30",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006b90",
+      "value": "FUN_10006b90",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006ce0",
+      "value": "FUN_10006ce0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006e10",
+      "value": "FUN_10006e10",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006e70",
+      "value": "FUN_10006e70",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006ea0",
+      "value": "FUN_10006ea0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006ec0",
+      "value": "FUN_10006ec0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006f40",
+      "value": "FUN_10006f40",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006ff0",
+      "value": "FUN_10006ff0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100070e0",
+      "value": "FUN_100070e0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007180",
+      "value": "FUN_10007180",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007390",
+      "value": "FUN_10007390",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100075c0",
+      "value": "FUN_100075c0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007610",
+      "value": "FUN_10007610",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007670",
+      "value": "FUN_10007670",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100076b0",
+      "value": "FUN_100076b0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007890",
+      "value": "FUN_10007890",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100078a0",
+      "value": "FUN_100078a0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007a00",
+      "value": "FUN_10007a00",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007a40",
+      "value": "FUN_10007a40",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007c20",
+      "value": "FUN_10007c20",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007c50",
+      "value": "FUN_10007c50",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007cc0",
+      "value": "FUN_10007cc0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007d40",
+      "value": "__aulldiv",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007db0",
+      "value": "__aullrem",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007e30",
+      "value": "FUN_10007e30",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007e70",
+      "value": "FUN_10007e70",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007e90",
+      "value": "FUN_10007e90",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007f30",
+      "value": "FUN_10007f30",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007fc0",
+      "value": "FUN_10007fc0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008060",
+      "value": "FUN_10008060",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100080f0",
+      "value": "FUN_100080f0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100081f0",
+      "value": "FUN_100081f0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008260",
+      "value": "FUN_10008260",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100082d0",
+      "value": "FUN_100082d0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008370",
+      "value": "FUN_10008370",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008390",
+      "value": "FUN_10008390",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100083a0",
+      "value": "FUN_100083a0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100083c0",
+      "value": "FUN_100083c0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008480",
+      "value": "FUN_10008480",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008650",
+      "value": "FUN_10008650",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008670",
+      "value": "FUN_10008670",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008690",
+      "value": "FUN_10008690",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100086d0",
+      "value": "FUN_100086d0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008710",
+      "value": "FUN_10008710",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100087b0",
+      "value": "FUN_100087b0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008840",
+      "value": "FUN_10008840",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008900",
+      "value": "FUN_10008900",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008c40",
+      "value": "__fptrap",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008c50",
+      "value": "FUN_10008c50",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008cf0",
+      "value": "FUN_10008cf0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008d40",
+      "value": "FUN_10008d40",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008db0",
+      "value": "FUN_10008db0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008de0",
+      "value": "FUN_10008de0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008e60",
+      "value": "FUN_10008e60",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008e70",
+      "value": "FUN_10008e70",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008e80",
+      "value": "FUN_10008e80",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008f00",
+      "value": "FUN_10008f00",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008f80",
+      "value": "FUN_10008f80",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008fc0",
+      "value": "FUN_10008fc0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10009030",
+      "value": "FUN_10009030",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10009090",
+      "value": "FUN_10009090",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100092c0",
+      "value": "FUN_100092c0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100092f0",
+      "value": "FUN_100092f0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10009480",
+      "value": "FUN_10009480",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100095c0",
+      "value": "FUN_100095c0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10009650",
+      "value": "_strncpy",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10009750",
+      "value": "FUN_10009750",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10009780",
+      "value": "FUN_10009780",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100097f0",
+      "value": "FUN_100097f0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10009820",
+      "value": "FUN_10009820",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10009850",
+      "value": "FUN_10009850",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10009950",
+      "value": "FUN_10009950",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000a0e0",
+      "value": "FUN_1000a0e0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000a470",
+      "value": "FUN_1000a470",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000a4e0",
+      "value": "FUN_1000a4e0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000a570",
+      "value": "FUN_1000a570",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000a660",
+      "value": "FUN_1000a660",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000a9e0",
+      "value": "FUN_1000a9e0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000ac20",
+      "value": "FUN_1000ac20",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000b010",
+      "value": "FUN_1000b010",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000b160",
+      "value": "FUN_1000b160",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000b1a0",
+      "value": "FUN_1000b1a0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000b4e0",
+      "value": "_strcspn",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000b520",
+      "value": "_strncmp",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000b560",
+      "value": "_strpbrk",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000b5a0",
+      "value": "FUN_1000b5a0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000b860",
+      "value": "FUN_1000b860",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000b8f0",
+      "value": "FUN_1000b8f0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000baa0",
+      "value": "FUN_1000baa0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000bb70",
+      "value": "FUN_1000bb70",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000bc80",
+      "value": "FUN_1000bc80",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000bdb0",
+      "value": "FUN_1000bdb0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    }
+  ],
+  "normalized_result": [
+    {
+      "address": "EXTERNAL:0x1",
+      "value": "KERNEL32.DLL::TlsGetValue",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x2",
+      "value": "KERNEL32.DLL::ExitProcess",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x3",
+      "value": "KERNEL32.DLL::GetModuleFileNameA",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x4",
+      "value": "KERNEL32.DLL::TerminateProcess",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x5",
+      "value": "KERNEL32.DLL::GetCurrentProcess",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x6",
+      "value": "KERNEL32.DLL::HeapAlloc",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x7",
+      "value": "KERNEL32.DLL::HeapFree",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x8",
+      "value": "KERNEL32.DLL::GetCommandLineA",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x9",
+      "value": "KERNEL32.DLL::GetVersion",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0xa",
+      "value": "KERNEL32.DLL::InitializeCriticalSection",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0xb",
+      "value": "KERNEL32.DLL::DeleteCriticalSection",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0xc",
+      "value": "KERNEL32.DLL::EnterCriticalSection",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0xd",
+      "value": "KERNEL32.DLL::LeaveCriticalSection",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0xe",
+      "value": "KERNEL32.DLL::HeapDestroy",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0xf",
+      "value": "KERNEL32.DLL::HeapCreate",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x10",
+      "value": "KERNEL32.DLL::VirtualFree",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x11",
+      "value": "KERNEL32.DLL::VirtualAlloc",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x12",
+      "value": "KERNEL32.DLL::GetProcAddress",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x13",
+      "value": "KERNEL32.DLL::GetModuleHandleA",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x14",
+      "value": "KERNEL32.DLL::GetLastError",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x15",
+      "value": "KERNEL32.DLL::FlushFileBuffers",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x16",
+      "value": "KERNEL32.DLL::WriteFile",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x17",
+      "value": "KERNEL32.DLL::SetHandleCount",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x18",
+      "value": "KERNEL32.DLL::GetStdHandle",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x19",
+      "value": "KERNEL32.DLL::GetFileType",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x1a",
+      "value": "KERNEL32.DLL::GetStartupInfoA",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x1b",
+      "value": "KERNEL32.DLL::GetCurrentThreadId",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x1c",
+      "value": "KERNEL32.DLL::TlsSetValue",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x1d",
+      "value": "KERNEL32.DLL::TlsAlloc",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x1e",
+      "value": "KERNEL32.DLL::TlsFree",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x1f",
+      "value": "KERNEL32.DLL::SetLastError",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x20",
+      "value": "KERNEL32.DLL::OutputDebugStringA",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x21",
+      "value": "KERNEL32.DLL::GetCPInfo",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x24",
+      "value": "KERNEL32.DLL::FreeEnvironmentStringsA",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x25",
+      "value": "KERNEL32.DLL::MultiByteToWideChar",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x26",
+      "value": "KERNEL32.DLL::FreeEnvironmentStringsW",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x27",
+      "value": "KERNEL32.DLL::GetEnvironmentStrings",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x28",
+      "value": "KERNEL32.DLL::GetEnvironmentStringsW",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x29",
+      "value": "KERNEL32.DLL::WideCharToMultiByte",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x2a",
+      "value": "KERNEL32.DLL::InterlockedDecrement",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x2b",
+      "value": "KERNEL32.DLL::InterlockedIncrement",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x2c",
+      "value": "KERNEL32.DLL::SetStdHandle",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x2d",
+      "value": "KERNEL32.DLL::SetFilePointer",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x2e",
+      "value": "KERNEL32.DLL::LCMapStringA",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x2f",
+      "value": "KERNEL32.DLL::LCMapStringW",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x30",
+      "value": "KERNEL32.DLL::GetStringTypeA",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x31",
+      "value": "KERNEL32.DLL::GetStringTypeW",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x32",
+      "value": "KERNEL32.DLL::LoadLibraryA",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x33",
+      "value": "KERNEL32.DLL::CloseHandle",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x34",
+      "value": "KERNEL32.DLL::GetLocaleInfoA",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x35",
+      "value": "KERNEL32.DLL::GetLocaleInfoW",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "EXTERNAL:0x36",
+      "value": "USER32.DLL::wvsprintfA",
+      "procedure": {
+        "external": true,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10001000",
+      "value": "FUN_10001000",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100013f0",
+      "value": "FUN_100013f0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100014b0",
+      "value": "FUN_100014b0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10001560",
+      "value": "FUN_10001560",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10001610",
+      "value": "FUN_10001610",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10001640",
+      "value": "FUN_10001640",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10001d70",
+      "value": "FUN_10001d70",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10001e00",
+      "value": "FUN_10001e00",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10001e50",
+      "value": "FUN_10001e50",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10001e90",
+      "value": "FUN_10001e90",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10001ea0",
+      "value": "FUN_10001ea0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10002150",
+      "value": "FUN_10002150",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10002490",
+      "value": "FUN_10002490",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10002590",
+      "value": "FUN_10002590",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10002650",
+      "value": "FUN_10002650",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100027b0",
+      "value": "FUN_100027b0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10002a20",
+      "value": "FUN_10002a20",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10002bf0",
+      "value": "FUN_10002bf0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10002c40",
+      "value": "FUN_10002c40",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10002d00",
+      "value": "FUN_10002d00",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10003000",
+      "value": "FUN_10003000",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10003520",
+      "value": "FUN_10003520",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100035e0",
+      "value": "FUN_100035e0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100035f0",
+      "value": "VqCalc",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10003990",
+      "value": "FUN_10003990",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100039b0",
+      "value": "FUN_100039b0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10003ea0",
+      "value": "FUN_10003ea0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10003ed0",
+      "value": "FUN_10003ed0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10003f30",
+      "value": "FUN_10003f30",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10003f60",
+      "value": "FUN_10003f60",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10003f80",
+      "value": "__exit",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10003fa0",
+      "value": "FUN_10003fa0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10003fb0",
+      "value": "FUN_10003fb0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004070",
+      "value": "FUN_10004070",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004080",
+      "value": "FUN_10004080",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004090",
+      "value": "FUN_10004090",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100040b0",
+      "value": "FUN_100040b0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004110",
+      "value": "FUN_10004110",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004130",
+      "value": "FUN_10004130",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004180",
+      "value": "FUN_10004180",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100041e0",
+      "value": "__fpmath",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004210",
+      "value": "FUN_10004210",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004250",
+      "value": "__ftol",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004280",
+      "value": "FUN_10004280",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004430",
+      "value": "FUN_10004430",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004490",
+      "value": "FUN_10004490",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004500",
+      "value": "FUN_10004500",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004720",
+      "value": "FUN_10004720",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004750",
+      "value": "FUN_10004750",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100047c0",
+      "value": "FUN_100047c0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004830",
+      "value": "FUN_10004830",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004950",
+      "value": "entry",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004a00",
+      "value": "__amsg_exit",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004a40",
+      "value": "FUN_10004a40",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004a70",
+      "value": "FUN_10004a70",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004af0",
+      "value": "FUN_10004af0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004b70",
+      "value": "FUN_10004b70",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004b90",
+      "value": "FUN_10004b90",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004bd0",
+      "value": "FUN_10004bd0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004c00",
+      "value": "FUN_10004c00",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004c40",
+      "value": "FUN_10004c40",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004c70",
+      "value": "FUN_10004c70",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004d30",
+      "value": "FUN_10004d30",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10004d70",
+      "value": "FUN_10004d70",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005700",
+      "value": "FUN_10005700",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005750",
+      "value": "FUN_10005750",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005790",
+      "value": "FUN_10005790",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100057d0",
+      "value": "FUN_100057d0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100057f0",
+      "value": "FUN_100057f0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005810",
+      "value": "FUN_10005810",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005830",
+      "value": "FUN_10005830",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005850",
+      "value": "FUN_10005850",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005890",
+      "value": "FUN_10005890",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100058d0",
+      "value": "FUN_100058d0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005a40",
+      "value": "FUN_10005a40",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005aa0",
+      "value": "FUN_10005aa0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005b70",
+      "value": "FUN_10005b70",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005bd0",
+      "value": "FUN_10005bd0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005c30",
+      "value": "FUN_10005c30",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005e70",
+      "value": "FUN_10005e70",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10005ff0",
+      "value": "__setdefaultprecision",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006010",
+      "value": "FUN_10006010",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006060",
+      "value": "FUN_10006060",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006090",
+      "value": "FUN_10006090",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100061e0",
+      "value": "FUN_100061e0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006260",
+      "value": "FUN_10006260",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006360",
+      "value": "FUN_10006360",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100063d0",
+      "value": "FUN_100063d0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006490",
+      "value": "FUN_10006490",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100065c0",
+      "value": "FUN_100065c0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006690",
+      "value": "FUN_10006690",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006710",
+      "value": "FUN_10006710",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006920",
+      "value": "FUN_10006920",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006b30",
+      "value": "FUN_10006b30",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006b90",
+      "value": "FUN_10006b90",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006ce0",
+      "value": "FUN_10006ce0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006e10",
+      "value": "FUN_10006e10",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006e70",
+      "value": "FUN_10006e70",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006ea0",
+      "value": "FUN_10006ea0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006ec0",
+      "value": "FUN_10006ec0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006f40",
+      "value": "FUN_10006f40",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10006ff0",
+      "value": "FUN_10006ff0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100070e0",
+      "value": "FUN_100070e0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007180",
+      "value": "FUN_10007180",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007390",
+      "value": "FUN_10007390",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100075c0",
+      "value": "FUN_100075c0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007610",
+      "value": "FUN_10007610",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007670",
+      "value": "FUN_10007670",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100076b0",
+      "value": "FUN_100076b0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007890",
+      "value": "FUN_10007890",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100078a0",
+      "value": "FUN_100078a0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007a00",
+      "value": "FUN_10007a00",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007a40",
+      "value": "FUN_10007a40",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007c20",
+      "value": "FUN_10007c20",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007c50",
+      "value": "FUN_10007c50",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007cc0",
+      "value": "FUN_10007cc0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007d40",
+      "value": "__aulldiv",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007db0",
+      "value": "__aullrem",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007e30",
+      "value": "FUN_10007e30",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007e70",
+      "value": "FUN_10007e70",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007e90",
+      "value": "FUN_10007e90",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007f30",
+      "value": "FUN_10007f30",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10007fc0",
+      "value": "FUN_10007fc0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008060",
+      "value": "FUN_10008060",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100080f0",
+      "value": "FUN_100080f0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100081f0",
+      "value": "FUN_100081f0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008260",
+      "value": "FUN_10008260",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100082d0",
+      "value": "FUN_100082d0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008370",
+      "value": "FUN_10008370",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008390",
+      "value": "FUN_10008390",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100083a0",
+      "value": "FUN_100083a0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100083c0",
+      "value": "FUN_100083c0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008480",
+      "value": "FUN_10008480",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008650",
+      "value": "FUN_10008650",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008670",
+      "value": "FUN_10008670",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008690",
+      "value": "FUN_10008690",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100086d0",
+      "value": "FUN_100086d0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008710",
+      "value": "FUN_10008710",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100087b0",
+      "value": "FUN_100087b0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008840",
+      "value": "FUN_10008840",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008900",
+      "value": "FUN_10008900",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008c40",
+      "value": "__fptrap",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008c50",
+      "value": "FUN_10008c50",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008cf0",
+      "value": "FUN_10008cf0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008d40",
+      "value": "FUN_10008d40",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008db0",
+      "value": "FUN_10008db0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008de0",
+      "value": "FUN_10008de0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008e60",
+      "value": "FUN_10008e60",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008e70",
+      "value": "FUN_10008e70",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008e80",
+      "value": "FUN_10008e80",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008f00",
+      "value": "FUN_10008f00",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008f80",
+      "value": "FUN_10008f80",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10008fc0",
+      "value": "FUN_10008fc0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10009030",
+      "value": "FUN_10009030",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10009090",
+      "value": "FUN_10009090",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100092c0",
+      "value": "FUN_100092c0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100092f0",
+      "value": "FUN_100092f0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10009480",
+      "value": "FUN_10009480",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100095c0",
+      "value": "FUN_100095c0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10009650",
+      "value": "_strncpy",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10009750",
+      "value": "FUN_10009750",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10009780",
+      "value": "FUN_10009780",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x100097f0",
+      "value": "FUN_100097f0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10009820",
+      "value": "FUN_10009820",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10009850",
+      "value": "FUN_10009850",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x10009950",
+      "value": "FUN_10009950",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000a0e0",
+      "value": "FUN_1000a0e0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000a470",
+      "value": "FUN_1000a470",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000a4e0",
+      "value": "FUN_1000a4e0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000a570",
+      "value": "FUN_1000a570",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000a660",
+      "value": "FUN_1000a660",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000a9e0",
+      "value": "FUN_1000a9e0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000ac20",
+      "value": "FUN_1000ac20",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000b010",
+      "value": "FUN_1000b010",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000b160",
+      "value": "FUN_1000b160",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000b1a0",
+      "value": "FUN_1000b1a0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000b4e0",
+      "value": "_strcspn",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000b520",
+      "value": "_strncmp",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000b560",
+      "value": "_strpbrk",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000b5a0",
+      "value": "FUN_1000b5a0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000b860",
+      "value": "FUN_1000b860",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000b8f0",
+      "value": "FUN_1000b8f0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000baa0",
+      "value": "FUN_1000baa0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000bb70",
+      "value": "FUN_1000bb70",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000bc80",
+      "value": "FUN_1000bc80",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    },
+    {
+      "address": "0x1000bdb0",
+      "value": "FUN_1000bdb0",
+      "procedure": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null
+      }
+    }
+  ],
+  "confidence": "observed",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+    "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+    "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+    "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+    "External functions and local thunks are distinct; procedure metadata identifies both and preserves a thunk target when Ghidra resolves one.",
+    "macOS sessions require a matching executable Ghidra native decompiler; REA checks for it but does not build native components or change Gatekeeper quarantine state.",
+    "This session uses Ghidra 12.1.2. The bridge is verified against 12.1.4; other 12.1.x builds are accepted and the observed version is reported."
+  ],
+  "relationship_coverage": null,
+  "locations": [],
+  "evidence_links": []
+}

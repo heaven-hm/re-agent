@@ -5,7 +5,7 @@
 ## Inputs and implementation
 
 - Original: the installed macOS Calculator binary at `/System/Applications/Calculator.app/Contents/MacOS/Calculator`, SHA-256 `0ebdae8618cd675bcf492d6fc8f48dd79c4712e0532c80f1a1cb59269fd76be9` at capture time. It is a local system app, not included in this repository.
-- Replica source: [CalculatorEngine.swift](../../../../scripts/calculator/CalculatorEngine.swift) and [CalculatorWindow.swift](../../../../scripts/calculator/CalculatorWindow.swift). The report records the replica executable hash at run time; its original output path is ephemeral and is not present in the checked-in tree.
+- Replica source: [CalculatorEngine.swift](../../../../scripts/calculator/CalculatorEngine.swift), [CalculatorWindow.swift](../../../../scripts/calculator/CalculatorWindow.swift) and the standalone [CalculatorApp.swift](../../../../scripts/calculator/CalculatorApp.swift) entry point. Rebuild it on macOS with [`build.sh`](../../../../scripts/calculator/build.sh); output is written to the ignored `scripts/calculator/build/` directory.
 - Driver: [verify-calculator-reconstruction.mjs](../../../../scripts/verify-calculator-reconstruction.mjs).
 - Structured case report: [calculator-report.json](../../../../docs/verification/rea-extended/calculator-report.json).
 

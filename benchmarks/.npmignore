@@ -1,0 +1,16 @@
+# Rebuild outputs and compiler module caches are local host artifacts.
+build
+build/**
+**/build
+**/build/**
+
+# Original Windows releases and compatibility-worker images are private test inputs.
+native-batch-2/originals/**
+native-batch-2/.runtime-workers/**
+native-batch-2/logs/runtime/**
+native-batch-2/logs/checkpoints/**
+
+# Python bytecode is generated from the checked-in benchmark scripts.
+**/__pycache__/**
+**/*.pyc
+**/*.pyo

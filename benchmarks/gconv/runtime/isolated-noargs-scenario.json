@@ -1,0 +1,17 @@
+{
+  "executable": "/Users/haseeb-mir/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin/wine",
+  "arguments": [
+    "--bottle",
+    "rea-gconv",
+    "--no-update",
+    "--no-gui",
+    "/Users/haseeb-mir/Downloads/tools/gconv.exe"
+  ],
+  "working_directory": "/Users/haseeb-mir/Downloads/tools",
+  "timeout_ms": 30000,
+  "environment": {
+    "WINEDEBUG": "-all",
+    "LC_ALL": "C",
+    "CX_BOTTLE_PATH": "/private/tmp/rea-gconv-bottles"
+  }
+}

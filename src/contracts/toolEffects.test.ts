@@ -18,6 +18,8 @@ const EXECUTION_WORDING_EXCEPTIONS: Readonly<Record<string, string>> = {
   inspect_native_load_image: "states that it does not execute the target",
   resolve_native_call_targets: "states that it does not execute code",
   inspect_pe_resources: "states that it does not execute the image",
+  inspect_capa_capabilities:
+    "states that target code is not executed; only the configured static analysis engine runs",
   inspect_go_binary: "reads embedded metadata without executing the target",
   inspect_sqlite_database:
     "uses a trusted inspector worker without executing application code or caller SQL",
@@ -76,6 +78,8 @@ const EXECUTION_WORDING_EXCEPTIONS: Readonly<Record<string, string>> = {
   inspect_adb_package: "reports install times without changing the device",
   list_adb_processes: "lists running processes without changing the device",
   inspect_web_event_listeners: "states it does not evaluate JavaScript",
+  inspect_radare2_function_inventory:
+    "launches radare2 as the analyzer while opening the target only as data",
 };
 
 const declaresForeignAuthority = (name: string): boolean => {

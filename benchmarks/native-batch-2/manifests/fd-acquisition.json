@@ -1,0 +1,89 @@
+{
+  "target": "fd",
+  "version": "v10.5.0",
+  "download_url": "https://github.com/sharkdp/fd/releases/download/v10.5.0/fd-v10.5.0-x86_64-pc-windows-msvc.zip",
+  "started_utc": "2026-10-13T22:23:58.772212+00:00",
+  "status": "PASS",
+  "release_url": "https://github.com/sharkdp/fd/releases/tag/v10.5.0",
+  "publisher_digest": "sha256:a227701b8551c35a9931d9f6da75503cf86d88e182d71fb849a70864c5d57cd7",
+  "archive_sha256": "a227701b8551c35a9931d9f6da75503cf86d88e182d71fb849a70864c5d57cd7",
+  "archive_bytes": 1535063,
+  "publisher_digest_verified": true,
+  "archive_entries": 14,
+  "asset_extraction": "complete",
+  "executables": [
+    {
+      "path": "originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+      "sha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "bytes": 4104192,
+      "format": "PE32+",
+      "machine": "0x8664",
+      "architecture": "x86_64",
+      "image_base": "0x140000000",
+      "entry_rva": "0x27cda0",
+      "clr_directory": [0, 0],
+      "imports": [
+        "kernel32.dll",
+        "ntdll.dll",
+        "api-ms-win-core-synch-l1-2-0.dll",
+        "advapi32.dll",
+        "shell32.dll",
+        "combase.dll",
+        "userenv.dll",
+        "bcryptprimitives.dll",
+        "ADVAPI32.dll",
+        "KERNEL32.dll"
+      ],
+      "sections": [
+        {
+          "name": ".text",
+          "rva": 4096,
+          "virtual_bytes": 2751408,
+          "file_offset": 1024,
+          "file_bytes": 2751488
+        },
+        {
+          "name": ".rdata",
+          "rva": 2756608,
+          "virtual_bytes": 1231806,
+          "file_offset": 2752512,
+          "file_bytes": 1231872
+        },
+        {
+          "name": ".data",
+          "rva": 3989504,
+          "virtual_bytes": 14980,
+          "file_offset": 3984384,
+          "file_bytes": 3584
+        },
+        {
+          "name": ".pdata",
+          "rva": 4005888,
+          "virtual_bytes": 94644,
+          "file_offset": 3987968,
+          "file_bytes": 94720
+        },
+        {
+          "name": ".fptable",
+          "rva": 4104192,
+          "virtual_bytes": 256,
+          "file_offset": 4082688,
+          "file_bytes": 512
+        },
+        {
+          "name": ".reloc",
+          "rva": 4108288,
+          "virtual_bytes": 20876,
+          "file_offset": 4083200,
+          "file_bytes": 20992
+        }
+      ]
+    }
+  ],
+  "bundled_dlls": [],
+  "license_notice_files": [
+    "originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/LICENSE-APACHE",
+    "originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/LICENSE-MIT"
+  ],
+  "duration_seconds": 2.9017313750227913
+}

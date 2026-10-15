@@ -1,0 +1,151 @@
+{
+  "evidence_id": "ev_4e13e5a6f9aaa5f212e9e95f49e086787a17ce83888d97cafc44f8b541cf29fc",
+  "subject": {
+    "name": "gconv.exe",
+    "digest": {
+      "sha256": "5616139f4f94e7299b0703954d6a3eeda36fdda5cb17e19fa32163ba6b326c78"
+    },
+    "format": "pe",
+    "architecture": "x86",
+    "local_path": "/Users/haseeb-mir/Downloads/tools/gconv.exe"
+  },
+  "provider": {
+    "id": "rea-workflow",
+    "name": "REA composed investigation workflow",
+    "version": "1"
+  },
+  "analysis_profile": {
+    "provider": {
+      "id": "rea-workflow",
+      "name": "REA composed investigation workflow",
+      "version": "1"
+    },
+    "parameters": {
+      "upstream_analysis_profile": {
+        "provider": { "id": "ghidra", "name": "Ghidra", "version": "12.1.2" },
+        "parameters": {
+          "target_kind": "executable",
+          "target_format": "pe",
+          "executable_role": "application",
+          "managed": false,
+          "native_aot_metadata": {
+            "contract_revision": "rtr-9.1-x64-pe-read-only-v3",
+            "source_bytes": 134217728,
+            "work_units": 67108864,
+            "working_memory_bytes": 67108864,
+            "report_bytes": 4194304
+          },
+          "architecture": "x86",
+          "available_architectures": ["x86"],
+          "import_mode": "ephemeral-source-immutable",
+          "annotation_policy": "atomic-function-entry-metadata-v1",
+          "load_image_observations": "source-mappings-entry-context-v2",
+          "function_body_evidence": "complete-inclusive-ranges-v1",
+          "function_references": "complete-body-and-entry-reference-manager-v2",
+          "call_relationship_coverage": "resolved-call-reference-diagnostics-v1",
+          "string_inventory_evidence": "defined-data-coverage-v1",
+          "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+          "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+          "instruction_flow_evidence": "decoded-return-pcode-v1",
+          "instruction_references": "exact-address-incoming-v1",
+          "function_boundary_observations": "ghidra-terminal-call-limitations-v1",
+          "no_return_repair": "returning-imports-decoded-return-v2",
+          "process_launch": "inspected-jvm-launch-support-v1",
+          "jump_table_evidence": "typed-case-default-blocks-v1",
+          "decompiler_jump_loads": true,
+          "loader": "auto-from-header",
+          "language_id": "auto-from-header",
+          "compiler_spec_id": "auto-default",
+          "analyzer_preset": "ghidra-default"
+        },
+        "digest": "37b93886f0b14c19db68f0d066683080ce4b0b5de4e352bb1b69865d24802dfc"
+      },
+      "workflow_revision": 3
+    },
+    "digest": "85860a784fabf73f3b6a38bf7d963b5fa0158d4bfa090805dfd7e0c234c0b789"
+  },
+  "predicate_type": "rea.analysis",
+  "operation": "binary_overview",
+  "parameters": {},
+  "raw_result": null,
+  "normalized_result": {
+    "document": "target-5616139f4f94.exe",
+    "image_base": "0x400000",
+    "segments": [
+      {
+        "name": "Headers",
+        "start": "0x400000",
+        "end": "0x401000",
+        "length": 4096,
+        "image_base": "0x400000",
+        "address_space": "ram"
+      },
+      {
+        "name": ".text",
+        "start": "0x401000",
+        "end": "0x424000",
+        "length": 143360,
+        "image_base": "0x400000",
+        "address_space": "ram"
+      },
+      {
+        "name": ".rdata",
+        "start": "0x424000",
+        "end": "0x425000",
+        "length": 4096,
+        "image_base": "0x400000",
+        "address_space": "ram"
+      },
+      {
+        "name": ".data",
+        "start": "0x425000",
+        "end": "0x43ed94",
+        "length": 105876,
+        "image_base": "0x400000",
+        "address_space": "ram"
+      },
+      {
+        "name": ".idata",
+        "start": "0x43f000",
+        "end": "0x440000",
+        "length": 4096,
+        "image_base": "0x400000",
+        "address_space": "ram"
+      },
+      {
+        "name": ".rsrc",
+        "start": "0x440000",
+        "end": "0x442000",
+        "length": 8192,
+        "image_base": "0x400000",
+        "address_space": "ram"
+      },
+      {
+        "name": ".reloc",
+        "start": "0x442000",
+        "end": "0x444000",
+        "length": 8192,
+        "image_base": "0x400000",
+        "address_space": "ram"
+      },
+      {
+        "name": "tdb",
+        "start": "0xffdff000",
+        "end": "0xffe00000",
+        "length": 4096,
+        "image_base": "0x400000",
+        "address_space": "ram"
+      }
+    ],
+    "segment_count": 8,
+    "procedure_count": 547,
+    "string_count": 297
+  },
+  "confidence": "derived",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": ["Derived by an REA composed workflow."],
+  "relationship_coverage": null,
+  "locations": [],
+  "evidence_links": []
+}

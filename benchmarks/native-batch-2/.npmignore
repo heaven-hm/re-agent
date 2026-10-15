@@ -1,0 +1,8 @@
+originals/**
+.runtime-workers/**
+logs/runtime/**
+logs/checkpoints/**
+reconstructed/**/build/**
+analysis/**/snapshot.json
+analysis/**/session-*.json
+analysis/fd/overview.json

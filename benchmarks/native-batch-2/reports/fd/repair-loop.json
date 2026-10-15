@@ -1,0 +1,156 @@
+{
+  "schema": "rea.fd-candidate-repair.v1",
+  "scope": "Actual own candidate pre/post corrections on three recorded original probes; no complete fd-equivalence claim.",
+  "beforeSource": {
+    "path": "reports/fd/before-candidate.cpp",
+    "sha256": "2e30e33cab0b9ca45ee43966f0beb4f8d344cbf9c091d31b60b0cd82376c3e76",
+    "provenance": "Pre-correction own source reconstructed by reverting the explicit correction before compilation; not upstream fd source."
+  },
+  "afterSource": {
+    "path": "reconstructed/fd/fdmac.cpp",
+    "sha256": "17372f673c6109cd756a1b1c51058cb04e41c19b3e27858b4f89168f878654cd"
+  },
+  "cases": [
+    {
+      "id": "invalid-regex",
+      "arguments": ["--color", "never", "--threads", "1", "[", "."],
+      "originalExit": 1,
+      "before": {
+        "binarySha256": "7827135d115b644b4dadc122f600661ca818bd11ed06d67d02d2fb5e5ad4cee6",
+        "stdout": {
+          "text": "",
+          "bytes": 0,
+          "observedBytes": 0
+        },
+        "stderr": {
+          "text": "fdmac: invalid regular expression\n",
+          "bytes": 34,
+          "observedBytes": 34
+        },
+        "exitCode": 2,
+        "signal": null,
+        "dimensions": {
+          "stdout": true,
+          "stderr": false,
+          "exit": false
+        },
+        "rawPass": false
+      },
+      "after": {
+        "binarySha256": "91332a6075aeb5acc7a3be95a8200fbac071fb7f85514b3488e245a3533fc8b9",
+        "stdout": {
+          "text": "",
+          "bytes": 0,
+          "observedBytes": 0
+        },
+        "stderr": {
+          "text": "[fd error]: regex parse error:\n    [\n    ^\nerror: unclosed character class\n\nNote: You can search for literal substrings with '--fixed-strings' or literal strings with '--exact' options (instead of a regular expression). Alternatively, you can also use the '--glob' option to match on a glob pattern.\n",
+          "bytes": 300,
+          "observedBytes": 300
+        },
+        "exitCode": 1,
+        "signal": null,
+        "dimensions": {
+          "stdout": true,
+          "stderr": true,
+          "exit": true
+        },
+        "rawPass": true
+      }
+    },
+    {
+      "id": "version",
+      "arguments": ["--version"],
+      "originalExit": 0,
+      "before": {
+        "binarySha256": "7827135d115b644b4dadc122f600661ca818bd11ed06d67d02d2fb5e5ad4cee6",
+        "stdout": {
+          "text": "",
+          "bytes": 0,
+          "observedBytes": 0
+        },
+        "stderr": {
+          "text": "fdmac: unsupported option: --version\n",
+          "bytes": 37,
+          "observedBytes": 37
+        },
+        "exitCode": 2,
+        "signal": null,
+        "dimensions": {
+          "stdout": false,
+          "stderr": false,
+          "exit": false
+        },
+        "rawPass": false
+      },
+      "after": {
+        "binarySha256": "91332a6075aeb5acc7a3be95a8200fbac071fb7f85514b3488e245a3533fc8b9",
+        "stdout": {
+          "text": "fd 10.5.0\n",
+          "bytes": 10,
+          "observedBytes": 10
+        },
+        "stderr": {
+          "text": "",
+          "bytes": 0,
+          "observedBytes": 0
+        },
+        "exitCode": 0,
+        "signal": null,
+        "dimensions": {
+          "stdout": true,
+          "stderr": true,
+          "exit": true
+        },
+        "rawPass": true
+      }
+    },
+    {
+      "id": "help",
+      "arguments": ["--help"],
+      "originalExit": 0,
+      "before": {
+        "binarySha256": "7827135d115b644b4dadc122f600661ca818bd11ed06d67d02d2fb5e5ad4cee6",
+        "stdout": {
+          "text": "",
+          "bytes": 0,
+          "observedBytes": 0
+        },
+        "stderr": {
+          "text": "fdmac: unsupported option: --help\n",
+          "bytes": 34,
+          "observedBytes": 34
+        },
+        "exitCode": 2,
+        "signal": null,
+        "dimensions": {
+          "stdout": false,
+          "stderr": false,
+          "exit": false
+        },
+        "rawPass": false
+      },
+      "after": {
+        "binarySha256": "91332a6075aeb5acc7a3be95a8200fbac071fb7f85514b3488e245a3533fc8b9",
+        "stdout": {
+          "text": "fdmac experimental native filesystem search\nUsage: fdmac [OPTIONS] [pattern] [path]...\nSupported: --glob --extension --hidden --no-ignore --type f|d|l\n           --max-depth --ignore-case --case-sensitive --full-path\n           --follow --absolute-path --print0 --exclude\n           --color never --threads 1\nRegex: C++ ECMAScript; complex Rust regex and ignore semantics unverified.\n",
+          "bytes": 384,
+          "observedBytes": 384
+        },
+        "stderr": {
+          "text": "",
+          "bytes": 0,
+          "observedBytes": 0
+        },
+        "exitCode": 0,
+        "signal": null,
+        "dimensions": {
+          "stdout": false,
+          "stderr": true,
+          "exit": true
+        },
+        "rawPass": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-14T17:17:43.348123+00:00",
+  "target": "plink CLI-surface replica",
+  "scope": "candidate output compared byte-for-byte for no-args/help/pgpfp; -V checks host-aware behavior while preserving portable fields. Original-side provenance is not established by this receipt",
+  "candidate": {
+    "path": "benchmarks/plink/replica/build/plinkmac",
+    "sha256": "71055b60a418eecea82ffdb18d35a906a760f8c8710b6b651667652d21f464ee",
+    "bytes": 50584
+  },
+  "comparisons": [
+    {
+      "case": "no-args",
+      "arguments": [],
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "observedStdoutSha256": "02faf5ed88b000c82ac3f33c02a82657185870727b473e7af17df6cedbff399a",
+      "goldenSha256": "02faf5ed88b000c82ac3f33c02a82657185870727b473e7af17df6cedbff399a",
+      "stdoutBytesEqual": true,
+      "passed": true
+    },
+    {
+      "case": "help",
+      "arguments": ["--help"],
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "observedStdoutSha256": "71b5986b1e53fddc644e022d2d3d93baf7af0137faed5b09b44d9f4734344fc2",
+      "goldenSha256": "71b5986b1e53fddc644e022d2d3d93baf7af0137faed5b09b44d9f4734344fc2",
+      "stdoutBytesEqual": true,
+      "passed": true
+    },
+    {
+      "case": "pgpfp",
+      "arguments": ["-pgpfp"],
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "observedStdoutSha256": "f573c152ed8b29e4015c70f38230d770dad332fa6b87e2f270526711975b5ab4",
+      "goldenSha256": "f573c152ed8b29e4015c70f38230d770dad332fa6b87e2f270526711975b5ab4",
+      "stdoutBytesEqual": true,
+      "passed": true
+    },
+    {
+      "case": "version",
+      "arguments": ["-V"],
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "observedStdoutSha256": "1830b322702fe0af4c6a7d3d29324b36624d6dca502bfe5aa70e91d85ff5aeb9",
+      "goldenSha256": "364f211b40ff30b265464b3dd06abeca9853f3df1e4d608b1436dbbb333540e0",
+      "stdoutBytesEqual": false,
+      "comparison": "host-aware semantic assertions; Windows/macOS fields differ",
+      "passed": true
+    }
+  ],
+  "passed": 4,
+  "failed": 0,
+  "originalBinaryHashFromManifest": "969f36879d5716aa1a9811f43a6a6510e8f08372dbeb9695b810b9c776f39c75",
+  "limits": [
+    "The previously cited original runtime receipt is not present in this repository.",
+    "Matching a retained golden does not independently prove that the golden came from the stated original binary.",
+    "Version behavior is checked semantically because Windows and macOS platform/compiler fields differ; its stdout is not byte-identical to the original.",
+    "Unknown-option behavior is not included in this receipt.",
+    "SSH/network transport is out of scope."
+  ]
+}

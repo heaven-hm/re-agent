@@ -1,8 +1,8 @@
 {
   "snake": {
-    "status": "PASS",
+    "status": "PARTIAL",
     "artifact": "snake/replica/snakemac (34KB arm64)",
-    "evidence": "26-line frames structurally identical modulo RNG cells; HUD bytes + CRLF exact; game-over + persistence implemented",
+    "evidence": "Replica builds; one original transcript is retained. Paired replica transcript and reproducible comparison receipt are absent, so original-versus-replica behavior is UNVERIFIED.",
     "unverified": [
       "score-per-food",
       "food RNG",
@@ -13,7 +13,7 @@
   "pixeltetris": {
     "status": "PARTIAL",
     "artifact": "pixeltetris/replica/pixelmac (36KB arm64 SDL2)",
-    "evidence": "builds clean; menu render UNVERIFIED on-screen",
+    "evidence": "builds clean; genuine replica menu and gameplay screenshots are retained. Original-versus-replica behavior is not established.",
     "unverified": [
       "gameplay",
       "piece RNG/colors",
@@ -24,7 +24,7 @@
   "tetris": {
     "status": "PARTIAL",
     "artifact": "tetris/replica/tetrismac (52KB arm64 SDL2)",
-    "evidence": "real menu screenshot (TETRIS + 6 entries)",
+    "evidence": "genuine replica menu and gameplay screenshots are retained. Original-versus-replica behavior is not established.",
     "unverified": ["gameplay", "key bindings", "scoring", "audio"]
   },
   "legacy-notepad": {

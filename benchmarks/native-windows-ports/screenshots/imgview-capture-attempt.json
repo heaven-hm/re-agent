@@ -1,0 +1,31 @@
+{
+  "schema": "rea.gui-capture-attempt.v1",
+  "target": "imgview",
+  "observed_at_utc": "2026-10-14T17:08:21Z",
+  "candidate": {
+    "path": "benchmarks/native-windows-ports/imgview/replica/build/imgviewmac",
+    "sha256": "6248c820642b3e424c89d4a1b33e49443204090c6e48a9865e4608446a188945",
+    "platform": "macOS arm64"
+  },
+  "fixture": {
+    "path": "/private/tmp/rea-imgview-fixture.png",
+    "sha256": "5bf6fc857ff27deecc8bf3122877ed108f9bbbe72a8f79d08b36ca662be76fd6",
+    "description": "Generated 64x64 checkerboard PNG used as a controlled image input; not a runtime screenshot."
+  },
+  "process": {
+    "launch_command": "imgviewmac /private/tmp/rea-imgview-fixture.png",
+    "observed_pid": 15393,
+    "launch_observation": "The foreground AppKit process remained alive until interrupted. AppKit logged LaunchServices and pasteboard service errors."
+  },
+  "capture": {
+    "command": "screencapture -x /private/tmp/rea-imgview-replica-screen.png",
+    "status": "FAILED",
+    "stderr": "could not create image from display 0",
+    "screenshot_created": false
+  },
+  "original": {
+    "launch_attempted": false,
+    "reason": "The host has no capturable display; a controlled original-vs-replica GUI run could not be recorded."
+  },
+  "conclusion": "No paired visual evidence or original-vs-replica GUI comparison is claimed. The existing imgviewmac-app.png is replica-only."
+}

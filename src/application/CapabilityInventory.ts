@@ -44,6 +44,7 @@ type ToolAvailabilityReason = "available" | ToolUnavailabilityReason;
 type ProviderDescriptor = ProviderCapability;
 export type AvailabilityPolicy = {
   readonly packetCaptureEnabled?: boolean;
+  readonly capaEnabled?: boolean;
   readonly signalRecordingEnabled?: boolean;
   readonly wasmArtifactEnabled?: boolean;
   readonly evmInterfaceEnabled?: boolean;
@@ -342,6 +343,14 @@ const workflowAvailabilityFor = ({
   kind,
   policy,
 }: AvailabilityContext): Availability | null => {
+  if (name === "inspect_capa_capabilities")
+    return policy.capaEnabled === true
+      ? { reason: "available", remediation: null }
+      : {
+          reason: "provider_unavailable",
+          remediation:
+            "Set REA_CAPA_PATH to a compatible installed capa executable.",
+        };
   if (name === "inspect_go_binary")
     return { reason: "available", remediation: null };
   if (name === "inspect_sqlite_database") {

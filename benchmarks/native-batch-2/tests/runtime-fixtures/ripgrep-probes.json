@@ -1,0 +1,95 @@
+[
+  {
+    "id": "version",
+    "arguments": ["--version"]
+  },
+  {
+    "id": "search",
+    "arguments": [
+      "--color",
+      "never",
+      "--sort",
+      "path",
+      "--no-heading",
+      "needle",
+      "."
+    ]
+  },
+  {
+    "id": "number",
+    "arguments": [
+      "--color",
+      "never",
+      "--sort",
+      "path",
+      "--no-heading",
+      "-n",
+      "needle",
+      "."
+    ]
+  },
+  {
+    "id": "ignorecase",
+    "arguments": [
+      "--color",
+      "never",
+      "--sort",
+      "path",
+      "--no-heading",
+      "-i",
+      "needle",
+      "."
+    ]
+  },
+  {
+    "id": "fixed",
+    "arguments": [
+      "--color",
+      "never",
+      "--sort",
+      "path",
+      "--no-heading",
+      "-F",
+      "needle",
+      "."
+    ]
+  },
+  {
+    "id": "hidden",
+    "arguments": [
+      "--color",
+      "never",
+      "--sort",
+      "path",
+      "--no-heading",
+      "--hidden",
+      "needle",
+      "."
+    ]
+  },
+  {
+    "id": "no-ignore",
+    "arguments": [
+      "--color",
+      "never",
+      "--sort",
+      "path",
+      "--no-heading",
+      "--no-ignore",
+      "needle",
+      "."
+    ]
+  },
+  {
+    "id": "invalid-regex",
+    "arguments": [
+      "--color",
+      "never",
+      "--sort",
+      "path",
+      "--no-heading",
+      "[",
+      "."
+    ]
+  }
+]

@@ -1,0 +1,235 @@
+{
+  "inputFingerprintSha256": "1149a93058898c45175fc83e2edd23c07a5d57fc25c77126db939d0ef378cfd3",
+  "generation": "Deterministic receipt projection; wall-clock generation time omitted.",
+  "targets": [
+    {
+      "target": "fd",
+      "originalBytes": 4104192,
+      "originalSha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "architecture": "x86_64",
+      "functionsDiscovered": 8153,
+      "functionsInvestigated": 5,
+      "evidence": [
+        {
+          "path": "analysis/fd/pe-resources.json",
+          "evidenceId": "ev_e83b6f51ca190525f75e69d4a9e5510cc2dbe068a351da43bb0c44f8bc34eafd"
+        },
+        {
+          "path": "analysis/fd/resilience/entry-dossier.json",
+          "evidenceId": "ev_e89c8c49bd8f3b891a757be8b5cd66d4c0c6d2851106f99fd55ee352912d31cf"
+        },
+        {
+          "path": "analysis/fd/resilience/overview.json",
+          "evidenceId": "ev_4c26e9c099f134c3987965b7f02cde235bbea19417c637f5df4c7ca83418ddd2"
+        },
+        {
+          "path": "analysis/fd/resilience-application/application-main-candidate-dossier.json",
+          "evidenceId": "ev_ef0cb7e19744b4f374b00ad0de24407f79ce3b68544a1fb2dfd22ab292961a7c"
+        },
+        {
+          "path": "analysis/fd/resilience-application/crt-dossier.json",
+          "evidenceId": "ev_f33c3f34f6e24bc540d47748805d57c4129befd9a104830096da1fca3c72315e"
+        },
+        {
+          "path": "analysis/fd/resilience-application/entry-dossier.json",
+          "evidenceId": "ev_e89c8c49bd8f3b891a757be8b5cd66d4c0c6d2851106f99fd55ee352912d31cf"
+        },
+        {
+          "path": "analysis/fd/resilience-application/overview.json",
+          "evidenceId": "ev_4c26e9c099f134c3987965b7f02cde235bbea19417c637f5df4c7ca83418ddd2"
+        },
+        {
+          "path": "analysis/fd/resilience-application/rust-start-wrapper-dossier.json",
+          "evidenceId": "ev_404001b627d1e0faf30b7beb415474611501aadb5a3e29d54ec98736e954fa4c"
+        },
+        {
+          "path": "analysis/fd/resilience-application/startup-candidate-0x140092b20.json",
+          "evidenceId": "ev_43d38e9a5691d2cb873398fb372089c27aa770714645da71add7fd75a29526af"
+        },
+        {
+          "path": "analysis/fd/resilience-main/crt-dossier.json",
+          "evidenceId": "ev_f33c3f34f6e24bc540d47748805d57c4129befd9a104830096da1fca3c72315e"
+        },
+        {
+          "path": "analysis/fd/resilience-main/entry-dossier.json",
+          "evidenceId": "ev_e89c8c49bd8f3b891a757be8b5cd66d4c0c6d2851106f99fd55ee352912d31cf"
+        },
+        {
+          "path": "analysis/fd/resilience-main/overview.json",
+          "evidenceId": "ev_4c26e9c099f134c3987965b7f02cde235bbea19417c637f5df4c7ca83418ddd2"
+        },
+        {
+          "path": "analysis/fd/resilience-main/startup-candidate-0x140092b20.json",
+          "evidenceId": "ev_43d38e9a5691d2cb873398fb372089c27aa770714645da71add7fd75a29526af"
+        }
+      ],
+      "originalComparisonsCompleted": 15,
+      "comparisonUnverified": 0,
+      "comparisonPasses": 14,
+      "comparisonFailures": 1,
+      "historicalMeasuredPasses": 14,
+      "historicalMeasuredFailures": 1,
+      "normalizedSearchPasses": 11,
+      "historicalNormalizedSearchPasses": 11,
+      "normalizedSearchCases": 11,
+      "candidateSource": "reconstructed/fd/fdmac.cpp",
+      "candidateSourceSha256": "48f41774af10fa2b45e5240ce967d9ffaaf2aef3e84d979a69d06bbf504e9a0d",
+      "candidateSha256": "7b9f84c23b27a0c10b2e2af3e4a84cf7f21e6114adfd493e46c718d122b9b4b9",
+      "localCandidateMatchesReceipt": true,
+      "replicaBytes": 162216,
+      "repairCorrectionsRawPass": [],
+      "unverifiedWholeApplication": true
+    },
+    {
+      "target": "ripgrep",
+      "originalBytes": 4218880,
+      "originalSha256": "14231169855ec5205cf5a1b6f1db358ff4aed4247c86b69ce8aae647c77f6680",
+      "architecture": "x86_64",
+      "functionsDiscovered": null,
+      "functionsInvestigated": 0,
+      "evidence": [
+        {
+          "path": "analysis/ripgrep/pe-resources.json",
+          "evidenceId": "ev_b3e239d051fd4fda7bf3038d0d3cccc270d08b198aed1ebb1cbc78ea6e562bcb"
+        }
+      ],
+      "originalComparisonsCompleted": 8,
+      "comparisonUnverified": 0,
+      "comparisonPasses": 8,
+      "comparisonFailures": 0,
+      "historicalMeasuredPasses": 8,
+      "historicalMeasuredFailures": 0,
+      "normalizedSearchPasses": 0,
+      "historicalNormalizedSearchPasses": 0,
+      "normalizedSearchCases": 0,
+      "candidateSource": "reconstructed/ripgrep/rea-rg.cpp",
+      "candidateSourceSha256": "44ae2244a491ffe486551bd1a861a6b8dbd0a6e0b33ed1ccaf6ef9d8920f73a2",
+      "candidateSha256": "9bebc344297bc9e99ddeae4500c055e23e5acae280e80d4603873efb6068f4f1",
+      "localCandidateMatchesReceipt": true,
+      "replicaBytes": 137992,
+      "repairCorrectionsRawPass": [],
+      "unverifiedWholeApplication": true
+    },
+    {
+      "target": "bat",
+      "originalBytes": 7342592,
+      "originalSha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+      "architecture": "x86_64",
+      "functionsDiscovered": null,
+      "functionsInvestigated": 0,
+      "evidence": [
+        {
+          "path": "analysis/bat/pe-resources.json",
+          "evidenceId": "ev_b98653c91dc16ee36dba8778108c31137d6ae8628e2484260a0bffe339e0cc6b"
+        }
+      ],
+      "originalComparisonsCompleted": 8,
+      "comparisonUnverified": 0,
+      "comparisonPasses": 8,
+      "comparisonFailures": 0,
+      "historicalMeasuredPasses": 8,
+      "historicalMeasuredFailures": 0,
+      "normalizedSearchPasses": 0,
+      "historicalNormalizedSearchPasses": 0,
+      "normalizedSearchCases": 0,
+      "candidateSource": "reconstructed/bat/batmac.cpp",
+      "candidateSourceSha256": "975ca15632e4983d3175b768203157d6353d28454594a58195c0b354e6040025",
+      "candidateSha256": "e41a5f460ef97aefad098020acd8c1ce9d91ac3896daa0528e3f8b50bbbc9116",
+      "localCandidateMatchesReceipt": true,
+      "replicaBytes": 40472,
+      "repairCorrectionsRawPass": [],
+      "unverifiedWholeApplication": true
+    },
+    {
+      "target": "openlierox",
+      "originalBytes": 12853347,
+      "originalSha256": "0f79c968ab9aabd8cb99e173500fa241e883846fd3e0c9ca2f7f0bf3771fa5c1",
+      "architecture": "x86_64",
+      "functionsDiscovered": null,
+      "functionsInvestigated": 0,
+      "evidence": [
+        {
+          "path": "analysis/openlierox/rea-pe-resources.json",
+          "evidenceId": "ev_416d2dda3a137a4a85fb92b16e4f1bcafc2c1f2125c591a1f805581038534786"
+        }
+      ],
+      "originalComparisonsCompleted": 0,
+      "comparisonUnverified": 0,
+      "comparisonPasses": 0,
+      "comparisonFailures": 0,
+      "historicalMeasuredPasses": 0,
+      "historicalMeasuredFailures": 0,
+      "normalizedSearchPasses": 0,
+      "historicalNormalizedSearchPasses": 0,
+      "normalizedSearchCases": 0,
+      "candidateSource": null,
+      "candidateSourceSha256": null,
+      "candidateSha256": null,
+      "localCandidateMatchesReceipt": false,
+      "replicaBytes": null,
+      "repairCorrectionsRawPass": [],
+      "unverifiedWholeApplication": true
+    },
+    {
+      "target": "supertux",
+      "originalBytes": 7259648,
+      "originalSha256": "6249f25a6ac1cc3d27955ca09852b8368618ce58ad9c13e0c5084051c2c02b43",
+      "architecture": "x86_64",
+      "functionsDiscovered": null,
+      "functionsInvestigated": 0,
+      "evidence": [
+        {
+          "path": "analysis/supertux/pe-resources.json",
+          "evidenceId": "ev_34d4d7b4a718806589e62d4f3970327162fbc370ab38069bb805ebdff4219f35"
+        }
+      ],
+      "originalComparisonsCompleted": 0,
+      "comparisonUnverified": 0,
+      "comparisonPasses": 0,
+      "comparisonFailures": 0,
+      "historicalMeasuredPasses": 0,
+      "historicalMeasuredFailures": 0,
+      "normalizedSearchPasses": 0,
+      "historicalNormalizedSearchPasses": 0,
+      "normalizedSearchCases": 0,
+      "candidateSource": null,
+      "candidateSourceSha256": null,
+      "candidateSha256": null,
+      "localCandidateMatchesReceipt": false,
+      "replicaBytes": null,
+      "repairCorrectionsRawPass": [],
+      "unverifiedWholeApplication": true
+    },
+    {
+      "target": "powder-toy",
+      "originalBytes": 8690342,
+      "originalSha256": "df32b616b31dabae10b82028731ebdfd6867c872198b81f29d418cbafbf460c3",
+      "architecture": "x86_64",
+      "functionsDiscovered": null,
+      "functionsInvestigated": 0,
+      "evidence": [
+        {
+          "path": "analysis/powder-toy/rea-pe-resources.json",
+          "evidenceId": "ev_8c274c9b179b5d726a2ce90fe9c8a9d3ddc0e9cf32112aed25f5381034ee1796"
+        }
+      ],
+      "originalComparisonsCompleted": 0,
+      "comparisonUnverified": 0,
+      "comparisonPasses": 0,
+      "comparisonFailures": 0,
+      "historicalMeasuredPasses": 0,
+      "historicalMeasuredFailures": 0,
+      "normalizedSearchPasses": 0,
+      "historicalNormalizedSearchPasses": 0,
+      "normalizedSearchCases": 0,
+      "candidateSource": null,
+      "candidateSourceSha256": null,
+      "candidateSha256": null,
+      "localCandidateMatchesReceipt": false,
+      "replicaBytes": null,
+      "repairCorrectionsRawPass": [],
+      "unverifiedWholeApplication": true
+    }
+  ],
+  "measurementScope": "Retained comparison, source/build and canonical static receipts; unmeasured values are null, not invented."
+}

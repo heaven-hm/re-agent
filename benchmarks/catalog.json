@@ -1,0 +1,585 @@
+{
+  "schemaVersion": 1,
+  "description": "Complete inventory of app/game reconstruction targets, including retained originals and SHA-256-bound local-only binary inputs. Local-only originals are excluded from distributable packages; catalog status never implies whole-application equivalence.",
+  "targets": [
+    {
+      "id": "luhn",
+      "name": "LTRData Luhn utility",
+      "kind": "software",
+      "status": "feature-pass",
+      "source": [
+        "scripts/benchmarks/LuhnReplica.cs",
+        "scripts/verify-luhn-reconstruction.mjs"
+      ],
+      "artifacts": [
+        "benchmarks/luhn/replica/Replica.dll",
+        "benchmarks/luhn/replica/Replica.runtimeconfig.json"
+      ],
+      "evidence": [
+        "docs/verification/rea-engine/luhn-report.json",
+        "docs/verification/rea-engine/software-execution-evidence.zip"
+      ],
+      "report": "benchmarks/luhn/target-report.md",
+      "records": []
+    },
+    {
+      "id": "tictactoe",
+      "name": "TicTacToe-AI",
+      "kind": "game",
+      "status": "feature-pass",
+      "source": [
+        "benchmarks/tictactoe/reconstructed/TicTacToe/Form1.cs",
+        "benchmarks/tictactoe/reconstructed/TicTacToe/Program.cs",
+        "benchmarks/tictactoe/reconstructed/TicTacToe.Properties/Resources.cs",
+        "benchmarks/tictactoe/reconstructed/TicTacToe.Properties/Settings.cs",
+        "benchmarks/tictactoe/reconstructed/Properties/AssemblyInfo.cs",
+        "scripts/benchmarks/TicTacToeProbe.cs",
+        "scripts/recover-tictactoe-replica.mjs",
+        "scripts/verify-tictactoe-reconstruction.mjs"
+      ],
+      "artifacts": ["benchmarks/tictactoe/reconstructed/Replica.exe"],
+      "evidence": [
+        "docs/verification/rea-engine/game-report.json",
+        "docs/verification/rea-engine/game-report-current-2026-10-14.json",
+        "docs/verification/rea-engine/game-execution-evidence.zip",
+        "docs/verification/rea-engine/game-execution-evidence-2026-10-14.zip",
+        "docs/verification/rea-engine/game-original.png",
+        "docs/verification/rea-engine/game-replica.png"
+      ],
+      "report": "benchmarks/native-windows-ports/reports/targets/tictactoe.md",
+      "distributionNote": "GPL-3.0 source archive is retained only for corresponding-source redistribution compliance; it was not used for reconstruction.",
+      "buildInputs": [
+        "benchmarks/tictactoe/reconstructed/TicTacToe.Form1.resources",
+        "benchmarks/tictactoe/reconstructed/TicTacToe.Properties.Resources.resources"
+      ],
+      "records": [
+        "docs/verification/rea-engine/manifest.json",
+        "benchmarks/tictactoe/upstream-source-for-license.zip"
+      ],
+      "originals": ["benchmarks/tictactoe/original/TicTacToe.exe"]
+    },
+    {
+      "id": "calculator",
+      "name": "Apple Calculator display-boundary experiment",
+      "kind": "software",
+      "status": "feature-pass",
+      "source": [
+        "scripts/calculator/CalculatorEngine.swift",
+        "scripts/calculator/CalculatorWindow.swift",
+        "scripts/calculator/CalculatorApp.swift",
+        "scripts/calculator/build.sh",
+        "scripts/verify-calculator-reconstruction.mjs",
+        "scripts/calculator/compare-images.py"
+      ],
+      "artifacts": [],
+      "evidence": [
+        "docs/verification/rea-extended/calculator-report.json",
+        "benchmarks/native-windows-ports/screenshots/calculator/capture-attempt.json",
+        "benchmarks/validation/2026-10-14/results.json"
+      ],
+      "report": "benchmarks/native-windows-ports/reports/targets/calculator.md",
+      "distributionNote": "Original system application is not redistributed; finite feature test only.",
+      "records": ["docs/verification/rea-extended/manifest.json"]
+    },
+    {
+      "id": "plink",
+      "name": "plink command-line surface",
+      "kind": "software",
+      "status": "partial",
+      "source": [
+        "benchmarks/plink/replica/plinkmac.c",
+        "benchmarks/plink/replica/build.sh",
+        "benchmarks/plink/replica/test.sh",
+        "benchmarks/plink/replica/test.py"
+      ],
+      "artifacts": ["benchmarks/plink/replica/plinkmac"],
+      "evidence": [
+        "benchmarks/plink/reports/replica-golden-comparison.json",
+        "benchmarks/plink/replica/goldens/plinkmac-golden-help.txt",
+        "benchmarks/plink/replica/goldens/plinkmac-golden-noargs.txt",
+        "benchmarks/plink/replica/goldens/plinkmac-golden-pgpfp.txt",
+        "benchmarks/plink/replica/goldens/plinkmac-golden-version.txt",
+        "benchmarks/validation/2026-10-14/results.json"
+      ],
+      "report": "benchmarks/plink/reports/target-report.md",
+      "buildInputs": [
+        "benchmarks/plink/replica/goldens/plinkmac-golden-help.txt",
+        "benchmarks/plink/replica/goldens/plinkmac-golden-noargs.txt",
+        "benchmarks/plink/replica/goldens/plinkmac-golden-pgpfp.txt",
+        "benchmarks/plink/replica/goldens/plinkmac-golden-version.txt"
+      ],
+      "records": [
+        "benchmarks/plink/manifest.json",
+        "benchmarks/plink/README.md"
+      ]
+    },
+    {
+      "id": "snake",
+      "name": "Snake v1.1.0",
+      "kind": "game",
+      "status": "partial",
+      "source": [
+        "benchmarks/native-windows-ports/snake/replica/snake.c",
+        "benchmarks/native-windows-ports/snake/replica/build.sh"
+      ],
+      "artifacts": ["benchmarks/native-windows-ports/snake/replica/snakemac"],
+      "evidence": [
+        "benchmarks/native-windows-ports/snake/original-run0.txt",
+        "benchmarks/native-windows-ports/reports/functional-results.json",
+        "benchmarks/validation/2026-10-14/results.json"
+      ],
+      "report": "benchmarks/native-windows-ports/reports/targets/snake.md",
+      "records": [
+        "benchmarks/native-windows-ports/snake/manifest.json",
+        "benchmarks/native-windows-ports/snake/README.md"
+      ],
+      "originals": [
+        "benchmarks/native-windows-ports/original-binaries/snake-windows-x86_64.exe"
+      ]
+    },
+    {
+      "id": "pixeltetris",
+      "name": "PixelTetris v1.0.0",
+      "kind": "game",
+      "status": "partial",
+      "source": [
+        "benchmarks/native-windows-ports/pixeltetris/replica/pixelmac.c",
+        "benchmarks/native-windows-ports/pixeltetris/replica/build.sh"
+      ],
+      "artifacts": [
+        "benchmarks/native-windows-ports/pixeltetris/replica/pixelmac"
+      ],
+      "evidence": [
+        "benchmarks/native-windows-ports/screenshots/pixelmac-menu4.png",
+        "benchmarks/native-windows-ports/screenshots/pixelmac-play.png",
+        "benchmarks/validation/2026-10-14/results.json"
+      ],
+      "report": "benchmarks/native-windows-ports/reports/targets/pixeltetris.md",
+      "runtimeAssets": [
+        "benchmarks/native-windows-ports/pixeltetris/replica/assets/OFL.txt",
+        "benchmarks/native-windows-ports/pixeltetris/replica/assets/arrow-left.png",
+        "benchmarks/native-windows-ports/pixeltetris/replica/assets/arrow-right.png",
+        "benchmarks/native-windows-ports/pixeltetris/replica/assets/button-exit.png",
+        "benchmarks/native-windows-ports/pixeltetris/replica/assets/button-off-off.png",
+        "benchmarks/native-windows-ports/pixeltetris/replica/assets/button-off-on.png",
+        "benchmarks/native-windows-ports/pixeltetris/replica/assets/button-ok.png",
+        "benchmarks/native-windows-ports/pixeltetris/replica/assets/button-on-off.png",
+        "benchmarks/native-windows-ports/pixeltetris/replica/assets/button-on-on.png",
+        "benchmarks/native-windows-ports/pixeltetris/replica/assets/button-options.png",
+        "benchmarks/native-windows-ports/pixeltetris/replica/assets/button-play.png",
+        "benchmarks/native-windows-ports/pixeltetris/replica/assets/button-quit.png",
+        "benchmarks/native-windows-ports/pixeltetris/replica/assets/button-resume.png",
+        "benchmarks/native-windows-ports/pixeltetris/replica/assets/munro-narrow.ttf",
+        "benchmarks/native-windows-ports/pixeltetris/replica/assets/munro-small.ttf",
+        "benchmarks/native-windows-ports/pixeltetris/replica/assets/munro.ttf",
+        "benchmarks/native-windows-ports/pixeltetris/replica/assets/paused-frame.png",
+        "benchmarks/native-windows-ports/pixeltetris/replica/assets/playfieldFrame.png",
+        "benchmarks/native-windows-ports/pixeltetris/replica/assets/tetrominoSprites.png"
+      ],
+      "records": [
+        "benchmarks/native-windows-ports/pixeltetris/manifest.json",
+        "benchmarks/native-windows-ports/pixeltetris/README.md"
+      ],
+      "originals": [
+        "benchmarks/native-windows-ports/original-binaries/Pixeltetris.exe"
+      ]
+    },
+    {
+      "id": "tetris",
+      "name": "Tetris v1.0.0",
+      "kind": "game",
+      "status": "partial",
+      "source": [
+        "benchmarks/native-windows-ports/tetris/replica/tetris.c",
+        "benchmarks/native-windows-ports/tetris/replica/build.sh"
+      ],
+      "artifacts": ["benchmarks/native-windows-ports/tetris/replica/tetrismac"],
+      "evidence": [
+        "benchmarks/native-windows-ports/screenshots/tetrismac-menu.png",
+        "benchmarks/native-windows-ports/screenshots/tetrismac-play.png",
+        "benchmarks/validation/2026-10-14/results.json"
+      ],
+      "report": "benchmarks/native-windows-ports/reports/targets/tetris.md",
+      "runtimeAssets": [
+        "benchmarks/native-windows-ports/tetris/replica/assets/fonts/open_sans/bold.ttf",
+        "benchmarks/native-windows-ports/tetris/replica/assets/fonts/open_sans/normal.ttf",
+        "benchmarks/native-windows-ports/tetris/replica/assets/fonts/swansea/bold.ttf",
+        "benchmarks/native-windows-ports/tetris/replica/assets/fonts/swansea/bold_italic.ttf",
+        "benchmarks/native-windows-ports/tetris/replica/assets/fonts/swansea/italic.ttf",
+        "benchmarks/native-windows-ports/tetris/replica/assets/fonts/swansea/normal.ttf",
+        "benchmarks/native-windows-ports/tetris/replica/assets/images/png/checked.png",
+        "benchmarks/native-windows-ports/tetris/replica/assets/images/png/controls.png",
+        "benchmarks/native-windows-ports/tetris/replica/assets/images/png/game_logo.png",
+        "benchmarks/native-windows-ports/tetris/replica/assets/images/png/i_block.png",
+        "benchmarks/native-windows-ports/tetris/replica/assets/images/png/icon.png",
+        "benchmarks/native-windows-ports/tetris/replica/assets/images/png/j_block.png",
+        "benchmarks/native-windows-ports/tetris/replica/assets/images/png/l_block.png",
+        "benchmarks/native-windows-ports/tetris/replica/assets/images/png/o_block.png",
+        "benchmarks/native-windows-ports/tetris/replica/assets/images/png/return.png",
+        "benchmarks/native-windows-ports/tetris/replica/assets/images/png/s_block.png",
+        "benchmarks/native-windows-ports/tetris/replica/assets/images/png/score_values.png",
+        "benchmarks/native-windows-ports/tetris/replica/assets/images/png/t_block.png",
+        "benchmarks/native-windows-ports/tetris/replica/assets/images/png/unchecked.png",
+        "benchmarks/native-windows-ports/tetris/replica/assets/images/png/z_block.png"
+      ],
+      "records": [
+        "benchmarks/native-windows-ports/tetris/manifest.json",
+        "benchmarks/native-windows-ports/tetris/README.md"
+      ],
+      "originals": [
+        "benchmarks/native-windows-ports/original-binaries/Tetris.exe"
+      ]
+    },
+    {
+      "id": "legacy-notepad",
+      "name": "Legacy Notepad v1.2.1",
+      "kind": "software",
+      "status": "partial",
+      "source": [
+        "benchmarks/native-windows-ports/notepad/replica/main.swift",
+        "benchmarks/native-windows-ports/notepad/replica/build.sh"
+      ],
+      "artifacts": [
+        "benchmarks/native-windows-ports/notepad/replica/notepadmac"
+      ],
+      "evidence": [
+        "benchmarks/native-windows-ports/screenshots/notepadmac-hello.png",
+        "benchmarks/native-windows-ports/screenshots/notepadmac-typed2.png",
+        "benchmarks/validation/2026-10-14/results.json"
+      ],
+      "report": "benchmarks/native-windows-ports/reports/targets/notepad.md",
+      "records": [
+        "benchmarks/native-windows-ports/notepad/manifest.json",
+        "benchmarks/native-windows-ports/notepad/README.md"
+      ],
+      "originals": [
+        "benchmarks/native-windows-ports/original-binaries/legacy-notepad-x64.exe"
+      ]
+    },
+    {
+      "id": "clipjar",
+      "name": "Clipjar v1.2.0",
+      "kind": "software",
+      "status": "partial",
+      "source": [
+        "benchmarks/native-windows-ports/clipjar/replica/main.swift",
+        "benchmarks/native-windows-ports/clipjar/replica/build.sh"
+      ],
+      "artifacts": [
+        "benchmarks/native-windows-ports/clipjar/replica/clipjarmac"
+      ],
+      "evidence": [
+        "benchmarks/native-windows-ports/clipjar/manifest.json",
+        "benchmarks/native-windows-ports/reports/functional-results.json",
+        "benchmarks/validation/2026-10-14/results.json"
+      ],
+      "report": "benchmarks/native-windows-ports/reports/targets/clipjar.md",
+      "records": [
+        "benchmarks/native-windows-ports/clipjar/manifest.json",
+        "benchmarks/native-windows-ports/clipjar/README.md"
+      ],
+      "originals": [
+        "benchmarks/native-windows-ports/original-binaries/clipjar.exe"
+      ]
+    },
+    {
+      "id": "gconv-qvm-toolchain",
+      "name": "GConv QVM toolchain behavior slice",
+      "kind": "software",
+      "status": "partial",
+      "source": [
+        "benchmarks/native-windows-ports/gconv/replica/qvmtool.c",
+        "benchmarks/native-windows-ports/gconv/replica/build.sh"
+      ],
+      "artifacts": ["benchmarks/native-windows-ports/gconv/replica/qvmtool"],
+      "evidence": [
+        "benchmarks/native-windows-ports/gconv/gconv-diff.txt",
+        "benchmarks/native-windows-ports/gconv/manifest.json",
+        "benchmarks/validation/2026-10-14/results.json"
+      ],
+      "report": "benchmarks/native-windows-ports/reports/targets/gconv.md",
+      "distributionNote": "Original gconv.exe/DLLs and user game scripts are not redistributed.",
+      "records": [
+        "benchmarks/native-windows-ports/gconv/manifest.json",
+        "benchmarks/native-windows-ports/gconv/README.md"
+      ]
+    },
+    {
+      "id": "imgview",
+      "name": "imgview v0.3",
+      "kind": "software",
+      "status": "partial",
+      "source": [
+        "benchmarks/native-windows-ports/imgview/replica/main.swift",
+        "benchmarks/native-windows-ports/imgview/replica/build.sh"
+      ],
+      "artifacts": [
+        "benchmarks/native-windows-ports/imgview/replica/imgviewmac"
+      ],
+      "evidence": [
+        "benchmarks/native-windows-ports/imgview/manifest.json",
+        "benchmarks/native-windows-ports/screenshots/imgviewmac-app.png",
+        "benchmarks/native-windows-ports/reports/functional-results.json",
+        "benchmarks/native-windows-ports/screenshots/imgview-capture-attempt.json",
+        "benchmarks/validation/2026-10-14/results.json"
+      ],
+      "report": "benchmarks/native-windows-ports/reports/targets/imgview.md",
+      "records": ["benchmarks/native-windows-ports/imgview/manifest.json"],
+      "originals": [
+        "benchmarks/native-windows-ports/original-binaries/imgview64.exe"
+      ]
+    },
+    {
+      "id": "fd",
+      "name": "fd v10.5.0",
+      "kind": "software",
+      "status": "partial",
+      "source": [
+        "benchmarks/native-batch-2/reconstructed/fd/fdmac.cpp",
+        "benchmarks/native-batch-2/reconstructed/fd/build.sh"
+      ],
+      "artifacts": [],
+      "evidence": [
+        "benchmarks/native-batch-2/manifests/fd-acquisition.json",
+        "benchmarks/native-batch-2/reports/binary-inventory.json",
+        "benchmarks/native-batch-2/reports/fd/comparison.json",
+        "benchmarks/native-batch-2/reports/fd/original-relocation.json",
+        "benchmarks/native-batch-2/reports/fd/heldout-comparison.json",
+        "benchmarks/native-batch-2/reports/fd/repair-loop.json",
+        "benchmarks/native-batch-2/reports/fd/version-parity.json",
+        "benchmarks/native-batch-2/reports/fd/before-candidate.cpp",
+        "benchmarks/validation/2026-10-14/results.json"
+      ],
+      "report": "benchmarks/native-batch-2/reports/fd/target-report.md",
+      "distributionNote": "Original release archives are excluded from the package.",
+      "records": [
+        "benchmarks/native-batch-2/manifests/fd-acquisition.json",
+        "benchmarks/native-batch-2/reconstructed/fd/README.md",
+        "benchmarks/native-batch-2/tests/fd-compare.mjs",
+        "benchmarks/native-batch-2/tests/fd-replica-probes.mjs",
+        "benchmarks/native-batch-2/tests/fd-version-parity.mjs"
+      ],
+      "localOnlyOriginals": [
+        {
+          "path": "benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+          "sha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+          "bytes": 4104192,
+          "architecture": "x86_64",
+          "format": "PE32+",
+          "role": "target-executable",
+          "acquisitionManifest": "benchmarks/native-batch-2/manifests/fd-acquisition.json",
+          "distribution": "local-only-not-redistributed"
+        }
+      ]
+    },
+    {
+      "id": "ripgrep",
+      "name": "ripgrep 15.2.0",
+      "kind": "software",
+      "status": "partial",
+      "source": [
+        "benchmarks/native-batch-2/reconstructed/ripgrep/README.md",
+        "benchmarks/native-batch-2/reconstructed/ripgrep/rea-rg.cpp",
+        "benchmarks/native-batch-2/reconstructed/ripgrep/build.sh",
+        "benchmarks/native-batch-2/reconstructed/ripgrep/test.sh",
+        "benchmarks/native-batch-2/reconstructed/ripgrep/differential.py"
+      ],
+      "artifacts": [],
+      "evidence": [
+        "benchmarks/native-batch-2/manifests/ripgrep-acquisition.json",
+        "benchmarks/native-batch-2/reports/binary-inventory.json",
+        "benchmarks/native-batch-2/analysis/ripgrep/summary.json",
+        "benchmarks/native-batch-2/reports/ripgrep/target-report.md",
+        "benchmarks/native-batch-2/reports/ripgrep/case-version.json",
+        "benchmarks/native-batch-2/reports/ripgrep/case-search.json",
+        "benchmarks/native-batch-2/reports/ripgrep/case-number.json",
+        "benchmarks/native-batch-2/reports/ripgrep/case-ignorecase.json",
+        "benchmarks/native-batch-2/reports/ripgrep/case-fixed.json",
+        "benchmarks/native-batch-2/reports/ripgrep/case-hidden.json",
+        "benchmarks/native-batch-2/reports/ripgrep/case-no-ignore.json",
+        "benchmarks/native-batch-2/reports/ripgrep/case-invalid-regex.json",
+        "benchmarks/native-batch-2/reports/ripgrep/differential.json",
+        "benchmarks/validation/2026-10-14/results.json"
+      ],
+      "report": "benchmarks/native-batch-2/reports/ripgrep/target-report.md",
+      "distributionNote": "Original release archives are excluded from the package.",
+      "records": [
+        "benchmarks/native-batch-2/manifests/ripgrep-acquisition.json",
+        "benchmarks/native-batch-2/reconstructed/ripgrep/README.md"
+      ],
+      "localOnlyOriginals": [
+        {
+          "path": "benchmarks/native-batch-2/originals/ripgrep/extracted/ripgrep-15.2.0-x86_64-pc-windows-msvc/rg.exe",
+          "sha256": "14231169855ec5205cf5a1b6f1db358ff4aed4247c86b69ce8aae647c77f6680",
+          "bytes": 4218880,
+          "architecture": "x86_64",
+          "format": "PE32+",
+          "role": "target-executable",
+          "acquisitionManifest": "benchmarks/native-batch-2/manifests/ripgrep-acquisition.json",
+          "distribution": "local-only-not-redistributed"
+        }
+      ]
+    },
+    {
+      "id": "bat",
+      "name": "bat v0.26.1",
+      "kind": "software",
+      "status": "partial",
+      "source": [
+        "benchmarks/native-batch-2/reconstructed/bat/batmac.cpp",
+        "benchmarks/native-batch-2/reconstructed/bat/build.sh"
+      ],
+      "artifacts": [],
+      "evidence": [
+        "benchmarks/native-batch-2/manifests/bat-acquisition.json",
+        "benchmarks/native-batch-2/reports/binary-inventory.json",
+        "benchmarks/native-batch-2/reports/bat/differential.json",
+        "benchmarks/native-batch-2/reports/bat/case-version.json",
+        "benchmarks/native-batch-2/reports/bat/case-plain.json",
+        "benchmarks/native-batch-2/reports/bat/case-crlf.json",
+        "benchmarks/native-batch-2/reports/bat/case-unicode.json",
+        "benchmarks/native-batch-2/reports/bat/case-empty.json",
+        "benchmarks/native-batch-2/reports/bat/case-invalid-path.json",
+        "benchmarks/native-batch-2/reports/bat/case-concat.json",
+        "benchmarks/native-batch-2/reports/bat/case-number.json",
+        "benchmarks/validation/2026-10-14/results.json"
+      ],
+      "report": "benchmarks/native-batch-2/reports/bat/target-report.md",
+      "distributionNote": "Original release archives are excluded from the package.",
+      "records": [
+        "benchmarks/native-batch-2/manifests/bat-acquisition.json",
+        "benchmarks/native-batch-2/reconstructed/bat/README.md"
+      ],
+      "localOnlyOriginals": [
+        {
+          "path": "benchmarks/native-batch-2/originals/bat/extracted/bat-v0.26.1-x86_64-pc-windows-msvc/bat.exe",
+          "sha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+          "bytes": 7342592,
+          "architecture": "x86_64",
+          "format": "PE32+",
+          "role": "target-executable",
+          "acquisitionManifest": "benchmarks/native-batch-2/manifests/bat-acquisition.json",
+          "distribution": "local-only-not-redistributed"
+        }
+      ]
+    },
+    {
+      "id": "openlierox",
+      "name": "OpenLieroX 20260912.1",
+      "kind": "game",
+      "status": "unverified",
+      "source": [],
+      "artifacts": [],
+      "evidence": [
+        "benchmarks/native-batch-2/manifests/openlierox-acquisition.json",
+        "benchmarks/native-batch-2/reports/binary-inventory.json",
+        "benchmarks/native-batch-2/analysis/openlierox/pe-inventory.json"
+      ],
+      "report": "benchmarks/native-batch-2/reports/openlierox/target-report.md",
+      "missingDeliverables": [
+        "independent macOS reconstruction source",
+        "compiled macOS game",
+        "original-versus-replica gameplay tests",
+        "genuine target screenshot"
+      ],
+      "distributionNote": "Original release archives are excluded from the package.",
+      "records": [
+        "benchmarks/native-batch-2/manifests/openlierox-acquisition.json"
+      ],
+      "localOnlyOriginals": [
+        {
+          "path": "benchmarks/native-batch-2/originals/openlierox/analysis-input/openlierox.exe",
+          "sha256": "0f79c968ab9aabd8cb99e173500fa241e883846fd3e0c9ca2f7f0bf3771fa5c1",
+          "bytes": 12853347,
+          "architecture": "x86_64",
+          "format": "PE32+",
+          "role": "analysis-copy",
+          "acquisitionManifest": "benchmarks/native-batch-2/manifests/openlierox-acquisition.json",
+          "distribution": "local-only-not-redistributed"
+        },
+        {
+          "path": "benchmarks/native-batch-2/originals/openlierox/extracted/openlierox-20260912.1-windows/openlierox.exe",
+          "sha256": "0f79c968ab9aabd8cb99e173500fa241e883846fd3e0c9ca2f7f0bf3771fa5c1",
+          "bytes": 12853347,
+          "architecture": "x86_64",
+          "format": "PE32+",
+          "role": "target-executable",
+          "acquisitionManifest": "benchmarks/native-batch-2/manifests/openlierox-acquisition.json",
+          "distribution": "local-only-not-redistributed"
+        }
+      ]
+    },
+    {
+      "id": "supertux",
+      "name": "SuperTux v0.7.0",
+      "kind": "game",
+      "status": "unverified",
+      "source": [],
+      "artifacts": [],
+      "evidence": [
+        "benchmarks/native-batch-2/manifests/supertux-acquisition.json",
+        "benchmarks/native-batch-2/reports/binary-inventory.json",
+        "benchmarks/native-batch-2/analysis/supertux/pe-resources.json"
+      ],
+      "report": "benchmarks/native-batch-2/reports/supertux/target-report.md",
+      "missingDeliverables": [
+        "independent macOS reconstruction source",
+        "compiled macOS game",
+        "original-versus-replica gameplay tests",
+        "genuine target screenshot"
+      ],
+      "distributionNote": "Original release archives are excluded from the package.",
+      "records": [
+        "benchmarks/native-batch-2/manifests/supertux-acquisition.json"
+      ],
+      "localOnlyOriginals": [
+        {
+          "path": "benchmarks/native-batch-2/originals/supertux/extracted/SuperTux-portable/bin/supertux2.exe",
+          "sha256": "6249f25a6ac1cc3d27955ca09852b8368618ce58ad9c13e0c5084051c2c02b43",
+          "bytes": 7259648,
+          "architecture": "x86_64",
+          "format": "PE32+",
+          "role": "target-executable",
+          "acquisitionManifest": "benchmarks/native-batch-2/manifests/supertux-acquisition.json",
+          "distribution": "local-only-not-redistributed"
+        }
+      ]
+    },
+    {
+      "id": "powder-toy",
+      "name": "The Powder Toy v100.1.400",
+      "kind": "game",
+      "status": "unverified",
+      "source": [],
+      "artifacts": [],
+      "evidence": [
+        "benchmarks/native-batch-2/manifests/powder-toy-acquisition.json",
+        "benchmarks/native-batch-2/reports/binary-inventory.json",
+        "benchmarks/native-batch-2/analysis/powder-toy/rea-inspect.json"
+      ],
+      "report": "benchmarks/native-batch-2/reports/powder-toy/target-report.md",
+      "missingDeliverables": [
+        "independent macOS reconstruction source",
+        "compiled macOS simulation",
+        "original-versus-replica simulation tests",
+        "genuine target screenshot"
+      ],
+      "distributionNote": "Original release binary is excluded from the package.",
+      "records": [
+        "benchmarks/native-batch-2/manifests/powder-toy-acquisition.json"
+      ],
+      "localOnlyOriginals": [
+        {
+          "path": "benchmarks/native-batch-2/originals/powder-toy/powder-v100.1.400-x86_64-windows-mingw.exe",
+          "sha256": "df32b616b31dabae10b82028731ebdfd6867c872198b81f29d418cbafbf460c3",
+          "bytes": 8690342,
+          "architecture": "x86_64",
+          "format": "PE32+",
+          "role": "target-executable",
+          "acquisitionManifest": "benchmarks/native-batch-2/manifests/powder-toy-acquisition.json",
+          "distribution": "local-only-not-redistributed"
+        }
+      ]
+    }
+  ]
+}

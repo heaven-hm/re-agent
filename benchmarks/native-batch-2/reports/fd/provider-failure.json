@@ -1,0 +1,22 @@
+{
+  "error": "Analysis failed",
+  "code": "provider_timeout",
+  "category": "timeout",
+  "message": "Analysis took too long. Try a smaller request, then run `rea doctor` if it continues.",
+  "retryable": true,
+  "diagnosticProjection": {
+    "target_path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+    "target_sha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+    "transport": "unix-socket",
+    "provider_version": "12.1.2",
+    "profile_digest": "b48c40da3ec6ac9605c16a7e7956ab5eb6653ab0dea996290b224c641cd63751",
+    "failure_kind": "timeout",
+    "failure_message": "Ghidra startup deadline elapsed"
+  },
+  "fullPrivateRecord": {
+    "path": "analysis/fd/overview.json",
+    "sha256": "776b5bd2abf327b2af0c2e66982b033f5fe0e979ea5982735d3c70e8e471d538",
+    "bytes": 1502046
+  },
+  "scope": "Safe projection of original failed provider envelope; not canonical successful analysis evidence. Full diagnostics remain preserved locally."
+}

@@ -63,6 +63,6 @@ No proprietary Apple binaries, Python environments, credentials or target applic
 
 ## Engine preview distributions
 
-The repository now includes a signature-verified ILSpy 9.1.0.7988 package with its collected dependency notices, plus an ARM64 X11-enabled libgdiplus build and the original source archive. The installer verifies the package hash and reuses a compatible healthy installation. See `third_party/ilspy/` and `third_party/libgdiplus/`.
+The source checkout retains the ILSpy 9.1.0.7988 NuGet package and local ARM64 X11-enabled libgdiplus build/source archive. Their hashes and available notices are recorded locally. NuGet signature verification did not succeed on the current host, and the license/notice audit is incomplete. The npm package therefore contains only their metadata, licenses and notices, not these binaries or archives. The installer can use the local ILSpy package in a source checkout and has a pinned-hash download fallback when only metadata is installed. See `third_party/ilspy/`, `third_party/libgdiplus/` and `third_party/distribution-inventory.json`.
 
 The preview release supplies the unmodified official Ghidra 12.1.2 ZIP as an optional release asset, with its embedded licenses preserved; `third_party/ghidra/manifest.json` records the publisher digest and runtime requirements. This is separate from the unapproved Python redistribution bundle above. It does not bundle every analysis tool, JDK, .NET, Mono, XQuartz, or all platform dependencies.

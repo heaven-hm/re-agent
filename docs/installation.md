@@ -13,8 +13,15 @@ Setup previews configuration changes and asks for approval before applying them.
 
 ## Start setup
 
+This checkout builds the `rea-engine` package, which is not published yet. The
+public `rea-agents` package below is the upstream REA release and does not
+install changes from this repository. To run this checkout, build it first and
+start setup from its source tree:
+
 ```bash
-npx rea-agents setup
+npm ci
+npm run build:cached
+node scripts/rea.mjs setup
 ```
 
 Choose the agents to configure, review the proposed paths and changes, and
@@ -22,7 +29,8 @@ approve the plan. npm's package-download approval and REA's setup approval are
 separate. Setup asks before changing agent configuration or installing Hopper.
 Restart the agents named in the completion message.
 
-For the latest published release, use `npx rea-agents@latest setup`.
+For the latest published upstream REA release, use
+`npx rea-agents@latest setup`.
 [Package-runner and global-installation options](#package-runners-and-global-installation)
 cover explicit versions, Bun, runtime requirements, and the curl wrapper.
 
@@ -781,11 +789,12 @@ read-only operations, digest identity, and runtime cleanup. The separate
 ordinary user. It requires the built Windows native bundle and an existing
 Ghidra/JDK installation; neither is inferred from startup alone.
 
-## MCP Registry
+## Upstream MCP Registry {#mcp-registry}
 
-REA is published in the official MCP Registry as `io.github.morluto/rea`. Registry
-clients can discover the server and install the existing public `rea-agents` npm
-package; the Registry entry does not introduce a second distribution artifact.
+Upstream REA is published in the official MCP Registry as
+`io.github.morluto/rea`. Registry clients can discover the upstream server and
+install the existing public `rea-agents` npm package. This REA Engine checkout
+is not registered there and is not installed by that package.
 
 For a client that supports Registry discovery, search for `io.github.morluto/rea`
 and select the npm package. The published metadata launches the existing stdio

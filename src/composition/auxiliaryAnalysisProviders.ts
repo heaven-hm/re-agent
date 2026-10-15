@@ -10,6 +10,10 @@ import {
   NATIVE_MACOS_PROVIDER_IDENTITY,
   nativeMacOSCapabilities,
 } from "../native/NativeMacOSProviderMetadata.js";
+import {
+  RADARE2_PROVIDER_IDENTITY,
+  radare2Capabilities,
+} from "../radare2/Radare2ProviderMetadata.js";
 
 type AuxiliaryProviderDeclaration = ConstructorParameters<
   typeof LazyAnalysisProvider
@@ -47,6 +51,15 @@ export const auxiliaryAnalysisProviderDeclarations = (
         const { ManagedStaticProvider } =
           await import("../dotnet/ManagedStaticProvider.js");
         return new ManagedStaticProvider();
+      },
+    },
+    {
+      identity: RADARE2_PROVIDER_IDENTITY,
+      capabilities: radare2Capabilities(environment),
+      load: async () => {
+        const { Radare2Provider } =
+          await import("../radare2/Radare2Provider.js");
+        return new Radare2Provider(environment);
       },
     },
   ];

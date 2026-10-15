@@ -1,0 +1,45 @@
+{
+  "schema": "rea.fd-version-parity.v1",
+  "status": "PASS",
+  "universalEquivalence": false,
+  "scope": "One --version invocation; exact stdout/stderr bytes and exit status.",
+  "comparisonRunId": "rea-comparison-b645ab873ffb45d098a3e851b5c4ea5d",
+  "input": {
+    "arguments": ["--version"],
+    "cwd": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/tests/fd-fixture-tree",
+    "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088"
+  },
+  "original": {
+    "binarySha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+    "runtime": "CrossOver compatibility layer on macOS arm64; actual Windows OS unverified",
+    "runId": "rea-original-fc4f3bf43c874f0a99d65d50d0b8f9d1",
+    "captureMethod": "Python subprocess; supplemental observation outside canonical REA capture",
+    "exitCode": 0,
+    "stdoutSha256": "be8759b90adf5a4ce1f81ec72fe86876c810dc35f4d977943bc85a01491b880f",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout": "fd 10.5.0\n",
+    "stderr": ""
+  },
+  "replica": {
+    "sourceSha256": "17372f673c6109cd756a1b1c51058cb04e41c19b3e27858b4f89168f878654cd",
+    "executableSha256": "91332a6075aeb5acc7a3be95a8200fbac071fb7f85514b3488e245a3533fc8b9",
+    "os": "darwin",
+    "architecture": "arm64",
+    "runId": "rea-replica-d7aebedb71134b2592f62257e9e2a2ec",
+    "exitCode": 0,
+    "signal": null,
+    "stdoutSha256": "be8759b90adf5a4ce1f81ec72fe86876c810dc35f4d977943bc85a01491b880f",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout": "fd 10.5.0\n",
+    "stderr": ""
+  },
+  "dimensions": {
+    "stdoutBytesEqual": true,
+    "stderrBytesEqual": true,
+    "exitStatusEqual": true
+  },
+  "limitations": [
+    "Original ran under CrossOver on macOS, not native Windows.",
+    "This single version query does not verify filesystem search behavior or whole-application equivalence."
+  ]
+}

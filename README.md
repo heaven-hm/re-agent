@@ -81,6 +81,10 @@ Byte-identical artifacts require exact byte comparisons. A native port across OS
 
 RE-Agent's code remains [MIT](LICENSE), with upstream REA attribution and selected cheat-agent MIT notices preserved. The project supports beneficial, authorized legacy maintenance, not cheats, sabotage or unauthorized changes. The use policy does not rewrite the MIT license. Original applications/assets and optional third-party tools retain their own licenses and redistribution requirements.
 
+[![MCP tool catalog](https://img.shields.io/badge/MCP-tool_catalog-5c4ee5?style=flat-square)](docs/mcp-contracts.md#generated-catalog)
+
+Setup supports the [supported agents](docs/installation.md#supported-agents). The upstream [MCP registry entry](docs/installation.md#mcp-registry) belongs to `morluto/rea`; this checkout is not registered there. See the [generated MCP tool catalog](docs/mcp-contracts.md#generated-catalog).
+
 ## Architecture at a glance
 
 RE-Agent extends the existing [REA](https://github.com/morluto/rea) analysis ecosystem with a bounded investigation and reconstruction layer. The diagrams below distinguish inherited providers from engine-specific orchestration. They describe supported workflows, **not** a promise of fully automatic reconstruction for arbitrary binaries.
@@ -244,6 +248,7 @@ These are actual `Form.DrawToBitmap` renders after the same button-handler seque
 ### Installed tools versus distributed tools
 
 A 2026-10-13 validation host reported Frida 17.23.3, LIEF 1.0.0, Z3 5.1.0.0, Capstone 5.0.9 and Pillow 12.3.0; tool presence varies by host (Frida/LIEF absent on some checkouts — verify with the autonomy tools probe before relying on them). Ghidra/radare2 and native compilers are reused locally. **Bundled now:** the signature-verified ILSpy package and the built X11 libgdiplus library with source and licenses. The [preview release](https://github.com/heaven-hm/re-agent/releases/tag/engine-preview-2026-10-13) also carries the checksum-verified, unmodified Ghidra 12.1.2 archive; see its [manifest](third_party/ghidra/manifest.json). **A clone does not contain every installed external tool binary.** The installer and offline bundle builder are shipped in source; generated local bundles are not a license-approved public distribution. Frida/LIEF native dependency source and license coverage require further audit. Optional licensed tools and Apple Calculator are not redistributed. See [tool profiles and limitations](docs/autonomy-tool-bootstrap.md).
+Development health checks confirmed Frida 17.23.3, LIEF 1.0.0, Z3 5.1.0.0, Capstone 5.0.9 and Pillow 12.3.0. Ghidra/radare2 and native compilers are reused locally. This checkout contains local ILSpy and ARM64 libgdiplus artifacts, but the npm package contains only their metadata, licenses and notices; the tool binaries are excluded while redistribution review is incomplete. The local ILSpy package hash matches its manifest, but NuGet signature verification did not succeed on this host, so it is not described as signature-verified. The [preview release](https://github.com/heaven-hm/re-agent/releases/tag/engine-preview-2026-10-13) carries the checksum-recorded Ghidra 12.1.2 archive as an external release asset; see its [manifest](third_party/ghidra/manifest.json). **A clone does not contain every installed external tool binary.** The installer and offline bundle builder are shipped in source; generated local bundles are not an approved public distribution. Frida/LIEF native dependency source and license coverage require further audit. Optional licensed tools and Apple Calculator are not redistributed. See [tool profiles and limitations](docs/autonomy-tool-bootstrap.md).
 
 See the [reverse-engineering tool coverage matrix](docs/reverse-engineering-tool-coverage.md) for a clearer separation between supported RE-Agent operations, host-installed tools, incomplete adapters, and the evidence required before a tool counts as integrated.
 
@@ -264,6 +269,28 @@ originals and macOS replicas are committed under
 | imgview v0.3          | `original-binaries/imgview64.exe` (UPX stub, unpacked upx 5.2.1) | `imgview/replica/imgviewmac` (Swift, AppKit)   | PNG render verified                  |
 | PuTTY plink 0.85      | official w64 binary (MIT, 1MB)                                   | `benchmarks/plink/replica/plinkmac` (C, CLI)   | help/pgpfp/noargs byte-identical     |
 | IGI2 QVM toolchain    | 2003 PE32 toolchain (user-supplied, unmodified)                  | `gconv/replica/qvmtool` (C, CLI)               | 120/120 error-behavior parity        |
+## Game behavior comparison
+REA includes a frame-sequence comparison command for exact PNG pixel checks:
+```sh
+npm run --silent compare:game-frames -- ./original-frames ./replica-frames
+```
+It emits a hash-bound JSON receipt and fails on missing or changed frames.
+This verifies only the captured visual frames; matched input replay, internal
+game-state oracles, and full gameplay equivalence remain separate requirements.
+See the [game verification guide](docs/game-behavior-verification.md) for the
+method, FFmpeg metrics, graphics-trace tool limits, and evidence requirements.
+Independent macOS reconstructions and one partial image-viewer investigation of
+six MIT-licensed native Windows targets, recovered binary-first with REA (no
+original source consulted). Six Windows originals and the available macOS
+replicas are committed under
+| Target                | Original (Windows x64)                                           | macOS port                                     | Status                                                   |
+| --------------------- | ---------------------------------------------------------------- | ---------------------------------------------- | -------------------------------------------------------- |
+| Snake v1.1.0          | `original-binaries/snake-windows-x86_64.exe` (55KB)              | `snake/replica/snakemac` (C, terminal)         | Replica builds; parity unverified (no paired transcript) |
+| PixelTetris v1.0.0    | `original-binaries/Pixeltetris.exe` (1.1MB, SDL2)                | `pixeltetris/replica/pixelmac` (C, SDL2)       | Replica menu/gameplay screenshots; parity unverified     |
+| Tetris v1.0.0         | `original-binaries/Tetris.exe` (2.2MB, SDL2)                     | `tetris/replica/tetrismac` (C, SDL2)           | Replica menu/gameplay screenshots; parity unverified     |
+| legacy-notepad v1.2.1 | `original-binaries/legacy-notepad-x64.exe` (263KB, Win32)        | `notepad/replica/notepadmac` (Swift, AppKit)   | Unicode window verified                                  |
+| Clipjar v1.2.0        | `original-binaries/clipjar.exe` (5.3MB, Rust)                    | `clipjar/replica/clipjarmac` (Swift, menu-bar) | SQLite capture/persist/dedupe PASS                       |
+| imgview v0.3          | `original-binaries/imgview64.exe` (UPX stub, unpacked upx 5.2.1) | `imgview/replica/imgviewmac` (Swift, AppKit)   | PNG render verified                                      |
 
 ## Maintenance evidence
 
@@ -276,6 +303,19 @@ page fault when its font asset is missing (`Could not load font!` then
 `wine: Unhandled page fault`), instead of exiting cleanly — root-caused
 to a missing early return in `FUN_140019080` and recorded in
 `pixeltetris/DEFECT-missing-font-crash.md`.
+imgview macOS port, displaying a PNG with its image status bar:
+
+![imgviewmac window](benchmarks/native-windows-ports/screenshots/imgviewmac-app.png)
+
+PixelTetris macOS replica, live menu + gameplay windows (replica captures only; no original-side visual comparison):
+
+![pixelmac menu](benchmarks/native-windows-ports/screenshots/pixelmac-menu4.png)
+![pixelmac gameplay](benchmarks/native-windows-ports/screenshots/pixelmac-play.png)
+
+Snake: one original terminal transcript is retained, but the paired replica
+transcript needed to reproduce the former parity claim is absent. Clipjar:
+synthetic capture → SHA-256 row,
+restart persistence and hash-dedupe verified against live SQLite.
 
 See `benchmarks/native-windows-ports/reports/` (license audit, binary
 analysis, functional results, limitations). Whole-executable identity is
@@ -290,19 +330,23 @@ to the listed features.
 
 The complete app/game inventory across managed examples, Batch 1 and Batch 2 is in the [package-checked benchmark catalog](benchmarks/catalog.json), with per-target implementation and evidence links in the [benchmark index](benchmarks/README.md).
 
-**Current result: incomplete; all six application-level results are UNVERIFIED.**
+**Current result: incomplete.** The bat native CLI replica has 8/8 fresh,
+run-bound stdout/stderr/exit cases passing. ripgrep has 8/8 run-bound cases
+passing, with six requiring a documented relative-path separator normalization.
+The whole applications remain
+PARTIAL; no target has whole-application equivalence evidence.
 All six requested official Windows assets were downloaded, publisher SHA-256
 verified, and actual native x64 PE executables inventoried. No upstream
 implementation source was used. Originals and runtime assets stay private.
 
-| Target                    | Windows release and binary                                                                                                                 | macOS reconstruction                                                                                         | Functional comparison                    |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | ---------------------------------------- |
-| OpenLieroX — C++ game     | [20260912.1 ZIP](https://github.com/openlierox/openlierox/releases/download/20260912.1/openlierox-20260912.1-windows.zip)                  | Unimplemented                                                                                                | UNVERIFIED                               |
-| SuperTux — C++ game       | [v0.7.0 portable ZIP](https://github.com/SuperTux/supertux/releases/download/v0.7.0/SuperTux-v0.7.0-win64-portable.zip)                    | Unimplemented                                                                                                | UNVERIFIED                               |
-| The Powder Toy — C++ game | [v100.1.400 EXE](https://github.com/The-Powder-Toy/The-Powder-Toy/releases/download/v100.1.400/powder-v100.1.400-x86_64-windows-mingw.exe) | Unimplemented                                                                                                | UNVERIFIED                               |
-| ripgrep — Rust utility    | [15.2.0 ZIP](https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15.2.0-x86_64-pc-windows-msvc.zip)                     | Independent C++17 macOS subset; 7/8 retained CrossOver observations match after path-separator normalization | PARTIAL feature / application UNVERIFIED |
-| fd — Rust utility         | [v10.5.0 ZIP](https://github.com/sharkdp/fd/releases/download/v10.5.0/fd-v10.5.0-x86_64-pc-windows-msvc.zip)                               | C++ ARM64 candidate; 2 raw, 9 normalized search cases pass                                                   | PARTIAL feature / application UNVERIFIED |
-| bat — Rust utility        | [v0.26.1 ZIP](https://github.com/sharkdp/bat/releases/download/v0.26.1/bat-v0.26.1-x86_64-pc-windows-msvc.zip)                             | C++ ARM64 candidate; 8/8 plain-output cases pass                                                             | PARTIAL feature / application UNVERIFIED |
+| Target                    | Windows release and binary                                                                                                                 | macOS reconstruction                                                                                                                            | Functional comparison                              |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| OpenLieroX — C++ game     | [20260912.1 ZIP](https://github.com/openlierox/openlierox/releases/download/20260912.1/openlierox-20260912.1-windows.zip)                  | Unimplemented                                                                                                                                   | UNVERIFIED                                         |
+| SuperTux — C++ game       | [v0.7.0 portable ZIP](https://github.com/SuperTux/supertux/releases/download/v0.7.0/SuperTux-v0.7.0-win64-portable.zip)                    | Unimplemented                                                                                                                                   | UNVERIFIED                                         |
+| The Powder Toy — C++ game | [v100.1.400 EXE](https://github.com/The-Powder-Toy/The-Powder-Toy/releases/download/v100.1.400/powder-v100.1.400-x86_64-windows-mingw.exe) | Unimplemented                                                                                                                                   | UNVERIFIED                                         |
+| ripgrep — Rust utility    | [15.2.0 ZIP](https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15.2.0-x86_64-pc-windows-msvc.zip)                     | Independent C++17 subset; 8/8 run-bound cases pass (six after narrow path normalization)                                                        | PARTIAL                                            |
+| fd — Rust utility         | [v10.5.0 ZIP](https://github.com/sharkdp/fd/releases/download/v10.5.0/fd-v10.5.0-x86_64-pc-windows-msvc.zip)                               | Independent C++ ARM64 candidate; 14/15 declared cases match exact bytes against the CrossOver observations; full fd behavior remains unverified | PARTIAL                                            |
+| bat — Rust utility        | [v0.26.1 ZIP](https://github.com/sharkdp/bat/releases/download/v0.26.1/bat-v0.26.1-x86_64-pc-windows-msvc.zip)                             | C++ ARM64 replica; 8/8 declared stdout/stderr/exit cases pass with joined run IDs and fixture binding                                           | PASS for declared cases; whole application PARTIAL |
 
 Original executable SHA-256 values, distinct from release archive hashes:
 
@@ -319,8 +363,9 @@ Original executable SHA-256 values, distinct from release archive hashes:
 Evidence, installed compilers, tool health inventory, owned process supervision,
 and the existing autonomous controller's checkpoint creation/reopening. Deep
 analysis timed out or was cancelled under host memory/disk pressure. No Batch 2
-native function recovery is verified. Original utility probes through CrossOver
-timed out; actual Windows OS behavior remains unverified. The controller also
+native function recovery is verified. Some bounded utility cases completed
+through CrossOver, as detailed in the per-target reports; actual Windows OS
+behavior remains unverified. The controller also
 rejected a compatibility launcher that differed from its hash-bound target.
 
 **New extension:** a reusable bounded file differential benchmark runner compares
@@ -329,16 +374,13 @@ Its infrastructure tests use actual child processes; they are separate from
 application fidelity tests. Windows workers, complete native recovery, FLOSS/capa
 integration and game reconstruction remain future work.
 
-Receipt-derived records currently contain **23 completed utility comparisons:
-10 raw byte/exit passes, 13 raw differences, and 9 additional fd search cases
-that pass only under declared path/order normalization**. fd has 2 raw passes
-among 15 cases; bat has 8/8 raw passes for its declared plain-output cases.
-These are feature-level results; all six Batch 2 applications remain PARTIAL
-or UNVERIFIED overall. fd has a completed bounded repair loop, while gameplay,
-game screenshots, original Windows OS execution, whole-application equivalence
-and formal proofs remain unavailable. See the
-[receipt-derived Batch 2 summary](benchmarks/native-batch-2/README.md) and
-[target reports](benchmarks/native-batch-2/reports/).
+The latest projection contains **31 run-bound cases: 30 passing, 1 differing,
+and 0 unverified**. This includes 8/8 raw-byte bat cases, 8/8 ripgrep cases
+(six search outputs pass only after path-separator normalization), and 14/15 fd
+cases; fd `--help` remains different. Original executions are CrossOver
+compatibility observations on macOS, not Windows OS results. The three Batch 2
+game targets remain analysis-only. See the [receipt-derived Batch 2 summary](benchmarks/native-batch-2/README.md)
+and [target reports](benchmarks/native-batch-2/reports/).
 
 [Full Batch 2 report](benchmarks/native-batch-2/reports/batch-2-overview.md) ·
 [binary/import inventory](benchmarks/native-batch-2/reports/binary-inventory.json) ·

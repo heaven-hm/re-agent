@@ -1,0 +1,75 @@
+{
+  "target": "fd 10.5.0 Windows x64",
+  "status": "PARTIAL",
+  "originalSha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+  "replica": {
+    "source": "benchmarks/native-batch-2/reconstructed/fd/fdmac.cpp",
+    "observedBuildPath": "benchmarks/native-batch-2/reconstructed/fd/build/fdmac",
+    "format": "Mach-O arm64",
+    "bytes": 162216,
+    "sha256": "34637d595ba14ee183b0af33652f3e3159f08d9b7788d393d85abc2afb276262",
+    "kind": "independent native macOS reconstruction for a tested feature subset",
+    "helpVersion": "help lists genuine supported subset, version reproduces observed compatibility datum; both exit0"
+  },
+  "staticAnalysis": {
+    "initialStatus": "provider_timeout",
+    "deadlineMs": 330000,
+    "retryStatus": "cancelled after open; no inventory or function dossiers",
+    "evidenceDirectory": "benchmarks/native-batch-2/analysis/fd",
+    "resilienceRetry": {
+      "status": "PARTIAL",
+      "startedAt": "2026-10-14T08:17:15.991Z",
+      "finishedAt": "2026-10-14T08:18:28.003Z",
+      "peakObservedFamilyRssBytes": 1043644416,
+      "profileDisabledAnalyzers": [
+        "Decompiler Switch Analysis",
+        "Decompiler Parameter ID"
+      ],
+      "procedureCount": 8153,
+      "definedStringCount": 2066,
+      "entryAddress": "0x14027cda0",
+      "entryDossierEvidenceId": "ev_e89c8c49bd8f3b891a757be8b5cd66d4c0c6d2851106f99fd55ee352912d31cf",
+      "evidenceDirectory": "benchmarks/native-batch-2/analysis/fd/resilience"
+    }
+  },
+  "replicaExecution": {
+    "declaredCases": 15,
+    "observed": 15,
+    "unverifiedTimeouts": 0,
+    "evidence": "benchmarks/native-batch-2/reports/fd/replica-probes.json"
+  },
+  "equivalence": {
+    "originalComparisonsCompleted": 15,
+    "byteEquality": "PARTIAL:14/15 declared cases match raw stdout/stderr/exit bytes",
+    "behavioralSuite": "11/11 declared search probes match raw output and exit behavior; help text differs",
+    "universalProof": false,
+    "processLinkedScreenshot": "UNVERIFIED",
+    "rawDeclaredCasesPassing": 14,
+    "pathOrderNormalizedSearchCasesPassing": 11
+  },
+  "blockers": [
+    "One of fifteen declared cases differs: --help output text. This remains a finite CLI suite, not complete fd application equivalence.",
+    "Original behavior was observed through CrossOver on macOS; native Windows execution and native Windows symlink classification are unverified.",
+    "The ten separately generated held-out searches remain UNVERIFIED because CrossOver wineserver crashed before target output.",
+    "Static function inventory and five retained dossiers do not establish complete fd algorithm recovery.",
+    "Interactive UI evidence is not applicable to this CLI target; no screenshots are claimed."
+  ],
+  "repairs": {
+    "evidence": "benchmarks/native-batch-2/reports/fd/repair-loop.json",
+    "invalidRegex": "observed error_brack case now exactstdout/stderr/exit matches; other classes unverified",
+    "version": "observed compatibility version exact; no binaryidentity assertion",
+    "help": "help text remains different from the original; exit status is 0",
+    "invalidOption": "observed invalid-option stderr now byte-exact for the declared --invalid-option case",
+    "pathRendering": "declared relative-root output reproduces observed Windows .\\ prefix and nested separators",
+    "symlinkClassification": "declared fixture reproduces CrossOver-observed --type f/--type l behavior; native Windows behavior unverified"
+  },
+  "heldout": {
+    "status": "UNVERIFIED",
+    "declaredCases": 10,
+    "seed": 34001,
+    "generatedFiles": 24,
+    "evidence": "benchmarks/native-batch-2/reports/fd/heldout-comparison.json",
+    "reason": "CrossOver wineserver crashed. Producer marks runtime_failed and target_observation_valid=false despite wrapper exit0. No held-out original behavior or parity passes claimed."
+  },
+  "scopeNote": "Original captures predate the local checkout rename and are retained in run attempt archives. Their target, arguments, run IDs and fixture-tree SHA-256 are validated against the current replica runs; a post-rename CrossOver retry failed before target execution."
+}

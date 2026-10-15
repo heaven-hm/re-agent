@@ -100,8 +100,8 @@ describe("release configuration", () => {
     };
 
     expect(packageJson).toMatchObject({
-      name: "rea-agents",
-      mcpName: "io.github.morluto/rea",
+      name: "rea-engine",
+      mcpName: "io.github.heaven-hm/rea-engine",
     });
     expect(serverJson).toMatchObject({
       name: packageJson.mcpName,

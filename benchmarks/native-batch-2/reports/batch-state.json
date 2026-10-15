@@ -1,0 +1,1156 @@
+{
+  "inputFingerprintSha256": "1149a93058898c45175fc83e2edd23c07a5d57fc25c77126db939d0ef378cfd3",
+  "generation": "Deterministic receipt projection; wall-clock generation time omitted.",
+  "applicationStatus": {
+    "fd": "PARTIAL",
+    "ripgrep": "PARTIAL",
+    "bat": "PARTIAL",
+    "openlierox": "UNVERIFIED",
+    "supertux": "UNVERIFIED",
+    "powder-toy": "UNVERIFIED"
+  },
+  "acquiredTargets": [
+    "fd",
+    "ripgrep",
+    "bat",
+    "openlierox",
+    "supertux",
+    "powder-toy"
+  ],
+  "originalComparisons": 31,
+  "historicalRawPasses": 30,
+  "currentWorkerStatus": "FAULT_OBSERVED",
+  "currentRuntimeFaults": [
+    {
+      "path": "logs/runtime/fd-all.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-depth.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-directories.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-extension.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-files.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-glob.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-heldout-all.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-heldout-binary.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-heldout-depth-two.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-heldout-directories.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-heldout-hidden.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-heldout-insensitive.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-heldout-logs.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-heldout-regex.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-heldout-sensitive.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-heldout-unicode.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-help.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-hidden.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-invalid-option.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-invalid-regex.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-no-ignore.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-regex.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-symlinks.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-unicode.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    },
+    {
+      "path": "logs/runtime/fd-version.json",
+      "status": "runtime_failed",
+      "targetObservationValid": false,
+      "wrapperExitCode": 0
+    }
+  ],
+  "attemptHistory": [
+    {
+      "path": "logs/runtime/attempts/rea-original-0045d395ed9b4b6dab1817f506c5d434/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-0045d395ed9b4b6dab1817f506c5d434",
+      "targetObservationValid": true,
+      "targetSha256": "14231169855ec5205cf5a1b6f1db358ff4aed4247c86b69ce8aae647c77f6680",
+      "arguments": [
+        "--color",
+        "never",
+        "--sort",
+        "path",
+        "--no-heading",
+        "-n",
+        "needle",
+        "."
+      ],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T16:58:09.469377+00:00",
+      "finishedAt": "2026-10-14T16:58:14.624545+00:00",
+      "recordSha256": "b89d74d26f68287b10e3b4650cdd337e568f1896bf59653499aaff711de23900",
+      "streamSha256": {
+        "stdout": "dc725fa4f03e2d4bc2c5d1e7ffcc70a24c5ea3f399cc207d090a33988ab21067",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-0260afbbfdab4104a6a81e03973c2802/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-0260afbbfdab4104a6a81e03973c2802",
+      "targetObservationValid": true,
+      "targetSha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "arguments": ["--color", "never", "--threads", "1", "[", "."],
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T17:41:43.908009+00:00",
+      "finishedAt": "2026-10-14T17:41:49.307990+00:00",
+      "recordSha256": "dcfedd3462cda3cf541e35d7d72949250a48013f3517e55a6e1f24267376c8d5",
+      "streamSha256": {
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "12f6d2e8723455d3690d55252a892a3d8cc9f150779ca3c4d327572181391ef8"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-0fdc8cb8909d4234a00a2e22a2eaacb5/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-0fdc8cb8909d4234a00a2e22a2eaacb5",
+      "targetObservationValid": true,
+      "targetSha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "arguments": [
+        "--color",
+        "never",
+        "--threads",
+        "1",
+        "--type",
+        "l",
+        ".",
+        "."
+      ],
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T17:41:27.119162+00:00",
+      "finishedAt": "2026-10-14T17:41:32.544765+00:00",
+      "recordSha256": "0ab600cbadf0823e7642f6a97937824ffbbe8b74571fa83c6d7d07c380a224e7",
+      "streamSha256": {
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-190d308114a7471fb90272cffd7189c4/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-190d308114a7471fb90272cffd7189c4",
+      "targetObservationValid": true,
+      "targetSha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+      "arguments": [
+        "--color",
+        "never",
+        "--paging",
+        "never",
+        "--style",
+        "plain",
+        "does-not-exist"
+      ],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "70259b5d8152d57612b84e78e607b1291353a16a90d1a2b950eca74135f490d8",
+      "startedAt": "2026-10-14T16:53:29.369190+00:00",
+      "finishedAt": "2026-10-14T16:53:34.500733+00:00",
+      "recordSha256": "9b491b0d39c2cfee20a9045609d101bd4a6d678516eca05cdb8a520d84abce79",
+      "streamSha256": {
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "7eb21a6bc9c753875b8be2cb543b1a8a620ea65abf1237c7c03d4f116da8541d"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-1a34df393bff4f3193e98a0e8dcfcc90/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-1a34df393bff4f3193e98a0e8dcfcc90",
+      "targetObservationValid": true,
+      "targetSha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "arguments": ["--color", "never", "--threads", "1", "^a.*\\.txt$", "."],
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T17:40:49.531154+00:00",
+      "finishedAt": "2026-10-14T17:40:54.716147+00:00",
+      "recordSha256": "79dadafabb8f51ca43a08c94b80c83fd3e91ca92ae4dbd1ccfc512a09a98de84",
+      "streamSha256": {
+        "stdout": "3eb04d61bd1e23d3422675cdb5840ae50162dde813dbf262e3e232396e443b76",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-1b97ced0f6ae40cf973f87c4910dc0bc/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-1b97ced0f6ae40cf973f87c4910dc0bc",
+      "targetObservationValid": true,
+      "targetSha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "arguments": ["--color", "never", "--threads", "1", "café", "."],
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T17:41:38.128353+00:00",
+      "finishedAt": "2026-10-14T17:41:43.712098+00:00",
+      "recordSha256": "59a1f37ad0286ee5f46ae79131d07766322a23e64e64473478325d5cd00a732a",
+      "streamSha256": {
+        "stdout": "2a69824b8b952cc413ad223eb713061e100717c828685484fa556a53218e8df8",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-1bcd99b72a224fdda645bdc22618754a/record.json",
+      "status": "runtime_failed",
+      "integrity": "PASS",
+      "runId": "rea-original-1bcd99b72a224fdda645bdc22618754a",
+      "targetObservationValid": false,
+      "targetSha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+      "arguments": ["--version"],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "3e08d74ff40ef2ac5703064ca6b53b87ab7c9b5d7f28a5a7fa1784c3ef96aebb",
+      "startedAt": "2026-10-14T16:52:00.326508+00:00",
+      "finishedAt": "2026-10-14T16:52:00.566709+00:00",
+      "recordSha256": "7e12ebaaf73620038e196c25123aa0b21ec502b7b2db43276a0073ee9e343db8",
+      "streamSha256": {
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "75aa685d109894ad7d95f29e36283984c0ce8b8506f4675cbc5ee726a0aae95b"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-22ac3a4745114eefacff332fdd94ae9b/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-22ac3a4745114eefacff332fdd94ae9b",
+      "targetObservationValid": true,
+      "targetSha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "arguments": [
+        "--color",
+        "never",
+        "--threads",
+        "1",
+        "--type",
+        "f",
+        ".",
+        "."
+      ],
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T17:41:16.471347+00:00",
+      "finishedAt": "2026-10-14T17:41:21.695446+00:00",
+      "recordSha256": "40c557d5f61a3eea5e13805bacb4ea4bb7b670460135c50027f5bff5e047d55b",
+      "streamSha256": {
+        "stdout": "d3e417ab42d4af628827d57c4c6624d900c8a881f2d76269f602b091383ece2a",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-22c515c301eb440d842e613458227823/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-22c515c301eb440d842e613458227823",
+      "targetObservationValid": true,
+      "targetSha256": "14231169855ec5205cf5a1b6f1db358ff4aed4247c86b69ce8aae647c77f6680",
+      "arguments": [
+        "--color",
+        "never",
+        "--sort",
+        "path",
+        "--no-heading",
+        "-i",
+        "needle",
+        "."
+      ],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T16:58:14.695401+00:00",
+      "finishedAt": "2026-10-14T16:58:19.927391+00:00",
+      "recordSha256": "2d6d9f76123a7e598a0030760f2e27510691dcd86427d6a1ff5543172c46a018",
+      "streamSha256": {
+        "stdout": "ca48bc75cd3aca1c7a3570fc0d2f306158f82766d26fca84f18e7171cbd19bfa",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-2f29346e03684bdab3c056ceac4486f4/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-2f29346e03684bdab3c056ceac4486f4",
+      "targetObservationValid": true,
+      "targetSha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "arguments": ["--color", "never", "--threads", "1", ".", "."],
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T17:40:42.038955+00:00",
+      "finishedAt": "2026-10-14T17:40:49.495672+00:00",
+      "recordSha256": "9eb361af81deb442cffe370e29217b71a023eb326f219f2cbe75fbe02652759c",
+      "streamSha256": {
+        "stdout": "60b8f32764214defcbb9588d008c5bfc531b18cb66b7ede983af8767664d6bd1",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-328340ef77e048dc840e9f370769d299/record.json",
+      "status": "runtime_failed",
+      "integrity": "PASS",
+      "runId": "rea-original-328340ef77e048dc840e9f370769d299",
+      "targetObservationValid": false,
+      "targetSha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+      "arguments": [
+        "--color",
+        "never",
+        "--paging",
+        "never",
+        "--style",
+        "plain",
+        "alpha.txt",
+        "crlf.txt"
+      ],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "3e08d74ff40ef2ac5703064ca6b53b87ab7c9b5d7f28a5a7fa1784c3ef96aebb",
+      "startedAt": "2026-10-14T16:52:02.165879+00:00",
+      "finishedAt": "2026-10-14T16:52:02.392955+00:00",
+      "recordSha256": "022d479ac136996bc53a1858afe7597a75adafd663cd4b91490271acb86e5de9",
+      "streamSha256": {
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "75aa685d109894ad7d95f29e36283984c0ce8b8506f4675cbc5ee726a0aae95b"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-3dfc55c45e2c42028388febf4bdc9421/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-3dfc55c45e2c42028388febf4bdc9421",
+      "targetObservationValid": true,
+      "targetSha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+      "arguments": [
+        "--color",
+        "never",
+        "--paging",
+        "never",
+        "--style",
+        "plain",
+        "unicode.txt"
+      ],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "70259b5d8152d57612b84e78e607b1291353a16a90d1a2b950eca74135f490d8",
+      "startedAt": "2026-10-14T16:53:19.079208+00:00",
+      "finishedAt": "2026-10-14T16:53:24.214033+00:00",
+      "recordSha256": "d5e7779ddebd9bac4710c7a5b43ec083ef2306b6155c1fe2bc75a654e4e08526",
+      "streamSha256": {
+        "stdout": "e17df118ff3f16f88a7352e34fffde963816f3f910f1c7a72581aaa1ec9de5bd",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-3fb141e1a52842e598feb760c6d7e10d/record.json",
+      "status": "runtime_failed",
+      "integrity": "PASS",
+      "runId": "rea-original-3fb141e1a52842e598feb760c6d7e10d",
+      "targetObservationValid": false,
+      "targetSha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+      "arguments": [
+        "--color",
+        "never",
+        "--paging",
+        "never",
+        "--style",
+        "plain",
+        "alpha.txt"
+      ],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "3e08d74ff40ef2ac5703064ca6b53b87ab7c9b5d7f28a5a7fa1784c3ef96aebb",
+      "startedAt": "2026-10-14T16:52:00.624648+00:00",
+      "finishedAt": "2026-10-14T16:52:00.867674+00:00",
+      "recordSha256": "e5b80948432788865143fedea2db3eef6bf34806e2d0209050b738d98dcfcb88",
+      "streamSha256": {
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "75aa685d109894ad7d95f29e36283984c0ce8b8506f4675cbc5ee726a0aae95b"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-45026322bfde4988b2d152a5c914dc3c/record.json",
+      "status": "runtime_failed",
+      "integrity": "PASS",
+      "runId": "rea-original-45026322bfde4988b2d152a5c914dc3c",
+      "targetObservationValid": false,
+      "targetSha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+      "arguments": [
+        "--color",
+        "never",
+        "--paging",
+        "never",
+        "--style",
+        "plain",
+        "unicode.txt"
+      ],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "3e08d74ff40ef2ac5703064ca6b53b87ab7c9b5d7f28a5a7fa1784c3ef96aebb",
+      "startedAt": "2026-10-14T16:52:01.157218+00:00",
+      "finishedAt": "2026-10-14T16:52:01.390918+00:00",
+      "recordSha256": "d8f9a3a156e01b095a314ea6266f26688bb191c319d68c7b0fb3888b5aedb8a3",
+      "streamSha256": {
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "75aa685d109894ad7d95f29e36283984c0ce8b8506f4675cbc5ee726a0aae95b"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-51ea2566778a4df29e5065a759ac1caf/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-51ea2566778a4df29e5065a759ac1caf",
+      "targetObservationValid": true,
+      "targetSha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "arguments": ["--version"],
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T17:36:08.800373+00:00",
+      "finishedAt": "2026-10-14T17:36:16.495090+00:00",
+      "recordSha256": "1775ed0a99826d991bce076645cd3f84d92cd7ed05ace6458e6034aeb8ef91ba",
+      "streamSha256": {
+        "stdout": "be8759b90adf5a4ce1f81ec72fe86876c810dc35f4d977943bc85a01491b880f",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-66fe6e97b0b741428c84cd022a92b0b8/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-66fe6e97b0b741428c84cd022a92b0b8",
+      "targetObservationValid": true,
+      "targetSha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+      "arguments": [
+        "--color",
+        "never",
+        "--paging",
+        "never",
+        "--style",
+        "plain",
+        "alpha.txt"
+      ],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "70259b5d8152d57612b84e78e607b1291353a16a90d1a2b950eca74135f490d8",
+      "startedAt": "2026-10-14T16:53:08.688471+00:00",
+      "finishedAt": "2026-10-14T16:53:13.923886+00:00",
+      "recordSha256": "518fbf6e5ed6b05f89c032e9084df8d153d935fb6d527e5f0fabe45c9bed576a",
+      "streamSha256": {
+        "stdout": "bc18e33b5a7cd48da6c8f390f9e2b898486812a2353ab5646a1b05c8613773b4",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-6e1dc184a72347398129a2ee6faf436f/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-6e1dc184a72347398129a2ee6faf436f",
+      "targetObservationValid": true,
+      "targetSha256": "14231169855ec5205cf5a1b6f1db358ff4aed4247c86b69ce8aae647c77f6680",
+      "arguments": [
+        "--color",
+        "never",
+        "--sort",
+        "path",
+        "--no-heading",
+        "--no-ignore",
+        "needle",
+        "."
+      ],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T16:58:33.535722+00:00",
+      "finishedAt": "2026-10-14T16:58:41.771682+00:00",
+      "recordSha256": "f0bb35ded95447001fbcb7472dd55b5e00573e29fe5297dfa67090a672056381",
+      "streamSha256": {
+        "stdout": "13b2b523cedfac30ab5e9d1da315f46f8462d4c074a96dc5c4bfc21093b619c8",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-6ec0684194f541f78856ffca0abc6c48/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-6ec0684194f541f78856ffca0abc6c48",
+      "targetObservationValid": true,
+      "targetSha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "arguments": [
+        "--color",
+        "never",
+        "--threads",
+        "1",
+        "--max-depth",
+        "1",
+        ".",
+        "."
+      ],
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T17:41:32.678696+00:00",
+      "finishedAt": "2026-10-14T17:41:38.069863+00:00",
+      "recordSha256": "f29bc5304008beefd62315f5d3d9c33fdf0491611f3fc26a3bdec3c414fa043f",
+      "streamSha256": {
+        "stdout": "e6a95dbc3e452916a2203087ad68ba40f6c3f4a20a1bd32f844ec78883d0f92d",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-7dff78c6ad8e4eda867d795f250f1ddc/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-7dff78c6ad8e4eda867d795f250f1ddc",
+      "targetObservationValid": true,
+      "targetSha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+      "arguments": [
+        "--color",
+        "never",
+        "--paging",
+        "never",
+        "--style",
+        "plain",
+        "empty.txt"
+      ],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "70259b5d8152d57612b84e78e607b1291353a16a90d1a2b950eca74135f490d8",
+      "startedAt": "2026-10-14T16:53:24.214913+00:00",
+      "finishedAt": "2026-10-14T16:53:29.368267+00:00",
+      "recordSha256": "8b0e2d40a5d8dc8f9465b3eb5689244b4f0abe29ac665a86a84c4ad03d0adfb8",
+      "streamSha256": {
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-84166d7d2ef54f1e9ca8cfd6b6d9c7cb/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-84166d7d2ef54f1e9ca8cfd6b6d9c7cb",
+      "targetObservationValid": true,
+      "targetSha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+      "arguments": [
+        "--color",
+        "never",
+        "--paging",
+        "never",
+        "--style",
+        "plain",
+        "crlf.txt"
+      ],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "70259b5d8152d57612b84e78e607b1291353a16a90d1a2b950eca74135f490d8",
+      "startedAt": "2026-10-14T16:53:13.924842+00:00",
+      "finishedAt": "2026-10-14T16:53:19.078312+00:00",
+      "recordSha256": "f1f1f4aade66ab0bc5448b9bc354567ac2ff0436add9cbb3cc48189e617fc898",
+      "streamSha256": {
+        "stdout": "f8e0f1568dd9254c3262d199d5dcfc9ff6d4855e18ec53a7176f9eab948ed93e",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-8a0192eee819400ca4e03bd8ee359feb/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-8a0192eee819400ca4e03bd8ee359feb",
+      "targetObservationValid": true,
+      "targetSha256": "14231169855ec5205cf5a1b6f1db358ff4aed4247c86b69ce8aae647c77f6680",
+      "arguments": ["--version"],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T16:57:57.430297+00:00",
+      "finishedAt": "2026-10-14T16:58:04.178264+00:00",
+      "recordSha256": "fe6f8167b9dafaf7e7cfb380c822136a5bd5cf50b392ec24998dd6fefea1ad2c",
+      "streamSha256": {
+        "stdout": "d951c991c6ee2a4d40f6948f3eaee2e2e7570cb3b78e9d73d284374560b1ae2d",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-8df9d38486454f8fb6355b97010504c3/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-8df9d38486454f8fb6355b97010504c3",
+      "targetObservationValid": true,
+      "targetSha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+      "arguments": ["--version"],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "70259b5d8152d57612b84e78e607b1291353a16a90d1a2b950eca74135f490d8",
+      "startedAt": "2026-10-14T16:53:03.353324+00:00",
+      "finishedAt": "2026-10-14T16:53:08.687543+00:00",
+      "recordSha256": "dc03696d01dd51cf3c342f0aaff2f335f32a4b38c37595af8474b7d6e747c153",
+      "streamSha256": {
+        "stdout": "89765e21d25a1df7515d60596a9a5a379f91acd822e52c9f4bf75ec6c71dbd31",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-8e94cbfb804a4101bc64027942ba2eef/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-8e94cbfb804a4101bc64027942ba2eef",
+      "targetObservationValid": true,
+      "targetSha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "arguments": [
+        "--color",
+        "never",
+        "--threads",
+        "1",
+        "--no-ignore",
+        ".",
+        "."
+      ],
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T17:41:10.774905+00:00",
+      "finishedAt": "2026-10-14T17:41:16.309010+00:00",
+      "recordSha256": "9c5827d75c94b1c06bcf6d5ece6ea6b1345856002ac40e4267ca006c3692aeb8",
+      "streamSha256": {
+        "stdout": "75497abab337a6c3097f06ced763acb51fa09955cd569a53c9ebcff0a641a0be",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-92fffe66539541649b92d20b8a69cfec/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-92fffe66539541649b92d20b8a69cfec",
+      "targetObservationValid": true,
+      "targetSha256": "14231169855ec5205cf5a1b6f1db358ff4aed4247c86b69ce8aae647c77f6680",
+      "arguments": [
+        "--color",
+        "never",
+        "--sort",
+        "path",
+        "--no-heading",
+        "[",
+        "."
+      ],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T16:58:41.787319+00:00",
+      "finishedAt": "2026-10-14T16:58:46.954638+00:00",
+      "recordSha256": "1e7e8c9d32451ff61a2b53e0aaa22fd6a4d0c6db4cd2244887f102cf44955a76",
+      "streamSha256": {
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "c827c67c0e0eeb4ca7df2cdeec9d30deaf2a3a9db80fea7205b6e869a395979b"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-a6fabe3c5503443f8e56b68f83d171f2/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-a6fabe3c5503443f8e56b68f83d171f2",
+      "targetObservationValid": true,
+      "targetSha256": "14231169855ec5205cf5a1b6f1db358ff4aed4247c86b69ce8aae647c77f6680",
+      "arguments": [
+        "--color",
+        "never",
+        "--sort",
+        "path",
+        "--no-heading",
+        "needle",
+        "."
+      ],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T16:58:04.209530+00:00",
+      "finishedAt": "2026-10-14T16:58:09.433773+00:00",
+      "recordSha256": "5685e2f346d6db107ea1e8687e267cf089272d3e24395bd11e0c6a5a16060ac6",
+      "streamSha256": {
+        "stdout": "0b752dd03496d6e8c9d77ddbbe03ce4b81622c8870a3809c6299a0aa4a8f2256",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-a88880fec3404906aa68d59170007c20/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-a88880fec3404906aa68d59170007c20",
+      "targetObservationValid": true,
+      "targetSha256": "14231169855ec5205cf5a1b6f1db358ff4aed4247c86b69ce8aae647c77f6680",
+      "arguments": [
+        "--color",
+        "never",
+        "--sort",
+        "path",
+        "--no-heading",
+        "-F",
+        "needle",
+        "."
+      ],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T16:58:20.033433+00:00",
+      "finishedAt": "2026-10-14T16:58:26.228677+00:00",
+      "recordSha256": "17e7811a601cedde7f693fec8b9cc6a6f6b8e2a7a1a9a2d7b0a00992544836df",
+      "streamSha256": {
+        "stdout": "0b752dd03496d6e8c9d77ddbbe03ce4b81622c8870a3809c6299a0aa4a8f2256",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-a94ff3bd62874a7da64950fea702b9e0/record.json",
+      "status": "runtime_failed",
+      "integrity": "PASS",
+      "runId": "rea-original-a94ff3bd62874a7da64950fea702b9e0",
+      "targetObservationValid": false,
+      "targetSha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+      "arguments": [
+        "--color",
+        "never",
+        "--paging",
+        "never",
+        "--style",
+        "plain",
+        "empty.txt"
+      ],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "3e08d74ff40ef2ac5703064ca6b53b87ab7c9b5d7f28a5a7fa1784c3ef96aebb",
+      "startedAt": "2026-10-14T16:52:01.400255+00:00",
+      "finishedAt": "2026-10-14T16:52:01.635803+00:00",
+      "recordSha256": "898efc2289525548e25dce5ea4fbb4c3256bfd36e870b4c795afe65726281273",
+      "streamSha256": {
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "75aa685d109894ad7d95f29e36283984c0ce8b8506f4675cbc5ee726a0aae95b"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-ac553efac94449c895fe334e448d7d6c/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-ac553efac94449c895fe334e448d7d6c",
+      "targetObservationValid": true,
+      "targetSha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+      "arguments": [
+        "--color",
+        "never",
+        "--paging",
+        "never",
+        "--style",
+        "plain",
+        "alpha.txt",
+        "crlf.txt"
+      ],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "70259b5d8152d57612b84e78e607b1291353a16a90d1a2b950eca74135f490d8",
+      "startedAt": "2026-10-14T16:53:34.501613+00:00",
+      "finishedAt": "2026-10-14T16:53:39.637904+00:00",
+      "recordSha256": "595bbd0f01149c50e6ee84bddc296924c6b93f5de5189cb5ebedf9e9fc6a59f9",
+      "streamSha256": {
+        "stdout": "4e09fabaa698de8dccbe937f01e36bbedf049994be596c88721ccd29f58ac54f",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-ae0cc9bdc04049198dbf025e3644a75b/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-ae0cc9bdc04049198dbf025e3644a75b",
+      "targetObservationValid": true,
+      "targetSha256": "14231169855ec5205cf5a1b6f1db358ff4aed4247c86b69ce8aae647c77f6680",
+      "arguments": [
+        "--color",
+        "never",
+        "--sort",
+        "path",
+        "--no-heading",
+        "--hidden",
+        "needle",
+        "."
+      ],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T16:58:26.343570+00:00",
+      "finishedAt": "2026-10-14T16:58:33.406787+00:00",
+      "recordSha256": "a7b41a271de41c6577da48e3e68f1d1c16e09676f15f0286a87984880f6db5dd",
+      "streamSha256": {
+        "stdout": "fb4425384875cd71aea3df4f558345c095167576a3881ad0a6437284327518e6",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-c1183f6b8857477eb760b0e2735d0bb1/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-c1183f6b8857477eb760b0e2735d0bb1",
+      "targetObservationValid": true,
+      "targetSha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "arguments": [
+        "--color",
+        "never",
+        "--threads",
+        "1",
+        "--type",
+        "d",
+        ".",
+        "."
+      ],
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T17:41:21.702118+00:00",
+      "finishedAt": "2026-10-14T17:41:26.903872+00:00",
+      "recordSha256": "5d80637c7d68552adb830a4209f67f9faf1b6f4ccee0d27107cbbb6926dad8cd",
+      "streamSha256": {
+        "stdout": "406a61466c436d9e6f4788ea930d587a14ca29500347066513b432de58c7cafb",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-c4d0773975e544309e481ba9e4fd63ee/record.json",
+      "status": "runtime_failed",
+      "integrity": "PASS",
+      "runId": "rea-original-c4d0773975e544309e481ba9e4fd63ee",
+      "targetObservationValid": false,
+      "targetSha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+      "arguments": [
+        "--color",
+        "never",
+        "--paging",
+        "never",
+        "--style",
+        "numbers",
+        "alpha.txt"
+      ],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "3e08d74ff40ef2ac5703064ca6b53b87ab7c9b5d7f28a5a7fa1784c3ef96aebb",
+      "startedAt": "2026-10-14T16:52:02.433117+00:00",
+      "finishedAt": "2026-10-14T16:52:02.666957+00:00",
+      "recordSha256": "817e9f3c960c8c679c525fda2870a7b564550becc78aef14780d38c683dd1e03",
+      "streamSha256": {
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "75aa685d109894ad7d95f29e36283984c0ce8b8506f4675cbc5ee726a0aae95b"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-c74d711913494c66b3b7cfe1fe857b35/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-c74d711913494c66b3b7cfe1fe857b35",
+      "targetObservationValid": true,
+      "targetSha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "arguments": [
+        "--color",
+        "never",
+        "--threads",
+        "1",
+        "--glob",
+        "*.txt",
+        "."
+      ],
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T17:40:54.819749+00:00",
+      "finishedAt": "2026-10-14T17:41:00.150986+00:00",
+      "recordSha256": "77150abf0557e932fa72ce40bd142bdd339589f1a0e69bf44c99ffd3b4cc7cf1",
+      "streamSha256": {
+        "stdout": "290849060291987b5667d7f27fa495e56486475697febaf76cc69951ca750579",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-d54a0fda37e34d639db2a975ae6a7576/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-d54a0fda37e34d639db2a975ae6a7576",
+      "targetObservationValid": true,
+      "targetSha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+      "arguments": [
+        "--color",
+        "never",
+        "--paging",
+        "never",
+        "--style",
+        "numbers",
+        "alpha.txt"
+      ],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "70259b5d8152d57612b84e78e607b1291353a16a90d1a2b950eca74135f490d8",
+      "startedAt": "2026-10-14T16:53:39.638879+00:00",
+      "finishedAt": "2026-10-14T16:53:44.787683+00:00",
+      "recordSha256": "60c57ca9e40656cfda5be46dbc8483d86463defd4ba8fb7319ad6975bd6bc51b",
+      "streamSha256": {
+        "stdout": "bc18e33b5a7cd48da6c8f390f9e2b898486812a2353ab5646a1b05c8613773b4",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-dd4114e9c3b245e6a8569676acc9981a/record.json",
+      "status": "runtime_failed",
+      "integrity": "PASS",
+      "runId": "rea-original-dd4114e9c3b245e6a8569676acc9981a",
+      "targetObservationValid": false,
+      "targetSha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+      "arguments": [
+        "--color",
+        "never",
+        "--paging",
+        "never",
+        "--style",
+        "plain",
+        "crlf.txt"
+      ],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "3e08d74ff40ef2ac5703064ca6b53b87ab7c9b5d7f28a5a7fa1784c3ef96aebb",
+      "startedAt": "2026-10-14T16:52:00.897065+00:00",
+      "finishedAt": "2026-10-14T16:52:01.134052+00:00",
+      "recordSha256": "f69c4ee255c0dd4d5a15cd211e4610cc1136f5e83e659af05e687e636e63772b",
+      "streamSha256": {
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "75aa685d109894ad7d95f29e36283984c0ce8b8506f4675cbc5ee726a0aae95b"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-e63d5ce137564f89a1ff0c81e96e98e8/record.json",
+      "status": "runtime_failed",
+      "integrity": "PASS",
+      "runId": "rea-original-e63d5ce137564f89a1ff0c81e96e98e8",
+      "targetObservationValid": false,
+      "targetSha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+      "arguments": [
+        "--color",
+        "never",
+        "--paging",
+        "never",
+        "--style",
+        "plain",
+        "does-not-exist"
+      ],
+      "fixtureTreeSha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+      "runnerSha256": "3e08d74ff40ef2ac5703064ca6b53b87ab7c9b5d7f28a5a7fa1784c3ef96aebb",
+      "startedAt": "2026-10-14T16:52:01.884344+00:00",
+      "finishedAt": "2026-10-14T16:52:02.135861+00:00",
+      "recordSha256": "0e920316bbf2373867b487fccab2193c9ab916a53efa72eaea5ab256817da308",
+      "streamSha256": {
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "75aa685d109894ad7d95f29e36283984c0ce8b8506f4675cbc5ee726a0aae95b"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-efe058957a4d42188513ba3e1e7f4fe1/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-efe058957a4d42188513ba3e1e7f4fe1",
+      "targetObservationValid": true,
+      "targetSha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "arguments": [
+        "--color",
+        "never",
+        "--threads",
+        "1",
+        "-e",
+        "txt",
+        ".",
+        "."
+      ],
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T17:41:00.162006+00:00",
+      "finishedAt": "2026-10-14T17:41:05.385521+00:00",
+      "recordSha256": "f80360eb9c78ea769f44200aa325b84718b443f23a8fd710ad875ad84619aa0d",
+      "streamSha256": {
+        "stdout": "290849060291987b5667d7f27fa495e56486475697febaf76cc69951ca750579",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-f1b2599bd874450696801faa8952672a/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-f1b2599bd874450696801faa8952672a",
+      "targetObservationValid": true,
+      "targetSha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "arguments": ["--invalid-option"],
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T17:41:49.360544+00:00",
+      "finishedAt": "2026-10-14T17:41:55.344481+00:00",
+      "recordSha256": "964cbf029d898e612c883fe7590a790aed27b145571c69680c0085fcb61e1e65",
+      "streamSha256": {
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "ee41a8d6eedfd37f66023bafe25c0a4a738e0b00f0f2450e44191a3af3159391"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-f3c43dff9c3c4d178910b81f217f9cb1/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-f3c43dff9c3c4d178910b81f217f9cb1",
+      "targetObservationValid": true,
+      "targetSha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "arguments": ["--color", "never", "--threads", "1", "--hidden", ".", "."],
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T17:41:05.466496+00:00",
+      "finishedAt": "2026-10-14T17:41:10.717932+00:00",
+      "recordSha256": "0c9eea4a845f07752fba01dc8bc2aef193fd099b7856250529a471ddf7ff8aca",
+      "streamSha256": {
+        "stdout": "16a6f68eeb8e3f626f5824ee3f5a359c7518a5e7481ec8bd5cacf22f32b49534",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-fc4f3bf43c874f0a99d65d50d0b8f9d1/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-fc4f3bf43c874f0a99d65d50d0b8f9d1",
+      "targetObservationValid": true,
+      "targetSha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "arguments": ["--version"],
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T17:41:55.347670+00:00",
+      "finishedAt": "2026-10-14T17:42:00.562518+00:00",
+      "recordSha256": "dd994079b6393a0f8aa9fe065876a217eb8fd8829fab79d5d8e615939c75a799",
+      "streamSha256": {
+        "stdout": "be8759b90adf5a4ce1f81ec72fe86876c810dc35f4d977943bc85a01491b880f",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-fdc12e6991904d4e8b747d7b48e22525/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-fdc12e6991904d4e8b747d7b48e22525",
+      "targetObservationValid": true,
+      "targetSha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "arguments": ["--help"],
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T17:42:00.566641+00:00",
+      "finishedAt": "2026-10-14T17:42:05.875685+00:00",
+      "recordSha256": "035c0baab117f6ffd5b65f5e34242ec82a8426e818b048bcf72eac9c92759b93",
+      "streamSha256": {
+        "stdout": "507ce783bff19e56f6b45b94614253d4c3fda8e011cbdc24d517f5e47188f66e",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": "logs/runtime/attempts/rea-original-febce0917df547f8b36f4bc734a535cc/record.json",
+      "status": "completed",
+      "integrity": "PASS",
+      "runId": "rea-original-febce0917df547f8b36f4bc734a535cc",
+      "targetObservationValid": true,
+      "targetSha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "arguments": ["--version"],
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "runnerSha256": "3f5141063d4430c375d7a302724f950a347084b66997df5bda3960f38abeb6be",
+      "startedAt": "2026-10-14T17:35:52.370957+00:00",
+      "finishedAt": "2026-10-14T17:35:53.072796+00:00",
+      "recordSha256": "4f658823fbde86f1d1c711640925a62673fff157bafcd112f070ff83d5d514ef",
+      "streamSha256": {
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "0463cf9144d848bf54546bdfaa1afd8575f5cb2cbb52130a10e3211e5450d589"
+      }
+    }
+  ],
+  "windowsWorker": "UNVERIFIED: inspect actual CI artifacts separately",
+  "heldoutStatus": "UNVERIFIED",
+  "nextPhase": "restore-healthy-worker-and-expand-coverage",
+  "controllerCheckpoint": "fd/controller-checkpoint.json",
+  "limitation": "Historical receipts survive current faults; this summary is not a controller checkpoint."
+}

@@ -1,0 +1,8 @@
+$ sh benchmarks/plink/replica/test.sh
+exit_code=0
+
+[stdout]
+/Users/haseeb-mir/Documents/Code/rea/benchmarks/plink/replica/build/plinkmac: Mach-O 64-bit executable arm64
+{"report": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/plink/reports/replica-golden-comparison.json", "passed": 4, "failed": 0}
+
+[stderr]

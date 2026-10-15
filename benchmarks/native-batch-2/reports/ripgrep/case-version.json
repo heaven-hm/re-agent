@@ -1,0 +1,70 @@
+{
+  "evidence_id": "ev_42676f42a3dc73747c6ae7c58cc62749b3b8bd9db9973db89ee878da01885a50",
+  "subject": {
+    "name": "rg.exe",
+    "digest": {
+      "sha256": "14231169855ec5205cf5a1b6f1db358ff4aed4247c86b69ce8aae647c77f6680"
+    },
+    "format": "pe",
+    "architecture": "x86_64",
+    "local_path": "/Users/haseeb-mir/Documents/Code/rea-engine/benchmarks/native-batch-2/originals/ripgrep/extracted/ripgrep-15.2.0-x86_64-pc-windows-msvc/rg.exe"
+  },
+  "provider": {
+    "id": "rea-engine-native-cli-benchmark",
+    "name": "REA Engine recorded CLI byte comparison",
+    "version": "1"
+  },
+  "analysis_profile": null,
+  "predicate_type": "rea.analysis",
+  "operation": "compare_recorded_native_cli_bytes",
+  "parameters": {
+    "case": "version",
+    "original_record_sha256": "fe6f8167b9dafaf7e7cfb380c822136a5bd5cf50b392ec24998dd6fefea1ad2c",
+    "candidate_sha256": "9bebc344297bc9e99ddeae4500c055e23e5acae280e80d4603873efb6068f4f1",
+    "candidate_source_sha256": "44ae2244a491ffe486551bd1a861a6b8dbd0a6e0b33ed1ccaf6ef9d8920f73a2",
+    "original_run_id": "rea-original-8a0192eee819400ca4e03bd8ee359feb",
+    "replica_run_id": "rea-replica-306afa90fb454350849f273f61bb4951",
+    "comparison_run_id": "rea-comparison-0ab794f5dea54b6998af4122f1d902f7",
+    "fixture_tree_sha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+    "fixture_bound": true,
+    "working_directory": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/tests/runtime-fixtures/tree",
+    "replica_working_directory": "/Users/haseeb-mir/Documents/Code/rea-engine/benchmarks/native-batch-2/tests/runtime-fixtures/tree",
+    "arguments": ["--version"]
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "status": "PASS",
+    "dimensions": {
+      "stdoutBytes": true,
+      "stderrBytes": true,
+      "exitCode": true,
+      "stdoutAfterRelativePathSeparatorNormalization": true
+    },
+    "original": {
+      "stdoutSha256": "d951c991c6ee2a4d40f6948f3eaee2e2e7570cb3b78e9d73d284374560b1ae2d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutAfterRelativePathSeparatorNormalizationSha256": "d951c991c6ee2a4d40f6948f3eaee2e2e7570cb3b78e9d73d284374560b1ae2d",
+      "exitCode": 0
+    },
+    "replica": {
+      "stdoutSha256": "d951c991c6ee2a4d40f6948f3eaee2e2e7570cb3b78e9d73d284374560b1ae2d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutAfterRelativePathSeparatorNormalizationSha256": "d951c991c6ee2a4d40f6948f3eaee2e2e7570cb3b78e9d73d284374560b1ae2d",
+      "exitCode": 0,
+      "stdout": "ripgrep 15.2.0 (rev e89fff89ac)\n\nfeatures:+pcre2\nsimd(compile):+SSE2,-SSSE3,-AVX2\nsimd(runtime):+SSE2,+SSSE3,-AVX2\n\nPCRE2 10.45 is available (JIT is available)\n",
+      "stderr": ""
+    }
+  },
+  "confidence": "observed",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Original is a retained CrossOver compatibility observation, not actual Windows OS verification.",
+    "Only the declared stdout/stderr/outcome cases are compared. Source/runtime algorithms, tty modes and full program equivalence remain unverified.",
+    "Candidate diagnostic capture is exact for these valid UTF-8 cases; arbitrary invalid UTF-8 output is unsupported.",
+    "Original observation did not bind a full filesystem snapshot; fixture ownership/unchanged contents are a stated assumption."
+  ],
+  "relationship_coverage": null,
+  "locations": [],
+  "evidence_links": []
+}

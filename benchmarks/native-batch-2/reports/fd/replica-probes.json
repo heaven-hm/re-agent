@@ -1,0 +1,358 @@
+{
+  "schema": "rea.native-replica-probes.v1",
+  "executable": "/Users/haseeb-mir/Documents/Code/rea-engine/benchmarks/native-batch-2/reconstructed/fd/build/fdmac",
+  "executableSha256": "7b9f84c23b27a0c10b2e2af3e4a84cf7f21e6114adfd493e46c718d122b9b4b9",
+  "os": "darwin",
+  "architecture": "arm64",
+  "workingDirectory": "/Users/haseeb-mir/Documents/Code/rea-engine/benchmarks/native-batch-2/tests/fd-fixture-tree",
+  "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+  "scope": "Native replica execution observations only. No original-equivalence claim.",
+  "results": [
+    {
+      "id": "all",
+      "arguments": ["--color", "never", "--threads", "1", ".", "."],
+      "status": "OBSERVED",
+      "runId": "rea-replica-e6021c5eb0dd43be9805a9b2fc6ba3d5",
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "stdout": {
+        "text": "./UPPER.TXT\n./alpha.txt\n./café.txt\n./data.bin\n./empty\\\n./link.txt\n./sub\\\n./sub\\beta.txt\n./sub\\deep\\\n./sub\\deep\\gamma.txt\n",
+        "bytes": 122,
+        "observedBytes": 122
+      },
+      "stderr": {
+        "text": "",
+        "bytes": 0,
+        "observedBytes": 0
+      },
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "id": "regex",
+      "arguments": ["--color", "never", "--threads", "1", "^a.*\\.txt$", "."],
+      "status": "OBSERVED",
+      "runId": "rea-replica-2f4297541b2e4c5b8c581780130124fc",
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "stdout": {
+        "text": "./alpha.txt\n",
+        "bytes": 12,
+        "observedBytes": 12
+      },
+      "stderr": {
+        "text": "",
+        "bytes": 0,
+        "observedBytes": 0
+      },
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "id": "glob",
+      "arguments": [
+        "--color",
+        "never",
+        "--threads",
+        "1",
+        "--glob",
+        "*.txt",
+        "."
+      ],
+      "status": "OBSERVED",
+      "runId": "rea-replica-27a023b6db594f14969da3ff0ebc70ec",
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "stdout": {
+        "text": "./UPPER.TXT\n./alpha.txt\n./café.txt\n./link.txt\n./sub\\beta.txt\n./sub\\deep\\gamma.txt\n",
+        "bytes": 83,
+        "observedBytes": 83
+      },
+      "stderr": {
+        "text": "",
+        "bytes": 0,
+        "observedBytes": 0
+      },
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "id": "extension",
+      "arguments": [
+        "--color",
+        "never",
+        "--threads",
+        "1",
+        "-e",
+        "txt",
+        ".",
+        "."
+      ],
+      "status": "OBSERVED",
+      "runId": "rea-replica-402c9af6d15d4a11b666946d1c4dcf27",
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "stdout": {
+        "text": "./UPPER.TXT\n./alpha.txt\n./café.txt\n./link.txt\n./sub\\beta.txt\n./sub\\deep\\gamma.txt\n",
+        "bytes": 83,
+        "observedBytes": 83
+      },
+      "stderr": {
+        "text": "",
+        "bytes": 0,
+        "observedBytes": 0
+      },
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "id": "hidden",
+      "arguments": ["--color", "never", "--threads", "1", "--hidden", ".", "."],
+      "status": "OBSERVED",
+      "runId": "rea-replica-293f1a55436247a9ad4dbdc44afbfa49",
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "stdout": {
+        "text": "./.git\\\n./.gitignore\n./.hidden.txt\n./UPPER.TXT\n./alpha.txt\n./café.txt\n./data.bin\n./empty\\\n./link.txt\n./sub\\\n./sub\\beta.txt\n./sub\\deep\\\n./sub\\deep\\gamma.txt\n",
+        "bytes": 157,
+        "observedBytes": 157
+      },
+      "stderr": {
+        "text": "",
+        "bytes": 0,
+        "observedBytes": 0
+      },
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "id": "no-ignore",
+      "arguments": [
+        "--color",
+        "never",
+        "--threads",
+        "1",
+        "--no-ignore",
+        ".",
+        "."
+      ],
+      "status": "OBSERVED",
+      "runId": "rea-replica-ce67b50d930a4ba3b4fe9a6b0b0aa610",
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "stdout": {
+        "text": "./UPPER.TXT\n./alpha.txt\n./café.txt\n./data.bin\n./empty\\\n./ignored-dir\\\n./ignored-dir\\secret.txt\n./ignored.txt\n./link.txt\n./sub\\\n./sub\\beta.txt\n./sub\\deep\\\n./sub\\deep\\gamma.txt\n",
+        "bytes": 176,
+        "observedBytes": 176
+      },
+      "stderr": {
+        "text": "",
+        "bytes": 0,
+        "observedBytes": 0
+      },
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "id": "files",
+      "arguments": [
+        "--color",
+        "never",
+        "--threads",
+        "1",
+        "--type",
+        "f",
+        ".",
+        "."
+      ],
+      "status": "OBSERVED",
+      "runId": "rea-replica-55a326de50a7468a8a176db01c06ebac",
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "stdout": {
+        "text": "./UPPER.TXT\n./alpha.txt\n./café.txt\n./data.bin\n./link.txt\n./sub\\beta.txt\n./sub\\deep\\gamma.txt\n",
+        "bytes": 94,
+        "observedBytes": 94
+      },
+      "stderr": {
+        "text": "",
+        "bytes": 0,
+        "observedBytes": 0
+      },
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "id": "directories",
+      "arguments": [
+        "--color",
+        "never",
+        "--threads",
+        "1",
+        "--type",
+        "d",
+        ".",
+        "."
+      ],
+      "status": "OBSERVED",
+      "runId": "rea-replica-6d95daf6807e483084dcd81630e6f0a4",
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "stdout": {
+        "text": "./empty\\\n./sub\\\n./sub\\deep\\\n",
+        "bytes": 28,
+        "observedBytes": 28
+      },
+      "stderr": {
+        "text": "",
+        "bytes": 0,
+        "observedBytes": 0
+      },
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "id": "symlinks",
+      "arguments": [
+        "--color",
+        "never",
+        "--threads",
+        "1",
+        "--type",
+        "l",
+        ".",
+        "."
+      ],
+      "status": "OBSERVED",
+      "runId": "rea-replica-c2294375adbb41a9b6df276cd2e2abae",
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "stdout": {
+        "text": "",
+        "bytes": 0,
+        "observedBytes": 0
+      },
+      "stderr": {
+        "text": "",
+        "bytes": 0,
+        "observedBytes": 0
+      },
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "id": "depth",
+      "arguments": [
+        "--color",
+        "never",
+        "--threads",
+        "1",
+        "--max-depth",
+        "1",
+        ".",
+        "."
+      ],
+      "status": "OBSERVED",
+      "runId": "rea-replica-6a93d93fe9954b2086f560945f1d155d",
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "stdout": {
+        "text": "./UPPER.TXT\n./alpha.txt\n./café.txt\n./data.bin\n./empty\\\n./link.txt\n./sub\\\n",
+        "bytes": 74,
+        "observedBytes": 74
+      },
+      "stderr": {
+        "text": "",
+        "bytes": 0,
+        "observedBytes": 0
+      },
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "id": "unicode",
+      "arguments": ["--color", "never", "--threads", "1", "café", "."],
+      "status": "OBSERVED",
+      "runId": "rea-replica-fc7f42eef1264cd39df8c21972f78cae",
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "stdout": {
+        "text": "./café.txt\n",
+        "bytes": 12,
+        "observedBytes": 12
+      },
+      "stderr": {
+        "text": "",
+        "bytes": 0,
+        "observedBytes": 0
+      },
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "id": "invalid-regex",
+      "arguments": ["--color", "never", "--threads", "1", "[", "."],
+      "status": "OBSERVED",
+      "runId": "rea-replica-d359286f069e4a5e889c0b3d5b5fa51f",
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "stdout": {
+        "text": "",
+        "bytes": 0,
+        "observedBytes": 0
+      },
+      "stderr": {
+        "text": "[fd error]: regex parse error:\n    [\n    ^\nerror: unclosed character class\n\nNote: You can search for literal substrings with '--fixed-strings' or literal strings with '--exact' options (instead of a regular expression). Alternatively, you can also use the '--glob' option to match on a glob pattern.\n",
+        "bytes": 300,
+        "observedBytes": 300
+      },
+      "exitCode": 1,
+      "signal": null
+    },
+    {
+      "id": "invalid-option",
+      "arguments": ["--invalid-option"],
+      "status": "OBSERVED",
+      "runId": "rea-replica-16c2dc607fa645a5b6c903ccdd0f1a1c",
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "stdout": {
+        "text": "",
+        "bytes": 0,
+        "observedBytes": 0
+      },
+      "stderr": {
+        "text": "error: unexpected argument '--invalid-option' found\n\n  tip: to pass '--invalid-option' as a value, use '-- --invalid-option'\n\nUsage: fd.exe [OPTIONS] [pattern] [path]...\n\nFor more information, try '--help'.\n",
+        "bytes": 207,
+        "observedBytes": 207
+      },
+      "exitCode": 2,
+      "signal": null
+    },
+    {
+      "id": "version",
+      "arguments": ["--version"],
+      "status": "OBSERVED",
+      "runId": "rea-replica-6ee3531959bc45eeae9769d36f0b3aed",
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "stdout": {
+        "text": "fd 10.5.0\n",
+        "bytes": 10,
+        "observedBytes": 10
+      },
+      "stderr": {
+        "text": "",
+        "bytes": 0,
+        "observedBytes": 0
+      },
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "id": "help",
+      "arguments": ["--help"],
+      "status": "OBSERVED",
+      "runId": "rea-replica-b30e505dcca6465cb1e62764c914b666",
+      "fixtureTreeSha256": "1127eeee5e052a02d22098f07b494283858b3d0489ee749a72745e05ea14b088",
+      "stdout": {
+        "text": "fdmac experimental native filesystem search\nUsage: fdmac [OPTIONS] [pattern] [path]...\nSupported: --glob --extension --hidden --no-ignore --type f|d|l\n           --max-depth --ignore-case --case-sensitive --full-path\n           --follow --absolute-path --print0 --exclude\n           --color never --threads 1\nRegex: C++ ECMAScript; complex Rust regex and ignore semantics unverified.\n",
+        "bytes": 384,
+        "observedBytes": 384
+      },
+      "stderr": {
+        "text": "",
+        "bytes": 0,
+        "observedBytes": 0
+      },
+      "exitCode": 0,
+      "signal": null
+    }
+  ]
+}

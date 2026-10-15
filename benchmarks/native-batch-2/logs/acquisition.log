@@ -1,0 +1,6 @@
+{"target": "fd", "status": "PASS", "executables": 1, "error": null}
+{"target": "ripgrep", "status": "PASS", "executables": 1, "error": null}
+{"target": "bat", "status": "PASS", "executables": 1, "error": null}
+{"target": "openlierox", "status": "PASS", "executables": 1, "error": null}
+{"target": "supertux", "status": "PASS", "executables": 1, "error": null}
+{"target": "powder-toy", "status": "PASS", "executables": 1, "error": null}

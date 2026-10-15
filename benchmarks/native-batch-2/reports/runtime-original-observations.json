@@ -1,0 +1,207 @@
+{
+  "scope": "Actual supplemental compatibility observations; no completed original/replica comparisons or actual Windows-OS evidence",
+  "records": [
+    {
+      "recordFile": "logs/runtime/bat-version.json",
+      "target": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/bat/extracted/bat-v0.26.1-x86_64-pc-windows-msvc/bat.exe",
+      "target_sha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+      "arguments": ["--version"],
+      "cwd": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/tests/runtime-fixtures/tree",
+      "runtime": "CrossOver compatibility layer on macOS arm64; actual Windows OS unverified",
+      "capture": "Python subprocess; supplemental observation outside canonical REA capture",
+      "timeout_seconds": 15,
+      "output_file_cap_bytes": 1048576,
+      "status": "timeout",
+      "exit_code": null,
+      "limitation": "subprocess.run terminates only its selected direct child; CrossOver descendants and service cleanup unverified",
+      "elapsed_seconds": 15.123294830322266,
+      "stdout": {
+        "path": "logs/runtime/bat-version.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "utf8": ""
+      },
+      "stderr": {
+        "path": "logs/runtime/bat-version.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "utf8": ""
+      }
+    },
+    {
+      "recordFile": "logs/runtime/fd-all.json",
+      "target": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+      "target_sha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "arguments": ["--color", "never", "--threads", "1", ".", "."],
+      "cwd": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/tests/fd-fixture-tree",
+      "runtime": "CrossOver compatibility layer on macOS arm64; actual Windows OS unverified",
+      "capture": "Python subprocess; supplemental observation outside canonical REA capture",
+      "timeout_seconds": 15,
+      "status": "timeout",
+      "exit_code": null,
+      "limitation": "subprocess.run terminates only its selected direct child; CrossOver descendants and service cleanup unverified",
+      "elapsed_seconds": 15.031488180160522,
+      "stdout": {
+        "path": "logs/runtime/fd-all.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "utf8": ""
+      },
+      "stderr": {
+        "path": "logs/runtime/fd-all.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "utf8": ""
+      }
+    },
+    {
+      "recordFile": "logs/runtime/fd-extension.json",
+      "target": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+      "target_sha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "arguments": [
+        "--color",
+        "never",
+        "--threads",
+        "1",
+        "-e",
+        "txt",
+        ".",
+        "."
+      ],
+      "cwd": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/tests/fd-fixture-tree",
+      "runtime": "CrossOver compatibility layer on macOS arm64; actual Windows OS unverified",
+      "capture": "Python subprocess; supplemental observation outside canonical REA capture",
+      "timeout_seconds": 15,
+      "status": "timeout",
+      "exit_code": null,
+      "limitation": "subprocess.run terminates only its selected direct child; CrossOver descendants and service cleanup unverified",
+      "elapsed_seconds": 15.038413047790527,
+      "stdout": {
+        "path": "logs/runtime/fd-extension.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "utf8": ""
+      },
+      "stderr": {
+        "path": "logs/runtime/fd-extension.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "utf8": ""
+      }
+    },
+    {
+      "recordFile": "logs/runtime/fd-glob.json",
+      "target": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+      "target_sha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "arguments": [
+        "--color",
+        "never",
+        "--threads",
+        "1",
+        "--glob",
+        "*.txt",
+        "."
+      ],
+      "cwd": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/tests/fd-fixture-tree",
+      "runtime": "CrossOver compatibility layer on macOS arm64; actual Windows OS unverified",
+      "capture": "Python subprocess; supplemental observation outside canonical REA capture",
+      "timeout_seconds": 15,
+      "status": "timeout",
+      "exit_code": null,
+      "limitation": "subprocess.run terminates only its selected direct child; CrossOver descendants and service cleanup unverified",
+      "elapsed_seconds": 15.657752752304077,
+      "stdout": {
+        "path": "logs/runtime/fd-glob.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "utf8": ""
+      },
+      "stderr": {
+        "path": "logs/runtime/fd-glob.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "utf8": ""
+      }
+    },
+    {
+      "recordFile": "logs/runtime/fd-regex.json",
+      "target": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+      "target_sha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "arguments": ["--color", "never", "--threads", "1", "^a.*\\.txt$", "."],
+      "cwd": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/tests/fd-fixture-tree",
+      "runtime": "CrossOver compatibility layer on macOS arm64; actual Windows OS unverified",
+      "capture": "Python subprocess; supplemental observation outside canonical REA capture",
+      "timeout_seconds": 15,
+      "status": "timeout",
+      "exit_code": null,
+      "limitation": "subprocess.run terminates only its selected direct child; CrossOver descendants and service cleanup unverified",
+      "elapsed_seconds": 16.588979244232178,
+      "stdout": {
+        "path": "logs/runtime/fd-regex.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "utf8": ""
+      },
+      "stderr": {
+        "path": "logs/runtime/fd-regex.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "utf8": ""
+      }
+    },
+    {
+      "recordFile": "logs/runtime/fd-version.json",
+      "target": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+      "target_sha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+      "arguments": ["--version"],
+      "cwd": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/tests/fd-fixture-tree",
+      "runtime": "CrossOver compatibility layer on macOS arm64; actual Windows OS unverified",
+      "capture": "Python subprocess; supplemental observation outside canonical REA capture",
+      "timeout_seconds": 15,
+      "output_file_cap_bytes": 1048576,
+      "status": "timeout",
+      "exit_code": null,
+      "limitation": "subprocess.run terminates only its selected direct child; CrossOver descendants and service cleanup unverified",
+      "elapsed_seconds": 15.640727043151855,
+      "stdout": {
+        "path": "logs/runtime/fd-version.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "utf8": ""
+      },
+      "stderr": {
+        "path": "logs/runtime/fd-version.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "utf8": ""
+      }
+    },
+    {
+      "recordFile": "logs/runtime/ripgrep-version.json",
+      "target": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/ripgrep/extracted/ripgrep-15.2.0-x86_64-pc-windows-msvc/rg.exe",
+      "target_sha256": "14231169855ec5205cf5a1b6f1db358ff4aed4247c86b69ce8aae647c77f6680",
+      "arguments": ["--version"],
+      "cwd": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/tests/runtime-fixtures/tree",
+      "runtime": "CrossOver compatibility layer on macOS arm64; actual Windows OS unverified",
+      "capture": "Python subprocess; supplemental observation outside canonical REA capture",
+      "timeout_seconds": 15,
+      "output_file_cap_bytes": 1048576,
+      "status": "timeout",
+      "exit_code": null,
+      "limitation": "subprocess.run terminates only its selected direct child; CrossOver descendants and service cleanup unverified",
+      "elapsed_seconds": 15.67858624458313,
+      "stdout": {
+        "path": "logs/runtime/ripgrep-version.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "utf8": ""
+      },
+      "stderr": {
+        "path": "logs/runtime/ripgrep-version.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "utf8": ""
+      }
+    }
+  ]
+}

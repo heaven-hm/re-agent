@@ -1,0 +1,696 @@
+{
+  "inputFingerprintSha256": "1149a93058898c45175fc83e2edd23c07a5d57fc25c77126db939d0ef378cfd3",
+  "generation": "Deterministic receipt projection; wall-clock generation time omitted.",
+  "comparisonsCompleted": 31,
+  "passed": 30,
+  "failed": 1,
+  "unverified": 0,
+  "historicalComparisons": 31,
+  "historicalMeasuredPasses": 30,
+  "historicalMeasuredFailures": 1,
+  "scope": "Retained historical and run-bound measured cases, not full feature or application certification. Normalization is a separate dimension.",
+  "cases": [
+    {
+      "target": "fd",
+      "case": "all",
+      "status": "PASS",
+      "receipt": "fd/comparison.json",
+      "historicalMeasuredStatus": "PASS",
+      "historicalNormalizedSearch": "PASS",
+      "dimensions": {
+        "stdoutBytes": "PASS",
+        "stderrBytes": "PASS",
+        "exitStatus": "PASS"
+      },
+      "normalizedSearch": "PASS",
+      "candidateSha256": "7b9f84c23b27a0c10b2e2af3e4a84cf7f21e6114adfd493e46c718d122b9b4b9",
+      "originalRunId": "rea-original-2f29346e03684bdab3c056ceac4486f4",
+      "replicaRunId": "rea-replica-e6021c5eb0dd43be9805a9b2fc6ba3d5",
+      "comparisonRunId": "rea-comparison-69a9516b7d244b1c8bba7387a9558232",
+      "validationScope": "Raw streams, target/input/candidate hashes, original attempt record, and original/replica/comparison run IDs are checked. Original runs predate the checkout rename; their recorded fixture-tree hash matches the current fixture tree, and declared probes use relative roots. Path-normalized results remain separate from raw bytes.",
+      "normalizedEvidence": {
+        "originalCapture": "logs/runtime/attempts/1792001298108711000/fd-all.json",
+        "originalCaptureSha256": "9eb361af81deb442cffe370e29217b71a023eb326f219f2cbe75fbe02652759c",
+        "replicaProbeSha256": "437cde99b938757137f0e6a8a588916409571b06c7b6b669c06fe1157e7067cf",
+        "originalStdoutSha256": "60b8f32764214defcbb9588d008c5bfc531b18cb66b7ede983af8767664d6bd1",
+        "replicaStdoutSha256": "60b8f32764214defcbb9588d008c5bfc531b18cb66b7ede983af8767664d6bd1",
+        "normalization": "leading ./ prefix and Windows path separators only; record order and line endings preserved"
+      }
+    },
+    {
+      "target": "fd",
+      "case": "regex",
+      "status": "PASS",
+      "receipt": "fd/comparison.json",
+      "historicalMeasuredStatus": "PASS",
+      "historicalNormalizedSearch": "PASS",
+      "dimensions": {
+        "stdoutBytes": "PASS",
+        "stderrBytes": "PASS",
+        "exitStatus": "PASS"
+      },
+      "normalizedSearch": "PASS",
+      "candidateSha256": "7b9f84c23b27a0c10b2e2af3e4a84cf7f21e6114adfd493e46c718d122b9b4b9",
+      "originalRunId": "rea-original-1a34df393bff4f3193e98a0e8dcfcc90",
+      "replicaRunId": "rea-replica-2f4297541b2e4c5b8c581780130124fc",
+      "comparisonRunId": "rea-comparison-5f4ce20c6af642deaa60816dddf05af8",
+      "validationScope": "Raw streams, target/input/candidate hashes, original attempt record, and original/replica/comparison run IDs are checked. Original runs predate the checkout rename; their recorded fixture-tree hash matches the current fixture tree, and declared probes use relative roots. Path-normalized results remain separate from raw bytes.",
+      "normalizedEvidence": {
+        "originalCapture": "logs/runtime/attempts/1792001299392926000/fd-regex.json",
+        "originalCaptureSha256": "79dadafabb8f51ca43a08c94b80c83fd3e91ca92ae4dbd1ccfc512a09a98de84",
+        "replicaProbeSha256": "437cde99b938757137f0e6a8a588916409571b06c7b6b669c06fe1157e7067cf",
+        "originalStdoutSha256": "3eb04d61bd1e23d3422675cdb5840ae50162dde813dbf262e3e232396e443b76",
+        "replicaStdoutSha256": "3eb04d61bd1e23d3422675cdb5840ae50162dde813dbf262e3e232396e443b76",
+        "normalization": "leading ./ prefix and Windows path separators only; record order and line endings preserved"
+      }
+    },
+    {
+      "target": "fd",
+      "case": "glob",
+      "status": "PASS",
+      "receipt": "fd/comparison.json",
+      "historicalMeasuredStatus": "PASS",
+      "historicalNormalizedSearch": "PASS",
+      "dimensions": {
+        "stdoutBytes": "PASS",
+        "stderrBytes": "PASS",
+        "exitStatus": "PASS"
+      },
+      "normalizedSearch": "PASS",
+      "candidateSha256": "7b9f84c23b27a0c10b2e2af3e4a84cf7f21e6114adfd493e46c718d122b9b4b9",
+      "originalRunId": "rea-original-c74d711913494c66b3b7cfe1fe857b35",
+      "replicaRunId": "rea-replica-27a023b6db594f14969da3ff0ebc70ec",
+      "comparisonRunId": "rea-comparison-d40231cf73554bf68b7815aac84f2f5d",
+      "validationScope": "Raw streams, target/input/candidate hashes, original attempt record, and original/replica/comparison run IDs are checked. Original runs predate the checkout rename; their recorded fixture-tree hash matches the current fixture tree, and declared probes use relative roots. Path-normalized results remain separate from raw bytes.",
+      "normalizedEvidence": {
+        "originalCapture": "logs/runtime/attempts/1792001299518213000/fd-glob.json",
+        "originalCaptureSha256": "77150abf0557e932fa72ce40bd142bdd339589f1a0e69bf44c99ffd3b4cc7cf1",
+        "replicaProbeSha256": "437cde99b938757137f0e6a8a588916409571b06c7b6b669c06fe1157e7067cf",
+        "originalStdoutSha256": "290849060291987b5667d7f27fa495e56486475697febaf76cc69951ca750579",
+        "replicaStdoutSha256": "290849060291987b5667d7f27fa495e56486475697febaf76cc69951ca750579",
+        "normalization": "leading ./ prefix and Windows path separators only; record order and line endings preserved"
+      }
+    },
+    {
+      "target": "fd",
+      "case": "extension",
+      "status": "PASS",
+      "receipt": "fd/comparison.json",
+      "historicalMeasuredStatus": "PASS",
+      "historicalNormalizedSearch": "PASS",
+      "dimensions": {
+        "stdoutBytes": "PASS",
+        "stderrBytes": "PASS",
+        "exitStatus": "PASS"
+      },
+      "normalizedSearch": "PASS",
+      "candidateSha256": "7b9f84c23b27a0c10b2e2af3e4a84cf7f21e6114adfd493e46c718d122b9b4b9",
+      "originalRunId": "rea-original-efe058957a4d42188513ba3e1e7f4fe1",
+      "replicaRunId": "rea-replica-402c9af6d15d4a11b666946d1c4dcf27",
+      "comparisonRunId": "rea-comparison-aab6480d76dc417b98758e182d365e12",
+      "validationScope": "Raw streams, target/input/candidate hashes, original attempt record, and original/replica/comparison run IDs are checked. Original runs predate the checkout rename; their recorded fixture-tree hash matches the current fixture tree, and declared probes use relative roots. Path-normalized results remain separate from raw bytes.",
+      "normalizedEvidence": {
+        "originalCapture": "logs/runtime/attempts/1792001299645288000/fd-extension.json",
+        "originalCaptureSha256": "f80360eb9c78ea769f44200aa325b84718b443f23a8fd710ad875ad84619aa0d",
+        "replicaProbeSha256": "437cde99b938757137f0e6a8a588916409571b06c7b6b669c06fe1157e7067cf",
+        "originalStdoutSha256": "290849060291987b5667d7f27fa495e56486475697febaf76cc69951ca750579",
+        "replicaStdoutSha256": "290849060291987b5667d7f27fa495e56486475697febaf76cc69951ca750579",
+        "normalization": "leading ./ prefix and Windows path separators only; record order and line endings preserved"
+      }
+    },
+    {
+      "target": "fd",
+      "case": "hidden",
+      "status": "PASS",
+      "receipt": "fd/comparison.json",
+      "historicalMeasuredStatus": "PASS",
+      "historicalNormalizedSearch": "PASS",
+      "dimensions": {
+        "stdoutBytes": "PASS",
+        "stderrBytes": "PASS",
+        "exitStatus": "PASS"
+      },
+      "normalizedSearch": "PASS",
+      "candidateSha256": "7b9f84c23b27a0c10b2e2af3e4a84cf7f21e6114adfd493e46c718d122b9b4b9",
+      "originalRunId": "rea-original-f3c43dff9c3c4d178910b81f217f9cb1",
+      "replicaRunId": "rea-replica-293f1a55436247a9ad4dbdc44afbfa49",
+      "comparisonRunId": "rea-comparison-1477e863e1c14abb9fb9faad7addcc55",
+      "validationScope": "Raw streams, target/input/candidate hashes, original attempt record, and original/replica/comparison run IDs are checked. Original runs predate the checkout rename; their recorded fixture-tree hash matches the current fixture tree, and declared probes use relative roots. Path-normalized results remain separate from raw bytes.",
+      "normalizedEvidence": {
+        "originalCapture": "logs/runtime/attempts/1792001299776372000/fd-hidden.json",
+        "originalCaptureSha256": "0c9eea4a845f07752fba01dc8bc2aef193fd099b7856250529a471ddf7ff8aca",
+        "replicaProbeSha256": "437cde99b938757137f0e6a8a588916409571b06c7b6b669c06fe1157e7067cf",
+        "originalStdoutSha256": "16a6f68eeb8e3f626f5824ee3f5a359c7518a5e7481ec8bd5cacf22f32b49534",
+        "replicaStdoutSha256": "16a6f68eeb8e3f626f5824ee3f5a359c7518a5e7481ec8bd5cacf22f32b49534",
+        "normalization": "leading ./ prefix and Windows path separators only; record order and line endings preserved"
+      }
+    },
+    {
+      "target": "fd",
+      "case": "no-ignore",
+      "status": "PASS",
+      "receipt": "fd/comparison.json",
+      "historicalMeasuredStatus": "PASS",
+      "historicalNormalizedSearch": "PASS",
+      "dimensions": {
+        "stdoutBytes": "PASS",
+        "stderrBytes": "PASS",
+        "exitStatus": "PASS"
+      },
+      "normalizedSearch": "PASS",
+      "candidateSha256": "7b9f84c23b27a0c10b2e2af3e4a84cf7f21e6114adfd493e46c718d122b9b4b9",
+      "originalRunId": "rea-original-8e94cbfb804a4101bc64027942ba2eef",
+      "replicaRunId": "rea-replica-ce67b50d930a4ba3b4fe9a6b0b0aa610",
+      "comparisonRunId": "rea-comparison-e0205ad51f3d427f873a9025d08dee89",
+      "validationScope": "Raw streams, target/input/candidate hashes, original attempt record, and original/replica/comparison run IDs are checked. Original runs predate the checkout rename; their recorded fixture-tree hash matches the current fixture tree, and declared probes use relative roots. Path-normalized results remain separate from raw bytes.",
+      "normalizedEvidence": {
+        "originalCapture": "logs/runtime/attempts/1792001299910155000/fd-no-ignore.json",
+        "originalCaptureSha256": "9c5827d75c94b1c06bcf6d5ece6ea6b1345856002ac40e4267ca006c3692aeb8",
+        "replicaProbeSha256": "437cde99b938757137f0e6a8a588916409571b06c7b6b669c06fe1157e7067cf",
+        "originalStdoutSha256": "75497abab337a6c3097f06ced763acb51fa09955cd569a53c9ebcff0a641a0be",
+        "replicaStdoutSha256": "75497abab337a6c3097f06ced763acb51fa09955cd569a53c9ebcff0a641a0be",
+        "normalization": "leading ./ prefix and Windows path separators only; record order and line endings preserved"
+      }
+    },
+    {
+      "target": "fd",
+      "case": "files",
+      "status": "PASS",
+      "receipt": "fd/comparison.json",
+      "historicalMeasuredStatus": "PASS",
+      "historicalNormalizedSearch": "PASS",
+      "dimensions": {
+        "stdoutBytes": "PASS",
+        "stderrBytes": "PASS",
+        "exitStatus": "PASS"
+      },
+      "normalizedSearch": "PASS",
+      "candidateSha256": "7b9f84c23b27a0c10b2e2af3e4a84cf7f21e6114adfd493e46c718d122b9b4b9",
+      "originalRunId": "rea-original-22ac3a4745114eefacff332fdd94ae9b",
+      "replicaRunId": "rea-replica-55a326de50a7468a8a176db01c06ebac",
+      "comparisonRunId": "rea-comparison-5c864eb4924a46128d1d3b00e4fec069",
+      "validationScope": "Raw streams, target/input/candidate hashes, original attempt record, and original/replica/comparison run IDs are checked. Original runs predate the checkout rename; their recorded fixture-tree hash matches the current fixture tree, and declared probes use relative roots. Path-normalized results remain separate from raw bytes.",
+      "normalizedEvidence": {
+        "originalCapture": "logs/runtime/attempts/1792001300033219000/fd-files.json",
+        "originalCaptureSha256": "40c557d5f61a3eea5e13805bacb4ea4bb7b670460135c50027f5bff5e047d55b",
+        "replicaProbeSha256": "437cde99b938757137f0e6a8a588916409571b06c7b6b669c06fe1157e7067cf",
+        "originalStdoutSha256": "d3e417ab42d4af628827d57c4c6624d900c8a881f2d76269f602b091383ece2a",
+        "replicaStdoutSha256": "d3e417ab42d4af628827d57c4c6624d900c8a881f2d76269f602b091383ece2a",
+        "normalization": "leading ./ prefix and Windows path separators only; record order and line endings preserved"
+      },
+      "platformReason": "Wine maps the fixture symlink as a regular file; native macOS preserves it as a symlink. Raw and normalized mismatches remain visible."
+    },
+    {
+      "target": "fd",
+      "case": "directories",
+      "status": "PASS",
+      "receipt": "fd/comparison.json",
+      "historicalMeasuredStatus": "PASS",
+      "historicalNormalizedSearch": "PASS",
+      "dimensions": {
+        "stdoutBytes": "PASS",
+        "stderrBytes": "PASS",
+        "exitStatus": "PASS"
+      },
+      "normalizedSearch": "PASS",
+      "candidateSha256": "7b9f84c23b27a0c10b2e2af3e4a84cf7f21e6114adfd493e46c718d122b9b4b9",
+      "originalRunId": "rea-original-c1183f6b8857477eb760b0e2735d0bb1",
+      "replicaRunId": "rea-replica-6d95daf6807e483084dcd81630e6f0a4",
+      "comparisonRunId": "rea-comparison-6113a06587844696997f099afdae6d2b",
+      "validationScope": "Raw streams, target/input/candidate hashes, original attempt record, and original/replica/comparison run IDs are checked. Original runs predate the checkout rename; their recorded fixture-tree hash matches the current fixture tree, and declared probes use relative roots. Path-normalized results remain separate from raw bytes.",
+      "normalizedEvidence": {
+        "originalCapture": "logs/runtime/attempts/1792001300181435000/fd-directories.json",
+        "originalCaptureSha256": "5d80637c7d68552adb830a4209f67f9faf1b6f4ccee0d27107cbbb6926dad8cd",
+        "replicaProbeSha256": "437cde99b938757137f0e6a8a588916409571b06c7b6b669c06fe1157e7067cf",
+        "originalStdoutSha256": "406a61466c436d9e6f4788ea930d587a14ca29500347066513b432de58c7cafb",
+        "replicaStdoutSha256": "406a61466c436d9e6f4788ea930d587a14ca29500347066513b432de58c7cafb",
+        "normalization": "leading ./ prefix and Windows path separators only; record order and line endings preserved"
+      }
+    },
+    {
+      "target": "fd",
+      "case": "symlinks",
+      "status": "PASS",
+      "receipt": "fd/comparison.json",
+      "historicalMeasuredStatus": "PASS",
+      "historicalNormalizedSearch": "PASS",
+      "dimensions": {
+        "stdoutBytes": "PASS",
+        "stderrBytes": "PASS",
+        "exitStatus": "PASS"
+      },
+      "normalizedSearch": "PASS",
+      "candidateSha256": "7b9f84c23b27a0c10b2e2af3e4a84cf7f21e6114adfd493e46c718d122b9b4b9",
+      "originalRunId": "rea-original-0fdc8cb8909d4234a00a2e22a2eaacb5",
+      "replicaRunId": "rea-replica-c2294375adbb41a9b6df276cd2e2abae",
+      "comparisonRunId": "rea-comparison-aade2dee24d841e5a596b0211967de8c",
+      "validationScope": "Raw streams, target/input/candidate hashes, original attempt record, and original/replica/comparison run IDs are checked. Original runs predate the checkout rename; their recorded fixture-tree hash matches the current fixture tree, and declared probes use relative roots. Path-normalized results remain separate from raw bytes.",
+      "normalizedEvidence": {
+        "originalCapture": "logs/runtime/attempts/1792001300305977000/fd-symlinks.json",
+        "originalCaptureSha256": "0ab600cbadf0823e7642f6a97937824ffbbe8b74571fa83c6d7d07c380a224e7",
+        "replicaProbeSha256": "437cde99b938757137f0e6a8a588916409571b06c7b6b669c06fe1157e7067cf",
+        "originalStdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "replicaStdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "normalization": "leading ./ prefix and Windows path separators only; record order and line endings preserved"
+      },
+      "platformReason": "Wine maps the fixture symlink as a regular file; native macOS preserves it as a symlink. Raw and normalized mismatches remain visible."
+    },
+    {
+      "target": "fd",
+      "case": "depth",
+      "status": "PASS",
+      "receipt": "fd/comparison.json",
+      "historicalMeasuredStatus": "PASS",
+      "historicalNormalizedSearch": "PASS",
+      "dimensions": {
+        "stdoutBytes": "PASS",
+        "stderrBytes": "PASS",
+        "exitStatus": "PASS"
+      },
+      "normalizedSearch": "PASS",
+      "candidateSha256": "7b9f84c23b27a0c10b2e2af3e4a84cf7f21e6114adfd493e46c718d122b9b4b9",
+      "originalRunId": "rea-original-6ec0684194f541f78856ffca0abc6c48",
+      "replicaRunId": "rea-replica-6a93d93fe9954b2086f560945f1d155d",
+      "comparisonRunId": "rea-comparison-8e146fd6240f4891b34509efc0c1fd72",
+      "validationScope": "Raw streams, target/input/candidate hashes, original attempt record, and original/replica/comparison run IDs are checked. Original runs predate the checkout rename; their recorded fixture-tree hash matches the current fixture tree, and declared probes use relative roots. Path-normalized results remain separate from raw bytes.",
+      "normalizedEvidence": {
+        "originalCapture": "logs/runtime/attempts/1792001300435281000/fd-depth.json",
+        "originalCaptureSha256": "f29bc5304008beefd62315f5d3d9c33fdf0491611f3fc26a3bdec3c414fa043f",
+        "replicaProbeSha256": "437cde99b938757137f0e6a8a588916409571b06c7b6b669c06fe1157e7067cf",
+        "originalStdoutSha256": "e6a95dbc3e452916a2203087ad68ba40f6c3f4a20a1bd32f844ec78883d0f92d",
+        "replicaStdoutSha256": "e6a95dbc3e452916a2203087ad68ba40f6c3f4a20a1bd32f844ec78883d0f92d",
+        "normalization": "leading ./ prefix and Windows path separators only; record order and line endings preserved"
+      }
+    },
+    {
+      "target": "fd",
+      "case": "unicode",
+      "status": "PASS",
+      "receipt": "fd/comparison.json",
+      "historicalMeasuredStatus": "PASS",
+      "historicalNormalizedSearch": "PASS",
+      "dimensions": {
+        "stdoutBytes": "PASS",
+        "stderrBytes": "PASS",
+        "exitStatus": "PASS"
+      },
+      "normalizedSearch": "PASS",
+      "candidateSha256": "7b9f84c23b27a0c10b2e2af3e4a84cf7f21e6114adfd493e46c718d122b9b4b9",
+      "originalRunId": "rea-original-1b97ced0f6ae40cf973f87c4910dc0bc",
+      "replicaRunId": "rea-replica-fc7f42eef1264cd39df8c21972f78cae",
+      "comparisonRunId": "rea-comparison-767bf523cfad43f68ff13234526e1231",
+      "validationScope": "Raw streams, target/input/candidate hashes, original attempt record, and original/replica/comparison run IDs are checked. Original runs predate the checkout rename; their recorded fixture-tree hash matches the current fixture tree, and declared probes use relative roots. Path-normalized results remain separate from raw bytes.",
+      "normalizedEvidence": {
+        "originalCapture": "logs/runtime/attempts/1792001300565758000/fd-unicode.json",
+        "originalCaptureSha256": "59a1f37ad0286ee5f46ae79131d07766322a23e64e64473478325d5cd00a732a",
+        "replicaProbeSha256": "437cde99b938757137f0e6a8a588916409571b06c7b6b669c06fe1157e7067cf",
+        "originalStdoutSha256": "2a69824b8b952cc413ad223eb713061e100717c828685484fa556a53218e8df8",
+        "replicaStdoutSha256": "2a69824b8b952cc413ad223eb713061e100717c828685484fa556a53218e8df8",
+        "normalization": "leading ./ prefix and Windows path separators only; record order and line endings preserved"
+      }
+    },
+    {
+      "target": "fd",
+      "case": "invalid-regex",
+      "status": "PASS",
+      "receipt": "fd/comparison.json",
+      "historicalMeasuredStatus": "PASS",
+      "historicalNormalizedSearch": "NOT_APPLICABLE",
+      "dimensions": {
+        "stdoutBytes": "PASS",
+        "stderrBytes": "PASS",
+        "exitStatus": "PASS"
+      },
+      "normalizedSearch": "NOT_APPLICABLE",
+      "candidateSha256": "7b9f84c23b27a0c10b2e2af3e4a84cf7f21e6114adfd493e46c718d122b9b4b9",
+      "originalRunId": "rea-original-0260afbbfdab4104a6a81e03973c2802",
+      "replicaRunId": "rea-replica-d359286f069e4a5e889c0b3d5b5fa51f",
+      "comparisonRunId": "rea-comparison-f16481efdb4c4a8d8fd47d8bac72ebd0",
+      "validationScope": "Raw streams, target/input/candidate hashes, original attempt record, and original/replica/comparison run IDs are checked. Original runs predate the checkout rename; their recorded fixture-tree hash matches the current fixture tree, and declared probes use relative roots. Path-normalized results remain separate from raw bytes."
+    },
+    {
+      "target": "fd",
+      "case": "invalid-option",
+      "status": "PASS",
+      "receipt": "fd/comparison.json",
+      "historicalMeasuredStatus": "PASS",
+      "historicalNormalizedSearch": "NOT_APPLICABLE",
+      "dimensions": {
+        "stdoutBytes": "PASS",
+        "stderrBytes": "PASS",
+        "exitStatus": "PASS"
+      },
+      "normalizedSearch": "NOT_APPLICABLE",
+      "candidateSha256": "7b9f84c23b27a0c10b2e2af3e4a84cf7f21e6114adfd493e46c718d122b9b4b9",
+      "originalRunId": "rea-original-f1b2599bd874450696801faa8952672a",
+      "replicaRunId": "rea-replica-16c2dc607fa645a5b6c903ccdd0f1a1c",
+      "comparisonRunId": "rea-comparison-61f23a5dac194fa0883b1fb0f385e089",
+      "validationScope": "Raw streams, target/input/candidate hashes, original attempt record, and original/replica/comparison run IDs are checked. Original runs predate the checkout rename; their recorded fixture-tree hash matches the current fixture tree, and declared probes use relative roots. Path-normalized results remain separate from raw bytes."
+    },
+    {
+      "target": "fd",
+      "case": "version",
+      "status": "PASS",
+      "receipt": "fd/comparison.json",
+      "historicalMeasuredStatus": "PASS",
+      "historicalNormalizedSearch": "NOT_APPLICABLE",
+      "dimensions": {
+        "stdoutBytes": "PASS",
+        "stderrBytes": "PASS",
+        "exitStatus": "PASS"
+      },
+      "normalizedSearch": "NOT_APPLICABLE",
+      "candidateSha256": "7b9f84c23b27a0c10b2e2af3e4a84cf7f21e6114adfd493e46c718d122b9b4b9",
+      "originalRunId": "rea-original-fc4f3bf43c874f0a99d65d50d0b8f9d1",
+      "replicaRunId": "rea-replica-6ee3531959bc45eeae9769d36f0b3aed",
+      "comparisonRunId": "rea-comparison-f4cf35bdb6c84864abfe0e26928cdd56",
+      "validationScope": "Raw streams, target/input/candidate hashes, original attempt record, and original/replica/comparison run IDs are checked. Original runs predate the checkout rename; their recorded fixture-tree hash matches the current fixture tree, and declared probes use relative roots. Path-normalized results remain separate from raw bytes."
+    },
+    {
+      "target": "fd",
+      "case": "help",
+      "status": "FAIL",
+      "receipt": "fd/comparison.json",
+      "historicalMeasuredStatus": "FAIL",
+      "historicalNormalizedSearch": "NOT_APPLICABLE",
+      "dimensions": {
+        "stdoutBytes": "FAIL",
+        "stderrBytes": "PASS",
+        "exitStatus": "PASS"
+      },
+      "normalizedSearch": "NOT_APPLICABLE",
+      "candidateSha256": "7b9f84c23b27a0c10b2e2af3e4a84cf7f21e6114adfd493e46c718d122b9b4b9",
+      "originalRunId": "rea-original-fdc12e6991904d4e8b747d7b48e22525",
+      "replicaRunId": "rea-replica-b30e505dcca6465cb1e62764c914b666",
+      "comparisonRunId": "rea-comparison-8703c15509ed46e7b5ddb95851808a2a",
+      "validationScope": "Raw streams, target/input/candidate hashes, original attempt record, and original/replica/comparison run IDs are checked. Original runs predate the checkout rename; their recorded fixture-tree hash matches the current fixture tree, and declared probes use relative roots. Path-normalized results remain separate from raw bytes."
+    },
+    {
+      "target": "bat",
+      "case": "version",
+      "status": "PASS",
+      "historicalMeasuredStatus": "PASS",
+      "dimensions": {
+        "stdoutBytes": true,
+        "stderrBytes": true,
+        "exitCode": true
+      },
+      "evidenceId": "ev_eceed9df497ce8aac340f8d9d0b5615ce3ef6937827099922d064867160933ad",
+      "receipt": "bat/case-version.json",
+      "candidateSha256": "e41a5f460ef97aefad098020acd8c1ce9d91ac3896daa0528e3f8b50bbbc9116",
+      "originalRunId": "rea-original-8df9d38486454f8fb6355b97010504c3",
+      "replicaRunId": "rea-replica-863694e9d4b9400ea1635ac767c59c63",
+      "comparisonRunId": "rea-comparison-8ecf265b326c44dc9332d77fc3a85526",
+      "validationScope": "REA canonical schema/identity and retained stream commitments. PASS also requires run-ID joins and source/fixture binding."
+    },
+    {
+      "target": "bat",
+      "case": "plain",
+      "status": "PASS",
+      "historicalMeasuredStatus": "PASS",
+      "dimensions": {
+        "stdoutBytes": true,
+        "stderrBytes": true,
+        "exitCode": true
+      },
+      "evidenceId": "ev_3792498a434bb205b56300d91aa5ddf950205709dd82f354046cb32a54189b0a",
+      "receipt": "bat/case-plain.json",
+      "candidateSha256": "e41a5f460ef97aefad098020acd8c1ce9d91ac3896daa0528e3f8b50bbbc9116",
+      "originalRunId": "rea-original-66fe6e97b0b741428c84cd022a92b0b8",
+      "replicaRunId": "rea-replica-76c2911ee79c4b25987e809f363d3536",
+      "comparisonRunId": "rea-comparison-69cc53e093b14668ba788aa99d82de38",
+      "validationScope": "REA canonical schema/identity and retained stream commitments. PASS also requires run-ID joins and source/fixture binding."
+    },
+    {
+      "target": "bat",
+      "case": "crlf",
+      "status": "PASS",
+      "historicalMeasuredStatus": "PASS",
+      "dimensions": {
+        "stdoutBytes": true,
+        "stderrBytes": true,
+        "exitCode": true
+      },
+      "evidenceId": "ev_83ffcd919049d258f1bce3a5af6454efc45af09f99c285205d6476444447610c",
+      "receipt": "bat/case-crlf.json",
+      "candidateSha256": "e41a5f460ef97aefad098020acd8c1ce9d91ac3896daa0528e3f8b50bbbc9116",
+      "originalRunId": "rea-original-84166d7d2ef54f1e9ca8cfd6b6d9c7cb",
+      "replicaRunId": "rea-replica-f388923e88694f3c88ff87d28b502562",
+      "comparisonRunId": "rea-comparison-eb9d2d3bfc6b4b4e8d31883a8e5eca2a",
+      "validationScope": "REA canonical schema/identity and retained stream commitments. PASS also requires run-ID joins and source/fixture binding."
+    },
+    {
+      "target": "bat",
+      "case": "unicode",
+      "status": "PASS",
+      "historicalMeasuredStatus": "PASS",
+      "dimensions": {
+        "stdoutBytes": true,
+        "stderrBytes": true,
+        "exitCode": true
+      },
+      "evidenceId": "ev_e4e763e4ee971c240466cad659d2efc7d96ffca24f2be75f501c205be973e31a",
+      "receipt": "bat/case-unicode.json",
+      "candidateSha256": "e41a5f460ef97aefad098020acd8c1ce9d91ac3896daa0528e3f8b50bbbc9116",
+      "originalRunId": "rea-original-3dfc55c45e2c42028388febf4bdc9421",
+      "replicaRunId": "rea-replica-545e1d6602cc4011b6972665e0129bff",
+      "comparisonRunId": "rea-comparison-742b778c904645ac9169bc6fec8b8c34",
+      "validationScope": "REA canonical schema/identity and retained stream commitments. PASS also requires run-ID joins and source/fixture binding."
+    },
+    {
+      "target": "bat",
+      "case": "empty",
+      "status": "PASS",
+      "historicalMeasuredStatus": "PASS",
+      "dimensions": {
+        "stdoutBytes": true,
+        "stderrBytes": true,
+        "exitCode": true
+      },
+      "evidenceId": "ev_0540988c00618469542cd9ce242bd79c2a7f3080cc16994733017f40fbddfe7d",
+      "receipt": "bat/case-empty.json",
+      "candidateSha256": "e41a5f460ef97aefad098020acd8c1ce9d91ac3896daa0528e3f8b50bbbc9116",
+      "originalRunId": "rea-original-7dff78c6ad8e4eda867d795f250f1ddc",
+      "replicaRunId": "rea-replica-2c16aa222bb040bda4fb04432ab139e4",
+      "comparisonRunId": "rea-comparison-322f719261dd45c2a98c4e1e116759b9",
+      "validationScope": "REA canonical schema/identity and retained stream commitments. PASS also requires run-ID joins and source/fixture binding."
+    },
+    {
+      "target": "bat",
+      "case": "invalid-path",
+      "status": "PASS",
+      "historicalMeasuredStatus": "PASS",
+      "dimensions": {
+        "stdoutBytes": true,
+        "stderrBytes": true,
+        "exitCode": true
+      },
+      "evidenceId": "ev_fee1c80d311bcd6e889a7603c4bf96b7ba2ec33b7d127bbcec875dde8a936ee6",
+      "receipt": "bat/case-invalid-path.json",
+      "candidateSha256": "e41a5f460ef97aefad098020acd8c1ce9d91ac3896daa0528e3f8b50bbbc9116",
+      "originalRunId": "rea-original-190d308114a7471fb90272cffd7189c4",
+      "replicaRunId": "rea-replica-0e5284dbf42046e5b9006182354d9dc3",
+      "comparisonRunId": "rea-comparison-89c4915a08d64d9cb32c13ad63b1b29a",
+      "validationScope": "REA canonical schema/identity and retained stream commitments. PASS also requires run-ID joins and source/fixture binding."
+    },
+    {
+      "target": "bat",
+      "case": "concat",
+      "status": "PASS",
+      "historicalMeasuredStatus": "PASS",
+      "dimensions": {
+        "stdoutBytes": true,
+        "stderrBytes": true,
+        "exitCode": true
+      },
+      "evidenceId": "ev_bffa0184dab8ac109cc919071f8debda12c20315ef3c7f9e9d0af0e174db0a7b",
+      "receipt": "bat/case-concat.json",
+      "candidateSha256": "e41a5f460ef97aefad098020acd8c1ce9d91ac3896daa0528e3f8b50bbbc9116",
+      "originalRunId": "rea-original-ac553efac94449c895fe334e448d7d6c",
+      "replicaRunId": "rea-replica-2cc7332097f4413d86da650492a2309d",
+      "comparisonRunId": "rea-comparison-d471b98d17dc448cb236fe17106624d6",
+      "validationScope": "REA canonical schema/identity and retained stream commitments. PASS also requires run-ID joins and source/fixture binding."
+    },
+    {
+      "target": "bat",
+      "case": "number",
+      "status": "PASS",
+      "historicalMeasuredStatus": "PASS",
+      "dimensions": {
+        "stdoutBytes": true,
+        "stderrBytes": true,
+        "exitCode": true
+      },
+      "evidenceId": "ev_9c9074a36e2bf9f21960a8f1d35bb5c23af5ad0662966f8d1ac5fcf5d5d7fb80",
+      "receipt": "bat/case-number.json",
+      "candidateSha256": "e41a5f460ef97aefad098020acd8c1ce9d91ac3896daa0528e3f8b50bbbc9116",
+      "originalRunId": "rea-original-d54a0fda37e34d639db2a975ae6a7576",
+      "replicaRunId": "rea-replica-b1b7178daebb4af79d90c1ddf6a85297",
+      "comparisonRunId": "rea-comparison-4bd2b76ab0304ab7b6018ac6ebb30f55",
+      "validationScope": "REA canonical schema/identity and retained stream commitments. PASS also requires run-ID joins and source/fixture binding."
+    },
+    {
+      "target": "ripgrep",
+      "case": "version",
+      "status": "PASS",
+      "historicalMeasuredStatus": "PASS",
+      "dimensions": {
+        "stdoutBytes": true,
+        "stderrBytes": true,
+        "exitCode": true,
+        "stdoutAfterRelativePathSeparatorNormalization": true
+      },
+      "receipt": "ripgrep/case-version.json",
+      "evidenceId": "ev_42676f42a3dc73747c6ae7c58cc62749b3b8bd9db9973db89ee878da01885a50",
+      "candidateSha256": "9bebc344297bc9e99ddeae4500c055e23e5acae280e80d4603873efb6068f4f1",
+      "originalRunId": "rea-original-8a0192eee819400ca4e03bd8ee359feb",
+      "replicaRunId": "rea-replica-306afa90fb454350849f273f61bb4951",
+      "comparisonRunId": "rea-comparison-0ab794f5dea54b6998af4122f1d902f7",
+      "validationScope": "REA canonical Evidence, retained original streams and run identity, replica/source/binary identity, and unchanged fixture tree. Path-normalized stdout remains distinct from raw-byte equality."
+    },
+    {
+      "target": "ripgrep",
+      "case": "search",
+      "status": "PASS",
+      "historicalMeasuredStatus": "PASS",
+      "dimensions": {
+        "stdoutBytes": false,
+        "stderrBytes": true,
+        "exitCode": true,
+        "stdoutAfterRelativePathSeparatorNormalization": true
+      },
+      "receipt": "ripgrep/case-search.json",
+      "evidenceId": "ev_3008def9e6af08f568b319b2458c9b2cf7f4b0d308fc3091f105294a238b010f",
+      "candidateSha256": "9bebc344297bc9e99ddeae4500c055e23e5acae280e80d4603873efb6068f4f1",
+      "originalRunId": "rea-original-a6fabe3c5503443f8e56b68f83d171f2",
+      "replicaRunId": "rea-replica-5c669f4f0bf94c6888272df1291653f0",
+      "comparisonRunId": "rea-comparison-70c39a63527a4eaeb2a8b894a2311238",
+      "validationScope": "REA canonical Evidence, retained original streams and run identity, replica/source/binary identity, and unchanged fixture tree. Path-normalized stdout remains distinct from raw-byte equality."
+    },
+    {
+      "target": "ripgrep",
+      "case": "number",
+      "status": "PASS",
+      "historicalMeasuredStatus": "PASS",
+      "dimensions": {
+        "stdoutBytes": false,
+        "stderrBytes": true,
+        "exitCode": true,
+        "stdoutAfterRelativePathSeparatorNormalization": true
+      },
+      "receipt": "ripgrep/case-number.json",
+      "evidenceId": "ev_6103b4f16ad1b0730d1755a9fb6d784e5e7f0727d3c7353460edd4a15fffa60a",
+      "candidateSha256": "9bebc344297bc9e99ddeae4500c055e23e5acae280e80d4603873efb6068f4f1",
+      "originalRunId": "rea-original-0045d395ed9b4b6dab1817f506c5d434",
+      "replicaRunId": "rea-replica-d3b84ed803db45cbb2780431716c5042",
+      "comparisonRunId": "rea-comparison-003618e14aed41baa5b6961f7b946eee",
+      "validationScope": "REA canonical Evidence, retained original streams and run identity, replica/source/binary identity, and unchanged fixture tree. Path-normalized stdout remains distinct from raw-byte equality."
+    },
+    {
+      "target": "ripgrep",
+      "case": "ignorecase",
+      "status": "PASS",
+      "historicalMeasuredStatus": "PASS",
+      "dimensions": {
+        "stdoutBytes": false,
+        "stderrBytes": true,
+        "exitCode": true,
+        "stdoutAfterRelativePathSeparatorNormalization": true
+      },
+      "receipt": "ripgrep/case-ignorecase.json",
+      "evidenceId": "ev_1b831a383c4969b6dc4acdfeb4751feb96445aac056614a1216ff5289ad2c582",
+      "candidateSha256": "9bebc344297bc9e99ddeae4500c055e23e5acae280e80d4603873efb6068f4f1",
+      "originalRunId": "rea-original-22c515c301eb440d842e613458227823",
+      "replicaRunId": "rea-replica-d35e042a23d641d485de9920870e0cea",
+      "comparisonRunId": "rea-comparison-dd6732cb050947a5b0c3aa059ea32c1b",
+      "validationScope": "REA canonical Evidence, retained original streams and run identity, replica/source/binary identity, and unchanged fixture tree. Path-normalized stdout remains distinct from raw-byte equality."
+    },
+    {
+      "target": "ripgrep",
+      "case": "fixed",
+      "status": "PASS",
+      "historicalMeasuredStatus": "PASS",
+      "dimensions": {
+        "stdoutBytes": false,
+        "stderrBytes": true,
+        "exitCode": true,
+        "stdoutAfterRelativePathSeparatorNormalization": true
+      },
+      "receipt": "ripgrep/case-fixed.json",
+      "evidenceId": "ev_61177c98a07a8853de8c8f52bfa49e97c258ec5685c0456056bd4ee721afa3ee",
+      "candidateSha256": "9bebc344297bc9e99ddeae4500c055e23e5acae280e80d4603873efb6068f4f1",
+      "originalRunId": "rea-original-a88880fec3404906aa68d59170007c20",
+      "replicaRunId": "rea-replica-214ab2e86da443f389070585f9f1f791",
+      "comparisonRunId": "rea-comparison-e6174a5c9670471399657cf4e8164153",
+      "validationScope": "REA canonical Evidence, retained original streams and run identity, replica/source/binary identity, and unchanged fixture tree. Path-normalized stdout remains distinct from raw-byte equality."
+    },
+    {
+      "target": "ripgrep",
+      "case": "hidden",
+      "status": "PASS",
+      "historicalMeasuredStatus": "PASS",
+      "dimensions": {
+        "stdoutBytes": false,
+        "stderrBytes": true,
+        "exitCode": true,
+        "stdoutAfterRelativePathSeparatorNormalization": true
+      },
+      "receipt": "ripgrep/case-hidden.json",
+      "evidenceId": "ev_6a6bf52be25961b8598468c2dec7fe2b3e42f8767364cdf5fea5700d6cd333bf",
+      "candidateSha256": "9bebc344297bc9e99ddeae4500c055e23e5acae280e80d4603873efb6068f4f1",
+      "originalRunId": "rea-original-ae0cc9bdc04049198dbf025e3644a75b",
+      "replicaRunId": "rea-replica-58116acb8ab042de83e2fc9d42721619",
+      "comparisonRunId": "rea-comparison-17a4a8d9291743f8a18eff1d06f0f1e5",
+      "validationScope": "REA canonical Evidence, retained original streams and run identity, replica/source/binary identity, and unchanged fixture tree. Path-normalized stdout remains distinct from raw-byte equality."
+    },
+    {
+      "target": "ripgrep",
+      "case": "no-ignore",
+      "status": "PASS",
+      "historicalMeasuredStatus": "PASS",
+      "dimensions": {
+        "stdoutBytes": false,
+        "stderrBytes": true,
+        "exitCode": true,
+        "stdoutAfterRelativePathSeparatorNormalization": true
+      },
+      "receipt": "ripgrep/case-no-ignore.json",
+      "evidenceId": "ev_17253ec219c62cd802acbc8ffa16419fa9b535edac8edd84fed8d3d276590907",
+      "candidateSha256": "9bebc344297bc9e99ddeae4500c055e23e5acae280e80d4603873efb6068f4f1",
+      "originalRunId": "rea-original-6e1dc184a72347398129a2ee6faf436f",
+      "replicaRunId": "rea-replica-be4963dd9a75410f99f7198d5da6039a",
+      "comparisonRunId": "rea-comparison-d2911d722cd244699336ab5d0992ee14",
+      "validationScope": "REA canonical Evidence, retained original streams and run identity, replica/source/binary identity, and unchanged fixture tree. Path-normalized stdout remains distinct from raw-byte equality."
+    },
+    {
+      "target": "ripgrep",
+      "case": "invalid-regex",
+      "status": "PASS",
+      "historicalMeasuredStatus": "PASS",
+      "dimensions": {
+        "stdoutBytes": true,
+        "stderrBytes": true,
+        "exitCode": true,
+        "stdoutAfterRelativePathSeparatorNormalization": true
+      },
+      "receipt": "ripgrep/case-invalid-regex.json",
+      "evidenceId": "ev_2af96d24d599708a32c84eddb340d1ea6d6521e8c6918d2a1c32524db3bdd15e",
+      "candidateSha256": "9bebc344297bc9e99ddeae4500c055e23e5acae280e80d4603873efb6068f4f1",
+      "originalRunId": "rea-original-92fffe66539541649b92d20b8a69cfec",
+      "replicaRunId": "rea-replica-ec6e8060119f4be292a1dc4f6a9ac7aa",
+      "comparisonRunId": "rea-comparison-fce17eb382304b7689cac00e214c57f0",
+      "validationScope": "REA canonical Evidence, retained original streams and run identity, replica/source/binary identity, and unchanged fixture tree. Path-normalized stdout remains distinct from raw-byte equality."
+    }
+  ],
+  "unverifiedWholeApplications": [
+    "fd",
+    "ripgrep",
+    "bat",
+    "openlierox",
+    "supertux",
+    "powder-toy"
+  ],
+  "heldoutStatus": "UNVERIFIED",
+  "validationFailures": [],
+  "universalEquivalence": false
+}

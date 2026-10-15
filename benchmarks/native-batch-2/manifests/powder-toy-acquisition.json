@@ -1,0 +1,136 @@
+{
+  "target": "powder-toy",
+  "version": "v100.1.400",
+  "download_url": "https://github.com/The-Powder-Toy/The-Powder-Toy/releases/download/v100.1.400/powder-v100.1.400-x86_64-windows-mingw.exe",
+  "started_utc": "2026-10-13T22:24:40.015320+00:00",
+  "status": "PASS",
+  "release_url": "https://github.com/The-Powder-Toy/The-Powder-Toy/releases/tag/v100.1.400",
+  "publisher_digest": "sha256:df32b616b31dabae10b82028731ebdfd6867c872198b81f29d418cbafbf460c3",
+  "archive_sha256": "df32b616b31dabae10b82028731ebdfd6867c872198b81f29d418cbafbf460c3",
+  "archive_bytes": 8690342,
+  "publisher_digest_verified": true,
+  "executables": [
+    {
+      "path": "originals/powder-toy/powder-v100.1.400-x86_64-windows-mingw.exe",
+      "sha256": "df32b616b31dabae10b82028731ebdfd6867c872198b81f29d418cbafbf460c3",
+      "bytes": 8690342,
+      "format": "PE32+",
+      "machine": "0x8664",
+      "architecture": "x86_64",
+      "image_base": "0x140000000",
+      "entry_rva": "0x1470",
+      "clr_directory": [0, 0],
+      "imports": [
+        "ADVAPI32.dll",
+        "bcrypt.dll",
+        "CRYPT32.dll",
+        "dbghelp.dll",
+        "GDI32.dll",
+        "IMM32.dll",
+        "KERNEL32.dll",
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-environment-l1-1-0.dll",
+        "api-ms-win-crt-filesystem-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-locale-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-private-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-time-l1-1-0.dll",
+        "api-ms-win-crt-utility-l1-1-0.dll",
+        "ole32.dll",
+        "OLEAUT32.dll",
+        "SHELL32.dll",
+        "USER32.dll",
+        "VERSION.dll",
+        "WINMM.dll",
+        "WS2_32.dll",
+        "WSOCK32.dll"
+      ],
+      "sections": [
+        {
+          "name": ".text",
+          "rva": 4096,
+          "virtual_bytes": 6994976,
+          "file_offset": 1024,
+          "file_bytes": 6995456
+        },
+        {
+          "name": ".data",
+          "rva": 7000064,
+          "virtual_bytes": 128608,
+          "file_offset": 6996480,
+          "file_bytes": 129024
+        },
+        {
+          "name": ".rdata",
+          "rva": 7131136,
+          "virtual_bytes": 889784,
+          "file_offset": 7125504,
+          "file_bytes": 889856
+        },
+        {
+          "name": ".pdata",
+          "rva": 8024064,
+          "virtual_bytes": 190152,
+          "file_offset": 8015360,
+          "file_bytes": 190464
+        },
+        {
+          "name": ".xdata",
+          "rva": 8216576,
+          "virtual_bytes": 307924,
+          "file_offset": 8205824,
+          "file_bytes": 308224
+        },
+        {
+          "name": ".bss",
+          "rva": 8527872,
+          "virtual_bytes": 183608,
+          "file_offset": 0,
+          "file_bytes": 0
+        },
+        {
+          "name": ".idata",
+          "rva": 8712192,
+          "virtual_bytes": 22532,
+          "file_offset": 8514048,
+          "file_bytes": 23040
+        },
+        {
+          "name": ".tls",
+          "rva": 8736768,
+          "virtual_bytes": 864,
+          "file_offset": 8537088,
+          "file_bytes": 1024
+        },
+        {
+          "name": ".rsrc",
+          "rva": 8740864,
+          "virtual_bytes": 100616,
+          "file_offset": 8538112,
+          "file_bytes": 100864
+        },
+        {
+          "name": ".reloc",
+          "rva": 8843264,
+          "virtual_bytes": 26028,
+          "file_offset": 8638976,
+          "file_bytes": 26112
+        },
+        {
+          "name": "/4",
+          "rva": 8871936,
+          "virtual_bytes": 16,
+          "file_offset": 8665088,
+          "file_bytes": 512
+        }
+      ]
+    }
+  ],
+  "bundled_dlls": [],
+  "license_notice_files": [],
+  "duration_seconds": 0.9296298749977723
+}

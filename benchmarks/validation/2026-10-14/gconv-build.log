@@ -1,0 +1,7 @@
+$ sh benchmarks/native-windows-ports/gconv/replica/build.sh
+exit_code=0
+
+[stdout]
+/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-windows-ports/gconv/replica/build/qvmtool: Mach-O 64-bit executable arm64
+
+[stderr]

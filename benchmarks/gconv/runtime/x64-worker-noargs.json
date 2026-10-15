@@ -1,0 +1,10 @@
+{
+  "status": "timeout",
+  "wrapper_exit_code": null,
+  "arguments": [],
+  "runtime": "CrossOver64bitworker32bit PE Wow64 compatibility, actualWindows unverified",
+  "streams": {
+    "stdout": "",
+    "stderr": "2026-10-14 14:03:49.821 gconv.exe[62921:6933023] +[IMKClient subclass]: chose IMKClient_Modern\n"
+  }
+}

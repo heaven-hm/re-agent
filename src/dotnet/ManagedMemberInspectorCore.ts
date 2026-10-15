@@ -49,6 +49,35 @@ export interface TypeRange {
   readonly methodEnd: number;
 }
 
+export type ManagedMemberTable = "field" | "method";
+
+/** Return the first TypeDef whose observed metadata range owns this row. */
+export const declaringType = (
+  ranges: readonly TypeRange[],
+  table: ManagedMemberTable,
+  row: number,
+): Pick<TypeRange, "token" | "fullName"> | null => {
+  if (!Number.isSafeInteger(row) || row < 1) return null;
+  const startKey = table === "field" ? "fieldStart" : "methodStart";
+  const endKey = table === "field" ? "fieldEnd" : "methodEnd";
+  for (const range of ranges) {
+    const start = range[startKey];
+    const end = range[endKey];
+    if (start <= row && row < end)
+      return { token: range.token, fullName: range.fullName };
+  }
+  return null;
+};
+
+/** Build an immutable row lookup while preserving the input's first-match ownership. */
+export const createDeclaringTypeLookup =
+  (
+    ranges: readonly TypeRange[],
+    table: ManagedMemberTable,
+  ): ((row: number) => Pick<TypeRange, "token" | "fullName"> | null) =>
+  (row) =>
+    declaringType(ranges, table, row);
+
 export interface MethodCore {
   readonly token: string;
   readonly name: string;

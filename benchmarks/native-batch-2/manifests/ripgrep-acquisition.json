@@ -1,0 +1,93 @@
+{
+  "target": "ripgrep",
+  "version": "15.2.0",
+  "download_url": "https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15.2.0-x86_64-pc-windows-msvc.zip",
+  "started_utc": "2026-10-13T22:24:01.676236+00:00",
+  "status": "PASS",
+  "release_url": "https://github.com/BurntSushi/ripgrep/releases/tag/15.2.0",
+  "publisher_digest": "sha256:71b2fef860abe467217a538ff31de02f5258807c0129f771846f87bd029aafc5",
+  "archive_sha256": "71b2fef860abe467217a538ff31de02f5258807c0129f771846f87bd029aafc5",
+  "archive_bytes": 1789611,
+  "publisher_digest_verified": true,
+  "archive_entries": 16,
+  "asset_extraction": "complete",
+  "executables": [
+    {
+      "path": "originals/ripgrep/extracted/ripgrep-15.2.0-x86_64-pc-windows-msvc/rg.exe",
+      "sha256": "14231169855ec5205cf5a1b6f1db358ff4aed4247c86b69ce8aae647c77f6680",
+      "bytes": 4218880,
+      "format": "PE32+",
+      "machine": "0x8664",
+      "architecture": "x86_64",
+      "image_base": "0x140000000",
+      "entry_rva": "0x2c8540",
+      "clr_directory": [0, 0],
+      "imports": [
+        "kernel32.dll",
+        "ntdll.dll",
+        "api-ms-win-core-synch-l1-2-0.dll",
+        "bcryptprimitives.dll",
+        "KERNEL32.dll",
+        "USERENV.dll"
+      ],
+      "sections": [
+        {
+          "name": ".text",
+          "rva": 4096,
+          "virtual_bytes": 3035856,
+          "file_offset": 1024,
+          "file_bytes": 3036160
+        },
+        {
+          "name": ".rdata",
+          "rva": 3043328,
+          "virtual_bytes": 1104330,
+          "file_offset": 3037184,
+          "file_bytes": 1104384
+        },
+        {
+          "name": ".data",
+          "rva": 4149248,
+          "virtual_bytes": 7020,
+          "file_offset": 4141568,
+          "file_bytes": 4096
+        },
+        {
+          "name": ".pdata",
+          "rva": 4157440,
+          "virtual_bytes": 43416,
+          "file_offset": 4145664,
+          "file_bytes": 43520
+        },
+        {
+          "name": ".fptable",
+          "rva": 4202496,
+          "virtual_bytes": 256,
+          "file_offset": 4189184,
+          "file_bytes": 512
+        },
+        {
+          "name": ".rsrc",
+          "rva": 4206592,
+          "virtual_bytes": 1808,
+          "file_offset": 4189696,
+          "file_bytes": 2048
+        },
+        {
+          "name": ".reloc",
+          "rva": 4210688,
+          "virtual_bytes": 26648,
+          "file_offset": 4191744,
+          "file_bytes": 27136
+        }
+      ]
+    }
+  ],
+  "bundled_dlls": [],
+  "license_notice_files": [
+    "originals/ripgrep/extracted/ripgrep-15.2.0-x86_64-pc-windows-msvc/COPYING",
+    "originals/ripgrep/extracted/ripgrep-15.2.0-x86_64-pc-windows-msvc/UNLICENSE",
+    "originals/ripgrep/extracted/ripgrep-15.2.0-x86_64-pc-windows-msvc/LICENSE-MIT"
+  ],
+  "duration_seconds": 0.6556957909779157
+}

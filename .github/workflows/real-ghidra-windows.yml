@@ -42,7 +42,9 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs: native-artifact
     environment: real-ghidra-windows
-    runs-on: [self-hosted, Windows, x64, ghidra-12-1-2]
+    # The verifier enforces the exact 12.1.4 bridge baseline. Avoid a runner
+    # label that names the separate 12.1.2 preview archive.
+    runs-on: [self-hosted, Windows, x64]
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4

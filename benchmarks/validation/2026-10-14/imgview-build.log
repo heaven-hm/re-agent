@@ -1,0 +1,13 @@
+$ sh benchmarks/native-windows-ports/imgview/replica/build.sh
+exit_code=0
+
+[stdout]
+
+[stderr]
+main.swift:34:34: warning: immutable value 'rep' was never used; consider replacing with '_' or removing it
+ 32 |     }
+ 33 |     override func mouseMoved(with e: NSEvent) {
+ 34 |         guard let img = img, let rep = img.representations.first else { return }
+    |                                  `- warning: immutable value 'rep' was never used; consider replacing with '_' or removing it
+ 35 |         let lx = Int((e.locationInWindow.x - frame.origin.x - pan.x) / zoom)
+ 36 |         let ly = Int((e.locationInWindow.y - frame.origin.y - pan.y) / zoom)

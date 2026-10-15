@@ -1,0 +1,23 @@
+$ sh benchmarks/native-windows-ports/pixeltetris/replica/build.sh
+exit_code=0
+
+[stdout]
+/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-windows-ports/pixeltetris/replica/build/pixelmac: Mach-O 64-bit executable arm64
+
+[stderr]
+/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-windows-ports/pixeltetris/replica/pixelmac.c:32:18: warning: unused variable 'SHAPES' [-Wunused-const-variable]
+   32 | static const int SHAPES[7][4][4][4] = {
+      |                  ^~~~~~
+/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-windows-ports/pixeltetris/replica/pixelmac.c:36:18: warning: unused variable 'BASE' [-Wunused-const-variable]
+   36 | static const int BASE[7][4][2] = {{0}};
+      |                  ^~~~
+/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-windows-ports/pixeltetris/replica/pixelmac.c:37:65: warning: unused variable 'ghost_y' [-Wunused-variable]
+   37 | static int bag[7], bag_n, px, py, prot, ptype, hold, hold_used, ghost_y;
+      |                                                                 ^~~~~~~
+/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-windows-ports/pixeltetris/replica/pixelmac.c:38:12: warning: unused variable 'next_q' [-Wunused-variable]
+   38 | static int next_q[3];
+      |            ^~~~~~
+/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-windows-ports/pixeltetris/replica/pixelmac.c:60:18: warning: unused variable 'ORDER' [-Wunused-const-variable]
+   60 | static const int ORDER[7] = {5, 1, 2, 3, 6, 4, 0}; /* display order guess */
+      |                  ^~~~~
+5 warnings generated.

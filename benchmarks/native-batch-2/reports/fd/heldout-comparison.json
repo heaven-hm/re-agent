@@ -1,0 +1,414 @@
+{
+  "schema": "rea.fd-heldout-comparison.v1",
+  "seed": 34001,
+  "generatedFiles": 24,
+  "universalEquivalence": false,
+  "status": "UNVERIFIED",
+  "scope": "Ten declared search probes on a separately generated seeded tree; raw output and path/order normalized comparisons are separate.",
+  "sourceSha256": "17372f673c6109cd756a1b1c51058cb04e41c19b3e27858b4f89168f878654cd",
+  "replicaSha256": "91332a6075aeb5acc7a3be95a8200fbac071fb7f85514b3488e245a3533fc8b9",
+  "cases": [
+    {
+      "id": "all",
+      "status": "UNVERIFIED",
+      "reason": "positive-search original baseline did not complete successfully",
+      "original": {
+        "target": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+        "target_sha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+        "arguments": ["--color", "never", "--threads", "1", ".", "."],
+        "cwd": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/tests/fd-heldout-tree",
+        "runtime": "CrossOver compatibility layer on macOS arm64; actual Windows OS unverified",
+        "capture": "Python subprocess; supplemental observation outside canonical REA capture",
+        "timeout_seconds": 15,
+        "output_file_cap_bytes": 1048576,
+        "worker_root": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/.runtime-workers",
+        "worker_bottle": "rea-native-x64",
+        "status": "runtime_failed",
+        "exit_code": null,
+        "elapsed_seconds": 1.0004141330718994,
+        "stdout": {
+          "path": "logs/runtime/fd-heldout-all.stdout.bin",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        },
+        "stderr": {
+          "path": "logs/runtime/fd-heldout-all.stderr.bin",
+          "bytes": 79,
+          "sha256": "75aa685d109894ad7d95f29e36283984c0ce8b8506f4675cbc5ee726a0aae95b",
+          "utf8": "wineserver crashed, please enable coredumps (ulimit -c unlimited) and restart.\n"
+        },
+        "wrapper_exit_code": 0,
+        "target_observation_valid": false,
+        "reason": "Compatibility worker wineserver crashed; wrapper exit is not target success"
+      }
+    },
+    {
+      "id": "logs",
+      "status": "UNVERIFIED",
+      "reason": "positive-search original baseline did not complete successfully",
+      "original": {
+        "target": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+        "target_sha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+        "arguments": [
+          "--color",
+          "never",
+          "--threads",
+          "1",
+          "--glob",
+          "*.log",
+          "."
+        ],
+        "cwd": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/tests/fd-heldout-tree",
+        "runtime": "CrossOver compatibility layer on macOS arm64; actual Windows OS unverified",
+        "capture": "Python subprocess; supplemental observation outside canonical REA capture",
+        "timeout_seconds": 15,
+        "output_file_cap_bytes": 1048576,
+        "worker_root": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/.runtime-workers",
+        "worker_bottle": "rea-native-x64",
+        "status": "runtime_failed",
+        "exit_code": null,
+        "elapsed_seconds": 0.2703518867492676,
+        "stdout": {
+          "path": "logs/runtime/fd-heldout-logs.stdout.bin",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        },
+        "stderr": {
+          "path": "logs/runtime/fd-heldout-logs.stderr.bin",
+          "bytes": 79,
+          "sha256": "75aa685d109894ad7d95f29e36283984c0ce8b8506f4675cbc5ee726a0aae95b",
+          "utf8": "wineserver crashed, please enable coredumps (ulimit -c unlimited) and restart.\n"
+        },
+        "wrapper_exit_code": 0,
+        "target_observation_valid": false,
+        "reason": "Compatibility worker wineserver crashed; wrapper exit is not target success"
+      }
+    },
+    {
+      "id": "binary",
+      "status": "UNVERIFIED",
+      "reason": "positive-search original baseline did not complete successfully",
+      "original": {
+        "target": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+        "target_sha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+        "arguments": [
+          "--color",
+          "never",
+          "--threads",
+          "1",
+          "-e",
+          "bin",
+          ".",
+          "."
+        ],
+        "cwd": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/tests/fd-heldout-tree",
+        "runtime": "CrossOver compatibility layer on macOS arm64; actual Windows OS unverified",
+        "capture": "Python subprocess; supplemental observation outside canonical REA capture",
+        "timeout_seconds": 15,
+        "output_file_cap_bytes": 1048576,
+        "worker_root": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/.runtime-workers",
+        "worker_bottle": "rea-native-x64",
+        "status": "runtime_failed",
+        "exit_code": null,
+        "elapsed_seconds": 0.2410266399383545,
+        "stdout": {
+          "path": "logs/runtime/fd-heldout-binary.stdout.bin",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        },
+        "stderr": {
+          "path": "logs/runtime/fd-heldout-binary.stderr.bin",
+          "bytes": 79,
+          "sha256": "75aa685d109894ad7d95f29e36283984c0ce8b8506f4675cbc5ee726a0aae95b",
+          "utf8": "wineserver crashed, please enable coredumps (ulimit -c unlimited) and restart.\n"
+        },
+        "wrapper_exit_code": 0,
+        "target_observation_valid": false,
+        "reason": "Compatibility worker wineserver crashed; wrapper exit is not target success"
+      }
+    },
+    {
+      "id": "depth-two",
+      "status": "UNVERIFIED",
+      "reason": "positive-search original baseline did not complete successfully",
+      "original": {
+        "target": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+        "target_sha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+        "arguments": [
+          "--color",
+          "never",
+          "--threads",
+          "1",
+          "--max-depth",
+          "2",
+          ".",
+          "."
+        ],
+        "cwd": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/tests/fd-heldout-tree",
+        "runtime": "CrossOver compatibility layer on macOS arm64; actual Windows OS unverified",
+        "capture": "Python subprocess; supplemental observation outside canonical REA capture",
+        "timeout_seconds": 15,
+        "output_file_cap_bytes": 1048576,
+        "worker_root": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/.runtime-workers",
+        "worker_bottle": "rea-native-x64",
+        "status": "runtime_failed",
+        "exit_code": null,
+        "elapsed_seconds": 0.22654390335083008,
+        "stdout": {
+          "path": "logs/runtime/fd-heldout-depth-two.stdout.bin",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        },
+        "stderr": {
+          "path": "logs/runtime/fd-heldout-depth-two.stderr.bin",
+          "bytes": 79,
+          "sha256": "75aa685d109894ad7d95f29e36283984c0ce8b8506f4675cbc5ee726a0aae95b",
+          "utf8": "wineserver crashed, please enable coredumps (ulimit -c unlimited) and restart.\n"
+        },
+        "wrapper_exit_code": 0,
+        "target_observation_valid": false,
+        "reason": "Compatibility worker wineserver crashed; wrapper exit is not target success"
+      }
+    },
+    {
+      "id": "hidden",
+      "status": "UNVERIFIED",
+      "reason": "positive-search original baseline did not complete successfully",
+      "original": {
+        "target": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+        "target_sha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+        "arguments": [
+          "--color",
+          "never",
+          "--threads",
+          "1",
+          "--hidden",
+          ".",
+          "."
+        ],
+        "cwd": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/tests/fd-heldout-tree",
+        "runtime": "CrossOver compatibility layer on macOS arm64; actual Windows OS unverified",
+        "capture": "Python subprocess; supplemental observation outside canonical REA capture",
+        "timeout_seconds": 15,
+        "output_file_cap_bytes": 1048576,
+        "worker_root": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/.runtime-workers",
+        "worker_bottle": "rea-native-x64",
+        "status": "runtime_failed",
+        "exit_code": null,
+        "elapsed_seconds": 0.23865318298339844,
+        "stdout": {
+          "path": "logs/runtime/fd-heldout-hidden.stdout.bin",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        },
+        "stderr": {
+          "path": "logs/runtime/fd-heldout-hidden.stderr.bin",
+          "bytes": 79,
+          "sha256": "75aa685d109894ad7d95f29e36283984c0ce8b8506f4675cbc5ee726a0aae95b",
+          "utf8": "wineserver crashed, please enable coredumps (ulimit -c unlimited) and restart.\n"
+        },
+        "wrapper_exit_code": 0,
+        "target_observation_valid": false,
+        "reason": "Compatibility worker wineserver crashed; wrapper exit is not target success"
+      }
+    },
+    {
+      "id": "sensitive",
+      "status": "UNVERIFIED",
+      "reason": "positive-search original baseline did not complete successfully",
+      "original": {
+        "target": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+        "target_sha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+        "arguments": ["--color", "never", "--threads", "1", "-s", "NODE", "."],
+        "cwd": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/tests/fd-heldout-tree",
+        "runtime": "CrossOver compatibility layer on macOS arm64; actual Windows OS unverified",
+        "capture": "Python subprocess; supplemental observation outside canonical REA capture",
+        "timeout_seconds": 15,
+        "output_file_cap_bytes": 1048576,
+        "worker_root": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/.runtime-workers",
+        "worker_bottle": "rea-native-x64",
+        "status": "runtime_failed",
+        "exit_code": null,
+        "elapsed_seconds": 0.2350139617919922,
+        "stdout": {
+          "path": "logs/runtime/fd-heldout-sensitive.stdout.bin",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        },
+        "stderr": {
+          "path": "logs/runtime/fd-heldout-sensitive.stderr.bin",
+          "bytes": 79,
+          "sha256": "75aa685d109894ad7d95f29e36283984c0ce8b8506f4675cbc5ee726a0aae95b",
+          "utf8": "wineserver crashed, please enable coredumps (ulimit -c unlimited) and restart.\n"
+        },
+        "wrapper_exit_code": 0,
+        "target_observation_valid": false,
+        "reason": "Compatibility worker wineserver crashed; wrapper exit is not target success"
+      }
+    },
+    {
+      "id": "insensitive",
+      "status": "UNVERIFIED",
+      "reason": "positive-search original baseline did not complete successfully",
+      "original": {
+        "target": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+        "target_sha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+        "arguments": ["--color", "never", "--threads", "1", "-i", "NODE", "."],
+        "cwd": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/tests/fd-heldout-tree",
+        "runtime": "CrossOver compatibility layer on macOS arm64; actual Windows OS unverified",
+        "capture": "Python subprocess; supplemental observation outside canonical REA capture",
+        "timeout_seconds": 15,
+        "output_file_cap_bytes": 1048576,
+        "worker_root": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/.runtime-workers",
+        "worker_bottle": "rea-native-x64",
+        "status": "runtime_failed",
+        "exit_code": null,
+        "elapsed_seconds": 0.2399909496307373,
+        "stdout": {
+          "path": "logs/runtime/fd-heldout-insensitive.stdout.bin",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        },
+        "stderr": {
+          "path": "logs/runtime/fd-heldout-insensitive.stderr.bin",
+          "bytes": 79,
+          "sha256": "75aa685d109894ad7d95f29e36283984c0ce8b8506f4675cbc5ee726a0aae95b",
+          "utf8": "wineserver crashed, please enable coredumps (ulimit -c unlimited) and restart.\n"
+        },
+        "wrapper_exit_code": 0,
+        "target_observation_valid": false,
+        "reason": "Compatibility worker wineserver crashed; wrapper exit is not target success"
+      }
+    },
+    {
+      "id": "regex",
+      "status": "UNVERIFIED",
+      "reason": "positive-search original baseline did not complete successfully",
+      "original": {
+        "target": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+        "target_sha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+        "arguments": [
+          "--color",
+          "never",
+          "--threads",
+          "1",
+          "node[0-9a-f]+",
+          "."
+        ],
+        "cwd": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/tests/fd-heldout-tree",
+        "runtime": "CrossOver compatibility layer on macOS arm64; actual Windows OS unverified",
+        "capture": "Python subprocess; supplemental observation outside canonical REA capture",
+        "timeout_seconds": 15,
+        "output_file_cap_bytes": 1048576,
+        "worker_root": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/.runtime-workers",
+        "worker_bottle": "rea-native-x64",
+        "status": "runtime_failed",
+        "exit_code": null,
+        "elapsed_seconds": 0.25211596488952637,
+        "stdout": {
+          "path": "logs/runtime/fd-heldout-regex.stdout.bin",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        },
+        "stderr": {
+          "path": "logs/runtime/fd-heldout-regex.stderr.bin",
+          "bytes": 79,
+          "sha256": "75aa685d109894ad7d95f29e36283984c0ce8b8506f4675cbc5ee726a0aae95b",
+          "utf8": "wineserver crashed, please enable coredumps (ulimit -c unlimited) and restart.\n"
+        },
+        "wrapper_exit_code": 0,
+        "target_observation_valid": false,
+        "reason": "Compatibility worker wineserver crashed; wrapper exit is not target success"
+      }
+    },
+    {
+      "id": "unicode",
+      "status": "UNVERIFIED",
+      "reason": "positive-search original baseline did not complete successfully",
+      "original": {
+        "target": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+        "target_sha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+        "arguments": ["--color", "never", "--threads", "1", "café", "."],
+        "cwd": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/tests/fd-heldout-tree",
+        "runtime": "CrossOver compatibility layer on macOS arm64; actual Windows OS unverified",
+        "capture": "Python subprocess; supplemental observation outside canonical REA capture",
+        "timeout_seconds": 15,
+        "output_file_cap_bytes": 1048576,
+        "worker_root": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/.runtime-workers",
+        "worker_bottle": "rea-native-x64",
+        "status": "runtime_failed",
+        "exit_code": null,
+        "elapsed_seconds": 0.20329976081848145,
+        "stdout": {
+          "path": "logs/runtime/fd-heldout-unicode.stdout.bin",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        },
+        "stderr": {
+          "path": "logs/runtime/fd-heldout-unicode.stderr.bin",
+          "bytes": 79,
+          "sha256": "75aa685d109894ad7d95f29e36283984c0ce8b8506f4675cbc5ee726a0aae95b",
+          "utf8": "wineserver crashed, please enable coredumps (ulimit -c unlimited) and restart.\n"
+        },
+        "wrapper_exit_code": 0,
+        "target_observation_valid": false,
+        "reason": "Compatibility worker wineserver crashed; wrapper exit is not target success"
+      }
+    },
+    {
+      "id": "directories",
+      "status": "UNVERIFIED",
+      "reason": "positive-search original baseline did not complete successfully",
+      "original": {
+        "target": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+        "target_sha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+        "arguments": [
+          "--color",
+          "never",
+          "--threads",
+          "1",
+          "--type",
+          "d",
+          ".",
+          "."
+        ],
+        "cwd": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/tests/fd-heldout-tree",
+        "runtime": "CrossOver compatibility layer on macOS arm64; actual Windows OS unverified",
+        "capture": "Python subprocess; supplemental observation outside canonical REA capture",
+        "timeout_seconds": 15,
+        "output_file_cap_bytes": 1048576,
+        "worker_root": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/.runtime-workers",
+        "worker_bottle": "rea-native-x64",
+        "status": "runtime_failed",
+        "exit_code": null,
+        "elapsed_seconds": 0.23490691184997559,
+        "stdout": {
+          "path": "logs/runtime/fd-heldout-directories.stdout.bin",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "utf8": ""
+        },
+        "stderr": {
+          "path": "logs/runtime/fd-heldout-directories.stderr.bin",
+          "bytes": 79,
+          "sha256": "75aa685d109894ad7d95f29e36283984c0ce8b8506f4675cbc5ee726a0aae95b",
+          "utf8": "wineserver crashed, please enable coredumps (ulimit -c unlimited) and restart.\n"
+        },
+        "wrapper_exit_code": 0,
+        "target_observation_valid": false,
+        "reason": "Compatibility worker wineserver crashed; wrapper exit is not target success"
+      }
+    }
+  ],
+  "normalizedPass": 0,
+  "rawPass": 0
+}

@@ -1,0 +1,150 @@
+{
+  "status": "PARTIAL",
+  "target": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+  "limits": {
+    "startupMs": 240000,
+    "totalMs": 300000,
+    "javaHeap": "1G",
+    "familyRssBytes": 1610612736,
+    "freeDiskReserveBytes": 1073741824
+  },
+  "phase": "close",
+  "startedAt": "2026-10-14T08:17:15.991Z",
+  "samples": [
+    {
+      "at": "2026-10-14T08:17:16.817Z",
+      "familyRssBytes": 362987520,
+      "freeDiskBytes": 2743427072
+    },
+    {
+      "at": "2026-10-14T08:17:19.006Z",
+      "familyRssBytes": 426721280,
+      "freeDiskBytes": 2736197632
+    },
+    {
+      "at": "2026-10-14T08:17:22.007Z",
+      "familyRssBytes": 492142592,
+      "freeDiskBytes": 2731626496
+    },
+    {
+      "at": "2026-10-14T08:17:25.050Z",
+      "familyRssBytes": 560398336,
+      "freeDiskBytes": 2715070464
+    },
+    {
+      "at": "2026-10-14T08:17:28.023Z",
+      "familyRssBytes": 123322368,
+      "freeDiskBytes": 2701787136
+    },
+    {
+      "at": "2026-10-14T08:17:31.011Z",
+      "familyRssBytes": 129351680,
+      "freeDiskBytes": 2698956800
+    },
+    {
+      "at": "2026-10-14T08:17:34.013Z",
+      "familyRssBytes": 668598272,
+      "freeDiskBytes": 2687602688
+    },
+    {
+      "at": "2026-10-14T08:17:37.016Z",
+      "familyRssBytes": 484655104,
+      "freeDiskBytes": 2675908608
+    },
+    {
+      "at": "2026-10-14T08:17:40.020Z",
+      "familyRssBytes": 982499328,
+      "freeDiskBytes": 2659160064
+    },
+    {
+      "at": "2026-10-14T08:17:43.015Z",
+      "familyRssBytes": 808189952,
+      "freeDiskBytes": 2646016000
+    },
+    {
+      "at": "2026-10-14T08:17:46.015Z",
+      "familyRssBytes": 850624512,
+      "freeDiskBytes": 2632966144
+    },
+    {
+      "at": "2026-10-14T08:17:49.023Z",
+      "familyRssBytes": 893059072,
+      "freeDiskBytes": 2623385600
+    },
+    {
+      "at": "2026-10-14T08:17:52.018Z",
+      "familyRssBytes": 887455744,
+      "freeDiskBytes": 2587799552
+    },
+    {
+      "at": "2026-10-14T08:17:55.018Z",
+      "familyRssBytes": 894124032,
+      "freeDiskBytes": 2587336704
+    },
+    {
+      "at": "2026-10-14T08:17:58.022Z",
+      "familyRssBytes": 889077760,
+      "freeDiskBytes": 2589253632
+    },
+    {
+      "at": "2026-10-14T08:18:01.018Z",
+      "familyRssBytes": 930349056,
+      "freeDiskBytes": 2587578368
+    },
+    {
+      "at": "2026-10-14T08:18:04.028Z",
+      "familyRssBytes": 893648896,
+      "freeDiskBytes": 2537607168
+    },
+    {
+      "at": "2026-10-14T08:18:07.025Z",
+      "familyRssBytes": 920453120,
+      "freeDiskBytes": 2490023936
+    },
+    {
+      "at": "2026-10-14T08:18:10.268Z",
+      "familyRssBytes": 854769664,
+      "freeDiskBytes": 2485944320
+    },
+    {
+      "at": "2026-10-14T08:18:13.027Z",
+      "familyRssBytes": 959217664,
+      "freeDiskBytes": 2479992832
+    },
+    {
+      "at": "2026-10-14T08:18:16.028Z",
+      "familyRssBytes": 947027968,
+      "freeDiskBytes": 2474483712
+    },
+    {
+      "at": "2026-10-14T08:18:19.033Z",
+      "familyRssBytes": 954040320,
+      "freeDiskBytes": 2424459264
+    },
+    {
+      "at": "2026-10-14T08:18:22.029Z",
+      "familyRssBytes": 896090112,
+      "freeDiskBytes": 2430545920
+    },
+    {
+      "at": "2026-10-14T08:18:25.034Z",
+      "familyRssBytes": 1043644416,
+      "freeDiskBytes": 2473144320
+    }
+  ],
+  "completedOperations": [
+    "open",
+    "overview",
+    "procedures",
+    "entry-dossier",
+    "close"
+  ],
+  "limitations": [
+    "RSS monitoring is observed, not an enforced OS memory limit.",
+    "Disabled decompiler auto-analyzers change analysis coverage; function dossiers still require actual evidence.",
+    "Static inventory or function pseudocode does not establish runtime behavior or reconstructed equivalence."
+  ],
+  "preflightFreeDiskBytes": 2737094656,
+  "reason": "Entry dossier and inventory only; application main identity and runtime behavior unverified",
+  "finishedAt": "2026-10-14T08:18:28.003Z"
+}

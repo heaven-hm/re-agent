@@ -1,0 +1,7 @@
+$ sh benchmarks/plink/replica/build.sh
+exit_code=0
+
+[stdout]
+/Users/haseeb-mir/Documents/Code/rea/benchmarks/plink/replica/build/plinkmac: Mach-O 64-bit executable arm64
+
+[stderr]

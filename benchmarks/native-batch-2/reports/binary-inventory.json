@@ -1,0 +1,833 @@
+[
+  {
+    "target": "fd",
+    "version": "v10.5.0",
+    "download_url": "https://github.com/sharkdp/fd/releases/download/v10.5.0/fd-v10.5.0-x86_64-pc-windows-msvc.zip",
+    "started_utc": "2026-10-13T22:23:58.772212+00:00",
+    "status": "PASS",
+    "release_url": "https://github.com/sharkdp/fd/releases/tag/v10.5.0",
+    "publisher_digest": "sha256:a227701b8551c35a9931d9f6da75503cf86d88e182d71fb849a70864c5d57cd7",
+    "archive_sha256": "a227701b8551c35a9931d9f6da75503cf86d88e182d71fb849a70864c5d57cd7",
+    "archive_bytes": 1535063,
+    "publisher_digest_verified": true,
+    "archive_entries": 14,
+    "asset_extraction": "complete",
+    "executables": [
+      {
+        "path": "originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/fd.exe",
+        "sha256": "d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9",
+        "bytes": 4104192,
+        "format": "PE32+",
+        "machine": "0x8664",
+        "architecture": "x86_64",
+        "image_base": "0x140000000",
+        "entry_rva": "0x27cda0",
+        "clr_directory": [0, 0],
+        "imports": [
+          "kernel32.dll",
+          "ntdll.dll",
+          "api-ms-win-core-synch-l1-2-0.dll",
+          "advapi32.dll",
+          "shell32.dll",
+          "combase.dll",
+          "userenv.dll",
+          "bcryptprimitives.dll",
+          "ADVAPI32.dll",
+          "KERNEL32.dll"
+        ],
+        "sections": [
+          {
+            "name": ".text",
+            "rva": 4096,
+            "virtual_bytes": 2751408,
+            "file_offset": 1024,
+            "file_bytes": 2751488
+          },
+          {
+            "name": ".rdata",
+            "rva": 2756608,
+            "virtual_bytes": 1231806,
+            "file_offset": 2752512,
+            "file_bytes": 1231872
+          },
+          {
+            "name": ".data",
+            "rva": 3989504,
+            "virtual_bytes": 14980,
+            "file_offset": 3984384,
+            "file_bytes": 3584
+          },
+          {
+            "name": ".pdata",
+            "rva": 4005888,
+            "virtual_bytes": 94644,
+            "file_offset": 3987968,
+            "file_bytes": 94720
+          },
+          {
+            "name": ".fptable",
+            "rva": 4104192,
+            "virtual_bytes": 256,
+            "file_offset": 4082688,
+            "file_bytes": 512
+          },
+          {
+            "name": ".reloc",
+            "rva": 4108288,
+            "virtual_bytes": 20876,
+            "file_offset": 4083200,
+            "file_bytes": 20992
+          }
+        ]
+      }
+    ],
+    "bundled_dlls": [],
+    "license_notice_files": [
+      "originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/LICENSE-APACHE",
+      "originals/fd/extracted/fd-v10.5.0-x86_64-pc-windows-msvc/LICENSE-MIT"
+    ],
+    "duration_seconds": 2.9017313750227913
+  },
+  {
+    "target": "ripgrep",
+    "version": "15.2.0",
+    "download_url": "https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15.2.0-x86_64-pc-windows-msvc.zip",
+    "started_utc": "2026-10-13T22:24:01.676236+00:00",
+    "status": "PASS",
+    "release_url": "https://github.com/BurntSushi/ripgrep/releases/tag/15.2.0",
+    "publisher_digest": "sha256:71b2fef860abe467217a538ff31de02f5258807c0129f771846f87bd029aafc5",
+    "archive_sha256": "71b2fef860abe467217a538ff31de02f5258807c0129f771846f87bd029aafc5",
+    "archive_bytes": 1789611,
+    "publisher_digest_verified": true,
+    "archive_entries": 16,
+    "asset_extraction": "complete",
+    "executables": [
+      {
+        "path": "originals/ripgrep/extracted/ripgrep-15.2.0-x86_64-pc-windows-msvc/rg.exe",
+        "sha256": "14231169855ec5205cf5a1b6f1db358ff4aed4247c86b69ce8aae647c77f6680",
+        "bytes": 4218880,
+        "format": "PE32+",
+        "machine": "0x8664",
+        "architecture": "x86_64",
+        "image_base": "0x140000000",
+        "entry_rva": "0x2c8540",
+        "clr_directory": [0, 0],
+        "imports": [
+          "kernel32.dll",
+          "ntdll.dll",
+          "api-ms-win-core-synch-l1-2-0.dll",
+          "bcryptprimitives.dll",
+          "KERNEL32.dll",
+          "USERENV.dll"
+        ],
+        "sections": [
+          {
+            "name": ".text",
+            "rva": 4096,
+            "virtual_bytes": 3035856,
+            "file_offset": 1024,
+            "file_bytes": 3036160
+          },
+          {
+            "name": ".rdata",
+            "rva": 3043328,
+            "virtual_bytes": 1104330,
+            "file_offset": 3037184,
+            "file_bytes": 1104384
+          },
+          {
+            "name": ".data",
+            "rva": 4149248,
+            "virtual_bytes": 7020,
+            "file_offset": 4141568,
+            "file_bytes": 4096
+          },
+          {
+            "name": ".pdata",
+            "rva": 4157440,
+            "virtual_bytes": 43416,
+            "file_offset": 4145664,
+            "file_bytes": 43520
+          },
+          {
+            "name": ".fptable",
+            "rva": 4202496,
+            "virtual_bytes": 256,
+            "file_offset": 4189184,
+            "file_bytes": 512
+          },
+          {
+            "name": ".rsrc",
+            "rva": 4206592,
+            "virtual_bytes": 1808,
+            "file_offset": 4189696,
+            "file_bytes": 2048
+          },
+          {
+            "name": ".reloc",
+            "rva": 4210688,
+            "virtual_bytes": 26648,
+            "file_offset": 4191744,
+            "file_bytes": 27136
+          }
+        ]
+      }
+    ],
+    "bundled_dlls": [],
+    "license_notice_files": [
+      "originals/ripgrep/extracted/ripgrep-15.2.0-x86_64-pc-windows-msvc/COPYING",
+      "originals/ripgrep/extracted/ripgrep-15.2.0-x86_64-pc-windows-msvc/UNLICENSE",
+      "originals/ripgrep/extracted/ripgrep-15.2.0-x86_64-pc-windows-msvc/LICENSE-MIT"
+    ],
+    "duration_seconds": 0.6556957909779157
+  },
+  {
+    "target": "bat",
+    "version": "v0.26.1",
+    "download_url": "https://github.com/sharkdp/bat/releases/download/v0.26.1/bat-v0.26.1-x86_64-pc-windows-msvc.zip",
+    "started_utc": "2026-10-13T22:24:02.332200+00:00",
+    "status": "PASS",
+    "release_url": "https://github.com/sharkdp/bat/releases/tag/v0.26.1",
+    "publisher_digest": "sha256:0f729b4b6f5f28d395c641eacc2e9ff68d0096b85aa0eec344aa62425144b69b",
+    "archive_sha256": "0f729b4b6f5f28d395c641eacc2e9ff68d0096b85aa0eec344aa62425144b69b",
+    "archive_bytes": 3613318,
+    "publisher_digest_verified": true,
+    "archive_entries": 11,
+    "asset_extraction": "complete",
+    "executables": [
+      {
+        "path": "originals/bat/extracted/bat-v0.26.1-x86_64-pc-windows-msvc/bat.exe",
+        "sha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd",
+        "bytes": 7342592,
+        "format": "PE32+",
+        "machine": "0x8664",
+        "architecture": "x86_64",
+        "image_base": "0x140000000",
+        "entry_rva": "0x400b9c",
+        "clr_directory": [0, 0],
+        "imports": [
+          "api-ms-win-core-synch-l1-2-0.dll",
+          "kernel32.dll",
+          "userenv.dll",
+          "api-ms-win-core-handle-l1-1-0.dll",
+          "shell32.dll",
+          "combase.dll",
+          "ntdll.dll",
+          "oleaut32.dll",
+          "bcryptprimitives.dll",
+          "user32.dll",
+          "advapi32.dll",
+          "ws2_32.dll",
+          "secur32.dll",
+          "VCRUNTIME140.dll",
+          "api-ms-win-crt-string-l1-1-0.dll",
+          "api-ms-win-crt-math-l1-1-0.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-filesystem-l1-1-0.dll",
+          "api-ms-win-crt-stdio-l1-1-0.dll",
+          "api-ms-win-crt-time-l1-1-0.dll",
+          "api-ms-win-crt-heap-l1-1-0.dll",
+          "api-ms-win-crt-convert-l1-1-0.dll",
+          "api-ms-win-crt-locale-l1-1-0.dll"
+        ],
+        "sections": [
+          {
+            "name": ".text",
+            "rva": 4096,
+            "virtual_bytes": 4297533,
+            "file_offset": 1024,
+            "file_bytes": 4297728
+          },
+          {
+            "name": ".rdata",
+            "rva": 4304896,
+            "virtual_bytes": 2782658,
+            "file_offset": 4298752,
+            "file_bytes": 2782720
+          },
+          {
+            "name": ".data",
+            "rva": 7090176,
+            "virtual_bytes": 99624,
+            "file_offset": 7081472,
+            "file_bytes": 77824
+          },
+          {
+            "name": ".pdata",
+            "rva": 7192576,
+            "virtual_bytes": 158724,
+            "file_offset": 7159296,
+            "file_bytes": 159232
+          },
+          {
+            "name": ".reloc",
+            "rva": 7352320,
+            "virtual_bytes": 23740,
+            "file_offset": 7318528,
+            "file_bytes": 24064
+          }
+        ]
+      }
+    ],
+    "bundled_dlls": [],
+    "license_notice_files": [
+      "originals/bat/extracted/bat-v0.26.1-x86_64-pc-windows-msvc/LICENSE-APACHE",
+      "originals/bat/extracted/bat-v0.26.1-x86_64-pc-windows-msvc/LICENSE-MIT"
+    ],
+    "duration_seconds": 0.6422345000028145
+  },
+  {
+    "target": "openlierox",
+    "version": "20260912.1",
+    "download_url": "https://github.com/openlierox/openlierox/releases/download/20260912.1/openlierox-20260912.1-windows.zip",
+    "started_utc": "2026-10-13T22:24:02.974730+00:00",
+    "status": "PASS",
+    "release_url": "https://github.com/openlierox/openlierox/releases/tag/20260912.1",
+    "publisher_digest": "sha256:fbc14a948166bea0fa34c9d0fe26e3d46a96f2a7bec0dd2fa8cba06459cb43ad",
+    "archive_sha256": "fbc14a948166bea0fa34c9d0fe26e3d46a96f2a7bec0dd2fa8cba06459cb43ad",
+    "archive_bytes": 143483781,
+    "publisher_digest_verified": true,
+    "archive_entries": 8541,
+    "asset_extraction": "complete",
+    "executables": [
+      {
+        "path": "originals/openlierox/extracted/openlierox-20260912.1-windows/openlierox.exe",
+        "sha256": "0f79c968ab9aabd8cb99e173500fa241e883846fd3e0c9ca2f7f0bf3771fa5c1",
+        "bytes": 12853347,
+        "format": "PE32+",
+        "machine": "0x8664",
+        "architecture": "x86_64",
+        "image_base": "0x140000000",
+        "entry_rva": "0x1480",
+        "clr_directory": [0, 0],
+        "imports": [
+          "ADVAPI32.dll",
+          "libalut-0.dll",
+          "libcurl-4.dll",
+          "libgcc_s_seh-1.dll",
+          "libgd.dll",
+          "KERNEL32.dll",
+          "msvcrt.dll",
+          "libopenal-1.dll",
+          "libwinpthread-1.dll",
+          "SDL2.dll",
+          "SDL2_image.dll",
+          "SHELL32.dll",
+          "libstdc++-6.dll",
+          "USER32.dll",
+          "VERSION.dll",
+          "libvorbisfile-3.dll",
+          "WS2_32.dll",
+          "WSOCK32.dll",
+          "libxml2-16.dll",
+          "libyaml-cpp.dll",
+          "zlib1.dll",
+          "libzip.dll"
+        ],
+        "sections": [
+          {
+            "name": ".text",
+            "rva": 4096,
+            "virtual_bytes": 7755472,
+            "file_offset": 1024,
+            "file_bytes": 7755776
+          },
+          {
+            "name": ".data",
+            "rva": 7761920,
+            "virtual_bytes": 91680,
+            "file_offset": 7756800,
+            "file_bytes": 92160
+          },
+          {
+            "name": ".rdata",
+            "rva": 7856128,
+            "virtual_bytes": 453936,
+            "file_offset": 7848960,
+            "file_bytes": 454144
+          },
+          {
+            "name": ".pdata",
+            "rva": 8310784,
+            "virtual_bytes": 139560,
+            "file_offset": 8303104,
+            "file_bytes": 139776
+          },
+          {
+            "name": ".xdata",
+            "rva": 8454144,
+            "virtual_bytes": 415312,
+            "file_offset": 8442880,
+            "file_bytes": 415744
+          },
+          {
+            "name": ".bss",
+            "rva": 8871936,
+            "virtual_bytes": 279544,
+            "file_offset": 0,
+            "file_bytes": 0
+          },
+          {
+            "name": ".edata",
+            "rva": 9154560,
+            "virtual_bytes": 1350,
+            "file_offset": 8858624,
+            "file_bytes": 1536
+          },
+          {
+            "name": ".idata",
+            "rva": 9158656,
+            "virtual_bytes": 30612,
+            "file_offset": 8860160,
+            "file_bytes": 30720
+          },
+          {
+            "name": ".rsrc",
+            "rva": 9191424,
+            "virtual_bytes": 55528,
+            "file_offset": 8890880,
+            "file_bytes": 55528
+          },
+          {
+            "name": ".reloc",
+            "rva": 9248768,
+            "virtual_bytes": 23768,
+            "file_offset": 8946688,
+            "file_bytes": 24064
+          }
+        ]
+      }
+    ],
+    "bundled_dlls": [
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/SDL2.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/SDL2_image.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libLerc.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libSvtAv1Enc-4.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libXpm-noX4.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libalut-0.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libaom.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libavif-16.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libbrotlicommon.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libbrotlidec.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libbrotlienc.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libbz2-1.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libcrypto-3-x64.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libcryptopp.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libcurl-4.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libdav1d-7.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libde265-0.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libdeflate.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libexpat-1.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libfontconfig-1.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libfreetype-6.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libgcc_s_seh-1.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libgd.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libglib-2.0-0.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libgraphite2.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libharfbuzz-0.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libheif.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libhwy.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libiconv-2.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libidn2-0.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libimagequant.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libintl-8.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libjbig-0.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libjpeg-8.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libjxl.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libjxl_cms.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libkvazaar-7.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/liblcms2-2.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/liblzma-5.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libnghttp2-14.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libnghttp3-9.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libngtcp2-16.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libngtcp2_crypto_ossl-0.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libogg-0.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libopenal-1.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libopenh264-7.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libopenjp2-7.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libopenjph-0.31.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libpcre2-8-0.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libpng16-16.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libpsl-5.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/librav1e.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libsharpyuv-0.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libssh2-1.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libssl-3-x64.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libstdc++-6.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libtiff-6.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libunistring-5.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libvorbis-0.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libvorbisfile-3.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libwebp-7.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libwebpdemux-2.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libwinpthread-1.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libx264-165.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libx265-217.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libxml2-16.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libyaml-cpp.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libyuv.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libzip.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/libzstd.dll",
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/zlib1.dll"
+    ],
+    "license_notice_files": [
+      "originals/openlierox/extracted/openlierox-20260912.1-windows/gamedir/promode/sprites/gui/blueround-notice.png"
+    ],
+    "duration_seconds": 12.51686333399266
+  },
+  {
+    "target": "supertux",
+    "version": "v0.7.0",
+    "download_url": "https://github.com/SuperTux/supertux/releases/download/v0.7.0/SuperTux-v0.7.0-win64-portable.zip",
+    "started_utc": "2026-10-13T22:24:15.494639+00:00",
+    "status": "PASS",
+    "release_url": "https://github.com/SuperTux/supertux/releases/tag/v0.7.0",
+    "publisher_digest": "sha256:d637f79e8a77fc4d42982cfea40f74f812d5050b9d6d53309b287dae734e1970",
+    "archive_sha256": "d637f79e8a77fc4d42982cfea40f74f812d5050b9d6d53309b287dae734e1970",
+    "archive_bytes": 308538500,
+    "publisher_digest_verified": true,
+    "archive_entries": 5233,
+    "asset_extraction": "complete",
+    "executables": [
+      {
+        "path": "originals/supertux/extracted/SuperTux-portable/bin/supertux2.exe",
+        "sha256": "6249f25a6ac1cc3d27955ca09852b8368618ce58ad9c13e0c5084051c2c02b43",
+        "bytes": 7259648,
+        "format": "PE32+",
+        "machine": "0x8664",
+        "architecture": "x86_64",
+        "image_base": "0x140000000",
+        "entry_rva": "0xb992",
+        "clr_directory": [0, 0],
+        "imports": [
+          "OpenAL32.dll",
+          "fmt.dll",
+          "physfs.dll",
+          "SDL2_image.dll",
+          "SDL2.dll",
+          "vorbisfile.dll",
+          "libcurl.dll",
+          "OPENGL32.dll",
+          "glew32.dll",
+          "libpng16.dll",
+          "freetype.dll",
+          "zlib1.dll",
+          "SHELL32.dll",
+          "ADVAPI32.dll",
+          "KERNEL32.dll",
+          "MSVCP140.dll",
+          "dbghelp.dll",
+          "VCRUNTIME140.dll",
+          "VCRUNTIME140_1.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-heap-l1-1-0.dll",
+          "api-ms-win-crt-string-l1-1-0.dll",
+          "api-ms-win-crt-stdio-l1-1-0.dll",
+          "api-ms-win-crt-math-l1-1-0.dll",
+          "api-ms-win-crt-convert-l1-1-0.dll",
+          "api-ms-win-crt-filesystem-l1-1-0.dll",
+          "api-ms-win-crt-time-l1-1-0.dll",
+          "api-ms-win-crt-environment-l1-1-0.dll",
+          "api-ms-win-crt-utility-l1-1-0.dll",
+          "api-ms-win-crt-locale-l1-1-0.dll"
+        ],
+        "sections": [
+          {
+            "name": ".text",
+            "rva": 4096,
+            "virtual_bytes": 5495437,
+            "file_offset": 1024,
+            "file_bytes": 5495808
+          },
+          {
+            "name": ".rdata",
+            "rva": 5500928,
+            "virtual_bytes": 1217421,
+            "file_offset": 5496832,
+            "file_bytes": 1217536
+          },
+          {
+            "name": ".data",
+            "rva": 6721536,
+            "virtual_bytes": 492249,
+            "file_offset": 6714368,
+            "file_bytes": 204800
+          },
+          {
+            "name": ".pdata",
+            "rva": 7217152,
+            "virtual_bytes": 226452,
+            "file_offset": 6919168,
+            "file_bytes": 226816
+          },
+          {
+            "name": ".idata",
+            "rva": 7446528,
+            "virtual_bytes": 42830,
+            "file_offset": 7145984,
+            "file_bytes": 43008
+          },
+          {
+            "name": ".tls",
+            "rva": 7491584,
+            "virtual_bytes": 777,
+            "file_offset": 7188992,
+            "file_bytes": 1024
+          },
+          {
+            "name": ".00cfg",
+            "rva": 7495680,
+            "virtual_bytes": 373,
+            "file_offset": 7190016,
+            "file_bytes": 512
+          },
+          {
+            "name": ".rsrc",
+            "rva": 7499776,
+            "virtual_bytes": 1084,
+            "file_offset": 7190528,
+            "file_bytes": 1536
+          },
+          {
+            "name": ".reloc",
+            "rva": 7503872,
+            "virtual_bytes": 67208,
+            "file_offset": 7192064,
+            "file_bytes": 67584
+          }
+        ]
+      }
+    ],
+    "bundled_dlls": [
+      "originals/supertux/extracted/SuperTux-portable/bin/OpenAL32.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/SDL2.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/SDL2_image.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-console-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-console-l1-2-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-datetime-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-debug-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-errorhandling-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-fibers-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-fibers-l1-1-1.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-file-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-file-l1-2-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-file-l2-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-handle-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-heap-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-interlocked-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-kernel32-legacy-l1-1-1.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-libraryloader-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-localization-l1-2-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-memory-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-namedpipe-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-processenvironment-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-processthreads-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-processthreads-l1-1-1.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-profile-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-rtlsupport-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-string-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-synch-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-synch-l1-2-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-sysinfo-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-sysinfo-l1-2-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-timezone-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-core-util-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-crt-conio-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-crt-convert-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-crt-environment-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-crt-filesystem-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-crt-heap-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-crt-locale-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-crt-math-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-crt-multibyte-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-crt-private-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-crt-process-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-crt-runtime-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-crt-stdio-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-crt-string-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-crt-time-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/api-ms-win-crt-utility-l1-1-0.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/brotlicommon.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/brotlidec.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/bz2.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/concrt140.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/fmt.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/freetype.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/glew32.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/jpeg62.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/libcurl.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/libpng16.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/msvcp140.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/msvcp140_1.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/msvcp140_2.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/msvcp140_atomic_wait.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/msvcp140_codecvt_ids.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/ogg.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/physfs.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/ucrtbase.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/vcruntime140.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/vcruntime140_1.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/vorbis.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/vorbisfile.dll",
+      "originals/supertux/extracted/SuperTux-portable/bin/zlib1.dll"
+    ],
+    "license_notice_files": [
+      "originals/supertux/extracted/SuperTux-portable/doc/LICENSE.txt",
+      "originals/supertux/extracted/SuperTux-portable/data/fonts/VARELA_ROUND_LICENSE.txt",
+      "originals/supertux/extracted/SuperTux-portable/data/fonts/DEKKO_LICENSE.txt",
+      "originals/supertux/extracted/SuperTux-portable/data/fonts/NOTO_SANS_LICENSE.txt",
+      "originals/supertux/extracted/SuperTux-portable/data/fonts/SOURCECODEPRO_LICENSE.md",
+      "originals/supertux/extracted/SuperTux-portable/data/fonts/MapoBackpacking_License.txt",
+      "originals/supertux/extracted/SuperTux-portable/data/fonts/Roboto_License.txt",
+      "originals/supertux/extracted/SuperTux-portable/data/images/creatures/fish/forest/notice_brown-3.png",
+      "originals/supertux/extracted/SuperTux-portable/data/images/creatures/fish/forest/notice_brown-2.png",
+      "originals/supertux/extracted/SuperTux-portable/data/images/creatures/fish/forest/notice_brown-0.png",
+      "originals/supertux/extracted/SuperTux-portable/data/images/creatures/fish/forest/notice_brown-1.png",
+      "originals/supertux/extracted/SuperTux-portable/data/images/creatures/fish/ice/notice_green-0.png",
+      "originals/supertux/extracted/SuperTux-portable/data/images/creatures/fish/ice/notice_green-1.png",
+      "originals/supertux/extracted/SuperTux-portable/data/images/creatures/fish/ice/notice_green-2.png",
+      "originals/supertux/extracted/SuperTux-portable/data/images/creatures/fish/forest/corrupted/notice_brown-3.png",
+      "originals/supertux/extracted/SuperTux-portable/data/images/creatures/fish/forest/corrupted/notice_brown-2.png",
+      "originals/supertux/extracted/SuperTux-portable/data/images/creatures/fish/forest/corrupted/notice_brown-0.png",
+      "originals/supertux/extracted/SuperTux-portable/data/images/creatures/fish/forest/corrupted/notice_brown-1.png"
+    ],
+    "duration_seconds": 24.5182668340276
+  },
+  {
+    "target": "powder-toy",
+    "version": "v100.1.400",
+    "download_url": "https://github.com/The-Powder-Toy/The-Powder-Toy/releases/download/v100.1.400/powder-v100.1.400-x86_64-windows-mingw.exe",
+    "started_utc": "2026-10-13T22:24:40.015320+00:00",
+    "status": "PASS",
+    "release_url": "https://github.com/The-Powder-Toy/The-Powder-Toy/releases/tag/v100.1.400",
+    "publisher_digest": "sha256:df32b616b31dabae10b82028731ebdfd6867c872198b81f29d418cbafbf460c3",
+    "archive_sha256": "df32b616b31dabae10b82028731ebdfd6867c872198b81f29d418cbafbf460c3",
+    "archive_bytes": 8690342,
+    "publisher_digest_verified": true,
+    "executables": [
+      {
+        "path": "originals/powder-toy/powder-v100.1.400-x86_64-windows-mingw.exe",
+        "sha256": "df32b616b31dabae10b82028731ebdfd6867c872198b81f29d418cbafbf460c3",
+        "bytes": 8690342,
+        "format": "PE32+",
+        "machine": "0x8664",
+        "architecture": "x86_64",
+        "image_base": "0x140000000",
+        "entry_rva": "0x1470",
+        "clr_directory": [0, 0],
+        "imports": [
+          "ADVAPI32.dll",
+          "bcrypt.dll",
+          "CRYPT32.dll",
+          "dbghelp.dll",
+          "GDI32.dll",
+          "IMM32.dll",
+          "KERNEL32.dll",
+          "api-ms-win-crt-convert-l1-1-0.dll",
+          "api-ms-win-crt-environment-l1-1-0.dll",
+          "api-ms-win-crt-filesystem-l1-1-0.dll",
+          "api-ms-win-crt-heap-l1-1-0.dll",
+          "api-ms-win-crt-locale-l1-1-0.dll",
+          "api-ms-win-crt-math-l1-1-0.dll",
+          "api-ms-win-crt-private-l1-1-0.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-stdio-l1-1-0.dll",
+          "api-ms-win-crt-string-l1-1-0.dll",
+          "api-ms-win-crt-time-l1-1-0.dll",
+          "api-ms-win-crt-utility-l1-1-0.dll",
+          "ole32.dll",
+          "OLEAUT32.dll",
+          "SHELL32.dll",
+          "USER32.dll",
+          "VERSION.dll",
+          "WINMM.dll",
+          "WS2_32.dll",
+          "WSOCK32.dll"
+        ],
+        "sections": [
+          {
+            "name": ".text",
+            "rva": 4096,
+            "virtual_bytes": 6994976,
+            "file_offset": 1024,
+            "file_bytes": 6995456
+          },
+          {
+            "name": ".data",
+            "rva": 7000064,
+            "virtual_bytes": 128608,
+            "file_offset": 6996480,
+            "file_bytes": 129024
+          },
+          {
+            "name": ".rdata",
+            "rva": 7131136,
+            "virtual_bytes": 889784,
+            "file_offset": 7125504,
+            "file_bytes": 889856
+          },
+          {
+            "name": ".pdata",
+            "rva": 8024064,
+            "virtual_bytes": 190152,
+            "file_offset": 8015360,
+            "file_bytes": 190464
+          },
+          {
+            "name": ".xdata",
+            "rva": 8216576,
+            "virtual_bytes": 307924,
+            "file_offset": 8205824,
+            "file_bytes": 308224
+          },
+          {
+            "name": ".bss",
+            "rva": 8527872,
+            "virtual_bytes": 183608,
+            "file_offset": 0,
+            "file_bytes": 0
+          },
+          {
+            "name": ".idata",
+            "rva": 8712192,
+            "virtual_bytes": 22532,
+            "file_offset": 8514048,
+            "file_bytes": 23040
+          },
+          {
+            "name": ".tls",
+            "rva": 8736768,
+            "virtual_bytes": 864,
+            "file_offset": 8537088,
+            "file_bytes": 1024
+          },
+          {
+            "name": ".rsrc",
+            "rva": 8740864,
+            "virtual_bytes": 100616,
+            "file_offset": 8538112,
+            "file_bytes": 100864
+          },
+          {
+            "name": ".reloc",
+            "rva": 8843264,
+            "virtual_bytes": 26028,
+            "file_offset": 8638976,
+            "file_bytes": 26112
+          },
+          {
+            "name": "/4",
+            "rva": 8871936,
+            "virtual_bytes": 16,
+            "file_offset": 8665088,
+            "file_bytes": 512
+          }
+        ]
+      }
+    ],
+    "bundled_dlls": [],
+    "license_notice_files": [],
+    "duration_seconds": 0.9296298749977723
+  }
+]

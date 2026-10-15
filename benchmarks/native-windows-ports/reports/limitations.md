@@ -8,9 +8,15 @@
    to corroborate. Score-per-food (+1) and checksum scheme assumed.
 4. Clipjar static analysis unavailable (Ghidra 330s budget); recovery is
    strings + runtime only. Image clipboard, hotkey, autopaste unported.
-5. imgview not started: UPX stub, no upx on host.
+5. imgview's UPX-packed original was unpacked and statically analyzed; the
+   independent macOS replica was built and a replica-only PNG display capture
+   is retained. Original-versus-replica GUI comparison remains UNVERIFIED:
+   the current host could not capture a display during the latest attempt
+   (`screenshots/imgview-capture-attempt.json`).
 6. Wine/CrossOver is a test harness for originals, never the port vehicle.
 7. Screenshots: real window captures where present; absent original-side GUI
    shots are marked UNVERIFIED, not substituted.
-8. A parallel session shares this checkout (batch-2 + README); paths under
-   benchmarks/native-windows-ports/ are this session's scope.
+8. The benchmark catalog also includes Batch 2 targets and records their
+   acquisition, reconstruction, evidence, and report paths. Their overall
+   states remain target-specific; analysis-only games are not marked as
+   reconstructed.

@@ -15,7 +15,7 @@ export interface NpmInstallation {
 /** Bun global installation that owns the running package and its entry point. */
 export interface BunInstallation {
   readonly manager: "bun";
-  /** Bun's global project directory, which owns `node_modules/rea-agents`. */
+  /** Bun's global project directory, which owns the package's `node_modules` entry. */
   readonly globalDirectory: string;
   readonly packageRoot: string;
 }
@@ -202,8 +202,7 @@ const runUpdateWorkflow = async (
       currentVersion,
       latestVersion: targetVersion,
       reason: "unknown-install-method",
-      remediation:
-        "Update this installation with the package manager or source checkout that owns it. For a one-off latest invocation, use npx rea-agents@latest.",
+      remediation: `Update this installation with the package manager or source checkout that owns it. For a one-off latest invocation, use npx ${PRODUCT_IDENTITY.packageSpecifier}.`,
     };
   const installed = await host.installVersion(
     installation,

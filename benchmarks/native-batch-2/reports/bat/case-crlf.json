@@ -1,0 +1,74 @@
+{
+  "evidence_id": "ev_83ffcd919049d258f1bce3a5af6454efc45af09f99c285205d6476444447610c",
+  "subject": {
+    "name": "bat.exe",
+    "digest": {
+      "sha256": "9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd"
+    },
+    "format": "pe",
+    "architecture": "x86_64",
+    "local_path": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/originals/bat/extracted/bat-v0.26.1-x86_64-pc-windows-msvc/bat.exe"
+  },
+  "provider": {
+    "id": "rea-engine-native-cli-benchmark",
+    "name": "REA Engine recorded CLI byte comparison",
+    "version": "1"
+  },
+  "analysis_profile": null,
+  "predicate_type": "rea.analysis",
+  "operation": "compare_recorded_native_cli_bytes",
+  "parameters": {
+    "case": "crlf",
+    "original_record_sha256": "f1f1f4aade66ab0bc5448b9bc354567ac2ff0436add9cbb3cc48189e617fc898",
+    "candidate_sha256": "e41a5f460ef97aefad098020acd8c1ce9d91ac3896daa0528e3f8b50bbbc9116",
+    "candidate_source_sha256": "975ca15632e4983d3175b768203157d6353d28454594a58195c0b354e6040025",
+    "original_run_id": "rea-original-84166d7d2ef54f1e9ca8cfd6b6d9c7cb",
+    "replica_run_id": "rea-replica-f388923e88694f3c88ff87d28b502562",
+    "comparison_run_id": "rea-comparison-eb9d2d3bfc6b4b4e8d31883a8e5eca2a",
+    "fixture_tree_sha256": "c6e694147dde1d4836e4c6423f9820a961e0615f481338e67b0fe459f25411e0",
+    "fixture_bound": true,
+    "working_directory": "/Users/haseeb-mir/Documents/Code/rea/benchmarks/native-batch-2/tests/runtime-fixtures/tree",
+    "arguments": [
+      "--color",
+      "never",
+      "--paging",
+      "never",
+      "--style",
+      "plain",
+      "crlf.txt"
+    ]
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "status": "PASS",
+    "dimensions": {
+      "stdoutBytes": true,
+      "stderrBytes": true,
+      "exitCode": true
+    },
+    "original": {
+      "stdoutSha256": "f8e0f1568dd9254c3262d199d5dcfc9ff6d4855e18ec53a7176f9eab948ed93e",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exitCode": 0
+    },
+    "replica": {
+      "stdoutSha256": "f8e0f1568dd9254c3262d199d5dcfc9ff6d4855e18ec53a7176f9eab948ed93e",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exitCode": 0,
+      "stdout": "first\r\nsecond\r\n",
+      "stderr": ""
+    }
+  },
+  "confidence": "observed",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Original is a retained CrossOver compatibility observation, not actual Windows OS verification.",
+    "Only the declared stdout/stderr/outcome cases are compared. Source/runtime algorithms, tty modes and full program equivalence remain unverified.",
+    "Candidate diagnostic capture is exact for these valid UTF-8 cases; arbitrary invalid UTF-8 output is unsupported.",
+    "Original observation did not bind a full filesystem snapshot; fixture ownership/unchanged contents are a stated assumption."
+  ],
+  "relationship_coverage": null,
+  "locations": [],
+  "evidence_links": []
+}

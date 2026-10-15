@@ -1,0 +1,117 @@
+{
+  "target": "openlierox",
+  "version": "20260912.1",
+  "archive_sha256": "fbc14a948166bea0fa34c9d0fe26e3d46a96f2a7bec0dd2fa8cba06459cb43ad",
+  "archive_bytes": 143483781,
+  "publisher_digest": "sha256:fbc14a948166bea0fa34c9d0fe26e3d46a96f2a7bec0dd2fa8cba06459cb43ad",
+  "publisher_digest_verified": true,
+  "source_url": "https://github.com/openlierox/openlierox/releases/download/20260912.1/openlierox-20260912.1-windows.zip",
+  "executable": {
+    "path": "originals/openlierox/analysis-input/openlierox.exe",
+    "sha256": "0f79c968ab9aabd8cb99e173500fa241e883846fd3e0c9ca2f7f0bf3771fa5c1",
+    "bytes": 12853347,
+    "format": "PE32+",
+    "machine": "0x8664",
+    "architecture": "x86_64",
+    "image_base": "0x140000000",
+    "entry_rva": "0x1480",
+    "clr_directory": [0, 0],
+    "imports": [
+      "ADVAPI32.dll",
+      "libalut-0.dll",
+      "libcurl-4.dll",
+      "libgcc_s_seh-1.dll",
+      "libgd.dll",
+      "KERNEL32.dll",
+      "msvcrt.dll",
+      "libopenal-1.dll",
+      "libwinpthread-1.dll",
+      "SDL2.dll",
+      "SDL2_image.dll",
+      "SHELL32.dll",
+      "libstdc++-6.dll",
+      "USER32.dll",
+      "VERSION.dll",
+      "libvorbisfile-3.dll",
+      "WS2_32.dll",
+      "WSOCK32.dll",
+      "libxml2-16.dll",
+      "libyaml-cpp.dll",
+      "zlib1.dll",
+      "libzip.dll"
+    ],
+    "sections": [
+      {
+        "name": ".text",
+        "rva": 4096,
+        "virtual_bytes": 7755472,
+        "file_offset": 1024,
+        "file_bytes": 7755776
+      },
+      {
+        "name": ".data",
+        "rva": 7761920,
+        "virtual_bytes": 91680,
+        "file_offset": 7756800,
+        "file_bytes": 92160
+      },
+      {
+        "name": ".rdata",
+        "rva": 7856128,
+        "virtual_bytes": 453936,
+        "file_offset": 7848960,
+        "file_bytes": 454144
+      },
+      {
+        "name": ".pdata",
+        "rva": 8310784,
+        "virtual_bytes": 139560,
+        "file_offset": 8303104,
+        "file_bytes": 139776
+      },
+      {
+        "name": ".xdata",
+        "rva": 8454144,
+        "virtual_bytes": 415312,
+        "file_offset": 8442880,
+        "file_bytes": 415744
+      },
+      {
+        "name": ".bss",
+        "rva": 8871936,
+        "virtual_bytes": 279544,
+        "file_offset": 0,
+        "file_bytes": 0
+      },
+      {
+        "name": ".edata",
+        "rva": 9154560,
+        "virtual_bytes": 1350,
+        "file_offset": 8858624,
+        "file_bytes": 1536
+      },
+      {
+        "name": ".idata",
+        "rva": 9158656,
+        "virtual_bytes": 30612,
+        "file_offset": 8860160,
+        "file_bytes": 30720
+      },
+      {
+        "name": ".rsrc",
+        "rva": 9191424,
+        "virtual_bytes": 55528,
+        "file_offset": 8890880,
+        "file_bytes": 55528
+      },
+      {
+        "name": ".reloc",
+        "rva": 9248768,
+        "virtual_bytes": 23768,
+        "file_offset": 8946688,
+        "file_bytes": 24064
+      }
+    ]
+  },
+  "status": "archive-and-exe-verified; full extraction/license audit incomplete"
+}

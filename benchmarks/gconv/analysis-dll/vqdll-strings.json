@@ -1,0 +1,4655 @@
+{
+  "evidence_id": "ev_880b33f8005fdcbc88cb0d7fe71c5f6f70b6498279b552d7f5d950dc58c9e850",
+  "subject": {
+    "name": "vqdll.dll",
+    "digest": {
+      "sha256": "2491892b539d9072ca0704972ceac83bf5cb9fbcc3938be6a01495f9cbf40a69"
+    },
+    "format": "pe",
+    "architecture": "x86",
+    "local_path": "/Users/haseeb-mir/Downloads/tools/vqdll.dll"
+  },
+  "provider": {
+    "id": "ghidra",
+    "name": "Ghidra",
+    "version": "12.1.2"
+  },
+  "analysis_profile": {
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.2"
+    },
+    "parameters": {
+      "target_kind": "executable",
+      "target_format": "pe",
+      "executable_role": "shared-library",
+      "managed": false,
+      "native_aot_metadata": {
+        "contract_revision": "rtr-9.1-x64-pe-read-only-v3",
+        "source_bytes": 134217728,
+        "work_units": 67108864,
+        "working_memory_bytes": 67108864,
+        "report_bytes": 4194304
+      },
+      "architecture": "x86",
+      "available_architectures": ["x86"],
+      "import_mode": "ephemeral-source-immutable",
+      "annotation_policy": "atomic-function-entry-metadata-v1",
+      "load_image_observations": "source-mappings-entry-context-v2",
+      "function_body_evidence": "complete-inclusive-ranges-v1",
+      "function_references": "complete-body-and-entry-reference-manager-v2",
+      "call_relationship_coverage": "resolved-call-reference-diagnostics-v1",
+      "string_inventory_evidence": "defined-data-coverage-v1",
+      "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+      "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+      "instruction_flow_evidence": "decoded-return-pcode-v1",
+      "instruction_references": "exact-address-incoming-v1",
+      "function_boundary_observations": "ghidra-terminal-call-limitations-v1",
+      "no_return_repair": "returning-imports-decoded-return-v2",
+      "process_launch": "inspected-jvm-launch-support-v1",
+      "jump_table_evidence": "typed-case-default-blocks-v1",
+      "decompiler_jump_loads": true,
+      "loader": "auto-from-header",
+      "language_id": "auto-from-header",
+      "compiler_spec_id": "auto-default",
+      "analyzer_preset": "ghidra-default"
+    },
+    "digest": "805fc3c4d08c6e55ed9b3c02c6cd5000d29eaa566876b747267b1559986657fa"
+  },
+  "predicate_type": "rea.analysis",
+  "operation": "list_strings",
+  "parameters": {},
+  "raw_result": [
+    {
+      "address": "0x1000c296",
+      "value": "null)",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c2a5",
+      "value": "null)",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 6
+      }
+    },
+    {
+      "address": "0x1000c2b7",
+      "value": "?IsProcessorFeaturePresent",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 29
+      }
+    },
+    {
+      "address": "0x1000c2d4",
+      "value": "KERNEL32",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 9
+      }
+    },
+    {
+      "address": "0x1000c2f0",
+      "value": "runtime error ",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c304",
+      "value": "TLOSS error\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c314",
+      "value": "SING error\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c324",
+      "value": "DOMAIN error\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c334",
+      "value": "R6028\r\n- unable to initialize heap\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 40
+      }
+    },
+    {
+      "address": "0x1000c35c",
+      "value": "R6027\r\n- not enough space for lowio initialization\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 56
+      }
+    },
+    {
+      "address": "0x1000c394",
+      "value": "R6026\r\n- not enough space for stdio initialization\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 56
+      }
+    },
+    {
+      "address": "0x1000c3cc",
+      "value": "R6025\r\n- pure virtual function call\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 40
+      }
+    },
+    {
+      "address": "0x1000c3f4",
+      "value": "R6024\r\n- not enough space for _onexit/atexit table\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 56
+      }
+    },
+    {
+      "address": "0x1000c42c",
+      "value": "R6019\r\n- unable to open console device\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 44
+      }
+    },
+    {
+      "address": "0x1000c458",
+      "value": "R6018\r\n- unexpected heap error\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 36
+      }
+    },
+    {
+      "address": "0x1000c47c",
+      "value": "R6017\r\n- unexpected multithread lock error\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 48
+      }
+    },
+    {
+      "address": "0x1000c4ac",
+      "value": "R6016\r\n- not enough space for thread data\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 44
+      }
+    },
+    {
+      "address": "0x1000c4d8",
+      "value": "\r\nabnormal program termination\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 36
+      }
+    },
+    {
+      "address": "0x1000c4fc",
+      "value": "R6009\r\n- not enough space for environment\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 44
+      }
+    },
+    {
+      "address": "0x1000c528",
+      "value": "R6008\r\n- not enough space for arguments\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 44
+      }
+    },
+    {
+      "address": "0x1000c554",
+      "value": "R6002\r\n- floating point not loaded\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 40
+      }
+    },
+    {
+      "address": "0x1000c57c",
+      "value": "Microsoft Visual C++ Runtime Library",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 37
+      }
+    },
+    {
+      "address": "0x1000c5a8",
+      "value": "Runtime Error!\n\nProgram: ",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 28
+      }
+    },
+    {
+      "address": "0x1000c5c8",
+      "value": "<program name unknown>",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x1000c5e8",
+      "value": "GetLastActivePopup",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 19
+      }
+    },
+    {
+      "address": "0x1000c5fc",
+      "value": "GetActiveWindow",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c60c",
+      "value": "MessageBoxA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c618",
+      "value": "user32.dll",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 11
+      }
+    },
+    {
+      "address": "0x1000c624",
+      "value": "LC_TIME",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c62c",
+      "value": "LC_NUMERIC",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 11
+      }
+    },
+    {
+      "address": "0x1000c638",
+      "value": "LC_MONETARY",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c644",
+      "value": "LC_CTYPE",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 9
+      }
+    },
+    {
+      "address": "0x1000c650",
+      "value": "LC_COLLATE",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 11
+      }
+    },
+    {
+      "address": "0x1000c65c",
+      "value": "LC_ALL",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c684",
+      "value": "Paraguay",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c698",
+      "value": "Chile",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c6a0",
+      "value": "Ecuador",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c6a8",
+      "value": "Argentina",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c6bc",
+      "value": "Colombia",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c6c8",
+      "value": "Venezuela",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c6d4",
+      "value": "Dominican Republic",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000c6e8",
+      "value": "South Africa",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c6f8",
+      "value": "Panama",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c700",
+      "value": "Luxembourg",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c70c",
+      "value": "Costa Rica",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c718",
+      "value": "Switzerland",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c724",
+      "value": "Guatemala",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c730",
+      "value": "Canada",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c738",
+      "value": "Spanish - Modern Sort",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x1000c750",
+      "value": "Australia",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c75c",
+      "value": "English",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c764",
+      "value": "Austria",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c76c",
+      "value": "German",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c774",
+      "value": "Belgium",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c77c",
+      "value": "Mexico",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c784",
+      "value": "Spanish",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c78c",
+      "value": "Basque",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c794",
+      "value": "Sweden",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c79c",
+      "value": "Swedish",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c7a4",
+      "value": "Iceland",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c7ac",
+      "value": "Icelandic",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c7b8",
+      "value": "France",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c7c0",
+      "value": "French",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c7c8",
+      "value": "Finland",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c7d0",
+      "value": "Finnish",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c7d8",
+      "value": "Spain",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c7e0",
+      "value": "Spanish - Traditional Sort",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 28
+      }
+    },
+    {
+      "address": "0x1000c7fc",
+      "value": "united-states",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c80c",
+      "value": "united-kingdom",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c81c",
+      "value": "trinidad & tobago",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000c830",
+      "value": "south-korea",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c83c",
+      "value": "south-africa",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c84c",
+      "value": "south korea",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c858",
+      "value": "south africa",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c870",
+      "value": "puerto-rico",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c87c",
+      "value": "pr-china",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c888",
+      "value": "pr china",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c898",
+      "value": "new-zealand",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c8a4",
+      "value": "hong-kong",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c8b0",
+      "value": "holland",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c8b8",
+      "value": "great britain",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c8c8",
+      "value": "england",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c8d8",
+      "value": "china",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c8e0",
+      "value": "britain",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c8e8",
+      "value": "america",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c8fc",
+      "value": "swiss",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c904",
+      "value": "swedish-finland",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c914",
+      "value": "spanish-venezuela",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000c928",
+      "value": "spanish-uruguay",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c938",
+      "value": "spanish-puerto rico",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000c94c",
+      "value": "spanish-peru",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c95c",
+      "value": "spanish-paraguay",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000c970",
+      "value": "spanish-panama",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c980",
+      "value": "spanish-nicaragua",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000c994",
+      "value": "spanish-modern",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c9a4",
+      "value": "spanish-mexican",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c9b4",
+      "value": "spanish-honduras",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000c9c8",
+      "value": "spanish-guatemala",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000c9dc",
+      "value": "spanish-el salvador",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000c9f0",
+      "value": "spanish-ecuador",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000ca00",
+      "value": "spanish-dominican republic",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 28
+      }
+    },
+    {
+      "address": "0x1000ca1c",
+      "value": "spanish-costa rica",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000ca30",
+      "value": "spanish-colombia",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000ca44",
+      "value": "spanish-chile",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000ca54",
+      "value": "spanish-bolivia",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000ca64",
+      "value": "spanish-argentina",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000ca78",
+      "value": "portuguese-brazilian",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x1000ca90",
+      "value": "norwegian-nynorsk",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000caa4",
+      "value": "norwegian-bokmal",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cab8",
+      "value": "norwegian",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000cac4",
+      "value": "italian-swiss",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000cad4",
+      "value": "irish-english",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000cae4",
+      "value": "german-swiss",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000caf4",
+      "value": "german-luxembourg",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cb08",
+      "value": "german-lichtenstein",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cb1c",
+      "value": "german-austrian",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000cb2c",
+      "value": "french-swiss",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000cb3c",
+      "value": "french-luxembourg",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cb50",
+      "value": "french-canadian",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000cb60",
+      "value": "french-belgian",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000cb70",
+      "value": "english-usa",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000cb7c",
+      "value": "english-us",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000cb88",
+      "value": "english-uk",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000cb94",
+      "value": "english-trinidad y tobago",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 28
+      }
+    },
+    {
+      "address": "0x1000cbb0",
+      "value": "english-south africa",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x1000cbc8",
+      "value": "english-nz",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000cbd4",
+      "value": "english-jamaica",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000cbe4",
+      "value": "english-ire",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000cbf0",
+      "value": "english-caribbean",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cc04",
+      "value": "english-can",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000cc10",
+      "value": "english-belize",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000cc20",
+      "value": "english-aus",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000cc2c",
+      "value": "english-american",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cc40",
+      "value": "dutch-belgian",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000cc50",
+      "value": "chinese-traditional",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cc64",
+      "value": "chinese-singapore",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cc78",
+      "value": "chinese-simplified",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cc8c",
+      "value": "chinese-hongkong",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cca0",
+      "value": "chinese",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000ccb0",
+      "value": "canadian",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000ccbc",
+      "value": "belgian",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000ccc4",
+      "value": "australian",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000ccd0",
+      "value": "american-english",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cce4",
+      "value": "american english",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000ccf8",
+      "value": "american",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000cd04",
+      "value": "H:mm:ss",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000cd0c",
+      "value": "dddd, MMMM dd, yyyy",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cd20",
+      "value": "M/d/yy",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 7
+      }
+    },
+    {
+      "address": "0x1000cd30",
+      "value": "December",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 9
+      }
+    },
+    {
+      "address": "0x1000cd3c",
+      "value": "November",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 9
+      }
+    },
+    {
+      "address": "0x1000cd48",
+      "value": "October",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000cd50",
+      "value": "September",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 10
+      }
+    },
+    {
+      "address": "0x1000cd5c",
+      "value": "August",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 7
+      }
+    },
+    {
+      "address": "0x1000cd74",
+      "value": "April",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 6
+      }
+    },
+    {
+      "address": "0x1000cd7c",
+      "value": "March",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 6
+      }
+    },
+    {
+      "address": "0x1000cd84",
+      "value": "February",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 9
+      }
+    },
+    {
+      "address": "0x1000cd90",
+      "value": "January",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000cdc8",
+      "value": "Saturday",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 9
+      }
+    },
+    {
+      "address": "0x1000cdd4",
+      "value": "Friday",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 7
+      }
+    },
+    {
+      "address": "0x1000cddc",
+      "value": "Thursday",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 9
+      }
+    },
+    {
+      "address": "0x1000cde8",
+      "value": "Wednesday",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 10
+      }
+    },
+    {
+      "address": "0x1000cdf4",
+      "value": "Tuesday",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000cdfc",
+      "value": "Monday",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 7
+      }
+    },
+    {
+      "address": "0x1000ce04",
+      "value": "Sunday",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 7
+      }
+    },
+    {
+      "address": "0x1000ce28",
+      "value": "SunMonTueWedThuFriSat",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x1000ce40",
+      "value": "JanFebMarAprMayJunJulAugSepOctNovDec",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 40
+      }
+    },
+    {
+      "address": "0x1000cf86",
+      "value": "OutputDebugStringA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 19
+      }
+    },
+    {
+      "address": "0x1000cf9c",
+      "value": "ExitProcess",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000cfa8",
+      "value": "KERNEL32.dll",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 13
+      }
+    },
+    {
+      "address": "0x1000cfb8",
+      "value": "wvsprintfA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 11
+      }
+    },
+    {
+      "address": "0x1000cfc4",
+      "value": "USER32.dll",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 11
+      }
+    },
+    {
+      "address": "0x1000cfd2",
+      "value": "TerminateProcess",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 17
+      }
+    },
+    {
+      "address": "0x1000cfe6",
+      "value": "GetCurrentProcess",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 18
+      }
+    },
+    {
+      "address": "0x1000cffa",
+      "value": "HeapAlloc",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 10
+      }
+    },
+    {
+      "address": "0x1000d006",
+      "value": "HeapFree",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 9
+      }
+    },
+    {
+      "address": "0x1000d012",
+      "value": "GetCommandLineA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000d024",
+      "value": "GetVersion",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 11
+      }
+    },
+    {
+      "address": "0x1000d032",
+      "value": "InitializeCriticalSection",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 26
+      }
+    },
+    {
+      "address": "0x1000d04e",
+      "value": "DeleteCriticalSection",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 22
+      }
+    },
+    {
+      "address": "0x1000d066",
+      "value": "EnterCriticalSection",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 21
+      }
+    },
+    {
+      "address": "0x1000d07e",
+      "value": "LeaveCriticalSection",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 21
+      }
+    },
+    {
+      "address": "0x1000d096",
+      "value": "HeapDestroy",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000d0a4",
+      "value": "HeapCreate",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 11
+      }
+    },
+    {
+      "address": "0x1000d0b2",
+      "value": "VirtualFree",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000d0c0",
+      "value": "VirtualAlloc",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 13
+      }
+    },
+    {
+      "address": "0x1000d0d0",
+      "value": "GetProcAddress",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 15
+      }
+    },
+    {
+      "address": "0x1000d0e2",
+      "value": "GetModuleHandleA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 17
+      }
+    },
+    {
+      "address": "0x1000d0f6",
+      "value": "GetLastError",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 13
+      }
+    },
+    {
+      "address": "0x1000d106",
+      "value": "FlushFileBuffers",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 17
+      }
+    },
+    {
+      "address": "0x1000d11a",
+      "value": "WriteFile",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 10
+      }
+    },
+    {
+      "address": "0x1000d126",
+      "value": "SetHandleCount",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 15
+      }
+    },
+    {
+      "address": "0x1000d138",
+      "value": "GetStdHandle",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 13
+      }
+    },
+    {
+      "address": "0x1000d148",
+      "value": "GetFileType",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000d156",
+      "value": "GetStartupInfoA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000d168",
+      "value": "GetCurrentThreadId",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 19
+      }
+    },
+    {
+      "address": "0x1000d17e",
+      "value": "TlsSetValue",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000d18c",
+      "value": "TlsAlloc",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 9
+      }
+    },
+    {
+      "address": "0x1000d198",
+      "value": "TlsFree",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000d1a2",
+      "value": "SetLastError",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 13
+      }
+    },
+    {
+      "address": "0x1000d1b2",
+      "value": "TlsGetValue",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000d1c0",
+      "value": "GetModuleFileNameA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 19
+      }
+    },
+    {
+      "address": "0x1000d1d6",
+      "value": "GetCPInfo",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 10
+      }
+    },
+    {
+      "address": "0x1000d1e2",
+      "value": "GetACP",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 7
+      }
+    },
+    {
+      "address": "0x1000d1ec",
+      "value": "GetOEMCP",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 9
+      }
+    },
+    {
+      "address": "0x1000d1f8",
+      "value": "FreeEnvironmentStringsA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x1000d212",
+      "value": "MultiByteToWideChar",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000d228",
+      "value": "FreeEnvironmentStringsW",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x1000d242",
+      "value": "GetEnvironmentStrings",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 22
+      }
+    },
+    {
+      "address": "0x1000d25a",
+      "value": "GetEnvironmentStringsW",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 23
+      }
+    },
+    {
+      "address": "0x1000d274",
+      "value": "WideCharToMultiByte",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000d28a",
+      "value": "InterlockedDecrement",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 21
+      }
+    },
+    {
+      "address": "0x1000d2a2",
+      "value": "InterlockedIncrement",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 21
+      }
+    },
+    {
+      "address": "0x1000d2ba",
+      "value": "SetStdHandle",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 13
+      }
+    },
+    {
+      "address": "0x1000d2ca",
+      "value": "SetFilePointer",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 15
+      }
+    },
+    {
+      "address": "0x1000d2dc",
+      "value": "LCMapStringA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 13
+      }
+    },
+    {
+      "address": "0x1000d2ec",
+      "value": "LCMapStringW",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 13
+      }
+    },
+    {
+      "address": "0x1000d2fc",
+      "value": "GetStringTypeA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 15
+      }
+    },
+    {
+      "address": "0x1000d30e",
+      "value": "GetStringTypeW",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 15
+      }
+    },
+    {
+      "address": "0x1000d320",
+      "value": "LoadLibraryA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 13
+      }
+    },
+    {
+      "address": "0x1000d330",
+      "value": "CloseHandle",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000d33e",
+      "value": "GetLocaleInfoA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 15
+      }
+    },
+    {
+      "address": "0x1000d350",
+      "value": "GetLocaleInfoW",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 15
+      }
+    },
+    {
+      "address": "0x1000d392",
+      "value": "vqdll.dll",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 10
+      }
+    },
+    {
+      "address": "0x1000d39c",
+      "value": "VqCalc",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 7
+      }
+    },
+    {
+      "address": "0x1000e030",
+      "value": "Out of memory\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 15
+      }
+    },
+    {
+      "address": "0x1000e044",
+      "value": "PVRHCL: ",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 9
+      }
+    },
+    {
+      "address": "0x1000e0d8",
+      "value": "Number of codes Used:%d\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 25
+      }
+    },
+    {
+      "address": "0x1000e0f4",
+      "value": "Change in error is small. Terminating Iteration\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 49
+      }
+    },
+    {
+      "address": "0x1000e128",
+      "value": "\nIteration :%d\t Codes:%d\t Image Quality Error:%s\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 50
+      }
+    },
+    {
+      "address": "0x1000e160",
+      "value": "No diffusion version at the moment\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 36
+      }
+    },
+    {
+      "address": "0x1000e184",
+      "value": "Found %d repeated codes\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 25
+      }
+    },
+    {
+      "address": "0x1000e1a0",
+      "value": "Deleted  %d Codes with Total Error <  %s\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 42
+      }
+    },
+    {
+      "address": "0x100be0c2",
+      "value": "VarFileInfo",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x100be0e2",
+      "value": "Translation",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x100be106",
+      "value": "StringFileInfo",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 30
+      }
+    },
+    {
+      "address": "0x100be12a",
+      "value": "040904E4",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 18
+      }
+    },
+    {
+      "address": "0x100be142",
+      "value": "CompanyName",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x100be15c",
+      "value": "VideoLogic Plc",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 30
+      }
+    },
+    {
+      "address": "0x100be182",
+      "value": "FileDescription",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 32
+      }
+    },
+    {
+      "address": "0x100be1a4",
+      "value": "VQGEN Image Compression Tool Dll",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 66
+      }
+    },
+    {
+      "address": "0x100be1ee",
+      "value": "FileVersion",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x100be208",
+      "value": "1.00.00.0008",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 26
+      }
+    },
+    {
+      "address": "0x100be22a",
+      "value": "InternalName",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 26
+      }
+    },
+    {
+      "address": "0x100be244",
+      "value": "vqdll",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x100be256",
+      "value": "LegalCopyright",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 30
+      }
+    },
+    {
+      "address": "0x100be274",
+      "value": "© 1997-98 VideoLogic Limited",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 58
+      }
+    },
+    {
+      "address": "0x100be2b6",
+      "value": "OriginalFilename",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 34
+      }
+    },
+    {
+      "address": "0x100be2d8",
+      "value": "vqdll.dll",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x100be2f2",
+      "value": "ProductName",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x100be30c",
+      "value": "PowerVRTools",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 26
+      }
+    },
+    {
+      "address": "0x100be32e",
+      "value": "ProductVersion",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 30
+      }
+    },
+    {
+      "address": "0x100be34c",
+      "value": "2.00.00.0007",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 26
+      }
+    },
+    {
+      "address": "0xffdff1ac",
+      "value": "",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 36
+      }
+    },
+    {
+      "address": "0xffdffc00",
+      "value": "",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 522
+      }
+    }
+  ],
+  "normalized_result": [
+    {
+      "address": "0x1000c296",
+      "value": "null)",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c2a5",
+      "value": "null)",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 6
+      }
+    },
+    {
+      "address": "0x1000c2b7",
+      "value": "?IsProcessorFeaturePresent",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 29
+      }
+    },
+    {
+      "address": "0x1000c2d4",
+      "value": "KERNEL32",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 9
+      }
+    },
+    {
+      "address": "0x1000c2f0",
+      "value": "runtime error ",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c304",
+      "value": "TLOSS error\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c314",
+      "value": "SING error\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c324",
+      "value": "DOMAIN error\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c334",
+      "value": "R6028\r\n- unable to initialize heap\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 40
+      }
+    },
+    {
+      "address": "0x1000c35c",
+      "value": "R6027\r\n- not enough space for lowio initialization\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 56
+      }
+    },
+    {
+      "address": "0x1000c394",
+      "value": "R6026\r\n- not enough space for stdio initialization\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 56
+      }
+    },
+    {
+      "address": "0x1000c3cc",
+      "value": "R6025\r\n- pure virtual function call\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 40
+      }
+    },
+    {
+      "address": "0x1000c3f4",
+      "value": "R6024\r\n- not enough space for _onexit/atexit table\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 56
+      }
+    },
+    {
+      "address": "0x1000c42c",
+      "value": "R6019\r\n- unable to open console device\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 44
+      }
+    },
+    {
+      "address": "0x1000c458",
+      "value": "R6018\r\n- unexpected heap error\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 36
+      }
+    },
+    {
+      "address": "0x1000c47c",
+      "value": "R6017\r\n- unexpected multithread lock error\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 48
+      }
+    },
+    {
+      "address": "0x1000c4ac",
+      "value": "R6016\r\n- not enough space for thread data\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 44
+      }
+    },
+    {
+      "address": "0x1000c4d8",
+      "value": "\r\nabnormal program termination\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 36
+      }
+    },
+    {
+      "address": "0x1000c4fc",
+      "value": "R6009\r\n- not enough space for environment\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 44
+      }
+    },
+    {
+      "address": "0x1000c528",
+      "value": "R6008\r\n- not enough space for arguments\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 44
+      }
+    },
+    {
+      "address": "0x1000c554",
+      "value": "R6002\r\n- floating point not loaded\r\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 40
+      }
+    },
+    {
+      "address": "0x1000c57c",
+      "value": "Microsoft Visual C++ Runtime Library",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 37
+      }
+    },
+    {
+      "address": "0x1000c5a8",
+      "value": "Runtime Error!\n\nProgram: ",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 28
+      }
+    },
+    {
+      "address": "0x1000c5c8",
+      "value": "<program name unknown>",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x1000c5e8",
+      "value": "GetLastActivePopup",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 19
+      }
+    },
+    {
+      "address": "0x1000c5fc",
+      "value": "GetActiveWindow",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c60c",
+      "value": "MessageBoxA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c618",
+      "value": "user32.dll",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 11
+      }
+    },
+    {
+      "address": "0x1000c624",
+      "value": "LC_TIME",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c62c",
+      "value": "LC_NUMERIC",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 11
+      }
+    },
+    {
+      "address": "0x1000c638",
+      "value": "LC_MONETARY",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c644",
+      "value": "LC_CTYPE",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 9
+      }
+    },
+    {
+      "address": "0x1000c650",
+      "value": "LC_COLLATE",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 11
+      }
+    },
+    {
+      "address": "0x1000c65c",
+      "value": "LC_ALL",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c684",
+      "value": "Paraguay",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c698",
+      "value": "Chile",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c6a0",
+      "value": "Ecuador",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c6a8",
+      "value": "Argentina",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c6bc",
+      "value": "Colombia",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c6c8",
+      "value": "Venezuela",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c6d4",
+      "value": "Dominican Republic",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000c6e8",
+      "value": "South Africa",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c6f8",
+      "value": "Panama",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c700",
+      "value": "Luxembourg",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c70c",
+      "value": "Costa Rica",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c718",
+      "value": "Switzerland",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c724",
+      "value": "Guatemala",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c730",
+      "value": "Canada",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c738",
+      "value": "Spanish - Modern Sort",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x1000c750",
+      "value": "Australia",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c75c",
+      "value": "English",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c764",
+      "value": "Austria",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c76c",
+      "value": "German",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c774",
+      "value": "Belgium",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c77c",
+      "value": "Mexico",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c784",
+      "value": "Spanish",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c78c",
+      "value": "Basque",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c794",
+      "value": "Sweden",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c79c",
+      "value": "Swedish",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c7a4",
+      "value": "Iceland",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c7ac",
+      "value": "Icelandic",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c7b8",
+      "value": "France",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c7c0",
+      "value": "French",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c7c8",
+      "value": "Finland",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c7d0",
+      "value": "Finnish",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c7d8",
+      "value": "Spain",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c7e0",
+      "value": "Spanish - Traditional Sort",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 28
+      }
+    },
+    {
+      "address": "0x1000c7fc",
+      "value": "united-states",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c80c",
+      "value": "united-kingdom",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c81c",
+      "value": "trinidad & tobago",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000c830",
+      "value": "south-korea",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c83c",
+      "value": "south-africa",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c84c",
+      "value": "south korea",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c858",
+      "value": "south africa",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c870",
+      "value": "puerto-rico",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c87c",
+      "value": "pr-china",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c888",
+      "value": "pr china",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c898",
+      "value": "new-zealand",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c8a4",
+      "value": "hong-kong",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000c8b0",
+      "value": "holland",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c8b8",
+      "value": "great britain",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c8c8",
+      "value": "england",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c8d8",
+      "value": "china",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c8e0",
+      "value": "britain",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c8e8",
+      "value": "america",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c8fc",
+      "value": "swiss",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000c904",
+      "value": "swedish-finland",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c914",
+      "value": "spanish-venezuela",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000c928",
+      "value": "spanish-uruguay",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c938",
+      "value": "spanish-puerto rico",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000c94c",
+      "value": "spanish-peru",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c95c",
+      "value": "spanish-paraguay",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000c970",
+      "value": "spanish-panama",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c980",
+      "value": "spanish-nicaragua",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000c994",
+      "value": "spanish-modern",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c9a4",
+      "value": "spanish-mexican",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000c9b4",
+      "value": "spanish-honduras",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000c9c8",
+      "value": "spanish-guatemala",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000c9dc",
+      "value": "spanish-el salvador",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000c9f0",
+      "value": "spanish-ecuador",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000ca00",
+      "value": "spanish-dominican republic",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 28
+      }
+    },
+    {
+      "address": "0x1000ca1c",
+      "value": "spanish-costa rica",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000ca30",
+      "value": "spanish-colombia",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000ca44",
+      "value": "spanish-chile",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000ca54",
+      "value": "spanish-bolivia",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000ca64",
+      "value": "spanish-argentina",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000ca78",
+      "value": "portuguese-brazilian",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x1000ca90",
+      "value": "norwegian-nynorsk",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000caa4",
+      "value": "norwegian-bokmal",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cab8",
+      "value": "norwegian",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000cac4",
+      "value": "italian-swiss",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000cad4",
+      "value": "irish-english",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000cae4",
+      "value": "german-swiss",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000caf4",
+      "value": "german-luxembourg",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cb08",
+      "value": "german-lichtenstein",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cb1c",
+      "value": "german-austrian",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000cb2c",
+      "value": "french-swiss",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000cb3c",
+      "value": "french-luxembourg",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cb50",
+      "value": "french-canadian",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000cb60",
+      "value": "french-belgian",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000cb70",
+      "value": "english-usa",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000cb7c",
+      "value": "english-us",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000cb88",
+      "value": "english-uk",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000cb94",
+      "value": "english-trinidad y tobago",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 28
+      }
+    },
+    {
+      "address": "0x1000cbb0",
+      "value": "english-south africa",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x1000cbc8",
+      "value": "english-nz",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000cbd4",
+      "value": "english-jamaica",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000cbe4",
+      "value": "english-ire",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000cbf0",
+      "value": "english-caribbean",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cc04",
+      "value": "english-can",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000cc10",
+      "value": "english-belize",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000cc20",
+      "value": "english-aus",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000cc2c",
+      "value": "english-american",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cc40",
+      "value": "dutch-belgian",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000cc50",
+      "value": "chinese-traditional",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cc64",
+      "value": "chinese-singapore",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cc78",
+      "value": "chinese-simplified",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cc8c",
+      "value": "chinese-hongkong",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cca0",
+      "value": "chinese",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000ccb0",
+      "value": "canadian",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000ccbc",
+      "value": "belgian",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000ccc4",
+      "value": "australian",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000ccd0",
+      "value": "american-english",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cce4",
+      "value": "american english",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000ccf8",
+      "value": "american",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000cd04",
+      "value": "H:mm:ss",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000cd0c",
+      "value": "dddd, MMMM dd, yyyy",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000cd20",
+      "value": "M/d/yy",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 7
+      }
+    },
+    {
+      "address": "0x1000cd30",
+      "value": "December",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 9
+      }
+    },
+    {
+      "address": "0x1000cd3c",
+      "value": "November",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 9
+      }
+    },
+    {
+      "address": "0x1000cd48",
+      "value": "October",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000cd50",
+      "value": "September",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 10
+      }
+    },
+    {
+      "address": "0x1000cd5c",
+      "value": "August",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 7
+      }
+    },
+    {
+      "address": "0x1000cd74",
+      "value": "April",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 6
+      }
+    },
+    {
+      "address": "0x1000cd7c",
+      "value": "March",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 6
+      }
+    },
+    {
+      "address": "0x1000cd84",
+      "value": "February",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 9
+      }
+    },
+    {
+      "address": "0x1000cd90",
+      "value": "January",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000cdc8",
+      "value": "Saturday",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 9
+      }
+    },
+    {
+      "address": "0x1000cdd4",
+      "value": "Friday",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 7
+      }
+    },
+    {
+      "address": "0x1000cddc",
+      "value": "Thursday",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 9
+      }
+    },
+    {
+      "address": "0x1000cde8",
+      "value": "Wednesday",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 10
+      }
+    },
+    {
+      "address": "0x1000cdf4",
+      "value": "Tuesday",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000cdfc",
+      "value": "Monday",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 7
+      }
+    },
+    {
+      "address": "0x1000ce04",
+      "value": "Sunday",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 7
+      }
+    },
+    {
+      "address": "0x1000ce28",
+      "value": "SunMonTueWedThuFriSat",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x1000ce40",
+      "value": "JanFebMarAprMayJunJulAugSepOctNovDec",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 40
+      }
+    },
+    {
+      "address": "0x1000cf86",
+      "value": "OutputDebugStringA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 19
+      }
+    },
+    {
+      "address": "0x1000cf9c",
+      "value": "ExitProcess",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000cfa8",
+      "value": "KERNEL32.dll",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 13
+      }
+    },
+    {
+      "address": "0x1000cfb8",
+      "value": "wvsprintfA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 11
+      }
+    },
+    {
+      "address": "0x1000cfc4",
+      "value": "USER32.dll",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 11
+      }
+    },
+    {
+      "address": "0x1000cfd2",
+      "value": "TerminateProcess",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 17
+      }
+    },
+    {
+      "address": "0x1000cfe6",
+      "value": "GetCurrentProcess",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 18
+      }
+    },
+    {
+      "address": "0x1000cffa",
+      "value": "HeapAlloc",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 10
+      }
+    },
+    {
+      "address": "0x1000d006",
+      "value": "HeapFree",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 9
+      }
+    },
+    {
+      "address": "0x1000d012",
+      "value": "GetCommandLineA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000d024",
+      "value": "GetVersion",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 11
+      }
+    },
+    {
+      "address": "0x1000d032",
+      "value": "InitializeCriticalSection",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 26
+      }
+    },
+    {
+      "address": "0x1000d04e",
+      "value": "DeleteCriticalSection",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 22
+      }
+    },
+    {
+      "address": "0x1000d066",
+      "value": "EnterCriticalSection",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 21
+      }
+    },
+    {
+      "address": "0x1000d07e",
+      "value": "LeaveCriticalSection",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 21
+      }
+    },
+    {
+      "address": "0x1000d096",
+      "value": "HeapDestroy",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000d0a4",
+      "value": "HeapCreate",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 11
+      }
+    },
+    {
+      "address": "0x1000d0b2",
+      "value": "VirtualFree",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000d0c0",
+      "value": "VirtualAlloc",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 13
+      }
+    },
+    {
+      "address": "0x1000d0d0",
+      "value": "GetProcAddress",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 15
+      }
+    },
+    {
+      "address": "0x1000d0e2",
+      "value": "GetModuleHandleA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 17
+      }
+    },
+    {
+      "address": "0x1000d0f6",
+      "value": "GetLastError",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 13
+      }
+    },
+    {
+      "address": "0x1000d106",
+      "value": "FlushFileBuffers",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 17
+      }
+    },
+    {
+      "address": "0x1000d11a",
+      "value": "WriteFile",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 10
+      }
+    },
+    {
+      "address": "0x1000d126",
+      "value": "SetHandleCount",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 15
+      }
+    },
+    {
+      "address": "0x1000d138",
+      "value": "GetStdHandle",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 13
+      }
+    },
+    {
+      "address": "0x1000d148",
+      "value": "GetFileType",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000d156",
+      "value": "GetStartupInfoA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 16
+      }
+    },
+    {
+      "address": "0x1000d168",
+      "value": "GetCurrentThreadId",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 19
+      }
+    },
+    {
+      "address": "0x1000d17e",
+      "value": "TlsSetValue",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000d18c",
+      "value": "TlsAlloc",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 9
+      }
+    },
+    {
+      "address": "0x1000d198",
+      "value": "TlsFree",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 8
+      }
+    },
+    {
+      "address": "0x1000d1a2",
+      "value": "SetLastError",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 13
+      }
+    },
+    {
+      "address": "0x1000d1b2",
+      "value": "TlsGetValue",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000d1c0",
+      "value": "GetModuleFileNameA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 19
+      }
+    },
+    {
+      "address": "0x1000d1d6",
+      "value": "GetCPInfo",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 10
+      }
+    },
+    {
+      "address": "0x1000d1e2",
+      "value": "GetACP",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 7
+      }
+    },
+    {
+      "address": "0x1000d1ec",
+      "value": "GetOEMCP",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 9
+      }
+    },
+    {
+      "address": "0x1000d1f8",
+      "value": "FreeEnvironmentStringsA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x1000d212",
+      "value": "MultiByteToWideChar",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000d228",
+      "value": "FreeEnvironmentStringsW",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x1000d242",
+      "value": "GetEnvironmentStrings",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 22
+      }
+    },
+    {
+      "address": "0x1000d25a",
+      "value": "GetEnvironmentStringsW",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 23
+      }
+    },
+    {
+      "address": "0x1000d274",
+      "value": "WideCharToMultiByte",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x1000d28a",
+      "value": "InterlockedDecrement",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 21
+      }
+    },
+    {
+      "address": "0x1000d2a2",
+      "value": "InterlockedIncrement",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 21
+      }
+    },
+    {
+      "address": "0x1000d2ba",
+      "value": "SetStdHandle",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 13
+      }
+    },
+    {
+      "address": "0x1000d2ca",
+      "value": "SetFilePointer",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 15
+      }
+    },
+    {
+      "address": "0x1000d2dc",
+      "value": "LCMapStringA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 13
+      }
+    },
+    {
+      "address": "0x1000d2ec",
+      "value": "LCMapStringW",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 13
+      }
+    },
+    {
+      "address": "0x1000d2fc",
+      "value": "GetStringTypeA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 15
+      }
+    },
+    {
+      "address": "0x1000d30e",
+      "value": "GetStringTypeW",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 15
+      }
+    },
+    {
+      "address": "0x1000d320",
+      "value": "LoadLibraryA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 13
+      }
+    },
+    {
+      "address": "0x1000d330",
+      "value": "CloseHandle",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x1000d33e",
+      "value": "GetLocaleInfoA",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 15
+      }
+    },
+    {
+      "address": "0x1000d350",
+      "value": "GetLocaleInfoW",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 15
+      }
+    },
+    {
+      "address": "0x1000d392",
+      "value": "vqdll.dll",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 10
+      }
+    },
+    {
+      "address": "0x1000d39c",
+      "value": "VqCalc",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 7
+      }
+    },
+    {
+      "address": "0x1000e030",
+      "value": "Out of memory\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 15
+      }
+    },
+    {
+      "address": "0x1000e044",
+      "value": "PVRHCL: ",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 9
+      }
+    },
+    {
+      "address": "0x1000e0d8",
+      "value": "Number of codes Used:%d\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 25
+      }
+    },
+    {
+      "address": "0x1000e0f4",
+      "value": "Change in error is small. Terminating Iteration\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 49
+      }
+    },
+    {
+      "address": "0x1000e128",
+      "value": "\nIteration :%d\t Codes:%d\t Image Quality Error:%s\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 50
+      }
+    },
+    {
+      "address": "0x1000e160",
+      "value": "No diffusion version at the moment\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 36
+      }
+    },
+    {
+      "address": "0x1000e184",
+      "value": "Found %d repeated codes\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 25
+      }
+    },
+    {
+      "address": "0x1000e1a0",
+      "value": "Deleted  %d Codes with Total Error <  %s\n",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 42
+      }
+    },
+    {
+      "address": "0x100be0c2",
+      "value": "VarFileInfo",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x100be0e2",
+      "value": "Translation",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x100be106",
+      "value": "StringFileInfo",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 30
+      }
+    },
+    {
+      "address": "0x100be12a",
+      "value": "040904E4",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 18
+      }
+    },
+    {
+      "address": "0x100be142",
+      "value": "CompanyName",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x100be15c",
+      "value": "VideoLogic Plc",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 30
+      }
+    },
+    {
+      "address": "0x100be182",
+      "value": "FileDescription",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 32
+      }
+    },
+    {
+      "address": "0x100be1a4",
+      "value": "VQGEN Image Compression Tool Dll",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 66
+      }
+    },
+    {
+      "address": "0x100be1ee",
+      "value": "FileVersion",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x100be208",
+      "value": "1.00.00.0008",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 26
+      }
+    },
+    {
+      "address": "0x100be22a",
+      "value": "InternalName",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 26
+      }
+    },
+    {
+      "address": "0x100be244",
+      "value": "vqdll",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 12
+      }
+    },
+    {
+      "address": "0x100be256",
+      "value": "LegalCopyright",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 30
+      }
+    },
+    {
+      "address": "0x100be274",
+      "value": "© 1997-98 VideoLogic Limited",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 58
+      }
+    },
+    {
+      "address": "0x100be2b6",
+      "value": "OriginalFilename",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 34
+      }
+    },
+    {
+      "address": "0x100be2d8",
+      "value": "vqdll.dll",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 20
+      }
+    },
+    {
+      "address": "0x100be2f2",
+      "value": "ProductName",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 24
+      }
+    },
+    {
+      "address": "0x100be30c",
+      "value": "PowerVRTools",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 26
+      }
+    },
+    {
+      "address": "0x100be32e",
+      "value": "ProductVersion",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 30
+      }
+    },
+    {
+      "address": "0x100be34c",
+      "value": "2.00.00.0007",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 26
+      }
+    },
+    {
+      "address": "0xffdff1ac",
+      "value": "",
+      "string": {
+        "encoding": "US-ASCII",
+        "termination": "present_or_not_required",
+        "byte_length": 36
+      }
+    },
+    {
+      "address": "0xffdffc00",
+      "value": "",
+      "string": {
+        "encoding": "UTF-16",
+        "termination": "present_or_not_required",
+        "byte_length": 522
+      }
+    }
+  ],
+  "confidence": "observed",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+    "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+    "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+    "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+    "Only Ghidra-defined string Data is observed; packed or undefined string bytes may be absent. Completeness applies to that inventory, and an empty search does not establish that text is absent from the artifact. If an address is known, use read_bytes and xrefs to inspect bytes and references.",
+    "Charset is reported, while a non-missing terminator cannot distinguish a present terminator from a fixed or Pascal layout.",
+    "macOS sessions require a matching executable Ghidra native decompiler; REA checks for it but does not build native components or change Gatekeeper quarantine state.",
+    "This session uses Ghidra 12.1.2. The bridge is verified against 12.1.4; other 12.1.x builds are accepted and the observed version is reported."
+  ],
+  "relationship_coverage": null,
+  "locations": [],
+  "evidence_links": []
+}
