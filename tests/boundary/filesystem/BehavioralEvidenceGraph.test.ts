@@ -2,12 +2,15 @@ import { describe, expect, it } from "vitest";
 
 import {
   createEmptyBehavioralGraph,
+  behavioralGraphSchema,
+  validateBehavioralGraph,
+  mergeBehavioralGraphs,
   BEHAVIORAL_GRAPH_MAX_EDGES,
   BEHAVIORAL_GRAPH_MAX_NODES,
   behavioralNodeId,
-  mergeBehavioralGraphs,
+  mergeBinaryBehavioralGraphs,
   queryBehavioralEvidence,
-  validateBehavioralGraph,
+  validateBinaryBehavioralGraph,
 } from "../../../src/domain/reconstruction/BehavioralEvidenceGraph.js";
 
 const sha = "a".repeat(64);
@@ -38,7 +41,7 @@ const edge = (extra: Record<string, unknown> = {}) => ({
   ...extra,
 });
 const graph = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   targetSha256: sha,
   nodes: [node("node-1"), node("node-2", { assertion: "contradicts" })],
   edges: [edge()],
@@ -50,7 +53,7 @@ const graph = {
 describe("behavioral evidence graph", () => {
   it("creates a binary-bound empty graph and validates provenance", () => {
     expect(createEmptyBehavioralGraph(sha)).toEqual({
-      schemaVersion: 1,
+      schemaVersion: 2,
       targetSha256: sha,
       nodes: [],
       edges: [],
@@ -58,34 +61,37 @@ describe("behavioral evidence graph", () => {
       coverage: [],
       limitations: [],
     });
-    expect(validateBehavioralGraph(graph)).toEqual(graph);
+    expect(validateBinaryBehavioralGraph(graph)).toEqual(graph);
   });
 
   it("rejects malformed identity, duplicate IDs and dangling or cross-binary edges", () => {
     expect(() => createEmptyBehavioralGraph("not-a-digest")).toThrow();
     expect(() =>
-      validateBehavioralGraph({
+      validateBinaryBehavioralGraph({
         ...graph,
         nodes: [node("node-1"), node("node-1")],
       }),
     ).toThrow(/duplicate.*node/iu);
     expect(() =>
-      validateBehavioralGraph({ ...graph, edges: [edge({ to: "missing" })] }),
+      validateBinaryBehavioralGraph({
+        ...graph,
+        edges: [edge({ to: "missing" })],
+      }),
     ).toThrow(/dangling/iu);
     expect(() =>
-      validateBehavioralGraph({
+      validateBinaryBehavioralGraph({
         ...graph,
         nodes: [node("node-1"), node("node-2", { binarySha256: otherSha })],
       }),
     ).toThrow(/cross-binary/iu);
     expect(() =>
-      validateBehavioralGraph({ ...graph, evidenceIds: [ev1] }),
+      validateBinaryBehavioralGraph({ ...graph, evidenceIds: [ev1] }),
     ).toThrow(/evidence reference/iu);
   });
 
   it("bounds coverage reason text in persisted graph state", () => {
     expect(() =>
-      validateBehavioralGraph({
+      validateBinaryBehavioralGraph({
         ...graph,
         coverage: [
           {
@@ -104,7 +110,7 @@ describe("behavioral evidence graph", () => {
     "requires a meaningful reason for an ambiguous edge (%s)",
     (reason) => {
       expect(() =>
-        validateBehavioralGraph({
+        validateBinaryBehavioralGraph({
           ...graph,
           edges: [edge({ resolution: "ambiguous", reason })],
         }),
@@ -122,14 +128,14 @@ describe("behavioral evidence graph", () => {
   });
 
   it("merges deterministically and rejects conflicting assertions instead of overwriting", () => {
-    expect(mergeBehavioralGraphs(graph, graph)).toEqual(
-      validateBehavioralGraph(graph),
+    expect(mergeBinaryBehavioralGraphs(graph, graph)).toEqual(
+      validateBinaryBehavioralGraph(graph),
     );
     const conflict = {
       ...graph,
       nodes: [node("node-1", { assertion: "contradicts" }), graph.nodes[1]],
     };
-    expect(() => mergeBehavioralGraphs(graph, conflict)).toThrow(
+    expect(() => mergeBinaryBehavioralGraphs(graph, conflict)).toThrow(
       /conflicting node/iu,
     );
   });
@@ -163,5 +169,34 @@ describe("behavioral evidence graph", () => {
     );
     expect(BEHAVIORAL_GRAPH_MAX_NODES).toBe(100_000);
     expect(BEHAVIORAL_GRAPH_MAX_EDGES).toBe(250_000);
+  });
+});
+
+describe("versioned behavioral graph API", () => {
+  const legacy = { schemaVersion: 1, nodes: [], edges: [] };
+  it("preserves original v1 shape and dispatches enriched v2 unchanged", () => {
+    const binary = createEmptyBehavioralGraph(sha);
+    expect(behavioralGraphSchema.parse(legacy)).toEqual(legacy);
+    expect(validateBehavioralGraph(legacy)).toEqual(legacy);
+    expect(mergeBehavioralGraphs(legacy, legacy)).toEqual(legacy);
+    expect(validateBehavioralGraph(binary)).toEqual(binary);
+    expect(mergeBehavioralGraphs(binary, binary)).toEqual(binary);
+    expect(binary.schemaVersion).toBe(2);
+    expect(() => validateBinaryBehavioralGraph(legacy)).toThrow();
+  });
+  it("rejects mixed versions in either direction and unknown versions", () => {
+    const binary = createEmptyBehavioralGraph(sha);
+    expect(() => mergeBehavioralGraphs(legacy, binary)).toThrow(
+      /different schema versions/u,
+    );
+    expect(() => mergeBehavioralGraphs(binary, legacy)).toThrow(
+      /different schema versions/u,
+    );
+    expect(() =>
+      validateBehavioralGraph({ ...legacy, schemaVersion: 3 }),
+    ).toThrow();
+    expect(() =>
+      validateBehavioralGraph({ ...binary, schemaVersion: 1 }),
+    ).toThrow();
   });
 });

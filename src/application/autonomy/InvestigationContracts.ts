@@ -2,8 +2,8 @@ import { z } from "zod";
 import { digestCanonicalValue } from "../../domain/canonicalDigest.js";
 import { evidenceSchema, parseEvidence } from "../../domain/evidence.js";
 import {
-  behavioralGraphSchema,
-  validateBehavioralGraph,
+  binaryBehavioralGraphSchema,
+  validateBinaryBehavioralGraph,
 } from "../../domain/reconstruction/BehavioralEvidenceGraph.js";
 import { projectEvidenceToBehavioralGraph } from "../investigation/BehavioralGraphProjection.js";
 import { parseProcessCapture } from "../../domain/process/processCaptureParsing.js";
@@ -84,7 +84,7 @@ export const investigationStateSchema = z.object({
   ]),
   iteration: z.number().int().nonnegative(),
   evidence: z.array(evidenceSchema),
-  behavioralGraph: behavioralGraphSchema.optional(),
+  behavioralGraph: binaryBehavioralGraphSchema.optional(),
   regressions: z.array(z.string()),
   functions: z.array(
     z.object({
@@ -140,7 +140,7 @@ export const parseInvestigationState = (input: unknown): InvestigationState => {
   if (state.behavioralGraph === undefined) {
     state.behavioralGraph = expectedGraph;
   } else {
-    const storedGraph = validateBehavioralGraph(state.behavioralGraph);
+    const storedGraph = validateBinaryBehavioralGraph(state.behavioralGraph);
     if (
       storedGraph.targetSha256 !== state.binarySha256 ||
       JSON.stringify(storedGraph) !== JSON.stringify(expectedGraph)

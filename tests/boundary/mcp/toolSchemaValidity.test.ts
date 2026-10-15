@@ -62,6 +62,7 @@ function expectStrictInputSchemaParity(
     "binary_session",
     "find_changed_behavior",
     "build_call_path",
+    "schedule_reconstruction_functions",
     "record_unknown",
     "update_unknown",
   ];

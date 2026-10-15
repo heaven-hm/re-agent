@@ -1,8 +1,10 @@
 # RE-Agent Behavioral Evidence Graph — First-Slice Design
 
-**Status:** Draft for review  
-**Repository baseline:** `develop` at `213bf08ad82f5ca270604efbe650638076e88d47` (verified through GitHub API)  
-**Related work:** Issue #25; draft PR #29 (not merged)
+**Status:** Implemented foundation; native provider acceptance remains blocked.
+
+**Repository baseline:** `develop` at `567c1c0` (integrated during production review).
+
+**Related work:** Issue #25; merged PR #29; integration PR #35.
 
 ## 1. Goal
 

@@ -144,6 +144,13 @@ export const CALL_PATH_PROVIDER = {
   version: "1",
 } as const;
 
+/** Provider identity for Evidence-backed reconstruction scheduling. */
+export const RECONSTRUCTION_SCHEDULE_PROVIDER = {
+  id: "rea-reconstruction-schedule",
+  name: "REA reconstruction scheduler",
+  version: "1",
+} as const;
+
 /** Provider identity for explicit static/runtime hypothesis correlation. */
 export const STATIC_RUNTIME_PROVIDER = {
   id: "rea-static-runtime-correlation",

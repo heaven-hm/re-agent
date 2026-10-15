@@ -1,0 +1,33 @@
+name: Legacy case study evidence gate
+on:
+  pull_request:
+    paths:
+      - 'scripts/verify-case-study.mjs'
+      - 'tests/verify-case-study.test.mjs'
+      - 'docs/legacy-case-study-standard.md'
+      - 'case-studies/**'
+      - '.github/workflows/legacy-case-study.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-case-studies:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run evidence contract regression tests
+        run: node --test tests/verify-case-study.test.mjs
+      - name: Verify every published case-study manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ ! -d case-studies ]]; then
+            echo "No case studies published; contract tests only."
+            exit 0
+          fi
+          while IFS= read -r -d '' manifest; do
+            node scripts/verify-case-study.mjs "$manifest"
+          done < <(find case-studies -name case.json -type f -print0)

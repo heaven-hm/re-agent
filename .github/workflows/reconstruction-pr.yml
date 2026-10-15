@@ -1,0 +1,58 @@
+name: Reconstruction PR checks
+
+on:
+  pull_request:
+    branches: [develop]
+    paths:
+      - "src/domain/reconstruction/**"
+      - "src/application/autonomy/**"
+      - "src/application/investigation/**"
+      - "src/server/registerAutonomyTool.ts"
+      - "src/cli/autonomyCommands.ts"
+      - "tests/acceptance/autonomy.test.ts"
+      - "docs/autonomous-reconstruction.md"
+      - "docs/mcp-contracts.md"
+      - "licenses/**"
+      - "package.json"
+      - "package-lock.json"
+      - "tests/boundary/filesystem/**"
+      - ".github/workflows/reconstruction-pr.yml"
+  push:
+    branches:
+      - "feat/25-behavioral-evidence-graph"
+      - "feat/26-semantic-memory-lifetimes"
+      - "feat/27-differential-counterexample-minimizer"
+      - "feat/28-bitvector-proof-obligations"
+
+permissions:
+  contents: read
+
+jobs:
+  reconstruction:
+    name: Typecheck and focused reconstruction tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run check:fast
+      - name: Run focused reconstruction regressions
+        shell: bash
+        run: |
+          test_files=()
+          for name in BehavioralEvidenceGraph BehavioralEvidenceGraphV1 BehavioralGraphProjection MemoryLifetimes DifferentialMinimizer BitvectorProofObligations; do
+            file="tests/boundary/filesystem/${name}.test.ts"
+            if [ -f "$file" ]; then test_files+=("$file"); fi
+          done
+          if [ "${#test_files[@]}" -eq 0 ]; then
+            echo "No reconstruction test files found" >&2
+            exit 1
+          fi
+          test_files+=(src/application/autonomy/AutonomousInvestigation.test.ts tests/acceptance/autonomy.test.ts)
+          npm run test:focused -- "${test_files[@]}"
+      - name: Validate documentation and dependency licenses
+        run: npm run docs:check

@@ -1,4 +1,10 @@
 import { z } from "zod";
+import {
+  legacyBehavioralGraphSchema,
+  validateLegacyBehavioralGraph,
+  mergeLegacyBehavioralGraphs,
+  type LegacyBehavioralGraph,
+} from "./LegacyBehavioralEvidenceGraph.js";
 
 import { digestCanonicalValue } from "../canonicalDigest.js";
 import { digestSchema, prefixedDigestSchema } from "../digests.js";
@@ -96,8 +102,8 @@ const coverageSchema = z.strictObject({
   omitted: z.number().int().nonnegative().nullable(),
   reason: z.string().max(4096).nullable(),
 });
-export const behavioralGraphSchema = z.strictObject({
-  schemaVersion: z.literal(1),
+export const binaryBehavioralGraphSchema = z.strictObject({
+  schemaVersion: z.literal(2),
   targetSha256: digestSchema,
   nodes: z.array(nodeSchema).max(BEHAVIORAL_GRAPH_MAX_NODES),
   edges: z.array(behavioralGraphEdgeSchema).max(BEHAVIORAL_GRAPH_MAX_EDGES),
@@ -108,7 +114,7 @@ export const behavioralGraphSchema = z.strictObject({
   limitations: z.array(z.string().min(1).max(4096)).max(10_000),
 });
 
-export type BehavioralGraph = z.infer<typeof behavioralGraphSchema>;
+export type BinaryBehavioralGraph = z.infer<typeof binaryBehavioralGraphSchema>;
 export type BehavioralGraphNode = z.infer<typeof nodeSchema>;
 export type BehavioralGraphEdge = z.infer<typeof behavioralGraphEdgeSchema>;
 export type BehavioralGraphCoverage = z.infer<typeof coverageSchema>;
@@ -132,9 +138,9 @@ export const behavioralNodeId = (
 
 export const createEmptyBehavioralGraph = (
   binarySha256: string,
-): BehavioralGraph =>
-  validateBehavioralGraph({
-    schemaVersion: 1,
+): BinaryBehavioralGraph =>
+  validateBinaryBehavioralGraph({
+    schemaVersion: 2,
     targetSha256: digestSchema.parse(binarySha256),
     nodes: [],
     edges: [],
@@ -144,8 +150,10 @@ export const createEmptyBehavioralGraph = (
   });
 
 /** Validate references and return a deterministic, canonical graph ordering. */
-export const validateBehavioralGraph = (input: unknown): BehavioralGraph => {
-  const graph = behavioralGraphSchema.parse(input);
+export const validateBinaryBehavioralGraph = (
+  input: unknown,
+): BinaryBehavioralGraph => {
+  const graph = binaryBehavioralGraphSchema.parse(input);
   const nodeIds = new Set<string>();
   const knownEvidence = new Set(graph.evidenceIds);
   if (knownEvidence.size !== graph.evidenceIds.length)
@@ -211,12 +219,12 @@ const assertEvidenceReferences = (
 };
 
 /** Merge only compatible identities; equivalent assertions union provenance. */
-export const mergeBehavioralGraphs = (
+export const mergeBinaryBehavioralGraphs = (
   leftInput: unknown,
   rightInput: unknown,
-): BehavioralGraph => {
-  const left = validateBehavioralGraph(leftInput);
-  const right = validateBehavioralGraph(rightInput);
+): BinaryBehavioralGraph => {
+  const left = validateBinaryBehavioralGraph(leftInput);
+  const right = validateBinaryBehavioralGraph(rightInput);
   if (left.targetSha256 !== right.targetSha256)
     throw new Error("Cannot merge behavioral graphs for different binaries");
   const nodes = new Map(left.nodes.map((node) => [node.id, node]));
@@ -253,8 +261,8 @@ export const mergeBehavioralGraphs = (
     const key = JSON.stringify(item);
     coverage.set(key, item);
   }
-  return validateBehavioralGraph({
-    schemaVersion: 1,
+  return validateBinaryBehavioralGraph({
+    schemaVersion: 2,
     targetSha256: left.targetSha256,
     nodes: [...nodes.values()],
     edges: [...edges.values()],
@@ -299,7 +307,7 @@ export const queryBehavioralEvidence = (
   graphInput: unknown,
   nodeId: string,
 ): BehavioralEvidenceQuery => {
-  const graph = validateBehavioralGraph(graphInput);
+  const graph = validateBinaryBehavioralGraph(graphInput);
   const node = graph.nodes.find((item) => item.id === nodeId);
   if (node === undefined) throw new Error(`Unknown behavioral node: ${nodeId}`);
   const related = graph.edges.filter(
@@ -327,4 +335,33 @@ export const queryBehavioralEvidence = (
     coverage: graph.coverage,
     limitations: graph.limitations,
   };
+};
+
+/** Versioned public API: original multi-binary v1 and Evidence-bound binary v2. */
+export const behavioralGraphSchema = z.discriminatedUnion("schemaVersion", [
+  legacyBehavioralGraphSchema,
+  binaryBehavioralGraphSchema,
+]);
+export type BehavioralGraph = LegacyBehavioralGraph | BinaryBehavioralGraph;
+
+export const validateBehavioralGraph = (input: unknown): BehavioralGraph => {
+  const graph = behavioralGraphSchema.parse(input);
+  return graph.schemaVersion === 1
+    ? validateLegacyBehavioralGraph(graph)
+    : validateBinaryBehavioralGraph(graph);
+};
+
+export const mergeBehavioralGraphs = (
+  left: unknown,
+  right: unknown,
+): BehavioralGraph => {
+  const a = behavioralGraphSchema.parse(left);
+  const b = behavioralGraphSchema.parse(right);
+  if (a.schemaVersion !== b.schemaVersion)
+    throw new Error(
+      "Cannot merge behavioral graphs with different schema versions",
+    );
+  return a.schemaVersion === 1
+    ? mergeLegacyBehavioralGraphs(a, b)
+    : mergeBinaryBehavioralGraphs(a, b);
 };

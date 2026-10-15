@@ -24,7 +24,7 @@ The MCP operation is `autonomous_investigation`. Its actions are `start`, `resum
 
 ## Behavioral evidence graph in checkpoints
 
-Each checkpoint now includes a versioned `behavioralGraph` projection bound to
+Each checkpoint now includes a version 2 `behavioralGraph` projection bound to
 the checkpoint's exact `binarySha256`. The projection keeps the original
 Evidence records in the checkpoint and refers to them by immutable Evidence
 ID. It does not copy provider payloads into a second Evidence store. On resume,
@@ -32,6 +32,11 @@ the graph is validated against the authenticated Evidence list; legacy
 checkpoints without the graph are deterministically upgraded in memory and
 persisted on their next save. Unsupported graph versions, wrong target hashes,
 and dangling graph Evidence references fail closed.
+
+Standalone graph consumers retain the original version 1 correlation API and
+its behavior across binary identities. The checkpoint projection uses version 2,
+with one exact target and authenticated Evidence references. The public parser
+dispatches by schema version; merging different schema versions is rejected.
 
 The graph has a 100,000 node cap and a 250,000 edge cap. Repeated imports merge
 provenance deterministically. Conflicting assertions are rejected during merge

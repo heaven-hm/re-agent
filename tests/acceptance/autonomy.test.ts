@@ -40,7 +40,7 @@ cliTest(
       iteration: 1,
       results: [{ caseId: "negative", status: "pass" }],
       behavioral_graph: expect.objectContaining({
-        schema_version: 1,
+        schema_version: 2,
         target_sha256: expect.any(String),
         graph_sha256: expect.any(String),
         node_count: expect.any(Number),
@@ -92,7 +92,7 @@ cliTest(
           ),
           result_counts: { pass: 1, fail: 0, unknown: 0 },
           behavioral_graph: expect.objectContaining({
-            schema_version: 1,
+            schema_version: 2,
             target_sha256: expect.any(String),
             graph_sha256: expect.any(String),
             node_count: expect.any(Number),

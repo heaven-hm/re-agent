@@ -6,6 +6,7 @@ import {
 import { fileURLToPath } from "node:url";
 import { inspectSystemGhidraProvider } from "./ghidra/GhidraDoctor.js";
 import { inspectIdaRegistration } from "./ida/IdaDoctor.js";
+import { inspectBinaryNinjaRegistration } from "./binaryninja/BinaryNinjaDoctor.js";
 import { selectLinuxPrivateDisplayStrategy } from "./hopper/LinuxPrivateDisplayProbe.js";
 
 /** Compose provider diagnostics at the outer CLI adapter boundary. */
@@ -17,6 +18,10 @@ export const createSystemDoctorHost = (
     providerInspections: async () => [
       await inspectSystemGhidraProvider(environment),
       inspectIdaRegistration(environment.REA_IDA_MCP_CONFIG),
+      inspectBinaryNinjaRegistration(
+        environment.REA_BINJA_MCP_CONFIG ??
+          environment.REA_BINARYNINJA_MCP_CONFIG,
+      ),
     ],
     linuxDemoRuntimeCheck: () => inspectLinuxPrivateDisplay(environment),
   });

@@ -1,1 +1,6 @@
 npm run check:fast
+# Review tooling must be installed explicitly, not downloaded during push.
+# Do not silently treat review failures as successful pushes.
+if [ -x node_modules/.bin/openqodex ]; then
+  node_modules/.bin/openqodex hook pre-push "$@"
+fi

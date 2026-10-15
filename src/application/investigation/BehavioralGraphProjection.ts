@@ -6,8 +6,8 @@ import {
   behavioralNodeId,
   BEHAVIORAL_GRAPH_MAX_EDGES,
   BEHAVIORAL_GRAPH_MAX_NODES,
-  validateBehavioralGraph,
-  type BehavioralGraph,
+  validateBinaryBehavioralGraph,
+  type BinaryBehavioralGraph,
   type BehavioralGraphCoverage,
   type BehavioralGraphEdge,
   type BehavioralGraphNode,
@@ -32,7 +32,7 @@ export interface BehavioralEvidenceProjectionInput {
 export const projectEvidenceToBehavioralGraph = (
   targetSha256: string,
   input: BehavioralEvidenceProjectionInput,
-): BehavioralGraph => {
+): BinaryBehavioralGraph => {
   const nodeBound =
     input.records.length +
     input.applicationSources.reduce(
@@ -464,8 +464,8 @@ export const projectEvidenceToBehavioralGraph = (
       "Native investigation graph facts without immutable Evidence IDs are retained only as an explicit coverage gap.",
     );
   }
-  return validateBehavioralGraph({
-    schemaVersion: 1,
+  return validateBinaryBehavioralGraph({
+    schemaVersion: 2,
     targetSha256,
     nodes: [...nodes.values()],
     edges: [...edges.values()],
