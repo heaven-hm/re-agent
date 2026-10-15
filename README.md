@@ -1,11 +1,28 @@
-# Reverse Engineering Engine
+# RE-Agent — Reverse Engineering Agent
 
-**Repository: [heaven-hm/rea-engine](https://github.com/heaven-hm/rea-engine).**
-Reverse Engineering Engine builds directly on [morluto/rea](https://github.com/morluto/rea), retaining its MIT license, attribution and working integrations. The package identity is `rea-engine`; compatible `rea` and `rea-agents` command aliases are retained. Registry metadata is configured for `io.github.heaven-hm/rea-engine`; this does not imply npm or MCP Registry publication.
+A modular coding-agent toolkit for **authorized maintenance, compatibility repair and independent porting of discontinued or unsupported software and games**. It extends the existing REA codebase with hosted investigation, evidence, checkpointing and bounded build/test/repair. The user or community can add focused skills without creating another platform.
+
+The repository is [heaven-hm/re-agent](https://github.com/heaven-hm/re-agent), renamed from `rea-engine`. The source package identity is `re-agent`; registry metadata alone does not mean the renamed npm/MCP package is published or available. Existing `rea`, `rea-engine`, `rea-extended` and `rea-agents` command aliases, `rea` MCP registrations and `rea.json` configuration remain compatible.
+
+## Legacy maintenance and modular skills
+
+- Discover built-in and local community skills: `node scripts/rea.mjs maintenance-skills`.
+- Bind a supported-scope target and prepare a hosted workflow: `node scripts/rea.mjs maintenance-plan request.json`.
+- Execute a caller-supplied bounded comparison/repair plan: `node scripts/rea.mjs maintenance-run request.json controller-plan.json checkpoint.json` (supports `--resume`).
+- Scan captured memory bytes without attaching or writing: `node scripts/rea.mjs memory-snapshot-pattern snapshot.bin "48 8B ?? 90"`.
+- The host coding agent follows selected skills to reproduce issues, collect static/runtime evidence, repair an isolated replica, build, compare and retain regressions using existing tools. A prepared plan is not a completed scan or repair; arbitrary closed-source reconstruction is not guaranteed.
+
+See [workflow and verification](docs/legacy-maintenance.md), [community skill format](docs/community-skills.md), [audited cheat-agent integration](docs/cheat-agent-integration.md) and [supported-use policy](USAGE_POLICY.md). Six bundled modules cover triage, static diagnosis, runtime/memory observation, repair/port, verification and release review. Discovery never executes community code. See the [macOS validation record and reproduction command](docs/re-agent-maintenance-validation.md).
+
+## Verification claims and licensing
+
+Byte-identical artifacts require exact byte comparisons. A native port across OS/CPU architectures normally has different executable bytes; matching a declared finite suite establishes that suite's observations only. Missing evidence stays unverified. Existing benchmark sections below retain their original limited scope and do not prove universal application/game equivalence.
+
+RE-Agent's code remains [MIT](LICENSE), with upstream REA attribution and selected cheat-agent MIT notices preserved. The project supports beneficial, authorized legacy maintenance, not cheats, sabotage or unauthorized changes. The use policy does not rewrite the MIT license. Original applications/assets and optional third-party tools retain their own licenses and redistribution requirements.
 
 ## Architecture at a glance
 
-REA Engine extends the existing [REA](https://github.com/morluto/rea) analysis ecosystem with a bounded investigation and reconstruction layer. The diagrams below distinguish inherited providers from engine-specific orchestration. They describe supported workflows, **not** a promise of fully automatic reconstruction for arbitrary binaries.
+RE-Agent extends the existing [REA](https://github.com/morluto/rea) analysis ecosystem with a bounded investigation and reconstruction layer. The diagrams below distinguish inherited providers from engine-specific orchestration. They describe supported workflows, **not** a promise of fully automatic reconstruction for arbitrary binaries.
 
 ```mermaid
 flowchart TB
@@ -18,7 +35,7 @@ flowchart TB
         R["Runtime and process evidence<br/>capture · instrumentation"]
     end
 
-    subgraph ENGINE["REA Engine extensions"]
+    subgraph ENGINE["RE-Agent extensions"]
         D["Evidence-led discovery"]
         T["Owned Frida trace correlation"]
         A["Bounded affine recovery"]
@@ -89,7 +106,7 @@ flowchart LR
         REA["CLI / MCP and agent workflows"]
         PROVIDERS["Ghidra · Frida · native / managed / web analysis"]
     end
-    subgraph EXT["heaven-hm/rea-engine additions"]
+    subgraph EXT["heaven-hm/re-agent additions"]
         AUTO["Persistent autonomy controller"]
         PROOF["Affine recovery · constrained verification"]
         TOOL["Verified tool bootstrap · offline bundle builder"]
@@ -110,7 +127,7 @@ For implementation details, see the [investigation controller](src/application/a
 
 ### What differs from upstream REA
 
-| Area                           | Reverse Engineering Engine addition                                                                                           | Source / reproducible evidence                                                                                                                          |
+| Area                           | Reverse Engineering Agent addition                                                                                            | Source / reproducible evidence                                                                                                                          |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Autonomous reconstruction      | Persistent checkpoints, bounded build/test/repair, rollback, mismatch regression inputs                                       | [Controller](src/application/autonomy/AutonomousInvestigation.ts), [25/25 fixture report](docs/verification/rea-extended/fixture-report.json)           |
 | Unknown function investigation | Existing static providers feed runtime hypotheses and independent bounded affine reconstruction                               | [Discovery](src/composition/autonomousDiscovery.ts), [recovery](src/application/autonomy/AffineRecovery.ts)                                             |
@@ -153,7 +170,7 @@ These are actual `Form.DrawToBitmap` renders after the same button-handler seque
 
 ### Installed tools versus distributed tools
 
-Development health checks confirmed Frida 17.23.3, LIEF 1.0.0, Z3 5.1.0.0, Capstone 5.0.9 and Pillow 12.3.0. Ghidra/radare2 and native compilers are reused locally. **Bundled now:** the signature-verified ILSpy package and the built X11 libgdiplus library with source and licenses. The [preview release](https://github.com/heaven-hm/rea-engine/releases/tag/engine-preview-2026-10-13) also carries the checksum-verified, unmodified Ghidra 12.1.2 archive; see its [manifest](third_party/ghidra/manifest.json). **A clone does not contain every installed external tool binary.** The installer and offline bundle builder are shipped in source; generated local bundles are not a license-approved public distribution. Frida/LIEF native dependency source and license coverage require further audit. Optional licensed tools and Apple Calculator are not redistributed. See [tool profiles and limitations](docs/autonomy-tool-bootstrap.md).
+Development health checks confirmed Frida 17.23.3, LIEF 1.0.0, Z3 5.1.0.0, Capstone 5.0.9 and Pillow 12.3.0. Ghidra/radare2 and native compilers are reused locally. **Bundled now:** the signature-verified ILSpy package and the built X11 libgdiplus library with source and licenses. The [preview release](https://github.com/heaven-hm/re-agent/releases/tag/engine-preview-2026-10-13) also carries the checksum-verified, unmodified Ghidra 12.1.2 archive; see its [manifest](third_party/ghidra/manifest.json). **A clone does not contain every installed external tool binary.** The installer and offline bundle builder are shipped in source; generated local bundles are not a license-approved public distribution. Frida/LIEF native dependency source and license coverage require further audit. Optional licensed tools and Apple Calculator are not redistributed. See [tool profiles and limitations](docs/autonomy-tool-bootstrap.md).
 
 # Native Windows → macOS ports (Batch 1)
 
@@ -262,15 +279,15 @@ and formal proofs remain unavailable. See the
 ## Build and use this repository
 
 ```sh
-git clone https://github.com/heaven-hm/rea-engine.git
-cd rea-engine
+git clone https://github.com/heaven-hm/re-agent.git
+cd re-agent
 npm ci
 npm run build:cached
 node scripts/print-mcp-config.mjs /absolute/path/to/target --local
 node scripts/rea.mjs --help
 ```
 
-Use the printed local MCP configuration with your host coding agent and the built packaged skill. A published upstream npm package is not this fork. The implementation retains compatible command names while the product identity is Reverse Engineering Engine.
+Use the printed local MCP configuration with your host coding agent and the built packaged skill. A published upstream npm package is not this fork. The implementation retains compatible command names while the product identity is Reverse Engineering Agent.
 
 ## Documentation
 
@@ -283,6 +300,6 @@ Use the printed local MCP configuration with your host coding agent and the buil
 - [MCP contracts](docs/mcp-contracts.md)
 - [Licensing](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md)
 
-Report issues and contribute at [heaven-hm/rea-engine](https://github.com/heaven-hm/rea-engine).
+Report issues and contribute at [heaven-hm/re-agent](https://github.com/heaven-hm/re-agent).
 
 Latest validation: the complete managed benchmark command passed again with verified owned-display cleanup. The focused autonomy regression batch passed 37 tests with 2 skipped; type and lint checks passed. [Execution logs and checksum inventory](docs/verification/rea-engine/manifest.json). These are scoped development checks, not certification of all REA capabilities.

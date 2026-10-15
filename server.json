@@ -1,11 +1,11 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.heaven-hm/rea-engine",
-  "title": "Reverse Engineering Engine",
-  "description": "Evidence-backed static/runtime investigation, reconstruction and differential repair for coding agents.",
-  "websiteUrl": "https://github.com/heaven-hm/rea-engine",
+  "name": "io.github.heaven-hm/re-agent",
+  "title": "RE-Agent \u2014 Reverse Engineering Agent",
+  "description": "Authorized legacy software maintenance, analysis, porting and scoped verification for coding agents.",
+  "websiteUrl": "https://github.com/heaven-hm/re-agent",
   "repository": {
-    "url": "https://github.com/heaven-hm/rea-engine",
+    "url": "https://github.com/heaven-hm/re-agent",
     "source": "github"
   },
   "version": "6.4.0",
@@ -13,7 +13,7 @@
     {
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
-      "identifier": "rea-engine",
+      "identifier": "re-agent",
       "version": "6.4.0",
       "runtimeHint": "npx",
       "transport": {

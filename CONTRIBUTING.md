@@ -1,3 +1,7 @@
+# Contributing to RE-Agent
+
+The current focus is authorized legacy software and game maintenance. Read [supported use](USAGE_POLICY.md), [modular skills](docs/community-skills.md) and the [integration audit](docs/cheat-agent-integration.md). Add skills under maintenance-skills/; preserve upstream licenses and prove verification claims with real evidence. Runtime tools remain in the existing CLI/MCP architecture.
+
 # Contributing to REA
 
 REA welcomes focused bug fixes, documentation improvements, tests, and reverse-engineering workflows. For large contract or architecture changes, explain the intended scope and link the relevant issue or design discussion.

@@ -1,11 +1,19 @@
 ---
 name: reverse-engineer-anything
-description: Reverse engineer native, managed, Electron/JavaScript, packaged, firmware, and browser targets with REA. Use shipped-artifact or requested runtime evidence to explain features, compare versions, decompile code, or guide a reconstruction. Skip REA for ordinary source-repository architecture analysis.
+description: Maintain and independently port authorized discontinued or unsupported software and games using RE-Agent static/runtime evidence, modular skills, regression comparison and bounded repair. Skip binary analysis for ordinary complete-source codebase questions.
 metadata:
-  version: "43"
+  version: "44"
 ---
 
-# REA
+# RE-Agent — Reverse Engineering Agent
+
+## Default mission: legacy maintenance
+
+Use this distribution for authorized maintenance and porting of discontinued or unsupported software and games. Record end-of-support evidence, authorization, original hashes and requested scope before repair. End of support does not grant rights to code or assets. Preserve the original; generate and test changes in an isolated replica workspace.
+
+Start with [legacy maintenance](references/legacy-maintenance.md). Run `re-agent maintenance-skills` to discover modular skills, then `re-agent maintenance-plan request.json` to bind the target and choose stage-specific instruction paths. Read each selected SKILL.md before that stage. Additional community roots are selected with `--directory`; metadata discovery never executes their scripts. See [community skills](references/community-skills.md).
+
+The coding agent supplies reasoning and source edits; RE-Agent supplies existing analysis, process supervision, evidence and bounded build/test/repair operations. A prepared maintenance plan is not a completed scan or repair. Do not generate trainers, cheats, DRM bypasses, or unauthorized changes. A finite passing suite proves its declared observations only. Cross-platform native ports generally have different executable bytes; require behavioral comparisons and explicit assumptions instead of claiming byte identity.
 
 Use REA when a claim depends on a shipped binary or package, decompilation,
 passive application runtime evidence, or comparison with
@@ -31,8 +39,7 @@ Diagnose the observed blocker, continue useful supported work, and resume the
 original task after repair. Client approval, shell PATH, registration and engine
 availability have different remedies; avoid repeating setup for all of them.
 
-Prefer an existing `rea` CLI. When none is installed and REA package acquisition
-is within the authorized scope, use `npx -y rea-agents@latest` in its place.
+Prefer the installed `re-agent` CLI or retained `rea` alias. In a source checkout, use `node scripts/rea.mjs` after building. Do not assume the renamed npm package is published; verify its publisher and release before using a registry install.
 Configuration repair starts with a read-only setup plan; show paths, backups and
 skill replacement before applying authorized changes. Preserve existing approval
 and target-execution boundaries. REA setup never installs or upgrades unrelated
