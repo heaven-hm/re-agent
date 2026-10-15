@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - 'integrations/cheat-agent/**'
+      - 'integrations/gtlibcpp'
+      - '.gitmodules'
       - '.github/workflows/cheat-agent-native.yml'
   push:
     branches: [develop]
@@ -22,6 +24,15 @@ jobs:
         enabled: ['ON', 'OFF']
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Verify pinned GTLibCpp checkout
+        if: matrix.enabled == 'ON'
+        shell: bash
+        run: |
+          test -f integrations/gtlibcpp/CMakeLists.txt
+          git -C integrations/gtlibcpp rev-parse HEAD
+          grep -q 'gtlibcpp' integrations/cheat-agent/native/CMakeLists.txt
       - name: Configure native integration
         run: cmake -S integrations/cheat-agent -B build-cheat-agent -DCHEAT_AGENT_ENABLE_GTLIBCPP=${{ matrix.enabled }}
       - name: Build
