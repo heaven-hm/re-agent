@@ -22,7 +22,8 @@
     "help": "byte-identical, exit 0",
     "pgpfp": "byte-identical, exit 0",
     "unknown-option": "byte-identical (`plink: unknown option \"-Zbogus\"`, CRLF, exit 0)",
-    "version": "release and source-commit lines identical; platform/compiler lines re-reported for ARM64 macOS (sole documented deviation)"
+    "version": "release and source-commit lines identical; platform/compiler lines re-reported for ARM64 macOS (sole documented deviation)",
+    "negative_control": "PASS (single-word mutant in unknown-option path detected by byte comparison)"
   },
   "scope": "CLI-surface parity only. Network/SSH transport explicitly out of scope; a host argument exits 1 with a transport notice on stderr. CRLF line endings preserved to match the original console bytes.",
   "evidence": "output/hypercam/evidence-plink.json (22 records, 4 unknowns; ignored scratch, not committed)"
