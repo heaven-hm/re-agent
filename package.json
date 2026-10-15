@@ -41,7 +41,7 @@
     "re-agent": "scripts/rea.mjs",
     "rea": "scripts/rea.mjs",
     "rea-agents": "scripts/rea.mjs",
-    "rea-extended": "scripts/rea.mjs",
+    "rea-extended": "scripts/rea.mjs"
   },
   "engines": {
     "node": "^22.19.0 || ^24.11.0 || >=26.0.0"
