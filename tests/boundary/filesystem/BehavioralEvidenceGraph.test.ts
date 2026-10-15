@@ -19,3 +19,11 @@ describe("behavioral graph provenance contract", () => {
     expect(() => validateBehavioralGraph({...graph, edges: [{...edge, evidenceIds: [ev, ev]}]})).toThrow(/Duplicate/u);
   });
 });
+
+it("canonicalizes edge evidence order across graph merges", () => {
+  const e2 = "ev_" + "c".repeat(64);
+  const left = {...graph, edges: [{...edge, evidenceIds: [ev, e2]}]};
+  const right = {...graph, edges: [{...edge, evidenceIds: [e2, ev]}]};
+  expect(mergeBehavioralGraphs(left, right).edges).toHaveLength(1);
+  expect(() => mergeBehavioralGraphs(left, {...right, edges: [{...right.edges[0]!, confidence: "inferred"}]})).toThrow(/Conflicting behavioral edge confidence/u);
+});
