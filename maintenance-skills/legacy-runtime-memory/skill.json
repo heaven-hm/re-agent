@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "legacy-runtime-memory",
+  "version": "1.0.0",
+  "description": "Observe authorized legacy processes, UI and memory to test static hypotheses.",
+  "license": "MIT",
+  "targets": ["software", "game"],
+  "platforms": ["windows", "linux", "macos"],
+  "stages": ["runtime-analysis", "memory-analysis"],
+  "tools": [
+    "capture_process_scenario",
+    "instrument_with_frida",
+    "memory-snapshot-pattern"
+  ]
+}

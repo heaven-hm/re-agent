@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "id": "legacy-static-diagnosis",
+  "version": "1.0.0",
+  "description": "Investigate legacy binary imports, functions, data flow and compatibility boundaries.",
+  "license": "MIT",
+  "targets": ["software", "game"],
+  "platforms": ["windows", "linux", "macos"],
+  "stages": ["static-analysis"],
+  "tools": ["open_binary", "binary_overview", "analyze_function"]
+}

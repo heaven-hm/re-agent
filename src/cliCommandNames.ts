@@ -1,5 +1,9 @@
 /** Canonical names used by every one-shot CLI command registration. */
 export const CLI_COMMANDS = Object.freeze({
+  maintenanceSkills: "maintenance-skills",
+  maintenancePlan: "maintenance-plan",
+  maintenanceRun: "maintenance-run",
+  memorySnapshotPattern: "memory-snapshot-pattern",
   autonomyUi: "autonomy-ui",
   autonomyProveAffine: "autonomy-prove-affine",
   autonomyTools: "autonomy-tools",

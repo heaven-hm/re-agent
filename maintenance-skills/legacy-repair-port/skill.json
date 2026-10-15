@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "id": "legacy-repair-port",
+  "version": "1.0.0",
+  "description": "Repair and independently port scoped legacy behavior with rollback and bounded retries.",
+  "license": "MIT",
+  "targets": ["software", "game"],
+  "platforms": ["windows", "linux", "macos"],
+  "stages": ["repair-and-port"],
+  "tools": ["autonomous_investigation"]
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "legacy-port-verification",
+  "version": "1.0.0",
+  "description": "Verify a reconstructed legacy program against identical declared original inputs.",
+  "license": "MIT",
+  "targets": ["software", "game"],
+  "platforms": ["windows", "linux", "macos"],
+  "stages": ["verification"],
+  "tools": [
+    "compare_process_captures",
+    "compare_artifacts",
+    "autonomous_investigation"
+  ]
+}

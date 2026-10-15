@@ -136,3 +136,7 @@ not a substitute for those obligations.
 ## Reverse Engineering Engine demonstration bundles
 
 The fork additionally retains the official [ILSpy package and dependency notices](third_party/ilspy/README.md), the [MIT libgdiplus binary/source records](third_party/libgdiplus/manifest.json), and a standalone [GPL-3.0 TicTacToe benchmark](benchmarks/README.md). The game original, recovered game source/assets and game images retain GPL-3.0 terms and accompanying source; they are aggregated separately from MIT engine code. The publisher's original Luhn utility is downloaded locally and is not redistributed. These additions do not establish an audited bundle of all engine dependencies.
+
+## Selected cheat-agent buffer-scanning algorithm
+
+The read-only buffer-pattern algorithm adapted in `src/domain/maintenance/MemoryPattern.ts` originates from heaven-hm/cheat-agent revision `87b56e38b72aa4a98b62c4210ec751dfa6c213df`, copyright (c) 2026 Haseeb Mir, MIT. Full notice: [licenses/cheat-agent-MIT.txt](licenses/cheat-agent-MIT.txt). Integration scope and excluded components: [audit](docs/cheat-agent-integration.md). No trainer generator or original-process memory writer is included by this integration.
