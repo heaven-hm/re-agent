@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "id": "legacy-cross-platform-port",
+  "version": "1.0.0",
+  "description": "Recover declared legacy behavior for an independently implemented cross-platform port.",
+  "license": "MIT",
+  "targets": [
+    "software",
+    "game"
+  ],
+  "platforms": [
+    "windows",
+    "linux",
+    "macos"
+  ],
+  "stages": [
+    "repair-and-port",
+    "verification"
+  ],
+  "tools": [
+    "open_binary",
+    "analyze_function",
+    "capture_process_scenario",
+    "compare_artifacts",
+    "autonomous_investigation"
+  ]
+}
