@@ -6,16 +6,50 @@ import { parseFunctionEvidence } from "./functionDossierEvidence.js";
 import { evidenceSchema, type Evidence } from "./evidence.js";
 import { compareUnicodeCodePoints } from "./unicodeCodePointOrder.js";
 
+const attemptCountsSchema = z
+  .record(
+    z.string(),
+    z.number().int().max(Number.MAX_SAFE_INTEGER).nonnegative(),
+  )
+  .superRefine((attempts, context) => {
+    const canonicalAddresses = new Set<string>();
+    for (const address of Object.keys(attempts)) {
+      let canonical: string;
+      try {
+        canonical = parseCallPathAddress(address);
+      } catch {
+        context.addIssue({
+          code: "custom",
+          path: [address],
+          message: "Retry count keys must be valid function addresses",
+        });
+        continue;
+      }
+      if (canonicalAddresses.has(canonical))
+        context.addIssue({
+          code: "custom",
+          path: [address],
+          message: "Retry count addresses must be unique after normalization",
+        });
+      canonicalAddresses.add(canonical);
+    }
+  });
+
+const normalizeAttemptCounts = (
+  attempts: Readonly<Record<string, number>>,
+): Record<string, number> =>
+  Object.fromEntries(
+    Object.entries(attempts).map(([address, count]) => [
+      parseCallPathAddress(address),
+      count,
+    ]),
+  );
+
 const inputSchema = z.strictObject({
   functions: z.array(evidenceSchema).min(1).max(2000),
   maxFunctions: z.number().int().min(1).max(10000),
   maxAttempts: z.number().int().min(1).max(100),
-  attempts: z
-    .record(
-      z.string(),
-      z.number().int().max(Number.MAX_SAFE_INTEGER).nonnegative(),
-    )
-    .default({}),
+  attempts: attemptCountsSchema.default({}),
 });
 const MAX_FUNCTION_RELATIONSHIPS = 100_000;
 
@@ -24,12 +58,7 @@ export const reconstructionScheduleInputSchema = z.strictObject({
   functions: z.array(evidenceSchema).min(1).max(2000),
   max_functions: z.number().int().min(1).max(10000),
   max_attempts: z.number().int().min(1).max(100),
-  attempts: z
-    .record(
-      z.string(),
-      z.number().int().max(Number.MAX_SAFE_INTEGER).nonnegative(),
-    )
-    .default({}),
+  attempts: attemptCountsSchema.default({}),
 });
 
 /** Stable output contract for schedule reports and persisted Evidence. */
@@ -137,7 +166,11 @@ export interface ReconstructionSchedule {
 export const buildReconstructionSchedule = (
   rawInput: ReconstructionScheduleInput,
 ): ReconstructionSchedule => {
-  const input = inputSchema.parse(rawInput);
+  const parsedInput = inputSchema.parse(rawInput);
+  const input = {
+    ...parsedInput,
+    attempts: normalizeAttemptCounts(parsedInput.attempts),
+  };
   const snapshots = parseSnapshots(input.functions);
   const first = snapshots.values().next().value;
   if (first === undefined) throw new TypeError("Function Evidence is required");

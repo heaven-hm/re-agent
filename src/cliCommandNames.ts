@@ -226,6 +226,7 @@ export const MCP_TOOLS_WITHOUT_DEDICATED_CLI = Object.freeze([
   "import_evidence_bundle",
   "compare_artifacts",
   "compare_functions",
+  "autonomous_investigation",
   "find_changed_behavior",
   "build_call_path",
   "schedule_reconstruction_functions",
