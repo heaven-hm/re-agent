@@ -29,18 +29,21 @@ export const validateBehavioralGraph = (input: unknown): BehavioralGraph => {
     if (nodes.has(node.binarySha256 + ":" + node.id)) throw new Error("Duplicate behavioral node identity");
     nodes.set(node.binarySha256 + ":" + node.id, node);
   }
+  // Build a lookup once: scanning all nodes per edge is quadratic at the
+  // documented 100k-node/250k-edge budget.
+  const byId = new Map<string, (typeof graph.nodes)[number]>();
+  const ambiguous = new Set<string>();
+  for (const node of graph.nodes) {
+    if (byId.has(node.id)) ambiguous.add(node.id);
+    else byId.set(node.id, node);
+  }
   const signatures = new Map<string, string>();
   for (const edge of graph.edges) {
-    const candidates = (id: string) => graph.nodes.filter((node) => node.id === id);
-    const fromMatches = candidates(edge.from);
-    const toMatches = candidates(edge.to);
-    if (fromMatches.length === 0 || toMatches.length === 0)
-      throw new Error("Dangling behavioral edge");
-    if (fromMatches.length !== 1 || toMatches.length !== 1)
-      throw new Error("Ambiguous behavioral edge endpoint");
-    const from = fromMatches[0];
-    const to = toMatches[0];
+    const from = byId.get(edge.from);
+    const to = byId.get(edge.to);
     if (!from || !to) throw new Error("Dangling behavioral edge");
+    if (ambiguous.has(edge.from) || ambiguous.has(edge.to))
+      throw new Error("Ambiguous behavioral edge endpoint");
     if (from.binarySha256 !== to.binarySha256)
       throw new Error("Cross-binary behavioral edges require explicit correspondence");
     if (new Set(edge.evidenceIds).size !== edge.evidenceIds.length)
