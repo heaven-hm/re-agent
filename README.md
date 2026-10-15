@@ -163,6 +163,18 @@ flowchart TD
     class STOP stopped
 ```
 
+
+### Embedded memory-analysis components
+
+RE-Agent contains a [Cheat Agent source integration](integrations/cheat-agent)
+and a pinned [GTLibCpp submodule](integrations/gtlibcpp) for typed process
+memory access. Clone with `--recurse-submodules` and follow the
+[embedded engines build guide](docs/embedded-memory-engines.md). The
+Cheat Agent source snapshot is not yet synchronized automatically, and a
+working end-to-end RE-Agent MCP provider is still tracked separately.
+GTLibCpp retains its own restrictive license; it is not relicensed under
+RE-Agent's MIT terms.
+
 ### Extension boundary and provenance
 
 ```mermaid
