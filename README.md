@@ -247,47 +247,35 @@ A 2026-10-13 validation host reported Frida 17.23.3, LIEF 1.0.0, Z3 5.1.0.0, Cap
 
 See the [reverse-engineering tool coverage matrix](docs/reverse-engineering-tool-coverage.md) for a clearer separation between supported RE-Agent operations, host-installed tools, incomplete adapters, and the evidence required before a tool counts as integrated.
 
-# Binary-first port fixtures (Batch 1; not closed-source legacy case studies)
+# Professional maintenance fixtures (utilities and RE tooling)
 
-Independent macOS reconstructions and one explicitly blocked investigation of
-six MIT-licensed native Windows targets, recovered binary-first with REA (no
-original source consulted). Six Windows originals and the available macOS
-replicas are committed under
+Independent macOS reconstructions of MIT-licensed native Windows
+productivity tools, recovered binary-first with REA (no original source
+consulted). Game ports were removed from this showcase: this repository
+demonstrates serious legacy-software support — defect finding, maintenance
+engineering, and cross-platform porting — not game cloning. Windows
+originals and macOS replicas are committed under
 `benchmarks/native-windows-ports/` with manifests, goldens and reports.
 
-| Target                | Original (Windows x64)                                           | macOS port                                     | Status                                         |
-| --------------------- | ---------------------------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- |
-| Snake v1.1.0          | `original-binaries/snake-windows-x86_64.exe` (55KB)              | `snake/replica/snakemac` (C, terminal)         | Structural frame parity                        |
-| PixelTetris v1.0.0    | `original-binaries/Pixeltetris.exe` (1.1MB, SDL2)                | `pixeltetris/replica/pixelmac` (C, SDL2)       | Menu corrected to near-identity; gameplay live |
-| Tetris v1.0.0         | `original-binaries/Tetris.exe` (2.2MB, SDL2)                     | `tetris/replica/tetrismac` (C, SDL2)           | Menu + gameplay screenshots verified           |
-| legacy-notepad v1.2.1 | `original-binaries/legacy-notepad-x64.exe` (263KB, Win32)        | `notepad/replica/notepadmac` (Swift, AppKit)   | Unicode window + save-bytes verified           |
-| Clipjar v1.2.0        | `original-binaries/clipjar.exe` (5.3MB, Rust)                    | `clipjar/replica/clipjarmac` (Swift, menu-bar) | SQLite capture/persist/dedupe PASS             |
-| imgview v0.3          | `original-binaries/imgview64.exe` (UPX stub, unpacked upx 5.2.1) | `imgview/replica/imgviewmac` (Swift, AppKit)   | PNG render verified                            |
+| Target                | Original (Windows x64)                                           | macOS port                                     | Status                               |
+| --------------------- | ---------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------ |
+| legacy-notepad v1.2.1 | `original-binaries/legacy-notepad-x64.exe` (263KB, Win32)        | `notepad/replica/notepadmac` (Swift, AppKit)   | Unicode window + save-bytes verified |
+| Clipjar v1.2.0        | `original-binaries/clipjar.exe` (5.3MB, Rust)                    | `clipjar/replica/clipjarmac` (Swift, menu-bar) | SQLite capture/persist/dedupe PASS   |
+| imgview v0.3          | `original-binaries/imgview64.exe` (UPX stub, unpacked upx 5.2.1) | `imgview/replica/imgviewmac` (Swift, AppKit)   | PNG render verified                  |
+| PuTTY plink 0.85      | official w64 binary (MIT, 1MB)                                   | `benchmarks/plink/replica/plinkmac` (C, CLI)   | help/pgpfp/noargs byte-identical     |
+| IGI2 QVM toolchain    | 2003 PE32 toolchain (user-supplied, unmodified)                  | `gconv/replica/qvmtool` (C, CLI)               | 120/120 error-behavior parity        |
 
-## Port evidence
-
-Tetris macOS port, live menu + gameplay windows:
-
-![tetrismac menu](benchmarks/native-windows-ports/screenshots/tetrismac-menu.png)
-![tetrismac gameplay](benchmarks/native-windows-ports/screenshots/tetrismac-play.png)
+## Maintenance evidence
 
 Notepad macOS port, live Unicode window:
 
 ![notepadmac window](benchmarks/native-windows-ports/screenshots/notepadmac-hello.png)
 
-PixelTetris macOS port, live menu + gameplay windows:
-
-![pixelmac menu](benchmarks/native-windows-ports/screenshots/pixelmac-menu4.png)
-![pixelmac gameplay](benchmarks/native-windows-ports/screenshots/pixelmac-play.png)
-
-Snake: 26-line terminal frames byte-identical modulo RNG cells
-(`snake/original-run0.txt`); Clipjar: synthetic capture → SHA-256 row,
-restart persistence and hash-dedupe verified against live SQLite.
 Found defect example: the PixelTetris original crashes with a null-deref
 page fault when its font asset is missing (`Could not load font!` then
-`wine: Unhandled page fault`), instead of exiting cleanly — recorded in
-`pixeltetris/manifest.json`; the port prints the missing asset and exits
-nonzero without crashing.
+`wine: Unhandled page fault`), instead of exiting cleanly — root-caused
+to a missing early return in `FUN_140019080` and recorded in
+`pixeltetris/DEFECT-missing-font-crash.md`.
 
 See `benchmarks/native-windows-ports/reports/` (license audit, binary
 analysis, functional results, limitations). Whole-executable identity is
