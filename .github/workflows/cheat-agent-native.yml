@@ -7,6 +7,7 @@ on:
       - 'integrations/gtlibcpp'
       - '.gitmodules'
       - '.github/workflows/cheat-agent-native.yml'
+      - 'docs/gtlibcpp-cheat-agent-integration.md'
   push:
     branches: [develop]
     paths:
@@ -46,3 +47,17 @@ jobs:
         run: |
           cmake -S integrations/cheat-agent -B build-cheat-agent -DCHEAT_AGENT_BUILD_IGI_EXAMPLE=ON
           cmake --build build-cheat-agent --config Release --target igi_trainer
+
+  gtlibcpp-core:
+    name: GTLibCpp independent library tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Initialize pinned GTLibCpp submodule
+        run: git submodule update --init --depth 1 integrations/gtlibcpp
+      - name: Configure GTLibCpp unit tests
+        run: cmake -S integrations/gtlibcpp -B build-gtlibcpp -DGTLIBCPP_BUILD_TESTS=ON -DGTLIBCPP_BUILD_EXAMPLES=OFF -DGTLIBCPP_BUILD_DEMOS=OFF
+      - name: Build GTLibCpp unit tests
+        run: cmake --build build-gtlibcpp --config Release
+      - name: Execute GTLibCpp unit tests
+        run: ctest --test-dir build-gtlibcpp -C Release --output-on-failure
