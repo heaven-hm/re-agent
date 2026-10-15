@@ -75,7 +75,7 @@ const coverageSchema = z.strictObject({
   status: z.enum(["complete", "partial", "unsupported", "not_requested"]),
   examined: z.number().int().nonnegative(),
   omitted: z.number().int().nonnegative(),
-  reason: z.string().nullable(),
+  reason: z.string().max(4096).nullable(),
 });
 export const behavioralGraphSchema = z.strictObject({
   schemaVersion: z.literal(1),

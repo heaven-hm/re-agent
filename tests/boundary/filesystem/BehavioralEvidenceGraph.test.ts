@@ -83,6 +83,23 @@ describe("behavioral evidence graph", () => {
     ).toThrow(/evidence reference/iu);
   });
 
+  it("bounds coverage reason text in persisted graph state", () => {
+    expect(() =>
+      validateBehavioralGraph({
+        ...graph,
+        coverage: [
+          {
+            facet: "runtime-trace",
+            status: "partial",
+            examined: 0,
+            omitted: 1,
+            reason: "r".repeat(4097),
+          },
+        ],
+      }),
+    ).toThrow();
+  });
+
   it("keeps supporting and contradicting evidence separate in node queries", () => {
     const result = queryBehavioralEvidence(graph, "node-1");
     expect(result.supportingEvidenceIds).toEqual([ev1]);
