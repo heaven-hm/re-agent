@@ -33,3 +33,12 @@ it("permits duplicate local IDs across distinct binaries without inventing cross
   const b = {schemaVersion:1,nodes:[node("same", "c".repeat(64))],edges:[]};
   expect(mergeBehavioralGraphs(a,b).nodes).toHaveLength(2);
 });
+
+it("validates dense but bounded endpoint references without quadratic scans", () => {
+  const nodes = Array.from({ length: 5000 }, (_, i) => node("n" + i));
+  const edges = Array.from({ length: 4999 }, (_, i) => ({
+    ...edge, from: "n" + i, to: "n" + (i + 1),
+  }));
+  const result = validateBehavioralGraph({ schemaVersion: 1, nodes, edges });
+  expect(result.edges).toHaveLength(4999);
+});
