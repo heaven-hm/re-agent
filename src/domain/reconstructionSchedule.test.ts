@@ -144,6 +144,28 @@ describe("Evidence-backed reconstruction scheduling", () => {
     });
   });
 
+  it("normalizes retry address keys and rejects canonical collisions", () => {
+    const normalized = buildReconstructionSchedule({
+      functions: [observe("0x100", [])],
+      maxFunctions: 1,
+      maxAttempts: 1,
+      attempts: { "0X000100": 1 },
+    });
+    expect(normalized.items[0]).toMatchObject({
+      address: "0x100",
+      disposition: "retry_limit",
+    });
+
+    expect(() =>
+      buildReconstructionSchedule({
+        functions: [observe("0x100", [])],
+        maxFunctions: 1,
+        maxAttempts: 1,
+        attempts: { "0x100": 0, "0X000100": 1 },
+      }),
+    ).toThrow("Retry count addresses must be unique after normalization");
+  });
+
   it("preserves unknown relationship coverage as a limitation", () => {
     const result = buildReconstructionSchedule({
       functions: [observe("0x100", ["0x200"])],
