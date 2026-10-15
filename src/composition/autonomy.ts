@@ -18,8 +18,49 @@ import { discoverAutonomousFunctions } from "./autonomousDiscovery.js";
 import { generateNumericExperiments } from "../domain/autonomyExperiments.js";
 import { createAffineRecoveryHooks } from "../application/autonomy/AffineRecovery.js";
 import { resolveAutonomyEnvironment } from "./autonomyEnvironment.js";
+import { ArtifactResourceScope } from "../artifacts/ArtifactResourceScope.js";
+import { analyzeJavaScriptApplication } from "../application/javascript/JavaScriptApplicationService.js";
+import { parseApplicationGraphEvidence } from "../application/javascript/JavaScriptApplicationEvidenceGraph.js";
+import type { Evidence } from "../domain/evidence.js";
 
 const active = new Map<string, AutonomousInvestigation>();
+
+const discoverApplicationArtifacts = async (
+  config: AutonomousPlan["investigation"],
+  signal: AbortSignal,
+): Promise<readonly Evidence[]> => {
+  const artifacts = config.applicationArtifacts ?? [];
+  if (artifacts.length === 0) return [];
+  const resources = new ArtifactResourceScope();
+  const evidence: Evidence[] = [];
+  try {
+    for (const artifact of artifacts) {
+      signal.throwIfAborted();
+      const result = await analyzeJavaScriptApplication(
+        { input_path: artifact.path },
+        resources,
+        { signal },
+      );
+      if (!result.ok)
+        throw new Error(
+          `Application analysis failed for ${artifact.path}: ${JSON.stringify(result.error)}`,
+        );
+      const source = parseApplicationGraphEvidence(result.value);
+      if (!source.ok)
+        throw new Error(
+          `Application Evidence failed authentication for ${artifact.path}: ${JSON.stringify(source.error)}`,
+        );
+      if (source.value.rootArtifactSha256 !== artifact.sha256)
+        throw new Error(
+          `Application artifact changed during discovery: ${artifact.path}; expected SHA-256 ${artifact.sha256}, observed ${source.value.rootArtifactSha256}`,
+        );
+      evidence.push(result.value);
+    }
+  } finally {
+    await resources.close();
+  }
+  return evidence;
+};
 
 const hooksFor = (
   plan: AutonomousPlan,
@@ -92,20 +133,31 @@ const hooksFor = (
           ),
         })
       : {}),
-    ...(plan.analysis === undefined
+    ...(plan.analysis === undefined &&
+    (plan.investigation.applicationArtifacts?.length ?? 0) === 0
       ? {}
       : {
-          discover: (config, signal) =>
-            discoverAutonomousFunctions(config.binaryPath, {
-              ...(plan.analysis?.provider === undefined
-                ? {}
-                : { provider: plan.analysis.provider }),
-              ...(plan.analysis?.maxFunctions === undefined
-                ? {}
-                : { maxFunctions: plan.analysis.maxFunctions }),
-              environment,
+          discover: async (config, signal) => {
+            const applicationEvidence = await discoverApplicationArtifacts(
+              config,
               signal,
-            }),
+            );
+            if (plan.analysis === undefined) return applicationEvidence;
+            const functionEvidence = await discoverAutonomousFunctions(
+              config.binaryPath,
+              {
+                ...(plan.analysis.provider === undefined
+                  ? {}
+                  : { provider: plan.analysis.provider }),
+                ...(plan.analysis.maxFunctions === undefined
+                  ? {}
+                  : { maxFunctions: plan.analysis.maxFunctions }),
+                environment,
+                signal,
+              },
+            );
+            return [...applicationEvidence, ...functionEvidence];
+          },
         }),
     ...(model === undefined
       ? {}

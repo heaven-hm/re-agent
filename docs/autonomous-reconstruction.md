@@ -59,11 +59,13 @@ Evidence ID cited by graph facts exists in the checkpoint; this closure check
 does not prove that every cited record has the executable's digest, and records
 keep their own artifact identity. When the runnable target is a separate
 executable (as with Electron and `app.asar`), declare each related application
-artifact's SHA-256 in the plan's optional
-`investigation.applicationArtifactSha256s` list. This records the operator's
-target-scope choice; RE-Agent checks the graph Evidence against each declared
-digest and does not infer the executable-to-application relationship from
-paths or filenames. The current native
+artifact's path and SHA-256 in the plan's optional
+`investigation.applicationArtifacts` list. RE-Agent analyzes each declared
+artifact during discovery and rechecks its digest when creating, opening, and
+resuming the checkpoint. This records the operator's target-scope choice; REA
+does not infer the executable-to-application relationship from paths or
+filenames. Checkpoints with these bindings use state version 2; other plans
+remain on version 1. The current native
 investigation graph uses descriptive metadata rather than immutable
 RE-Agent Evidence IDs; its facts are therefore reported as a coverage gap and
 are not asserted in the cross-domain graph.

@@ -102,6 +102,9 @@ export const projectEvidenceToBehavioralGraph = (
     throw new Error("Behavioral graph edge budget exceeded");
 
   const allEvidence = new Map<string, Evidence>();
+  const allowedApplicationDigests = new Set(
+    input.applicationArtifactSha256s ?? [],
+  );
   // parseEvidence authenticates the semantic ID, which intentionally excludes
   // display subject names and local paths. Rebinding those is not a conflict.
   for (const raw of input.records) {
