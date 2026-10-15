@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "id": "legacy-bug-repair",
+  "version": "1.0.0",
+  "description": "Reproduce a real legacy defect and repair a separately owned candidate with regression evidence.",
+  "license": "MIT",
+  "targets": [
+    "software",
+    "game"
+  ],
+  "platforms": [
+    "windows",
+    "linux",
+    "macos"
+  ],
+  "stages": [
+    "repair-and-port",
+    "verification"
+  ],
+  "tools": [
+    "capture_process_scenario",
+    "autonomous_investigation",
+    "compare_process_captures"
+  ]
+}
