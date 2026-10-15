@@ -249,10 +249,10 @@
     }
   ],
   "recommended_sequence": [
-    "P0: Obtain a complete local checkout and execute baseline focused/full checks; compare PR #29-33 against develop and their CI.",
-    "P0: Select one bounded real open-source target buildable on Linux; verify release/license/source hash, reproduce and repair defect.",
-    "P0: Integrate behavioral graph with existing Evidence and provider outputs; retain ambiguous mappings.",
-    "P0: Add process-bound differential replay and counterexample corpus to existing controller.",
+    "P0: Review and merge focused PR #35 only after CI and reviewer acceptance; this implements the behavioral graph schema, Evidence projection, and autonomy persistence slice.",
+    "P0: Select one bounded real open-source target buildable on a suitable Linux worker; verify release/license/source hash, reproduce and repair a defect.",
+    "P0: Integrate actual static/runtime providers with the behavioral graph; retain ambiguous mappings and record provider evidence.",
+    "P0: Add process-bound differential replay and counterexample corpus to the existing controller.",
     "P1: Add offline semantic-memory reconstruction and explicit partial-trace semantics.",
     "P1: Add bitvector witness replay and assumption/status handling.",
     "P1: Change controller/platform-worker contracts only for demonstrated, testable gaps.",
@@ -287,6 +287,26 @@
       {
         "command": "npm run test:acceptance -- --testNamePattern='autonomy CLI executes identical cases'",
         "result": "PASS during implementation: 1 test; CLI summary, checkpoint persistence, resume, and existing MCP status"
+      },
+      {
+        "command": "npm run typecheck",
+        "result": "PASS after implementation"
+      },
+      {
+        "command": "npm run lint",
+        "result": "PASS: 2985 files, 0 errors, 1097 warnings"
+      },
+      {
+        "command": "npm run test:acceptance -- --testNamePattern='autonomy CLI executes identical cases' (final process-identity implementation)",
+        "result": "PASS: 1 test; 67 other acceptance files skipped by name filter"
+      },
+      {
+        "command": "npm run check:fast (post-implementation and commit hook)",
+        "result": "PASS"
+      },
+      {
+        "command": "npm run test:boundary",
+        "result": "INTERRUPTED after new graph and projection boundary tests passed; suite reported failures in existing unrelated client configuration/setup/catalog/static-check/reference-source/CLI cases; no full-suite pass claimed"
       }
     ],
     "capabilities": {
@@ -307,6 +327,8 @@
       "src/application/Setup.recovery.test.ts (1 failure)",
       "src/application/Setup.planning.test.ts (1 failure)",
       "src/application/autonomy/AutonomousInvestigation.test.ts (1 failure; build command clang unavailable)"
-    ]
+    ],
+    "pull_request": "https://github.com/heaven-hm/re-agent/pull/35",
+    "commit": "dfb100ac705c1b385ad5759618925593633c5ccc"
   }
 }
