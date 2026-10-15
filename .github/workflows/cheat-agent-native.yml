@@ -1,0 +1,35 @@
+name: Vendored Cheat Agent native integration
+
+on:
+  pull_request:
+    paths:
+      - 'integrations/cheat-agent/**'
+      - '.github/workflows/cheat-agent-native.yml'
+  push:
+    branches: [develop]
+    paths:
+      - 'integrations/cheat-agent/**'
+      - '.github/workflows/cheat-agent-native.yml'
+
+jobs:
+  native-matrix:
+    name: ${{ matrix.os }} GTLibCpp ${{ matrix.enabled }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        enabled: ['ON', 'OFF']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure native integration
+        run: cmake -S integrations/cheat-agent -B build-cheat-agent -DCHEAT_AGENT_ENABLE_GTLIBCPP=${{ matrix.enabled }}
+      - name: Build
+        run: cmake --build build-cheat-agent --config Release
+      - name: Native tests
+        run: ctest --test-dir build-cheat-agent --config Release --output-on-failure
+      - name: Compile IGI example with GTLibCpp
+        if: runner.os == 'Windows' && matrix.enabled == 'ON'
+        run: |
+          cmake -S integrations/cheat-agent -B build-cheat-agent -DCHEAT_AGENT_BUILD_IGI_EXAMPLE=ON
+          cmake --build build-cheat-agent --config Release --target igi_trainer
