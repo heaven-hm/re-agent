@@ -1,0 +1,40 @@
+{
+  "target": "chocolate-doom",
+  "original": {
+    "name": "Chocolate Doom 3.1.1 (GPL-2.0+, famous, modifiable + redistributable with source retention)",
+    "archive": "chocolate-doom-3.1.1-win64.zip (official release)",
+    "binary": "chocolate-doom.exe",
+    "sha256": "15e81c194df270fbd71450222e71846247926fabfb889e72e7d855903454d752",
+    "bytes": 875520,
+    "format": "PE32+ x86-64 GUI, native C, stripped to external PDB",
+    "note": "Binary stays in ignored _reference/ until GPL source-retention bundle is pinned (tic-tac-toe precedent)"
+  },
+  "analysis": {
+    "sections": [
+      "Headers",
+      ".text",
+      ".data",
+      ".rdata",
+      ".pdata",
+      ".xdata",
+      ".bss",
+      ".idata",
+      ".tls",
+      ".rsrc",
+      ".reloc"
+    ],
+    "procedures": 2045,
+    "strings": 3707,
+    "depends": [
+      "SDL2.dll",
+      "SDL2_mixer.dll",
+      "SDL2_net.dll",
+      "SDL3.dll (shipped alongside)"
+    ]
+  },
+  "verification": {
+    "static_triage": "PASS (format/arch/sections/imports recorded)",
+    "runtime": "UNVERIFIED",
+    "replica": "QUEUED (upstream ships its own macOS DMG — differential target exists)"
+  }
+}
