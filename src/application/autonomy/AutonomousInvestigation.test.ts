@@ -1,5 +1,6 @@
 import {
   link,
+  mkdir,
   mkdtemp,
   readFile,
   rm,
@@ -11,6 +12,9 @@ import { join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import * as graphProjection from "../investigation/BehavioralGraphProjection.js";
 import { createEvidence } from "../../domain/evidence.js";
+import { parseApplicationGraphEvidence } from "../javascript/JavaScriptApplicationEvidenceGraph.js";
+import { analyzeJavaScriptApplication } from "../../../tests/support/javascriptApplicationScope.js";
+import { createPackageWithOptions } from "@electron/asar";
 import {
   AutonomousInvestigation,
   investigationConfigSchema,
@@ -188,6 +192,157 @@ describe("autonomous reconstruction checkpoint and workspace safety", () => {
     await writeFile(f.original, "console.log('changed original')");
     await expect(AutonomousInvestigation.open(f.checkpoint)).rejects.toThrow(
       "argument artifact changed",
+    );
+  });
+});
+
+describe("autonomous application graph checkpoint integration", () => {
+  it("does not bind a different application artifact without explicit target scope", async () => {
+    const f = await fixture();
+    const applicationSource = join(f.root, "unbound-application");
+    await mkdir(applicationSource);
+    await writeFile(
+      join(applicationSource, "main.mjs"),
+      "export const value = 7;\n",
+    );
+    const applicationPath = join(f.root, "unbound-application.asar");
+    await createPackageWithOptions(applicationSource, applicationPath, {
+      unpack: "**/*.node",
+    });
+    const analysis = await analyzeJavaScriptApplication({
+      input_path: applicationPath,
+      format: "asar",
+    });
+    if (!analysis.ok) throw analysis.error;
+    const parsedSource = parseApplicationGraphEvidence(analysis.value);
+    if (!parsedSource.ok)
+      throw new Error("Application Evidence must authenticate");
+
+    const agent = await AutonomousInvestigation.create(
+      join(f.root, "unbound-checkpoint.json"),
+      f.config,
+    );
+    expect(agent.state.binarySha256).not.toBe(
+      parsedSource.value.rootArtifactSha256,
+    );
+    await expect(
+      agent.run({
+        discover: async () => [parsedSource.value.evidence],
+        reconstruct: async (state) => {
+          expect(state.behavioralGraph?.evidenceIds).not.toContain(
+            parsedSource.value.evidence.evidence_id,
+          );
+          expect(state.behavioralGraph?.edges).not.toEqual(
+            expect.arrayContaining([
+              expect.objectContaining({ relation: "imports" }),
+            ]),
+          );
+          throw new Error("stop after verifying no implicit binding");
+        },
+      }),
+    ).rejects.toThrow("stop after verifying no implicit binding");
+  });
+
+  it("rejects resume when a path-bound application artifact changes", async () => {
+    const f = await fixture();
+    const applicationSource = join(f.root, "mutable-application");
+    await mkdir(applicationSource);
+    await writeFile(
+      join(applicationSource, "main.mjs"),
+      "export const value = 7;\n",
+    );
+    const applicationPath = join(f.root, "mutable-application.asar");
+    await createPackageWithOptions(applicationSource, applicationPath, {
+      unpack: "**/*.node",
+    });
+    const analysis = await analyzeJavaScriptApplication({
+      input_path: applicationPath,
+      format: "asar",
+    });
+    if (!analysis.ok) throw analysis.error;
+    const source = parseApplicationGraphEvidence(analysis.value);
+    if (!source.ok) throw new Error("Application Evidence must authenticate");
+
+    await AutonomousInvestigation.create(f.checkpoint, {
+      ...f.config,
+      applicationArtifacts: [
+        { path: applicationPath, sha256: source.value.rootArtifactSha256 },
+      ],
+    });
+    await writeFile(
+      join(applicationSource, "main.mjs"),
+      "export const value = 8;\n",
+    );
+    await rm(applicationPath);
+    await createPackageWithOptions(applicationSource, applicationPath, {
+      unpack: "**/*.node",
+    });
+
+    await expect(AutonomousInvestigation.open(f.checkpoint)).rejects.toThrow(
+      "Application artifact changed",
+    );
+  });
+});
+
+describe("autonomous application graph checkpoint compatibility", () => {
+  it("reopens and upgrades the generic graph projection written by pre-fix checkpoints", async () => {
+    const f = await fixture();
+    const applicationSource = join(f.root, "application");
+    await mkdir(applicationSource);
+    await writeFile(
+      join(applicationSource, "main.mjs"),
+      'import { helper } from "./helper.mjs";\nexport const value = helper();\n',
+    );
+    await writeFile(
+      join(applicationSource, "helper.mjs"),
+      "export const helper = () => 7;\n",
+    );
+    const applicationPath = join(f.root, "application.asar");
+    await createPackageWithOptions(applicationSource, applicationPath, {
+      unpack: "**/*.node",
+    });
+    const analysis = await analyzeJavaScriptApplication({
+      input_path: applicationPath,
+      format: "asar",
+    });
+    if (!analysis.ok) throw analysis.error;
+    const parsedSource = parseApplicationGraphEvidence(analysis.value);
+    if (!parsedSource.ok)
+      throw new Error("Application Evidence must authenticate");
+    const agent = await AutonomousInvestigation.create(f.checkpoint, {
+      ...f.config,
+      binaryPath: applicationPath,
+      original: { command: applicationPath, arguments: [] },
+    });
+    const legacyGraph = graphProjection.projectEvidenceToBehavioralGraph(
+      agent.state.binarySha256,
+      {
+        records: [parsedSource.value.evidence],
+        nativeGraphs: [],
+        applicationSources: [],
+        nonTargetEvidence: "exclude-with-coverage",
+      },
+    );
+    const legacyCheckpoint = JSON.parse(
+      JSON.stringify({
+        ...agent.state,
+        evidence: [parsedSource.value.evidence],
+        behavioralGraph: legacyGraph,
+      }),
+    );
+
+    await writeFile(f.checkpoint, JSON.stringify(legacyCheckpoint));
+    const reopened = await AutonomousInvestigation.open(f.checkpoint);
+    expect(reopened.state.behavioralGraph?.edges).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ relation: "imports" }),
+      ]),
+    );
+    const persisted = parseInvestigationState(
+      JSON.parse(await readFile(f.checkpoint, "utf8")),
+    );
+    expect(persisted.behavioralGraph?.edges).toEqual(
+      reopened.state.behavioralGraph?.edges,
     );
   });
 });
@@ -496,7 +651,9 @@ describe("autonomous reconstruction differential controller", () => {
       true,
     );
   }, 30000);
+});
 
+describe("autonomous reconstruction configuration contracts", () => {
   it("validates unique cases and refuses checkpoint rebinding", async () => {
     const f = await fixture();
     expect(() =>
@@ -505,13 +662,56 @@ describe("autonomous reconstruction differential controller", () => {
         cases: [{ id: "same" }, { id: "same" }],
       }),
     ).toThrow();
+    expect(() =>
+      investigationConfigSchema.parse({
+        ...f.config,
+        applicationArtifacts: [
+          { path: "/apps/one.asar", sha256: "a".repeat(64) },
+          { path: "/apps/two.asar", sha256: "a".repeat(64) },
+        ],
+      }),
+    ).toThrow(/digests must be unique/u);
+    expect(() =>
+      investigationConfigSchema.parse({
+        ...f.config,
+        applicationArtifacts: [
+          { path: "/apps/one.asar", sha256: "a".repeat(64) },
+          { path: "/apps/one.asar", sha256: "b".repeat(64) },
+        ],
+      }),
+    ).toThrow(/paths must be unique/u);
+    expect(() =>
+      investigationConfigSchema.parse({
+        ...f.config,
+        applicationArtifacts: Array.from({ length: 17 }, (_, index) => ({
+          path: `/apps/${index}.asar`,
+          sha256: `${index.toString(16).padStart(2, "0")}${"a".repeat(62)}`,
+        })),
+      }),
+    ).toThrow();
+    expect(() =>
+      investigationConfigSchema.parse({
+        ...f.config,
+        applicationArtifactSha256s: Array.from({ length: 33 }, () => "a".repeat(64)),
+      }),
+    ).toThrow();
     await AutonomousInvestigation.create(f.checkpoint, f.config);
     await expect(
       AutonomousInvestigation.create(f.checkpoint, f.config),
     ).rejects.toThrow("already exists");
     const saved = JSON.parse(await readFile(f.checkpoint, "utf8")) as {
       binarySha256: string;
+      version: number;
+      config: Record<string, unknown>;
     };
+    expect(saved.version).toBe(1);
+    expect(saved.config).not.toHaveProperty("applicationArtifacts");
+    expect(
+      parseInvestigationState({
+        ...saved,
+        config: { ...saved.config, applicationArtifactSha256s: [] },
+      }).version,
+    ).toBe(1);
     saved.binarySha256 = "0".repeat(64);
     await writeFile(f.checkpoint, JSON.stringify(saved));
     await expect(AutonomousInvestigation.open(f.checkpoint)).rejects.toThrow(

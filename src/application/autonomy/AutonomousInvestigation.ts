@@ -24,11 +24,15 @@ import {
 import {
   hashFile,
   normalizeInvestigationConfig,
+  validateApplicationArtifactBindings,
 } from "./InvestigationIdentity.js";
 import { InvestigationWorkspace } from "./InvestigationWorkspace.js";
 import { InvestigationProcessEvidence } from "./InvestigationProcessEvidence.js";
 import { createEmptyBehavioralGraph } from "../../domain/reconstruction/BehavioralEvidenceGraph.js";
-import { projectEvidenceToBehavioralGraph } from "../investigation/BehavioralGraphProjection.js";
+import {
+  applicationSourcesFromEvidence,
+  projectEvidenceToBehavioralGraph,
+} from "../investigation/BehavioralGraphProjection.js";
 
 export {
   investigationConfigSchema,
@@ -88,6 +92,7 @@ export class AutonomousInvestigation {
         throw cause;
     }
     const config = await normalizeInvestigationConfig(input);
+    await validateApplicationArtifactBindings(config);
     const originalArgumentSha256: Record<string, string> = {};
     for (const argument of [
       ...config.original.arguments,
@@ -111,7 +116,7 @@ export class AutonomousInvestigation {
     }
     const binarySha256 = await hashFile(config.binaryPath);
     const instance = new AutonomousInvestigation(resolve(storePath), {
-      version: 1,
+      version: config.applicationArtifacts?.length ? 2 : 1,
       id: randomUUID(),
       binarySha256,
       originalArgumentSha256,
@@ -500,6 +505,7 @@ export class AutonomousInvestigation {
     ))
       if ((await hashFile(path)) !== digest)
         throw new Error(`Original argument artifact changed: ${path}`);
+    await validateApplicationArtifactBindings(this.state.config);
   }
   #record(input: unknown): Evidence {
     const evidence = parseEvidence(input);
@@ -574,7 +580,22 @@ export class AutonomousInvestigation {
         {
           records: this.state.evidence,
           nativeGraphs: [],
-          applicationSources: [],
+          applicationSources: applicationSourcesFromEvidence(
+            this.state.evidence,
+            this.state.binarySha256,
+            [
+              ...(this.state.config.applicationArtifactSha256s ?? []),
+              ...(this.state.config.applicationArtifacts?.map(
+                ({ sha256 }) => sha256,
+              ) ?? []),
+            ],
+          ),
+          applicationArtifactSha256s: [
+            ...(this.state.config.applicationArtifactSha256s ?? []),
+            ...(this.state.config.applicationArtifacts?.map(
+              ({ sha256 }) => sha256,
+            ) ?? []),
+          ],
           nonTargetEvidence: "exclude-with-coverage",
         },
       );

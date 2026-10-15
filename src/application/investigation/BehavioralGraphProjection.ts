@@ -24,9 +24,54 @@ export interface BehavioralEvidenceProjectionInput {
   readonly records: readonly Evidence[];
   readonly nativeGraphs: readonly NativeInvestigationGraph[];
   readonly applicationSources: readonly ApplicationGraphEvidenceSource[];
+  /** Explicitly authorized app-layer digests associated with the target. */
+  readonly applicationArtifactSha256s?: readonly string[];
   /** Retain unrelated Evidence outside this graph with a coverage gap. */
   readonly nonTargetEvidence?: "reject" | "exclude-with-coverage";
 }
+
+/** Recover authenticated application graph projections from checkpoint Evidence. */
+export const applicationSourcesFromEvidence = (
+  records: readonly Evidence[],
+  targetSha256: string,
+  applicationArtifactSha256s: readonly string[] = [],
+): ApplicationGraphEvidenceSource[] => {
+  const operations = new Set([
+    "analyze_javascript_application",
+    "reconcile_javascript_runtime",
+    "project_managed_application_graph",
+  ]);
+  const sources: ApplicationGraphEvidenceSource[] = [];
+  const authorizedApplicationDigests = new Set(applicationArtifactSha256s);
+  const knownEvidenceIds = new Set(records.map((record) => record.evidence_id));
+  for (const record of records) {
+    if (!operations.has(record.operation)) continue;
+    const parsed = parseApplicationGraphEvidence(record);
+    if (!parsed.ok)
+      throw new Error(
+        `Application graph Evidence ${record.evidence_id} failed authentication: ${JSON.stringify(parsed)}`,
+      );
+    if (
+      parsed.value.rootArtifactSha256 === targetSha256 ||
+      authorizedApplicationDigests.has(parsed.value.rootArtifactSha256)
+    ) {
+      // A managed graph envelope may be delivered without its linked source
+      // records. Keep the envelope as ordinary checkpoint Evidence until its
+      // provenance closure is available rather than failing the entire save.
+      const source = parsed.value;
+      const referenced = new Set<string>();
+      for (const node of source.graph.nodes)
+        for (const observation of node.observations)
+          for (const id of observation.evidence.evidence_ids)
+            referenced.add(id);
+      for (const edge of source.graph.edges)
+        for (const id of edge.evidence.evidence_ids) referenced.add(id);
+      if ([...referenced].every((id) => knownEvidenceIds.has(id)))
+        sources.push(source);
+    }
+  }
+  return sources;
+};
 
 /** Project only authenticated claims; the ledger retains complete source values. */
 export const projectEvidenceToBehavioralGraph = (
@@ -57,19 +102,26 @@ export const projectEvidenceToBehavioralGraph = (
     throw new Error("Behavioral graph edge budget exceeded");
 
   const allEvidence = new Map<string, Evidence>();
+  const allowedApplicationDigests = new Set(
+    input.applicationArtifactSha256s ?? [],
+  );
   // parseEvidence authenticates the semantic ID, which intentionally excludes
   // display subject names and local paths. Rebinding those is not a conflict.
   for (const raw of input.records) {
     const record = parseEvidence(raw);
     allEvidence.set(record.evidence_id, record);
   }
+  const authorizedApplicationDigests = new Set(
+    input.applicationArtifactSha256s ?? [],
+  );
   const sources = input.applicationSources.map((source) => {
     const parsed = parseApplicationGraphEvidence(source.evidence);
     if (!parsed.ok)
       throw new Error("Application graph Evidence failed authentication");
     const owned = parsed.value;
     if (
-      owned.rootArtifactSha256 !== targetSha256 ||
+      (owned.rootArtifactSha256 !== targetSha256 &&
+        !authorizedApplicationDigests.has(owned.rootArtifactSha256)) ||
       source.rootArtifactSha256 !== owned.rootArtifactSha256 ||
       source.kind !== owned.kind ||
       digestCanonicalValue(source.graph, "behavioral application graph") !==

@@ -25,6 +25,7 @@ import {
   type Evidence,
 } from "../../../src/domain/evidence.js";
 import { parseApplicationGraphEvidence } from "../../../src/application/javascript/JavaScriptApplicationEvidenceGraph.js";
+import { applicationSourcesFromEvidence } from "../../../src/application/investigation/BehavioralGraphProjection.js";
 import { analyzeJavaScriptApplication } from "../../support/javascriptApplicationScope.js";
 import { createTestTempDirectory } from "../../fixtures/temporaryDirectory.js";
 import { writeFixtureFiles } from "../../support/javascriptApplicationFixture.js";
@@ -236,6 +237,41 @@ describe("behavioral evidence source projections", () => {
         ],
       }),
     ).toThrow(/authentication|authenticated Evidence|semantic/iu);
+  });
+
+  it("includes the Evidence ID and parser issues when application Evidence is malformed", async () => {
+    const root = await createTestTempDirectory(
+      "rea-behavioral-application-graph-invalid-evidence-",
+    );
+    await writeFixtureFiles(root, {
+      "main.mjs": "export const run = () => 7;\n",
+    });
+    const analyzed = await analyzeJavaScriptApplication({ input_path: root });
+    if (!analyzed.ok) throw analyzed.error;
+    const valid = analyzed.value;
+    const malformed = createEvidence(
+      {
+        path: valid.subject?.local_path ?? root,
+        sha256: valid.subject?.digest.sha256 ?? "a".repeat(64),
+        format: valid.subject?.format ?? "directory",
+      },
+      valid.provider,
+      {
+        predicateType: valid.predicate_type,
+        operation: valid.operation,
+        parameters: valid.parameters,
+        result: { input_path: 7 },
+        confidence: valid.confidence,
+        authority: valid.authority,
+      },
+    );
+
+    expect(() =>
+      applicationSourcesFromEvidence([malformed], "b".repeat(64)),
+    ).toThrow(new RegExp(malformed.evidence_id));
+    expect(() =>
+      applicationSourcesFromEvidence([malformed], "b".repeat(64)),
+    ).toThrow(/input_path/u);
   });
 });
 

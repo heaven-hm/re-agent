@@ -5,7 +5,10 @@ import {
   binaryBehavioralGraphSchema,
   validateBinaryBehavioralGraph,
 } from "../../domain/reconstruction/BehavioralEvidenceGraph.js";
-import { projectEvidenceToBehavioralGraph } from "../investigation/BehavioralGraphProjection.js";
+import {
+  applicationSourcesFromEvidence,
+  projectEvidenceToBehavioralGraph,
+} from "../investigation/BehavioralGraphProjection.js";
 import { parseProcessCapture } from "../../domain/process/processCaptureParsing.js";
 import { compareProcessExitOutcomes } from "../../domain/process/processExitOutcome.js";
 import {
@@ -18,9 +21,28 @@ export const commandSchema = z.strictObject({
   arguments: z.array(z.string()).default([]),
   cwd: z.string().optional(),
 });
+export const applicationArtifactBindingSchema = z.strictObject({
+  path: z.string().min(1),
+  sha256: z.string().regex(/^[a-f0-9]{64}$/u),
+});
 export const investigationConfigSchema = z
   .strictObject({
     binaryPath: z.string().min(1),
+    /** Legacy digest-only scope declaration retained for v1 checkpoints. */
+    applicationArtifactSha256s: z
+      .array(z.string().regex(/^[a-f0-9]{64}$/u))
+      .max(32)
+      .optional()
+      .refine(
+        (digests) =>
+          digests === undefined || new Set(digests).size === digests.length,
+        { message: "Application artifact digests must be unique" },
+      ),
+    /** Explicit app paths and digests included in this runnable target scope. */
+    applicationArtifacts: z
+      .array(applicationArtifactBindingSchema)
+      .max(16)
+      .optional(),
     workspace: z.string().min(1),
     original: commandSchema,
     replica: commandSchema,
@@ -55,6 +77,21 @@ export const investigationConfigSchema = z
         message: "Case IDs must be unique",
         path: ["cases"],
       });
+    const artifacts = value.applicationArtifacts ?? [];
+    if (new Set(artifacts.map(({ path }) => path)).size !== artifacts.length)
+      context.addIssue({
+        code: "custom",
+        message: "Application artifact paths must be unique",
+        path: ["applicationArtifacts"],
+      });
+    if (
+      new Set(artifacts.map(({ sha256 }) => sha256)).size !== artifacts.length
+    )
+      context.addIssue({
+        code: "custom",
+        message: "Application artifact digests must be unique",
+        path: ["applicationArtifacts"],
+      });
   });
 export type InvestigationConfig = z.infer<typeof investigationConfigSchema>;
 export const functionLifecycleSchema = z.enum([
@@ -67,8 +104,7 @@ export const functionLifecycleSchema = z.enum([
   "REJECTED",
   "UNRESOLVED",
 ]);
-export const investigationStateSchema = z.object({
-  version: z.literal(1),
+const investigationStateFields = {
   id: z.string(),
   binarySha256: z.string().regex(/^[a-f0-9]{64}$/u),
   config: investigationConfigSchema,
@@ -119,7 +155,32 @@ export const investigationStateSchema = z.object({
     .nullable()
     .default(null),
   limitations: z.array(z.string()),
-});
+};
+const investigationStateV1Schema = z
+  .object({ version: z.literal(1), ...investigationStateFields })
+  .superRefine((state, context) => {
+    if ((state.config.applicationArtifacts?.length ?? 0) > 0)
+      context.addIssue({
+        code: "custom",
+        message: "Application artifact bindings require checkpoint version 2",
+        path: ["config", "applicationArtifacts"],
+      });
+  });
+const investigationStateV2Schema = z
+  .object({ version: z.literal(2), ...investigationStateFields })
+  .superRefine((state, context) => {
+    if ((state.config.applicationArtifacts?.length ?? 0) === 0)
+      context.addIssue({
+        code: "custom",
+        message:
+          "Checkpoint version 2 requires at least one application artifact binding",
+        path: ["config", "applicationArtifacts"],
+      });
+  });
+export const investigationStateSchema = z.union([
+  investigationStateV1Schema,
+  investigationStateV2Schema,
+]);
 export type InvestigationState = z.infer<typeof investigationStateSchema>;
 
 /** Authenticate stored observations and recompute every finite comparison claim. */
@@ -134,21 +195,46 @@ export const parseInvestigationState = (input: unknown): InvestigationState => {
   const expectedGraph = projectEvidenceToBehavioralGraph(state.binarySha256, {
     records: state.evidence,
     nativeGraphs: [],
-    applicationSources: [],
+    applicationSources: applicationSourcesFromEvidence(
+      state.evidence,
+      state.binarySha256,
+      [
+        ...(state.config.applicationArtifactSha256s ?? []),
+        ...(state.config.applicationArtifacts?.map(({ sha256 }) => sha256) ??
+          []),
+      ],
+    ),
+    applicationArtifactSha256s: [
+      ...(state.config.applicationArtifactSha256s ?? []),
+      ...(state.config.applicationArtifacts?.map(({ sha256 }) => sha256) ?? []),
+    ],
     nonTargetEvidence: "exclude-with-coverage",
   });
   if (state.behavioralGraph === undefined) {
     state.behavioralGraph = expectedGraph;
   } else {
     const storedGraph = validateBinaryBehavioralGraph(state.behavioralGraph);
-    if (
-      storedGraph.targetSha256 !== state.binarySha256 ||
-      JSON.stringify(storedGraph) !== JSON.stringify(expectedGraph)
-    )
+    if (storedGraph.targetSha256 !== state.binarySha256)
       throw new Error(
         "Original binary changed or checkpoint behavioral graph does not match its authenticated Evidence",
       );
-    state.behavioralGraph = storedGraph;
+    if (JSON.stringify(storedGraph) === JSON.stringify(expectedGraph)) {
+      state.behavioralGraph = storedGraph;
+    } else {
+      // PR #43 checkpoints projected app Evidence as generic observations.
+      // Accept only that exact prior projection and upgrade it in memory.
+      const priorGraph = projectEvidenceToBehavioralGraph(state.binarySha256, {
+        records: state.evidence,
+        nativeGraphs: [],
+        applicationSources: [],
+        nonTargetEvidence: "exclude-with-coverage",
+      });
+      if (JSON.stringify(storedGraph) !== JSON.stringify(priorGraph))
+        throw new Error(
+          "Original binary changed or checkpoint behavioral graph does not match its authenticated Evidence",
+        );
+      state.behavioralGraph = expectedGraph;
+    }
   }
   for (const item of state.results)
     authenticateComparisonClaim(state, item, records);
