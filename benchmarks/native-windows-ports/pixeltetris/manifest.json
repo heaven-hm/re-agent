@@ -52,5 +52,11 @@
     "gravity_scoring": "UNVERIFIED (guideline values used)",
     "mac_menu": "PASS (real window capture with shipped button assets)",
     "mac_gameplay": "PASS (Enter starts game; falling piece + ghost + HUD live)"
+  },
+  "found_defect": {
+    "id": "missing-asset-crash",
+    "evidence": "output/hypercam/pixel-run0.txt (ignored scratch): Could not load font! SDL_ttf error followed by null-deref page fault when CWD lacks assets/",
+    "behavior": "missing font asset crashes the process instead of a clean error exit",
+    "port_hardening": "pixelmac prints missing-asset errors and exits nonzero without crashing"
   }
 }
