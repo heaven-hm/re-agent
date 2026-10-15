@@ -11,6 +11,7 @@ import { startAutonomyDashboard } from "../composition/autonomyDashboard.js";
 import { CLI_COMMANDS } from "../cliCommandNames.js";
 import { withCommandCancellation } from "./commandCancellation.js";
 import { resolveAutonomyEnvironment } from "../composition/autonomyEnvironment.js";
+import { summarizeInvestigation as summarize } from "../application/autonomy/InvestigationSummary.js";
 import { proveAffineExpressions } from "../application/autonomy/AffineEquivalenceProof.js";
 import {
   installAutonomyTools,
@@ -147,17 +148,3 @@ export const registerAutonomyCommands = (
       },
     );
 };
-
-export const summarize = (
-  state: Awaited<ReturnType<typeof readAutonomousStatus>>,
-) => ({
-  id: state.id,
-  status: state.status,
-  iteration: state.iteration,
-  binary_sha256: state.binarySha256,
-  functions: state.functions,
-  results: state.results,
-  regressions: state.regressions,
-  evidence_ids: state.evidence.map((item) => item.evidence_id),
-  limitations: state.limitations,
-});

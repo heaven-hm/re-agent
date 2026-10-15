@@ -5,6 +5,16 @@ on:
     branches: [develop]
     paths:
       - "src/domain/reconstruction/**"
+      - "src/application/autonomy/**"
+      - "src/application/investigation/**"
+      - "src/server/registerAutonomyTool.ts"
+      - "src/cli/autonomyCommands.ts"
+      - "tests/acceptance/autonomy.test.ts"
+      - "docs/autonomous-reconstruction.md"
+      - "docs/mcp-contracts.md"
+      - "licenses/**"
+      - "package.json"
+      - "package-lock.json"
       - "tests/boundary/filesystem/**"
       - ".github/workflows/reconstruction-pr.yml"
   push:
@@ -29,14 +39,12 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - run: npm run typecheck
-      - name: Prepare test artifacts
-        run: npm run test:prepare
+      - run: npm run check:fast
       - name: Run focused reconstruction regressions
         shell: bash
         run: |
           test_files=()
-          for name in BehavioralEvidenceGraph MemoryLifetimes DifferentialMinimizer BitvectorProofObligations; do
+          for name in BehavioralEvidenceGraph BehavioralEvidenceGraphV1 BehavioralGraphProjection MemoryLifetimes DifferentialMinimizer BitvectorProofObligations; do
             file="tests/boundary/filesystem/${name}.test.ts"
             if [ -f "$file" ]; then test_files+=("$file"); fi
           done
@@ -44,4 +52,7 @@ jobs:
             echo "No reconstruction test files found" >&2
             exit 1
           fi
-          npx vitest run "${test_files[@]}"
+          test_files+=(src/application/autonomy/AutonomousInvestigation.test.ts tests/acceptance/autonomy.test.ts)
+          npm run test:focused -- "${test_files[@]}"
+      - name: Validate documentation and dependency licenses
+        run: npm run docs:check

@@ -1,6 +1,11 @@
 import { z } from "zod";
 import { digestCanonicalValue } from "../../domain/canonicalDigest.js";
 import { evidenceSchema, parseEvidence } from "../../domain/evidence.js";
+import {
+  binaryBehavioralGraphSchema,
+  validateBinaryBehavioralGraph,
+} from "../../domain/reconstruction/BehavioralEvidenceGraph.js";
+import { projectEvidenceToBehavioralGraph } from "../investigation/BehavioralGraphProjection.js";
 import { parseProcessCapture } from "../../domain/process/processCaptureParsing.js";
 import { compareProcessExitOutcomes } from "../../domain/process/processExitOutcome.js";
 import {
@@ -79,6 +84,7 @@ export const investigationStateSchema = z.object({
   ]),
   iteration: z.number().int().nonnegative(),
   evidence: z.array(evidenceSchema),
+  behavioralGraph: binaryBehavioralGraphSchema.optional(),
   regressions: z.array(z.string()),
   functions: z.array(
     z.object({
@@ -125,6 +131,25 @@ export const parseInvestigationState = (input: unknown): InvestigationState => {
   );
   if (records.size !== state.evidence.length)
     throw new Error("Duplicate checkpoint Evidence ID");
+  const expectedGraph = projectEvidenceToBehavioralGraph(state.binarySha256, {
+    records: state.evidence,
+    nativeGraphs: [],
+    applicationSources: [],
+    nonTargetEvidence: "exclude-with-coverage",
+  });
+  if (state.behavioralGraph === undefined) {
+    state.behavioralGraph = expectedGraph;
+  } else {
+    const storedGraph = validateBinaryBehavioralGraph(state.behavioralGraph);
+    if (
+      storedGraph.targetSha256 !== state.binarySha256 ||
+      JSON.stringify(storedGraph) !== JSON.stringify(expectedGraph)
+    )
+      throw new Error(
+        "Original binary changed or checkpoint behavioral graph does not match its authenticated Evidence",
+      );
+    state.behavioralGraph = storedGraph;
+  }
   for (const item of state.results)
     authenticateComparisonClaim(state, item, records);
   if (

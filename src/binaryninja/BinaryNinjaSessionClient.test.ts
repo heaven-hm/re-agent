@@ -155,15 +155,13 @@ describe("BinaryNinjaSessionClient", () => {
       procedure: "0x1000",
     });
     expect(codeRes.ok).toBe(true);
-    if (codeRes.ok)
-      expect(codeRes.value.result).toContain("process_data()");
+    if (codeRes.ok) expect(codeRes.value.result).toContain("process_data()");
 
     const asmRes = await client.execute("procedure_assembly", {
       procedure: "main",
     });
     expect(asmRes.ok).toBe(true);
-    if (asmRes.ok)
-      expect(asmRes.value.result).toContain("0x1000: push rbp");
+    if (asmRes.ok) expect(asmRes.value.result).toContain("0x1000: push rbp");
   });
 
   it("executes callers, callees, and xrefs", async () => {
@@ -215,7 +213,9 @@ describe("BinaryNinjaSessionClient", () => {
     expect(Array.isArray(dossier.callees)).toBe(true);
     expect(dossierRes.value.limitations.length).toBeGreaterThan(0);
   });
+});
 
+describe("BinaryNinjaSessionClient lifecycle", () => {
   it("reports health and rejects mutating operations", async () => {
     const client = new BinaryNinjaSessionClient(
       dummyConfig,

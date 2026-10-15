@@ -5,3 +5,9 @@ RE-Agent's controller and existing verification operations remain the gates for 
 Dryxio/ReAgent's GREEN/YELLOW/RED parity engine and candidate gates were evaluated but not copied. RE-Agent already has scoped comparisons, reconstruction verification, and Evidence-backed uncertainty contracts. This integration's dependency schedule reports readiness and limitations only; it does not mint a parity verdict. Structural resemblance, CFG agreement, or model review alone must not be described as semantic equivalence.
 
 Candidate build and test execution should continue through RE-Agent's existing process/workspace ownership APIs. This document does not introduce shell command execution or a second overlay manager.
+
+The solver execution workflow is owned by
+`src/application/verification/BitvectorObligationExecution.ts`.
+Query construction and solver-output classification remain in the pure domain
+module. Direct source imports of `executeBitvectorObligation` must use the
+application module rather than the former domain path.

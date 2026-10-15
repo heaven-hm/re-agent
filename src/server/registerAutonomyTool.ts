@@ -1,3 +1,4 @@
+import { summarizeInvestigationForMcp } from "../application/autonomy/InvestigationSummary.js";
 import { readFile } from "node:fs/promises";
 import type { EvidenceMcpServer } from "./EvidenceMcpServer.js";
 import { toolContract } from "../contracts/toolContracts.js";
@@ -83,7 +84,10 @@ export const registerAutonomyTool = (
               context.mcpReq.signal,
             );
           } else if (input.action === "status")
-            result = await readAutonomousStatus(input.checkpoint);
+            result = summarizeInvestigationForMcp(
+              await readAutonomousStatus(input.checkpoint),
+              input.checkpoint,
+            );
           else if (input.action === "pause" || input.action === "stop") {
             await controlAutonomousInvestigation(
               input.checkpoint,
@@ -93,14 +97,17 @@ export const registerAutonomyTool = (
           } else {
             if (input.plan === undefined)
               throw new TypeError("Plan path is required for start/resume");
-            result = await runAutonomousPlan(
-              JSON.parse(await readFile(input.plan, "utf8")),
+            result = summarizeInvestigationForMcp(
+              await runAutonomousPlan(
+                JSON.parse(await readFile(input.plan, "utf8")),
+                input.checkpoint,
+                {
+                  resume: input.action === "resume",
+                  environment,
+                  signal: context.mcpReq.signal,
+                },
+              ),
               input.checkpoint,
-              {
-                resume: input.action === "resume",
-                environment,
-                signal: context.mcpReq.signal,
-              },
             );
           }
         }

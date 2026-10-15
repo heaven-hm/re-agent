@@ -8,6 +8,15 @@ when a cold provider exceeds the client's wait.
 
 ## Tool results
 
+The existing `autonomous_investigation` tool's `status`, `start`, and `resume`
+actions return compact progress: status, iteration, result counts, Evidence/function/
+regression counts, and a `behavioral_graph` digest/count/coverage summary. The
+`checkpoint` path retains access to the complete authenticated Evidence and graph;
+these records are not repeated in the MCP response. The graph is bound to
+`binarySha256` and canonical Evidence IDs in that checkpoint. Legacy checkpoints
+without a graph reconstruct it from validated Evidence when opened. The CLI
+status command also summarizes the graph and retains its existing result details.
+
 Evidence-producing tools return the complete canonical Evidence record in both
 text and structured content. Read `structuredContent.normalized_result` for the
 operation result and `structuredContent.evidence_id` for its identity.

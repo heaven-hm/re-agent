@@ -1,0 +1,334 @@
+{
+  "schema_version": 1,
+  "audit_id": "re-agent-develop-2026-10-15",
+  "audited_at": "2026-10-15",
+  "repository": {
+    "full_name": "heaven-hm/re-agent",
+    "default_branch": "develop",
+    "head_sha": "213bf08ad82f5ca270604efbe650638076e88d47",
+    "tree_sha": "2fccdc9b4c7110d7a75eb80d25ccd58abfba0a8b",
+    "tree_entries": 4660,
+    "blob_entries": 4183,
+    "declared_license": "MIT",
+    "access": "Native git checkout with GitHub transport",
+    "local_checkout": true,
+    "local_build_or_tests": "npm ci PASS; npm run check:fast PASS on base; npm run test:fast after npm run test:prepare: 472 files passed, 7 files failed (10 tests), 5 skipped; focused graph/autonomy tests run during implementation",
+    "local_branch": "feat/behavioral-evidence-graph-integration",
+    "local_worktree": "/workspace/re-agent-worktree"
+  },
+  "audit_status": "BASELINE_AUDITED_WITH_LOCAL_CHECKOUT",
+  "limitations": [
+    "The source audit was expanded from GitHub API inspection by a native checkout; the focused change did not exhaustively validate every provider or platform integration.",
+    "The prepared baseline test suite has 7 pre-existing failing files (10 tests); they are unrelated to the behavioral graph changes and are listed in the baseline run log.",
+    "Codex Cloud has gcc but no clang, radare2/r2, Ghidra or GUI/audio/Windows/macOS runtime; provider-backed native static analysis and the planned compiled-native static/runtime join remain BLOCKED \u2014 NOT EXECUTED.",
+    "No real legacy document-reader, media-player or game maintenance case study was built or validated in this focused vertical slice."
+  ],
+  "findings": [
+    {
+      "id": "F-01",
+      "priority": "P0",
+      "area": "behavioral model",
+      "status": "INCOMPLETE",
+      "evidence": [
+        "src/domain/evidence.ts",
+        "src/application/AnalysisProvider.ts",
+        "issue #25",
+        "draft PR #29",
+        "src/domain/native/nativeInvestigationGraph.ts",
+        "src/application/javascript/JavaScriptApplicationEvidenceGraph.ts",
+        "src/application/investigation/EvidenceLedger.ts"
+      ],
+      "assessment": "Baseline Evidence is strict and provider-neutral, carrying provider/profile, subject digest, raw/normalized results, confidence, limitations, locations and evidence links. A cross-provider behavioral graph linking static facts, runtime, memory, state and candidates is not demonstrated. Draft PR #29 adds a graph foundation but no static/runtime integrations; its tests were not executed. Further source review found existing specialized native and JavaScript application graphs and an EvidenceLedger. Preserve those graph details and use the ledger as the Evidence source of truth; the missing capability is the cross-domain projection joining them by provenance.",
+      "acceptance_criteria": [
+        "Import static and runtime evidence for the same exact binary into one versioned graph.",
+        "Preserve provider identity, evidence IDs and raw provenance.",
+        "Keep conflicts and ambiguous address/function matches unresolved.",
+        "Test idempotent import, binary-hash isolation, migration and tamper rejection."
+      ]
+    },
+    {
+      "id": "F-02",
+      "priority": "P0",
+      "area": "memory analysis",
+      "status": "INCOMPLETE",
+      "evidence": [
+        "src/application/maintenance/LegacyMaintenance.ts",
+        "issue #26",
+        "draft PR #30"
+      ],
+      "assessment": "Current maintenance scans caller-supplied captured bytes and explicitly disclaims live addresses and semantic fields. Draft PR #30 adds bounded offline allocation/write/free modeling, not live instrumentation or complete semantic heap recovery; tests not executed.",
+      "acceptance_criteria": [
+        "Bounded typed trace ingestion with sequence/drop/truncation markers.",
+        "Test allocation reuse, lifetime, write bounds, use-after-free and alias ambiguity.",
+        "Compare semantic state across original/candidate runs; missing events remain INCOMPLETE."
+      ]
+    },
+    {
+      "id": "F-03",
+      "priority": "P0",
+      "area": "differential verification",
+      "status": "PARTIAL",
+      "evidence": [
+        "src/application/autonomy/AutonomousInvestigation.ts",
+        "docs/autonomous-reconstruction-benchmark.md",
+        "issue #27",
+        "draft PR #31"
+      ],
+      "assessment": "A durable bounded controller exists with binary identity, checkpoints, owned-process evidence and declared scenario comparison. Documented parity is limited to declared fixtures and narrow Calculator UI outputs. Draft PR #31 adds a pure byte minimizer; process execution, provenance binding, grammar generation and persistent corpus are explicitly absent; tests not executed.",
+      "acceptance_criteria": [
+        "Bind comparisons to exact original/candidate hashes, environment, rules and raw captures.",
+        "Find/minimize mismatches under budgets; persist replayable regression inputs.",
+        "Test wrong identity, timeout, cancellation, nondeterminism, restart and interrupted resume."
+      ]
+    },
+    {
+      "id": "F-04",
+      "priority": "P1",
+      "area": "formal verification",
+      "status": "PARTIAL",
+      "evidence": [
+        "src/application/autonomy/AffineEquivalenceProof.ts",
+        "issue #28",
+        "draft PR #32"
+      ],
+      "assessment": "Baseline has narrow affine Z3 obligations under assumptions. Draft PR #32 adds QF_BV affine wraparound obligations, not general machine-code semantics or executable witness replay; tests not executed.",
+      "acceptance_criteria": [
+        "Persist query hash, solver/version, binary/function mapping and assumptions.",
+        "Replay SAT witnesses against exact original/candidate binaries.",
+        "Report VERIFIED UNDER EXPLICIT ASSUMPTIONS, COUNTEREXAMPLE, UNKNOWN, TIMEOUT or UNSUPPORTED."
+      ]
+    },
+    {
+      "id": "F-05",
+      "priority": "P1",
+      "area": "static analysis",
+      "status": "EXISTS_WITH_PROVIDER_LIMITATIONS",
+      "evidence": [
+        "src/ghidra",
+        "src/hopper",
+        "src/ida",
+        "src/radare2",
+        "docs/reverse-engineering-tool-coverage.md"
+      ],
+      "assessment": "Broad static-provider adapters and verification scripts exist; extend them instead of adding a second engine. Claims must remain tied to executed provider/version, target hash, profile and limitations. Not executed in this cloud shell."
+    },
+    {
+      "id": "F-06",
+      "priority": "P1",
+      "area": "runtime/process",
+      "status": "EXISTS_WITH_LIMITATIONS",
+      "evidence": [
+        "src/process",
+        "src/frida",
+        "bridge/native/rea_lldb_tracer.py",
+        "docs/process-capture.md",
+        "docs/frida-instrumentation.md"
+      ],
+      "assessment": "Controlled process capture and Frida/LLDB paths exist. Documentation says ownership and output/time bounds are not an OS security sandbox. GUI/audio/GPU/native-Windows claims need separately evidenced platform workers."
+    },
+    {
+      "id": "F-07",
+      "priority": "P0",
+      "area": "real-world case studies",
+      "status": "NOT_COMPLETE",
+      "evidence": [
+        "benchmarks/native-windows-ports/gconv/README.md",
+        "docs/re-agent-maintenance-validation.md",
+        "draft PR #33"
+      ],
+      "assessment": "No complete document-reader or media-player repair was found. GConv/QVM is real but partial: local 2003 Windows binaries have hashes, 120-script error parity is documented, but full VM/ABI work is unverified, source/build are not reverified in the case study, and target screenshots are absent. Calculator/arithmetic fixtures are narrow validations, not full maintenance cases. Draft PR #33 says no complete real legacy port is verified and presents an XMMS candidate, not an executed repair."
+    },
+    {
+      "id": "F-08",
+      "priority": "P1",
+      "area": "autonomy",
+      "status": "PARTIAL",
+      "evidence": [
+        "src/application/maintenance/LegacyMaintenance.ts",
+        "src/application/autonomy/AutonomousInvestigation.ts",
+        "docs/legacy-maintenance.md"
+      ],
+      "assessment": "Maintenance intake validates caller-attested authorization and prepares skills/plans; it does not independently verify legal authority or autonomously repair arbitrary programs. Controller handles bounded caller-supplied plans and checkpoints, not a universal reverse-engineering loop."
+    },
+    {
+      "id": "F-09",
+      "priority": "P1",
+      "area": "skills and CI",
+      "status": "MERGED_BASELINE_PLUS_OPEN_FOLLOWUPS",
+      "evidence": [
+        "merged PR #23",
+        "merged PR #24",
+        ".github/workflows/maintenance-skills.yml"
+      ],
+      "assessment": "PR #23 merged three skills and catalog contract coverage; #24 merged focused workflow validation. CI still needs an actual passing run for the path. Current head query did not establish one."
+    },
+    {
+      "id": "F-10",
+      "priority": "P1",
+      "area": "documentation/evidence",
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "README.md",
+        "docs/legacy-maintenance.md",
+        "docs/re-agent-maintenance-validation.md",
+        "draft PR #33"
+      ],
+      "assessment": "Baseline README is 44 KB and docs extensive. Draft PR #33 shortens/restructures README and adds case-study gates, but is documentation-only and states local build/lint were not executed."
+    },
+    {
+      "id": "F-11",
+      "priority": "P1",
+      "area": "licensing and authorization",
+      "status": "PARTIAL",
+      "evidence": [
+        "LICENSE",
+        "USAGE_POLICY.md",
+        "DISCLAIMER.md",
+        "docs/legacy-maintenance.md"
+      ],
+      "assessment": "MIT license, lawful-use policy and third-party inventory exist. Target authority is caller-attested, not independently verified. Original binaries/assets require separate provenance and redistribution review."
+    },
+    {
+      "id": "F-12",
+      "priority": "P0",
+      "area": "existing graph architecture",
+      "status": "REUSE_REQUIRED",
+      "evidence": [
+        "src/domain/native/nativeInvestigationGraph.ts",
+        "src/application/javascript/JavaScriptApplicationEvidenceGraph.ts",
+        "src/application/investigation/EvidenceLedger.ts"
+      ],
+      "assessment": "The repository already has typed native investigation relationships, a JavaScript application graph Evidence adapter, and an immutable Evidence ledger. A unified behavioral model must compose these systems and retain their detailed outputs rather than replacing or duplicating them.",
+      "acceptance_criteria": [
+        "Existing native and JavaScript graph tests continue to pass.",
+        "Unified graph edges point to Evidence IDs held by the existing ledger/checkpoint.",
+        "Provider-specific graph payloads remain available through their original workflows."
+      ]
+    }
+  ],
+  "pull_requests": [
+    {
+      "number": 23,
+      "state": "MERGED",
+      "title": "fix(maintenance): ship missing bundled skills and enforce catalog contract"
+    },
+    {
+      "number": 24,
+      "state": "MERGED",
+      "title": "ci: validate merged maintenance skills with build and focused tests"
+    },
+    {
+      "number": 29,
+      "state": "OPEN_DRAFT",
+      "title": "feat(reconstruction): provenance-linked behavioral graph foundation",
+      "tests": "NOT EXECUTED; provider integrations absent"
+    },
+    {
+      "number": 30,
+      "state": "OPEN_DRAFT",
+      "title": "feat(memory): bounded offline allocation lifecycle reconstruction",
+      "tests": "NOT EXECUTED; live instrumentation absent"
+    },
+    {
+      "number": 31,
+      "state": "OPEN_DRAFT",
+      "title": "feat(verify): bounded differential counterexample minimizer",
+      "tests": "NOT EXECUTED; process/provenance/corpus integration absent"
+    },
+    {
+      "number": 32,
+      "state": "OPEN_DRAFT",
+      "title": "feat(proof): bitvector SMT obligation and solver outcome foundation",
+      "tests": "NOT EXECUTED; witness replay absent"
+    },
+    {
+      "number": 33,
+      "state": "OPEN_DRAFT",
+      "title": "docs: reposition RE-Agent around serious legacy maintenance and verifiable porting",
+      "tests": "Local docs build/lint NOT EXECUTED; no complete real case study claimed"
+    }
+  ],
+  "recommended_sequence": [
+    "P0: Review and merge focused PR #35 only after CI and reviewer acceptance; this implements the behavioral graph schema, Evidence projection, and autonomy persistence slice.",
+    "P0: Select one bounded real open-source target buildable on a suitable Linux worker; verify release/license/source hash, reproduce and repair a defect.",
+    "P0: Integrate actual static/runtime providers with the behavioral graph; retain ambiguous mappings and record provider evidence.",
+    "P0: Add process-bound differential replay and counterexample corpus to the existing controller.",
+    "P1: Add offline semantic-memory reconstruction and explicit partial-trace semantics.",
+    "P1: Add bitvector witness replay and assumption/status handling.",
+    "P1: Change controller/platform-worker contracts only for demonstrated, testable gaps.",
+    "P1: Complete document, media and game cases on suitable workers; mark unavailable capabilities BLOCKED \u2014 NOT EXECUTED."
+  ],
+  "execution_update": {
+    "feature_branch": "feat/behavioral-evidence-graph-integration",
+    "base_sha": "213bf08ad82f5ca270604efbe650638076e88d47",
+    "pr_29_head": "af5750e",
+    "pr_29_actual_diff": "Graph schema/validator/merge foundation, one boundary test, and reconstruction CI workflow; not merged and not a provider/controller integration.",
+    "checks": [
+      {
+        "command": "npm ci",
+        "result": "PASS"
+      },
+      {
+        "command": "npm run check:fast (base)",
+        "result": "PASS"
+      },
+      {
+        "command": "npm run test:prepare",
+        "result": "PASS"
+      },
+      {
+        "command": "npm run test:fast (base after preparation)",
+        "result": "472 files passed; 7 files failed; 10 tests failed; 5 skipped"
+      },
+      {
+        "command": "npx vitest run tests/boundary/filesystem/BehavioralEvidenceGraph.test.ts tests/boundary/filesystem/BehavioralGraphProjection.test.ts src/application/autonomy/AutonomousInvestigation.test.ts",
+        "result": "PASS during implementation: 28 tests"
+      },
+      {
+        "command": "npm run test:acceptance -- --testNamePattern='autonomy CLI executes identical cases'",
+        "result": "PASS during implementation: 1 test; CLI summary, checkpoint persistence, resume, and existing MCP status"
+      },
+      {
+        "command": "npm run typecheck",
+        "result": "PASS after implementation"
+      },
+      {
+        "command": "npm run lint",
+        "result": "PASS: 2985 files, 0 errors, 1097 warnings"
+      },
+      {
+        "command": "npm run test:acceptance -- --testNamePattern='autonomy CLI executes identical cases' (final process-identity implementation)",
+        "result": "PASS: 1 test; 67 other acceptance files skipped by name filter"
+      },
+      {
+        "command": "npm run check:fast (post-implementation and commit hook)",
+        "result": "PASS"
+      },
+      {
+        "command": "npm run test:boundary",
+        "result": "INTERRUPTED after new graph and projection boundary tests passed; suite reported failures in existing unrelated client configuration/setup/catalog/static-check/reference-source/CLI cases; no full-suite pass claimed"
+      }
+    ],
+    "capabilities": {
+      "gcc": "available",
+      "clang": "BLOCKED \u2014 NOT EXECUTED",
+      "radare2": "BLOCKED \u2014 NOT EXECUTED",
+      "ghidra": "BLOCKED \u2014 NOT EXECUTED",
+      "gui": "BLOCKED \u2014 NOT EXECUTED",
+      "audio": "BLOCKED \u2014 NOT EXECUTED",
+      "windows": "BLOCKED \u2014 NOT EXECUTED",
+      "macos": "BLOCKED \u2014 NOT EXECUTED"
+    },
+    "baseline_failed_files": [
+      "src/native/Radare2Provider.test.ts (2 failures; required r2 unavailable)",
+      "tests/conformance/releaseConfiguration.test.ts (package metadata expected rea-engine, received re-agent)",
+      "tests/conformance/ghidraDistributionVersionScope.test.ts (documented release claim mismatch)",
+      "src/application/autonomy/AffineRecovery.test.ts (3 failures; required clang unavailable)",
+      "src/application/Setup.recovery.test.ts (1 failure)",
+      "src/application/Setup.planning.test.ts (1 failure)",
+      "src/application/autonomy/AutonomousInvestigation.test.ts (1 failure; build command clang unavailable)"
+    ],
+    "pull_request": "https://github.com/heaven-hm/re-agent/pull/35",
+    "commit": "dfb100ac705c1b385ad5759618925593633c5ccc"
+  }
+}

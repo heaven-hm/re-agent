@@ -27,6 +27,8 @@ import {
 } from "./InvestigationIdentity.js";
 import { InvestigationWorkspace } from "./InvestigationWorkspace.js";
 import { InvestigationProcessEvidence } from "./InvestigationProcessEvidence.js";
+import { createEmptyBehavioralGraph } from "../../domain/reconstruction/BehavioralEvidenceGraph.js";
+import { projectEvidenceToBehavioralGraph } from "../investigation/BehavioralGraphProjection.js";
 
 export {
   investigationConfigSchema,
@@ -49,6 +51,7 @@ export {
 export class AutonomousInvestigation {
   #controller = new AbortController();
   #active = false;
+  #graphDirty = false;
   #controlPoll: Promise<void> = Promise.resolve();
   #writes: Promise<void> = Promise.resolve();
   readonly #workspace: InvestigationWorkspace;
@@ -106,15 +109,17 @@ export class AutonomousInvestigation {
           throw cause;
       }
     }
+    const binarySha256 = await hashFile(config.binaryPath);
     const instance = new AutonomousInvestigation(resolve(storePath), {
       version: 1,
       id: randomUUID(),
-      binarySha256: await hashFile(config.binaryPath),
+      binarySha256,
       originalArgumentSha256,
       config,
       status: "ready",
       iteration: 0,
       evidence: [],
+      behavioralGraph: createEmptyBehavioralGraph(binarySha256),
       regressions: [],
       functions: [],
       history: [],
@@ -502,8 +507,10 @@ export class AutonomousInvestigation {
       !this.state.evidence.some(
         (item) => item.evidence_id === evidence.evidence_id,
       )
-    )
+    ) {
       this.state.evidence.push(evidence);
+      this.#graphDirty = true;
+    }
     if (evidence.operation === "search_procedures") {
       const names = functionSearchResultSchema.parse(
         evidence.normalized_result,
@@ -561,6 +568,18 @@ export class AutonomousInvestigation {
     await this.#workspace.rollback();
   }
   async #save(event: string, detail: string): Promise<void> {
+    if (this.#graphDirty) {
+      this.state.behavioralGraph = projectEvidenceToBehavioralGraph(
+        this.state.binarySha256,
+        {
+          records: this.state.evidence,
+          nativeGraphs: [],
+          applicationSources: [],
+          nonTargetEvidence: "exclude-with-coverage",
+        },
+      );
+      this.#graphDirty = false;
+    }
     this.state.history.push({ at: new Date().toISOString(), event, detail });
     const snapshot = JSON.stringify(
       investigationStateSchema.parse(this.state),

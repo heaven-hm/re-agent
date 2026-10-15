@@ -9,6 +9,8 @@ import {
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import * as graphProjection from "../investigation/BehavioralGraphProjection.js";
+import { createEvidence } from "../../domain/evidence.js";
 import {
   AutonomousInvestigation,
   investigationConfigSchema,
@@ -187,6 +189,134 @@ describe("autonomous reconstruction checkpoint and workspace safety", () => {
     await expect(AutonomousInvestigation.open(f.checkpoint)).rejects.toThrow(
       "argument artifact changed",
     );
+  });
+});
+
+describe("autonomous behavioral graph checkpoint binding", () => {
+  it("projects a discovery batch once before saving its authenticated checkpoint", async () => {
+    const f = await fixture();
+    const agent = await AutonomousInvestigation.create(f.checkpoint, f.config);
+    const records = Array.from({ length: 30 }, (_, index) =>
+      createEvidence(
+        {
+          path: f.config.binaryPath,
+          sha256: agent.state.binarySha256,
+          format: "unknown",
+        },
+        { id: "batch-test", name: "Batch Test", version: "1" },
+        {
+          operation: "batch_observation",
+          parameters: { index },
+          result: { index },
+        },
+      ),
+    );
+    const projection = vi.spyOn(
+      graphProjection,
+      "projectEvidenceToBehavioralGraph",
+    );
+    try {
+      await expect(
+        agent.run({
+          discover: async () => records,
+          reconstruct: async (state) => {
+            expect(state.behavioralGraph?.evidenceIds).toHaveLength(
+              records.length,
+            );
+            throw new Error("stop after discovery");
+          },
+        }),
+      ).rejects.toThrow("stop after discovery");
+      expect(
+        projection.mock.calls.filter(
+          ([, input]) => input.records.length === records.length,
+        ),
+      ).toHaveLength(1);
+      const persisted = parseInvestigationState(
+        JSON.parse(await readFile(f.checkpoint, "utf8")),
+      );
+      expect(persisted.behavioralGraph?.nodes).toHaveLength(records.length);
+      expect(persisted.behavioralGraph?.evidenceIds).toEqual(
+        agent.state.behavioralGraph?.evidenceIds,
+      );
+    } finally {
+      projection.mockRestore();
+    }
+  });
+
+  it("reconstructs a missing behavioral graph from authenticated checkpoint Evidence", async () => {
+    const f = await fixture();
+    const agent = await AutonomousInvestigation.create(f.checkpoint, f.config);
+    const record = createEvidence(
+      {
+        path: f.config.binaryPath,
+        sha256: agent.state.binarySha256,
+        format: "unknown",
+      },
+      { id: "checkpoint-test", name: "Checkpoint Test", version: "1" },
+      {
+        operation: "checkpoint_observation",
+        parameters: {},
+        result: { ok: true },
+        limitations: ["x".repeat(9000)],
+      },
+    );
+    const restored = parseInvestigationState({
+      ...agent.state,
+      evidence: [record],
+      behavioralGraph: undefined,
+    });
+    expect(restored.evidence[0]?.limitations[0]).toHaveLength(9000);
+    expect(
+      restored.behavioralGraph?.limitations.some((value) =>
+        value.includes("truncated"),
+      ),
+    ).toBe(true);
+    expect(restored.behavioralGraph?.evidenceIds).toEqual([record.evidence_id]);
+    expect(restored.behavioralGraph?.targetSha256).toBe(
+      agent.state.binarySha256,
+    );
+  });
+
+  it("rejects a checkpoint graph that changes target identity or loses Evidence references", async () => {
+    const f = await fixture();
+    const agent = await AutonomousInvestigation.create(f.checkpoint, f.config);
+    const record = createEvidence(
+      {
+        path: f.config.binaryPath,
+        sha256: agent.state.binarySha256,
+        format: "unknown",
+      },
+      { id: "checkpoint-test", name: "Checkpoint Test", version: "1" },
+      {
+        operation: "checkpoint_observation",
+        parameters: {},
+        result: { ok: true },
+      },
+    );
+    const state = parseInvestigationState({
+      ...agent.state,
+      evidence: [record],
+      behavioralGraph: undefined,
+    });
+    expect(() =>
+      parseInvestigationState({
+        ...state,
+        behavioralGraph: {
+          ...state.behavioralGraph,
+          targetSha256: "c".repeat(64),
+        },
+      }),
+    ).toThrow();
+    expect(() =>
+      parseInvestigationState({
+        ...state,
+        behavioralGraph: {
+          ...state.behavioralGraph,
+          evidenceIds: [],
+        },
+      }),
+    ).toThrow(/Evidence reference|does not match/iu);
   });
 });
 

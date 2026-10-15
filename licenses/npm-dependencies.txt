@@ -2,9 +2,14 @@ REA npm dependency inventory
 Prepared from the root package-lock.json; refresh this inventory when locked dependencies change.
 License identifiers are upstream lockfile declarations, not a legal assessment.
 Runtime includes transitive and optional platform packages; development includes build, test and website tooling.
-Locked package entries: 586; runtime: 174.
+Locked package entries: 649; runtime: 174.
 Full runtime copyright/license/NOTICE texts: npm-runtime-notices.txt.
 
+@ai-sdk/provider@4.0.26 | development | Apache-2.0
+  Lockfile path: node_modules/@ai-sdk/provider
+  Package: https://www.npmjs.com/package/@ai-sdk/provider/v/4.0.26
+  Archive: https://registry.npmjs.org/@ai-sdk/provider/-/provider-4.0.26.tgz
+  Integrity: sha512-BZ443uBEq6HuMA+Z4b7Hpm65GpZSo7pWqnYqpf/7tAO3C48JbtvAhOE2JnODFj+jodsZzfRHkAyQb64xuD2tZQ==
 @algolia/abtesting@1.25.0 | development | MIT
   Lockfile path: node_modules/@algolia/abtesting
   Package: https://www.npmjs.com/package/@algolia/abtesting/v/1.25.0
@@ -150,6 +155,16 @@ Full runtime copyright/license/NOTICE texts: npm-runtime-notices.txt.
   Package: https://www.npmjs.com/package/@docsearch/react/v/3.8.2
   Archive: https://registry.npmjs.org/@docsearch/react/-/react-3.8.2.tgz
   Integrity: sha512-xCRrJQlTt8N9GU0DG4ptwHRkfnSnD/YpdeaXe02iKfqs97TkZJv60yE+1eq/tjPcVnTW8dP5qLP7itifFVV5eg==
+@e2e-dev/web@0.15.0 | development | Apache-2.0
+  Lockfile path: node_modules/@e2e-dev/web
+  Package: https://www.npmjs.com/package/@e2e-dev/web/v/0.15.0
+  Archive: https://registry.npmjs.org/@e2e-dev/web/-/web-0.15.0.tgz
+  Integrity: sha512-yqtvDzsljNU+M1IXm6CmAI29Z61jqIjubgmj6y6JzSUSGRwtk0LKVo2eHWJHCOxH6lwYOIbn8pVt/fHKrrvSzA==
+playwright-core@1.64.0 | development | Apache-2.0
+  Lockfile path: node_modules/@e2e-dev/web/node_modules/playwright-core
+  Package: https://www.npmjs.com/package/playwright-core/v/1.64.0
+  Archive: https://registry.npmjs.org/playwright-core/-/playwright-core-1.64.0.tgz
+  Integrity: sha512-T9r+MZkTECl2+oUcZ26YgZzTrYidTsIhYYkJix+6iDOymOb1FB2RLLSOxRGnZGv5DStt+aduIVbt+E8WygXYpg==
 @electron/asar@4.2.0 | runtime | MIT
   Lockfile path: node_modules/@electron/asar
   Package: https://www.npmjs.com/package/@electron/asar/v/4.2.0
@@ -190,6 +205,16 @@ commander@13.1.0 | runtime | MIT
   Package: https://www.npmjs.com/package/@iconify/types/v/2.0.0
   Archive: https://registry.npmjs.org/@iconify/types/-/types-2.0.0.tgz
   Integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==
+@jridgewell/gen-mapping@0.3.13 | development | MIT
+  Lockfile path: node_modules/@jridgewell/gen-mapping
+  Package: https://www.npmjs.com/package/@jridgewell/gen-mapping/v/0.3.13
+  Archive: https://registry.npmjs.org/@jridgewell/gen-mapping/-/gen-mapping-0.3.13.tgz
+  Integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==
+@jridgewell/remapping@2.3.5 | development | MIT
+  Lockfile path: node_modules/@jridgewell/remapping
+  Package: https://www.npmjs.com/package/@jridgewell/remapping/v/2.3.5
+  Archive: https://registry.npmjs.org/@jridgewell/remapping/-/remapping-2.3.5.tgz
+  Integrity: sha512-LI9u/+laYG4Ds1TDKSJW2YPrIlcVYOwi2fUC6xB43lueCjgxV4lffOCZCtYFiH6TNOX+tQKXx97T4IKHbhyHEQ==
 @jridgewell/resolve-uri@3.1.2 | runtime | MIT
   Lockfile path: node_modules/@jridgewell/resolve-uri
   Package: https://www.npmjs.com/package/@jridgewell/resolve-uri/v/3.1.2
@@ -360,6 +385,11 @@ commander@13.1.0 | runtime | MIT
   Package: https://www.npmjs.com/package/@oxc-parser/binding-win32-x64-msvc/v/0.150.0
   Archive: https://registry.npmjs.org/@oxc-parser/binding-win32-x64-msvc/-/binding-win32-x64-msvc-0.150.0.tgz
   Integrity: sha512-n5YMzbqwPQqozbkrexi0lNZrUz5cnPHalYpFWe6Dau7AmKIWNo+y24IwzDuZEQtEdUHuKhXmMMih/MPjOI+CMw==
+@oxc-project/runtime@0.153.0 | development | MIT
+  Lockfile path: node_modules/@oxc-project/runtime
+  Package: https://www.npmjs.com/package/@oxc-project/runtime/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-project/runtime/-/runtime-0.153.0.tgz
+  Integrity: sha512-rXJvtlsVG4xJNq64hiaUTIatE7jbBgpa6l4QgmEa2jLgT3ULH9scUBkpsC9N1DfmqixLEyT6DuK6OSXozziIlw==
 @oxc-project/types@0.152.0 | development | MIT
   Lockfile path: node_modules/@oxc-project/types
   Package: https://www.npmjs.com/package/@oxc-project/types/v/0.152.0
@@ -460,6 +490,101 @@ commander@13.1.0 | runtime | MIT
   Package: https://www.npmjs.com/package/@oxc-resolver/binding-win32-x64-msvc/v/11.24.2
   Archive: https://registry.npmjs.org/@oxc-resolver/binding-win32-x64-msvc/-/binding-win32-x64-msvc-11.24.2.tgz
   Integrity: sha512-UqGPmo56KDfLlfXFAFIrNflHT8tFxWGEivWg3Zeyp4Uy2NlKN1FGPr6/BxcLGG3+kZ6Wp14g5Uj+n71boqZfiw==
+@oxc-transform/binding-android-arm-eabi@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/@oxc-transform/binding-android-arm-eabi
+  Package: https://www.npmjs.com/package/@oxc-transform/binding-android-arm-eabi/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-transform/binding-android-arm-eabi/-/binding-android-arm-eabi-0.153.0.tgz
+  Integrity: sha512-EUYebwgzuoDXutZJYbMdL6vzwnQoJyO3fRWGuo5AXSeKRO2YBySW1u2gcVwAA2lTcFXMPJh2Fw1OM23ZfFQF1A==
+@oxc-transform/binding-android-arm64@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/@oxc-transform/binding-android-arm64
+  Package: https://www.npmjs.com/package/@oxc-transform/binding-android-arm64/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-transform/binding-android-arm64/-/binding-android-arm64-0.153.0.tgz
+  Integrity: sha512-UwwX/zjbEFbLuUdV1+9+SKWhjqwO9tnHqKNQYN4dR3ypK61MFa7s0C2z+vASSSZt7CmcAbl5ArGPcykFiga38A==
+@oxc-transform/binding-darwin-arm64@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/@oxc-transform/binding-darwin-arm64
+  Package: https://www.npmjs.com/package/@oxc-transform/binding-darwin-arm64/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-transform/binding-darwin-arm64/-/binding-darwin-arm64-0.153.0.tgz
+  Integrity: sha512-J6r1FDN0eqhrddJ8Fxe01DMABxsRTGzrn0d14eDXT2a6gqj5sdtEOiEksN7FimuqDPrMsX1QGjEacSNAuzboGw==
+@oxc-transform/binding-darwin-x64@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/@oxc-transform/binding-darwin-x64
+  Package: https://www.npmjs.com/package/@oxc-transform/binding-darwin-x64/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-transform/binding-darwin-x64/-/binding-darwin-x64-0.153.0.tgz
+  Integrity: sha512-6ad61F1FuyozXDGkPl9VHi/aSOCNUS4ebqXhUqc2JsGXG2S1CFVOsN11u5haNWCLdctbognhzKexK4zpFAsLXg==
+@oxc-transform/binding-freebsd-x64@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/@oxc-transform/binding-freebsd-x64
+  Package: https://www.npmjs.com/package/@oxc-transform/binding-freebsd-x64/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-transform/binding-freebsd-x64/-/binding-freebsd-x64-0.153.0.tgz
+  Integrity: sha512-eVcvny0FJzAV7Rr49JkWupfQxoaghJ189nwiwQBv//wI52GtDj+IWkrpPEd7x5bCf1GRX8hoBJmHk/QvKS5S/g==
+@oxc-transform/binding-linux-arm-gnueabihf@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/@oxc-transform/binding-linux-arm-gnueabihf
+  Package: https://www.npmjs.com/package/@oxc-transform/binding-linux-arm-gnueabihf/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-transform/binding-linux-arm-gnueabihf/-/binding-linux-arm-gnueabihf-0.153.0.tgz
+  Integrity: sha512-8DiPMKx18GaMvt4KvHxHb7kHbOnZL9D0Xjxofc+N67RgeWNDdXiqLaUXVmptpOXmIK+sG4+RtQtHGrAt7fnyDQ==
+@oxc-transform/binding-linux-arm-musleabihf@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/@oxc-transform/binding-linux-arm-musleabihf
+  Package: https://www.npmjs.com/package/@oxc-transform/binding-linux-arm-musleabihf/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-transform/binding-linux-arm-musleabihf/-/binding-linux-arm-musleabihf-0.153.0.tgz
+  Integrity: sha512-k1MDve56Sml/O8f9EeeRecZtMdzAQZYtq8mqShtzyJ/LvLQ5KKXnyzlZxQYjoMsRJwzsdkWNHE2svNQxtpyBaQ==
+@oxc-transform/binding-linux-arm64-gnu@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/@oxc-transform/binding-linux-arm64-gnu
+  Package: https://www.npmjs.com/package/@oxc-transform/binding-linux-arm64-gnu/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-transform/binding-linux-arm64-gnu/-/binding-linux-arm64-gnu-0.153.0.tgz
+  Integrity: sha512-N8ZvBN7uhlqRgxiqwhgpF7KAaIj5qT/4cGMscxleipj90tbtYOO3rAqxiBuABCrvoosrLX4HbJ39gQX9verUiw==
+@oxc-transform/binding-linux-arm64-musl@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/@oxc-transform/binding-linux-arm64-musl
+  Package: https://www.npmjs.com/package/@oxc-transform/binding-linux-arm64-musl/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-transform/binding-linux-arm64-musl/-/binding-linux-arm64-musl-0.153.0.tgz
+  Integrity: sha512-OIRZqffxi0yam6aMzIV0lAV5JsMeGs1cQRTwco0qzeAFTKkVaFhpUWXdw1j4BXDDTqbJ3PWi+oQaYzLcGNiaFg==
+@oxc-transform/binding-linux-ppc64-gnu@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/@oxc-transform/binding-linux-ppc64-gnu
+  Package: https://www.npmjs.com/package/@oxc-transform/binding-linux-ppc64-gnu/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-transform/binding-linux-ppc64-gnu/-/binding-linux-ppc64-gnu-0.153.0.tgz
+  Integrity: sha512-KLf7dDN7zU6MFhka9zUHmJw8fvNRSxxGgLDelZwKh0iuaRjUSibKFQ4ZQd0/Rk5ybZbJgqDNFH5xeVU4Cd6ZfQ==
+@oxc-transform/binding-linux-riscv64-gnu@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/@oxc-transform/binding-linux-riscv64-gnu
+  Package: https://www.npmjs.com/package/@oxc-transform/binding-linux-riscv64-gnu/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-transform/binding-linux-riscv64-gnu/-/binding-linux-riscv64-gnu-0.153.0.tgz
+  Integrity: sha512-WByPPuG7ndXq0tb12P6eHzzolS9Q+ioBmUF99x1FfOiya5nkuc6bjjixq7ZgYezNiSxkw7UsfCgcBZwtNYajkQ==
+@oxc-transform/binding-linux-riscv64-musl@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/@oxc-transform/binding-linux-riscv64-musl
+  Package: https://www.npmjs.com/package/@oxc-transform/binding-linux-riscv64-musl/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-transform/binding-linux-riscv64-musl/-/binding-linux-riscv64-musl-0.153.0.tgz
+  Integrity: sha512-yXM0cc0mtvIH9keD/9oULanLhVXN8Rf8cvSO5OO2vVrGYs5b0DwkTStztvwn1JQc1eQxPru9iKpZSJq6R4kURA==
+@oxc-transform/binding-linux-s390x-gnu@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/@oxc-transform/binding-linux-s390x-gnu
+  Package: https://www.npmjs.com/package/@oxc-transform/binding-linux-s390x-gnu/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-transform/binding-linux-s390x-gnu/-/binding-linux-s390x-gnu-0.153.0.tgz
+  Integrity: sha512-fqwaM2IMmOI0L7DEUWxWtJzGPyvr9ciIOXhB1vp8gkQ97j6xUCddJrEeUJTOAyJyYvHeT0rf03rWciASK4FqUw==
+@oxc-transform/binding-linux-x64-gnu@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/@oxc-transform/binding-linux-x64-gnu
+  Package: https://www.npmjs.com/package/@oxc-transform/binding-linux-x64-gnu/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-transform/binding-linux-x64-gnu/-/binding-linux-x64-gnu-0.153.0.tgz
+  Integrity: sha512-q0yrehYszYqbJfBW0LeUeYvI+NUMwD5p/6skX05EHVQsOJCUTdYKI2wEN2b3nBRUVYxf030pFdOtXJgpZatf/A==
+@oxc-transform/binding-linux-x64-musl@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/@oxc-transform/binding-linux-x64-musl
+  Package: https://www.npmjs.com/package/@oxc-transform/binding-linux-x64-musl/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-transform/binding-linux-x64-musl/-/binding-linux-x64-musl-0.153.0.tgz
+  Integrity: sha512-+e0dMTEE7azbGjnJSG97BIQ/CtHM2FbudIlaMmq0Dx5BMaeZaynvXfOg4X2uAYWHEIJva9pC+o6JByuIhUrMOw==
+@oxc-transform/binding-openharmony-arm64@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/@oxc-transform/binding-openharmony-arm64
+  Package: https://www.npmjs.com/package/@oxc-transform/binding-openharmony-arm64/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-transform/binding-openharmony-arm64/-/binding-openharmony-arm64-0.153.0.tgz
+  Integrity: sha512-yQu5Ykk76Nu0g82B6q5nMgyuqgntdmv16LXQPBOVIl2CvwbSwx2jrigfTztNDHk708/hCjiPp6/J7AnNpxO/kg==
+@oxc-transform/binding-win32-arm64-msvc@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/@oxc-transform/binding-win32-arm64-msvc
+  Package: https://www.npmjs.com/package/@oxc-transform/binding-win32-arm64-msvc/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-transform/binding-win32-arm64-msvc/-/binding-win32-arm64-msvc-0.153.0.tgz
+  Integrity: sha512-6hXONV9UIT0wqfSOtuXlRZSZofHF8orlhyYCNwZJY+xuu/HjFI6D/+T6BbuTnCrhbutynMT5ZUIeVScqsELxDw==
+@oxc-transform/binding-win32-ia32-msvc@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/@oxc-transform/binding-win32-ia32-msvc
+  Package: https://www.npmjs.com/package/@oxc-transform/binding-win32-ia32-msvc/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-transform/binding-win32-ia32-msvc/-/binding-win32-ia32-msvc-0.153.0.tgz
+  Integrity: sha512-i0tleWz872L9t0SAYs6bcY2RLfN/3XE3i0h0UDuTCxMT7wYj22Nd3IFF+4CFZQgF9Eb/Jh92OFrXQHFlwfhA0Q==
+@oxc-transform/binding-win32-x64-msvc@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/@oxc-transform/binding-win32-x64-msvc
+  Package: https://www.npmjs.com/package/@oxc-transform/binding-win32-x64-msvc/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-transform/binding-win32-x64-msvc/-/binding-win32-x64-msvc-0.153.0.tgz
+  Integrity: sha512-DC1juC+WQbUmGf3qJ7x+w4K0U9SUAANizzgGU3J+Y0WrMNZZryXWq0zzHAKTfvFpY2fORgz+J1IXlZ/wf6mRGg==
 @oxfmt/binding-android-arm-eabi@0.72.0 | development, optional | MIT
   Lockfile path: node_modules/@oxfmt/binding-android-arm-eabi
   Package: https://www.npmjs.com/package/@oxfmt/binding-android-arm-eabi/v/0.72.0
@@ -905,6 +1030,11 @@ commander@13.1.0 | runtime | MIT
   Package: https://www.npmjs.com/package/@shikijs/vscode-textmate/v/10.0.2
   Archive: https://registry.npmjs.org/@shikijs/vscode-textmate/-/vscode-textmate-10.0.2.tgz
   Integrity: sha512-83yeghZ2xxin3Nj8z1NMd/NCuca+gsYXswywDy5bHvwlWL8tpTQmzGeUuHd9FC3E/SBEMvzJRwWEOz5gGes9Qg==
+@standard-schema/spec@1.1.0 | development | MIT
+  Lockfile path: node_modules/@standard-schema/spec
+  Package: https://www.npmjs.com/package/@standard-schema/spec/v/1.1.0
+  Archive: https://registry.npmjs.org/@standard-schema/spec/-/spec-1.1.0.tgz
+  Integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==
 @toon-format/toon@2.3.1 | runtime | MIT
   Lockfile path: node_modules/@toon-format/toon
   Package: https://www.npmjs.com/package/@toon-format/toon/v/2.3.1
@@ -1130,6 +1260,11 @@ commander@13.1.0 | runtime | MIT
   Package: https://www.npmjs.com/package/@vitest/coverage-v8/v/5.0.3
   Archive: https://registry.npmjs.org/@vitest/coverage-v8/-/coverage-v8-5.0.3.tgz
   Integrity: sha512-+klsyz7BvT1vCU28Zkfzms1Ia78XD0V41U3FUtRaa3S+vOr/EXvK1O6BvVD7l1RzEjm6SONR2aybOvDDf9u0mQ==
+@vitest/expect@5.0.3 | development | MIT
+  Lockfile path: node_modules/@vitest/expect
+  Package: https://www.npmjs.com/package/@vitest/expect/v/5.0.3
+  Archive: https://registry.npmjs.org/@vitest/expect/-/expect-5.0.3.tgz
+  Integrity: sha512-N/VGY122AqBx25OB4EatqlVu8PBayvm9dQzpJ8kVq/pOvqAhXTE5MAmoSMzdB8klDU9wcgSEUliwgMNMtxPa1w==
 @vitest/istanbul-lib-coverage@1.0.2 | development | MIT
   Lockfile path: node_modules/@vitest/istanbul-lib-coverage
   Package: https://www.npmjs.com/package/@vitest/istanbul-lib-coverage/v/1.0.2
@@ -1145,11 +1280,21 @@ commander@13.1.0 | runtime | MIT
   Package: https://www.npmjs.com/package/@vitest/mocker/v/5.0.3
   Archive: https://registry.npmjs.org/@vitest/mocker/-/mocker-5.0.3.tgz
   Integrity: sha512-T8sWAIbkSyAjkwTcaEc3Iu0o9A27X1/kdXrizhZkGuSKScRQtRzclfAMpOTcGdXCsqxeWlpGy3XjqaW8CpLORg==
+@vitest/pretty-format@5.0.3 | development | MIT
+  Lockfile path: node_modules/@vitest/pretty-format
+  Package: https://www.npmjs.com/package/@vitest/pretty-format/v/5.0.3
+  Archive: https://registry.npmjs.org/@vitest/pretty-format/-/pretty-format-5.0.3.tgz
+  Integrity: sha512-3hr5eV5z2ff0l2Q1vaKQbB4j3M3tElw8stDokEOTqXJB3Es5VrT8gBRIMY59gGuFp8Y61sWlWFK1aNUH5dHDYw==
 @vitest/spy@5.0.3 | development | MIT
   Lockfile path: node_modules/@vitest/spy
   Package: https://www.npmjs.com/package/@vitest/spy/v/5.0.3
   Archive: https://registry.npmjs.org/@vitest/spy/-/spy-5.0.3.tgz
   Integrity: sha512-XhFysQTB8AZ+P4gMi+Lpo99vg2AZi0qKpaB9yXQl37+CaMEAPO3iH/wGVnSyL5MPERiLezpqTVtrR6UZH5GCXg==
+@vitest/utils@5.0.3 | development | MIT
+  Lockfile path: node_modules/@vitest/utils
+  Package: https://www.npmjs.com/package/@vitest/utils/v/5.0.3
+  Archive: https://registry.npmjs.org/@vitest/utils/-/utils-5.0.3.tgz
+  Integrity: sha512-77fDTZv8eu1CzlIfgPU2yrl5MXSUaUAOvgdZEeVm3X3WIxUubIX2SforqS6176lT32HCF6uBVMYVqfHxw7o6eg==
 @vue/compiler-core@3.5.43 | development | MIT
   Lockfile path: node_modules/@vue/compiler-core
   Package: https://www.npmjs.com/package/@vue/compiler-core/v/3.5.43
@@ -1485,6 +1630,11 @@ commander@14.0.3 | development | MIT
   Package: https://www.npmjs.com/package/commander/v/14.0.3
   Archive: https://registry.npmjs.org/commander/-/commander-14.0.3.tgz
   Integrity: sha512-H+y0Jo/T1RZ9qPP4Eh1pkcQcLRglraJaSLoyOtHxu6AapkjWVCy2Sit1QQ4x3Dng8qDlSsZEet7g5Pq06MvTgw==
+convert-source-map@2.0.0 | development | MIT
+  Lockfile path: node_modules/convert-source-map
+  Package: https://www.npmjs.com/package/convert-source-map/v/2.0.0
+  Archive: https://registry.npmjs.org/convert-source-map/-/convert-source-map-2.0.0.tgz
+  Integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==
 copy-anything@4.1.5 | development | MIT
   Lockfile path: node_modules/copy-anything
   Package: https://www.npmjs.com/package/copy-anything/v/4.1.5
@@ -1550,6 +1700,136 @@ dunder-proto@1.0.1 | runtime | MIT
   Package: https://www.npmjs.com/package/dunder-proto/v/1.0.1
   Archive: https://registry.npmjs.org/dunder-proto/-/dunder-proto-1.0.1.tgz
   Integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==
+e2e@0.21.0 | development | Apache-2.0
+  Lockfile path: node_modules/e2e
+  Package: https://www.npmjs.com/package/e2e/v/0.21.0
+  Archive: https://registry.npmjs.org/e2e/-/e2e-0.21.0.tgz
+  Integrity: sha512-QucUfPD2VrFtgpazPJkYXs/rbwffQb2m3CyUUN/WdqFSyZtIR2pTFb1lYClk0TOhWbUcSEdUAsItdViCfrzZXw==
+@clack/core@1.5.1 | development | MIT
+  Lockfile path: node_modules/e2e/node_modules/@clack/core
+  Package: https://www.npmjs.com/package/@clack/core/v/1.5.1
+  Archive: https://registry.npmjs.org/@clack/core/-/core-1.5.1.tgz
+  Integrity: sha512-iHTrHA8MtVuLl2TfZySmcKv1qO2PoyC9Z7pfSDozEuV5vtY3/wcOPKJXlqJ5Oq2Cx5DDGQGAMVx6HZfRRoVEbQ==
+@clack/prompts@1.8.1 | development | MIT
+  Lockfile path: node_modules/e2e/node_modules/@clack/prompts
+  Package: https://www.npmjs.com/package/@clack/prompts/v/1.8.1
+  Archive: https://registry.npmjs.org/@clack/prompts/-/prompts-1.8.1.tgz
+  Integrity: sha512-dlT1m5e/0yUL0kRNcQn7yGLVThkgbB0Ga/1AmfDDC/8ik6AIiSf2QLQO2zPYvefsHP0aFgxO93cVLCCfDp7kzQ==
+@oxc-parser/binding-android-arm-eabi@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/e2e/node_modules/@oxc-parser/binding-android-arm-eabi
+  Package: https://www.npmjs.com/package/@oxc-parser/binding-android-arm-eabi/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-parser/binding-android-arm-eabi/-/binding-android-arm-eabi-0.153.0.tgz
+  Integrity: sha512-BcWu25dMwMjHpaDCEidmpAi7rGg1qZoihJeUUH9bD55pVZ0z4Wa5CQgqSTo0R41H81oozisQKW3WqvAN2m77IQ==
+@oxc-parser/binding-android-arm64@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/e2e/node_modules/@oxc-parser/binding-android-arm64
+  Package: https://www.npmjs.com/package/@oxc-parser/binding-android-arm64/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-parser/binding-android-arm64/-/binding-android-arm64-0.153.0.tgz
+  Integrity: sha512-9l5rdp2DhRqVriBHsNpu5cEf+hizZ4B58rt93HzyQEBUgZiC6qe2oFpaAAnXGCxHGnQExI1s7S2G0QhFacUZ6w==
+@oxc-parser/binding-darwin-arm64@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/e2e/node_modules/@oxc-parser/binding-darwin-arm64
+  Package: https://www.npmjs.com/package/@oxc-parser/binding-darwin-arm64/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-parser/binding-darwin-arm64/-/binding-darwin-arm64-0.153.0.tgz
+  Integrity: sha512-EcpsyRXHhENDpekpG4QNaSZj2F/BAz4Gh4o89zZwNss86R8KyRSQ6sXbAj74Xyeb4z3j/yBZZ6joQZhraIWyfw==
+@oxc-parser/binding-darwin-x64@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/e2e/node_modules/@oxc-parser/binding-darwin-x64
+  Package: https://www.npmjs.com/package/@oxc-parser/binding-darwin-x64/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-parser/binding-darwin-x64/-/binding-darwin-x64-0.153.0.tgz
+  Integrity: sha512-hlj80HUQy07/2lYp6rmxH+3u+H2ik3rjLR52CUdPApxmZCNxASDUf/+ykTzAHS/fehftmVMATKvPaWmuLHuasg==
+@oxc-parser/binding-freebsd-x64@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/e2e/node_modules/@oxc-parser/binding-freebsd-x64
+  Package: https://www.npmjs.com/package/@oxc-parser/binding-freebsd-x64/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-parser/binding-freebsd-x64/-/binding-freebsd-x64-0.153.0.tgz
+  Integrity: sha512-fWRcv2pMSh1qtez46MOu8vuUJ5fiaQZPHSphbWulbL7SHBMKfRgZl2PzjXZYQJbq7NEXyXbgIuIuUm+/Rmkv8w==
+@oxc-parser/binding-linux-arm-gnueabihf@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/e2e/node_modules/@oxc-parser/binding-linux-arm-gnueabihf
+  Package: https://www.npmjs.com/package/@oxc-parser/binding-linux-arm-gnueabihf/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-parser/binding-linux-arm-gnueabihf/-/binding-linux-arm-gnueabihf-0.153.0.tgz
+  Integrity: sha512-paZeUK1GXShl/bOJQET1/8AQxayFeuN4SIWAkgTRxE7ZQwv9uYSB2n0648smygP22N7jcI3zxAm0Z+ALNiIKxg==
+@oxc-parser/binding-linux-arm-musleabihf@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/e2e/node_modules/@oxc-parser/binding-linux-arm-musleabihf
+  Package: https://www.npmjs.com/package/@oxc-parser/binding-linux-arm-musleabihf/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-parser/binding-linux-arm-musleabihf/-/binding-linux-arm-musleabihf-0.153.0.tgz
+  Integrity: sha512-qFPp5NwMf4K1C0O+DCVGmcbOaYyYAq98Rvv9p4VSfb777iUwlJCqMUxf6QG9N5f5ls4TEX6LitOZHi+6GL6rYQ==
+@oxc-parser/binding-linux-arm64-gnu@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/e2e/node_modules/@oxc-parser/binding-linux-arm64-gnu
+  Package: https://www.npmjs.com/package/@oxc-parser/binding-linux-arm64-gnu/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-parser/binding-linux-arm64-gnu/-/binding-linux-arm64-gnu-0.153.0.tgz
+  Integrity: sha512-oufEhZCX7saeo27Logra8cvBR1jQ/yw2zUI2hHmWw3qA/XYqEW31FOvLQBv7DWN32NjVdlcaP11WBBZTJo4k9g==
+@oxc-parser/binding-linux-arm64-musl@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/e2e/node_modules/@oxc-parser/binding-linux-arm64-musl
+  Package: https://www.npmjs.com/package/@oxc-parser/binding-linux-arm64-musl/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-parser/binding-linux-arm64-musl/-/binding-linux-arm64-musl-0.153.0.tgz
+  Integrity: sha512-zXYzuAqng85h6+LI3iRm0zeMLX1/K2z41ZAMWxVRgt0D10VvZUaV5q+TEB46KDhoKBpdexoTLC6QoB/EiP2oqQ==
+@oxc-parser/binding-linux-ppc64-gnu@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/e2e/node_modules/@oxc-parser/binding-linux-ppc64-gnu
+  Package: https://www.npmjs.com/package/@oxc-parser/binding-linux-ppc64-gnu/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-parser/binding-linux-ppc64-gnu/-/binding-linux-ppc64-gnu-0.153.0.tgz
+  Integrity: sha512-J7+NLwLEzdkKM9cKyPHH/AjXXstWOs98KYgLrPPnO4N9MO8EZRBfPNnBcS3S67uMOBkRpUmCl2FhRnWdQ5CbBA==
+@oxc-parser/binding-linux-riscv64-gnu@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/e2e/node_modules/@oxc-parser/binding-linux-riscv64-gnu
+  Package: https://www.npmjs.com/package/@oxc-parser/binding-linux-riscv64-gnu/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-parser/binding-linux-riscv64-gnu/-/binding-linux-riscv64-gnu-0.153.0.tgz
+  Integrity: sha512-sD0K11GQTLWylln54nPMMTtgmBbQrR5It/vMpZpy/fogiw8O2AvIE+9LuWUXddrWk9zvFIHGRcSgFn4IHOfoYg==
+@oxc-parser/binding-linux-riscv64-musl@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/e2e/node_modules/@oxc-parser/binding-linux-riscv64-musl
+  Package: https://www.npmjs.com/package/@oxc-parser/binding-linux-riscv64-musl/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-parser/binding-linux-riscv64-musl/-/binding-linux-riscv64-musl-0.153.0.tgz
+  Integrity: sha512-7L66uql2BhvSz51LwfExjOdn6et/ydTiQxl23VApdKzJhTc3TczA1Qt6VR/UcvlQrL2ZbytIJb447vh7p5wmUw==
+@oxc-parser/binding-linux-s390x-gnu@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/e2e/node_modules/@oxc-parser/binding-linux-s390x-gnu
+  Package: https://www.npmjs.com/package/@oxc-parser/binding-linux-s390x-gnu/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-parser/binding-linux-s390x-gnu/-/binding-linux-s390x-gnu-0.153.0.tgz
+  Integrity: sha512-hXV3T7mNyrPR19rbPYkglkQJtoM/UNo/xwbZeeqdAxEg8PXgb4LXXuxPpGgI4bzRRCWwLUxdDSS58xIyC2u1TA==
+@oxc-parser/binding-linux-x64-gnu@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/e2e/node_modules/@oxc-parser/binding-linux-x64-gnu
+  Package: https://www.npmjs.com/package/@oxc-parser/binding-linux-x64-gnu/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-parser/binding-linux-x64-gnu/-/binding-linux-x64-gnu-0.153.0.tgz
+  Integrity: sha512-Da8Vqs1xdtoDYtEjmozD7wGgJeLBQkMbR0WUBECOSxodyX5DXy8ySlvJWbukyO2Q0+TM9EK+4LT6tbq0jCg4hQ==
+@oxc-parser/binding-linux-x64-musl@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/e2e/node_modules/@oxc-parser/binding-linux-x64-musl
+  Package: https://www.npmjs.com/package/@oxc-parser/binding-linux-x64-musl/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-parser/binding-linux-x64-musl/-/binding-linux-x64-musl-0.153.0.tgz
+  Integrity: sha512-zGAPxNTIIw6X5WyTRscIFE/oDjpdNtrrl32ing6NOXdGjzRucadnxBilexLdeYQ9YxixF93GujpXyQ0jw7ddSg==
+@oxc-parser/binding-openharmony-arm64@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/e2e/node_modules/@oxc-parser/binding-openharmony-arm64
+  Package: https://www.npmjs.com/package/@oxc-parser/binding-openharmony-arm64/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-parser/binding-openharmony-arm64/-/binding-openharmony-arm64-0.153.0.tgz
+  Integrity: sha512-GoHzpqP5XyPIp9DHokoEdCp+K4UPl/h1neFj1uXnUB3pJYyOQ7NOhFVOttNUgCGcj2eywAvu5cRivTOSq4S10g==
+@oxc-parser/binding-win32-arm64-msvc@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/e2e/node_modules/@oxc-parser/binding-win32-arm64-msvc
+  Package: https://www.npmjs.com/package/@oxc-parser/binding-win32-arm64-msvc/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-parser/binding-win32-arm64-msvc/-/binding-win32-arm64-msvc-0.153.0.tgz
+  Integrity: sha512-xGcy12tO9k7zFbeyQzEuilfWfQpyRq23/fLPfN3wjSWuWv58k46fQT1hsO1KFNykZuVGW9xSJE/z592TmAoSDA==
+@oxc-parser/binding-win32-ia32-msvc@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/e2e/node_modules/@oxc-parser/binding-win32-ia32-msvc
+  Package: https://www.npmjs.com/package/@oxc-parser/binding-win32-ia32-msvc/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-parser/binding-win32-ia32-msvc/-/binding-win32-ia32-msvc-0.153.0.tgz
+  Integrity: sha512-o1ykUjWncvXX6N5a4KebgLjtD8zRui+f1llMhSGoSC9oP2KOqapRpdwmZ3NcNG0axFouwVKmhGBjd+IhA8BksA==
+@oxc-parser/binding-win32-x64-msvc@0.153.0 | development, optional | MIT
+  Lockfile path: node_modules/e2e/node_modules/@oxc-parser/binding-win32-x64-msvc
+  Package: https://www.npmjs.com/package/@oxc-parser/binding-win32-x64-msvc/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-parser/binding-win32-x64-msvc/-/binding-win32-x64-msvc-0.153.0.tgz
+  Integrity: sha512-gxQz7G96Up136fd+2zWrP+o6FYGs9NO4Dyv55IoeJFJUDwLFHcLYY11hhA5wQKs0HoM57Q8esQ3nEVhnCdsjAQ==
+@oxc-project/types@0.153.0 | development | MIT
+  Lockfile path: node_modules/e2e/node_modules/@oxc-project/types
+  Package: https://www.npmjs.com/package/@oxc-project/types/v/0.153.0
+  Archive: https://registry.npmjs.org/@oxc-project/types/-/types-0.153.0.tgz
+  Integrity: sha512-jSNrRIyvPVLL5E1z/tS5zLAprosGz/FuI1PWwEOz59j3E4TTTzSpqKb/RDGqJhhW0QHYISGXxq582wGx6T11Tw==
+commander@15.0.0 | development | MIT
+  Lockfile path: node_modules/e2e/node_modules/commander
+  Package: https://www.npmjs.com/package/commander/v/15.0.0
+  Archive: https://registry.npmjs.org/commander/-/commander-15.0.0.tgz
+  Integrity: sha512-z67u4ZhzCL/Tydu1lJARtEZYWbWaN7oYLHbsuzocr6y4N6WZAagG3RQ4FW61V1/0+jImpj293XfrcYnd1qxtPg==
+oxc-parser@0.153.0 | development | MIT
+  Lockfile path: node_modules/e2e/node_modules/oxc-parser
+  Package: https://www.npmjs.com/package/oxc-parser/v/0.153.0
+  Archive: https://registry.npmjs.org/oxc-parser/-/oxc-parser-0.153.0.tgz
+  Integrity: sha512-cEnpyyV1OJRXv++SFNw0z8i+2o/cr88rVLaOYJafELDoHM5yHvCAbwGRLvxuany6SNLcbblSMUyZaGzH+quSYg==
+zod@4.6.1 | development | MIT
+  Lockfile path: node_modules/e2e/node_modules/zod
+  Package: https://www.npmjs.com/package/zod/v/4.6.1
+  Archive: https://registry.npmjs.org/zod/-/zod-4.6.1.tgz
+  Integrity: sha512-341aRWQsve0rvronKNTqZpjmzdbUDlFuzHaI/XLg/Ej82qffDJRRfBTCuv7+9q/rMjB6LSLyEBnW4InJeMtt/Q==
 emoji-regex@10.6.0 | development | MIT
   Lockfile path: node_modules/emoji-regex
   Package: https://www.npmjs.com/package/emoji-regex/v/10.6.0
@@ -1650,6 +1930,11 @@ fast-deep-equal@3.1.3 | runtime | MIT
   Package: https://www.npmjs.com/package/fast-deep-equal/v/3.1.3
   Archive: https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz
   Integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==
+fast-png@8.0.0 | development | MIT
+  Lockfile path: node_modules/fast-png
+  Package: https://www.npmjs.com/package/fast-png/v/8.0.0
+  Archive: https://registry.npmjs.org/fast-png/-/fast-png-8.0.0.tgz
+  Integrity: sha512-gCysNasJ8KEMgfdYIKd/wTDo6ENK1PWT0RJO7O+0pgmuHPw2O6tA1WvdxFRJoLf9V8yFYpG0FA1YgI8X97OhJA==
 fast-string-truncated-width@3.0.3 | runtime | MIT
   Lockfile path: node_modules/fast-string-truncated-width
   Package: https://www.npmjs.com/package/fast-string-truncated-width/v/3.0.3
@@ -1680,6 +1965,11 @@ fdir@6.5.0 | development | MIT
   Package: https://www.npmjs.com/package/fdir/v/6.5.0
   Archive: https://registry.npmjs.org/fdir/-/fdir-6.5.0.tgz
   Integrity: sha512-tIbYtZbucOs0BRGqPJkshJUYdL+SDH7dVM8gjy+ERp3WAUjLEFJE+02kanyHtwjWOnwrKYBiwAmM0p4kLJAnXg==
+fflate@0.8.3 | development | MIT
+  Lockfile path: node_modules/fflate
+  Package: https://www.npmjs.com/package/fflate/v/0.8.3
+  Archive: https://registry.npmjs.org/fflate/-/fflate-0.8.3.tgz
+  Integrity: sha512-tbZNuJrLwGUp3zshBtdy4W+ORxZuIh8a5ilyIEQDC5rY1f3U20JMry0Ll3WBzU58EZKsEuJFXhb5gwv8CsPvgA==
 file-uri-to-path@1.0.0 | runtime, optional | MIT
   Lockfile path: node_modules/file-uri-to-path
   Package: https://www.npmjs.com/package/file-uri-to-path/v/1.0.0
@@ -1840,6 +2130,11 @@ ini@1.3.8 | runtime, optional | ISC
   Package: https://www.npmjs.com/package/ini/v/1.3.8
   Archive: https://registry.npmjs.org/ini/-/ini-1.3.8.tgz
   Integrity: sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==
+iobuffer@6.0.1 | development | MIT
+  Lockfile path: node_modules/iobuffer
+  Package: https://www.npmjs.com/package/iobuffer/v/6.0.1
+  Archive: https://registry.npmjs.org/iobuffer/-/iobuffer-6.0.1.tgz
+  Integrity: sha512-SZWYkWNfjIXIBYSDpXDYIgshqtbOPsi4lviawAEceR1Kqk+sHDlcQjWrzNQsii80AyBY0q5c8HCTNjqo74ul+Q==
 is-callable@1.2.7 | runtime | MIT
   Lockfile path: node_modules/is-callable
   Package: https://www.npmjs.com/package/is-callable/v/1.2.7
@@ -1925,6 +2220,11 @@ jscpd-windows-x64-msvc@5.0.12 | development, optional | MIT
   Package: https://www.npmjs.com/package/jscpd-windows-x64-msvc/v/5.0.12
   Archive: https://registry.npmjs.org/jscpd-windows-x64-msvc/-/jscpd-windows-x64-msvc-5.0.12.tgz
   Integrity: sha512-01x1klKjvfzI6Of5tI9u72x7TIQZQLLG6kMdsEPJKl/BXbskdknrfCepeTXRBbdFPKs25jfcd0klZ4OdDvww5w==
+json-schema@0.4.0 | development | (AFL-2.1 OR BSD-3-Clause)
+  Lockfile path: node_modules/json-schema
+  Package: https://www.npmjs.com/package/json-schema/v/0.4.0
+  Archive: https://registry.npmjs.org/json-schema/-/json-schema-0.4.0.tgz
+  Integrity: sha512-es94M3nTIfsEPisRafak+HDLfHXnKBhV3vU5eqPcS3flIWqcxJWgXHXiey3YrpaNsanY5ei1VoYEbOzijuq9BA==
 json-schema-traverse@1.0.0 | runtime | MIT
   Lockfile path: node_modules/json-schema-traverse
   Package: https://www.npmjs.com/package/json-schema-traverse/v/1.0.0
@@ -2205,6 +2505,11 @@ oxc-resolver@11.24.2 | development | MIT
   Package: https://www.npmjs.com/package/oxc-resolver/v/11.24.2
   Archive: https://registry.npmjs.org/oxc-resolver/-/oxc-resolver-11.24.2.tgz
   Integrity: sha512-FY91FiDBj7ls5MsFS9jN3tjz2o0/zsdSsymlakySaBwVJZorHhkWyICLZMKxlu1R9vYo+sd3z1jwb4J8x7bNDw==
+oxc-transform@0.153.0 | development | MIT
+  Lockfile path: node_modules/oxc-transform
+  Package: https://www.npmjs.com/package/oxc-transform/v/0.153.0
+  Archive: https://registry.npmjs.org/oxc-transform/-/oxc-transform-0.153.0.tgz
+  Integrity: sha512-QNLqPkK0IeFF8QWB5KwieTLOZAo6v2hEHrXtmgPEINznmNy/nRi/fce/rm51RPKHPBkrEsxhePwYjGKp6wvfHQ==
 oxfmt@0.72.0 | development | MIT
   Lockfile path: node_modules/oxfmt
   Package: https://www.npmjs.com/package/oxfmt/v/0.72.0
@@ -2280,6 +2585,11 @@ pino-std-serializers@7.1.0 | runtime | MIT
   Package: https://www.npmjs.com/package/pino-std-serializers/v/7.1.0
   Archive: https://registry.npmjs.org/pino-std-serializers/-/pino-std-serializers-7.1.0.tgz
   Integrity: sha512-BndPH67/JxGExRgiX1dX0w1FvZck5Wa4aal9198SrRhZjH3GxKQUKIBnYJTdj2HDN3UQAS06HlfcSbQj2OHmaw==
+pixelmatch@8.0.0 | development | ISC
+  Lockfile path: node_modules/pixelmatch
+  Package: https://www.npmjs.com/package/pixelmatch/v/8.0.0
+  Archive: https://registry.npmjs.org/pixelmatch/-/pixelmatch-8.0.0.tgz
+  Integrity: sha512-cIqOLfh5k52us715qf3B3+kTOxZv+WDv77HN7xokLScYQGYQHi4m/ynoDIPpvF2LvCyUJGyvzY64i0QCXtzu1g==
 pkce-challenge@5.0.1 | runtime | MIT
   Lockfile path: node_modules/pkce-challenge
   Package: https://www.npmjs.com/package/pkce-challenge/v/5.0.1
@@ -2295,6 +2605,11 @@ plist@5.0.0 | runtime | MIT
   Package: https://www.npmjs.com/package/plist/v/5.0.0
   Archive: https://registry.npmjs.org/plist/-/plist-5.0.0.tgz
   Integrity: sha512-20N+g1DvMm/DFRbsvER7tT4wDryq0WunK7VMkDaiJcKNapAnUMkTsAnacFYf8n420F4Hf6/hefgmJRkMb1M0fg==
+pngjs@7.0.0 | development | MIT
+  Lockfile path: node_modules/pngjs
+  Package: https://www.npmjs.com/package/pngjs/v/7.0.0
+  Archive: https://registry.npmjs.org/pngjs/-/pngjs-7.0.0.tgz
+  Integrity: sha512-LKWqWJRhstyYo9pGvgor/ivk2w94eSjE3RGVuzLGlr3NmD8bf7RcYGze1mNdEHRP6TRP6rMuDHk5t44hnTRyow==
 possible-typed-array-names@1.1.0 | runtime | MIT
   Lockfile path: node_modules/possible-typed-array-names
   Package: https://www.npmjs.com/package/possible-typed-array-names/v/1.1.0
