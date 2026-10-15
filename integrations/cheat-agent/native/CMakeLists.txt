@@ -24,7 +24,7 @@ if(CHEAT_AGENT_ENABLE_GTLIBCPP)
         FetchContent_Declare(
             gtlibcpp
             GIT_REPOSITORY https://github.com/heaven-hm/gtlibcpp.git
-            GIT_TAG master
+            GIT_TAG 716046b4f7a15340b57e4c372012c34382398d4b
         )
         FetchContent_MakeAvailable(gtlibcpp)
     endif()
@@ -35,8 +35,11 @@ set(NATIVE_SOURCES
     src/memory_scanner.cpp
     src/pointer_resolver.cpp
     src/ffi.cpp
-    src/gtlibcpp_adapter.cpp
 )
+
+if(CHEAT_AGENT_ENABLE_GTLIBCPP)
+    list(APPEND NATIVE_SOURCES src/gtlibcpp_adapter.cpp)
+endif()
 
 if(APPLE)
     list(APPEND NATIVE_SOURCES src/macos/process_backend.cpp)
@@ -68,7 +71,9 @@ add_executable(cheat_agent_native_tests
     tests/test_scanner.cpp
     tests/test_pattern.cpp
     tests/test_pointer.cpp
-    tests/test_gtlibcpp_adapter.cpp
 )
+if(CHEAT_AGENT_ENABLE_GTLIBCPP)
+    target_sources(cheat_agent_native_tests PRIVATE tests/test_gtlibcpp_adapter.cpp)
+endif()
 target_link_libraries(cheat_agent_native_tests PRIVATE cheat_agent_native)
 add_test(NAME cheat_agent_native_tests COMMAND cheat_agent_native_tests)

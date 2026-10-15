@@ -18,19 +18,19 @@ namespace {
 std::atomic<bool> running{true};
 void on_interrupt(int) { running.store(false); }
 
-DWORD find_pid(const char* name) {
+DWORD find_pid(const wchar_t* name) {
     const HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if (snapshot == INVALID_HANDLE_VALUE) return 0;
-    PROCESSENTRY32A entry{};
+    PROCESSENTRY32W entry{};
     entry.dwSize = sizeof(entry);
     DWORD pid = 0;
-    if (Process32FirstA(snapshot, &entry)) {
+    if (Process32FirstW(snapshot, &entry)) {
         do {
-            if (_stricmp(entry.szExeFile, name) == 0) {
+            if (_wcsicmp(entry.szExeFile, name) == 0) {
                 pid = entry.th32ProcessID;
                 break;
             }
-        } while (Process32NextA(snapshot, &entry));
+        } while (Process32NextW(snapshot, &entry));
     }
     CloseHandle(snapshot);
     return pid;
@@ -130,7 +130,7 @@ int main(int argc, char** argv) {
             return 2;
         }
     }
-    if (!pid) pid = find_pid("igi.exe");
+    if (!pid) pid = find_pid(L"igi.exe");
     if (!pid) {
         std::cerr << "Project IGI not running. Start your authorized offline copy.\n";
         return 1;
