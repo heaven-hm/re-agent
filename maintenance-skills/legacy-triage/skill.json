@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "id": "legacy-triage",
+  "version": "1.0.0",
+  "description": "Record authorized unsupported-target identity and reproduce reported failures.",
+  "license": "MIT",
+  "targets": ["software", "game"],
+  "platforms": ["windows", "linux", "macos"],
+  "stages": ["triage"],
+  "tools": ["open_binary", "inspect_artifact"]
+}

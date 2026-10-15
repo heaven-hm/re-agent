@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "id": "legacy-release-review",
+  "version": "1.0.0",
+  "description": "Prepare supported legacy repairs with provenance, notices and reproducible evidence.",
+  "license": "MIT",
+  "targets": ["software", "game"],
+  "platforms": ["windows", "linux", "macos"],
+  "stages": ["release"],
+  "tools": ["export_evidence_bundle"]
+}

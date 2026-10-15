@@ -7,13 +7,83 @@
 
 RE-Agent is a local-first toolkit for **authorized maintenance, compatibility repair, and independent porting of discontinued software and games**. A connected coding agent combines focused skills with RE-Agent’s existing static/runtime analysis, evidence, checkpoints, and bounded build/test/repair workflows. Maintainers can add modular skills without creating a separate platform.
 
-**Legacy maintenance is the product goal; not every existing benchmark is a legacy-support case study.** 
+The repository is [heaven-hm/re-agent](https://github.com/heaven-hm/re-agent), renamed from `rea-engine`. The source package identity is `re-agent`; a renamed npm release is not yet published. Existing `rea`, `rea-engine`, `rea-extended`, and `rea-agents` commands and MCP configuration remain available for compatibility.
+
+**Legacy maintenance is the product goal; not every existing benchmark is a legacy-support case study.** The strongest binary-only example currently recorded in this repository is the Project IGI 2 GConv toolchain: the supplied 2003 Windows PE files now have a hash-bound static inventory, with a separately implemented QVM inspection tool. This is still a partial investigation: no vendor bug fix, full QVM engine, DLL ABI replacement, or complete game port has been verified. The currently retained Calculator, managed-game, and recent open-source samples validate narrower pipeline components; they do not demonstrate maintenance of a discontinued closed-source product. See [the GConv evidence and limits](benchmarks/native-windows-ports/gconv/README.md) and [rights-screened target catalog](docs/legacy-target-catalog.md).
 
 [![MCP tool catalog](https://img.shields.io/badge/MCP-tool_catalog-5c4ee5?style=flat-square)](docs/mcp-contracts.md#generated-catalog)
 
+## Legacy maintenance and modular skills
+
+- Discover built-in and local community skills: `node scripts/rea.mjs maintenance-skills`.
+- Bind a supported-scope target and prepare a hosted workflow: `node scripts/rea.mjs maintenance-plan request.json`.
+- Execute a caller-supplied bounded comparison/repair plan: `node scripts/rea.mjs maintenance-run request.json controller-plan.json checkpoint.json` (supports `--resume`).
+- Scan captured memory bytes without attaching or writing: `node scripts/rea.mjs memory-snapshot-pattern snapshot.bin "48 8B ?? 90"`.
+- The host coding agent follows selected skills to reproduce issues, collect static/runtime evidence, repair an isolated replica, build, compare and retain regressions using existing tools. A prepared plan is not a completed scan or repair; arbitrary closed-source reconstruction is not guaranteed.
+
+See [workflow and verification](docs/legacy-maintenance.md), [community skill format](docs/community-skills.md), [audited cheat-agent integration](docs/cheat-agent-integration.md) and [supported-use policy](USAGE_POLICY.md). Nine bundled modules cover rights/provenance, triage, static diagnosis, runtime/memory observation, same-platform issue repair, independent cross-platform porting, verification and release review. Discovery never executes community code. The rights-aware binary target catalog is maintained in `docs/legacy-target-catalog.md`. See the [macOS validation record and reproduction command](docs/re-agent-maintenance-validation.md).
+
+### 🧭 What RE-Agent is for
+
+RE-Agent is a **reverse engineering agent for maintaining software and games**. A connected coding agent uses its CLI/MCP operations and selected skills to investigate an authorized target, preserve evidence, and implement or verify a scoped change. It is useful for:
+
+- Finding reproducible bugs in discontinued desktop software and games.
+- Diagnosing compatibility failures, crashes, missing dependencies, file-format problems, and operating-system assumptions.
+- Recovering behavior needed to keep an unsupported application working or to build an independent port.
+- Examining suspicious binaries defensively in an isolated, authorized environment, documenting observed behavior, and recommending remediation or removal.
+- Verifying repairs with regression tests and explicit evidence, while keeping unknown behavior marked as unknown.
+
+For defensive malware analysis, use an isolated lab and focus on identification, behavior documentation, and protecting or repairing the affected software. RE-Agent does not provide malware deployment, persistence, credential theft, evasion, exploitation, cheat/trainer creation, or unauthorized process modification. See the [supported-use policy](USAGE_POLICY.md).
+
+### 🧩 Recommended skills
+
+The nine bundled maintenance modules are the default skill set. A coding agent should select only the modules needed for the investigation; each module supplies focused instructions and required RE-Agent operations.
+
+| Skill                                                                                | Use it to                                                                                                                           |
+| ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
+| [legacy-rights-provenance](maintenance-skills/legacy-rights-provenance/SKILL.md)     | Record artifact identity and separate analysis, modification, patch, and redistribution permissions.                                |
+| [legacy-triage](maintenance-skills/legacy-triage/SKILL.md)                           | Bind an authorized target, record its hash and support status, reproduce the reported issue, and create an evidence-backed backlog. |
+| [legacy-static-diagnosis](maintenance-skills/legacy-static-diagnosis/SKILL.md)       | Inspect functions, callers, imports, strings, data structures, and platform assumptions in the selected static-analysis provider.   |
+| [legacy-runtime-memory](maintenance-skills/legacy-runtime-memory/SKILL.md)           | Capture authorized process behavior and inspect caller-provided memory snapshots without modifying the original binary.             |
+| [legacy-repair-port](maintenance-skills/legacy-repair-port/SKILL.md)                 | Make a scoped repair or independent port in a separate workspace, with evidence linked to the change.                               |
+| [legacy-bug-repair](maintenance-skills/legacy-bug-repair/SKILL.md)                   | Reproduce a real defect in an authorized legacy build, repair the supported branch, and preserve a regression test.                 |
+| [legacy-cross-platform-port](maintenance-skills/legacy-cross-platform-port/SKILL.md) | Reconstruct a declared behavior from binary/runtime evidence and implement it for a new OS with explicit asset and API boundaries.  |
+| [legacy-port-verification](maintenance-skills/legacy-port-verification/SKILL.md)     | Compare original and candidate behavior, preserve mismatches as regressions, and state the exact test scope.                        |
+| [legacy-release-review](maintenance-skills/legacy-release-review/SKILL.md)           | Review evidence, known limitations, licensing, packaging, and whether release claims match the results.                             |
+
+The bundled `legacy-rights-provenance` module checks target provenance and separates analysis, modification, publication, patch and redistribution permissions. `legacy-repair-port` remains as a compatibility workflow; the two focused skills clarify same-platform repair versus cross-platform porting. The host agent may also route to installed specialist skills such as Ghidra or radare2 analysis, binary diffing, code audit, supply-chain review, and defensive malware analysis. Those are **optional host-agent skills**, not additional RE-Agent bundled modules; their availability and tools must be checked in the connected agent before use. Community modules can be added in the documented format, but discovery does not execute them.
+
+```mermaid
+flowchart LR
+    TARGET["Authorized legacy app or game<br/>or isolated suspicious binary"] --> SCOPE["Target identity · permission ·<br/>support status · task limits"]
+    SCOPE --> SKILLS["Selected maintenance skills<br/>triage · static · runtime/memory<br/>repair · verification · release"]
+    SKILLS --> TOOLS["Existing RE-Agent / REA tools<br/>static analysis · runtime evidence<br/>memory snapshots · comparison"]
+    TOOLS --> EVIDENCE["Evidence-backed findings<br/>functions · traces · failures<br/>mismatches · uncertainty"]
+    EVIDENCE --> AGENT["Host coding agent<br/>investigate · repair · port"]
+    AGENT --> BUILD["Isolated candidate<br/>build · execute · regressions"]
+    BUILD --> VERIFY["Scoped verification<br/>results · limits · release review"]
+    VERIFY -->|"new mismatch"| EVIDENCE
+    VERIFY -->|"documented outcome"| REPORT["Report and preserved evidence"]
+
+    classDef target fill:#fff7ed,stroke:#c2410c,color:#7c2d12
+    classDef gate fill:#fef3c7,stroke:#b45309,color:#78350f
+    classDef work fill:#eff6ff,stroke:#2563eb,color:#1e3a8a
+    classDef proof fill:#ecfdf5,stroke:#059669,color:#064e3b
+    class TARGET target
+    class SCOPE gate
+    class SKILLS,TOOLS,AGENT,BUILD work
+    class EVIDENCE,VERIFY,REPORT proof
+```
+
+## Verification claims and licensing
+
+Byte-identical artifacts require exact byte comparisons. A native port across OS/CPU architectures normally has different executable bytes; matching a declared finite suite establishes that suite's observations only. Missing evidence stays unverified. Existing benchmark sections below retain their original limited scope and do not prove universal application/game equivalence.
+
+RE-Agent's code remains [MIT](LICENSE), with upstream REA attribution and selected cheat-agent MIT notices preserved. The project supports beneficial, authorized legacy maintenance, not cheats, sabotage or unauthorized changes. The use policy does not rewrite the MIT license. Original applications/assets and optional third-party tools retain their own licenses and redistribution requirements.
+
 ## Architecture at a glance
 
-REA Engine extends the existing [REA](https://github.com/morluto/rea) analysis ecosystem with a bounded investigation and reconstruction layer. The diagrams below distinguish inherited providers from engine-specific orchestration. They describe supported workflows, **not** a promise of fully automatic reconstruction for arbitrary binaries.
+RE-Agent extends the existing [REA](https://github.com/morluto/rea) analysis ecosystem with a bounded investigation and reconstruction layer. The diagrams below distinguish inherited providers from engine-specific orchestration. They describe supported workflows, **not** a promise of fully automatic reconstruction for arbitrary binaries.
 
 ```mermaid
 flowchart TB
@@ -26,7 +96,7 @@ flowchart TB
         R["Runtime and process evidence<br/>capture · instrumentation"]
     end
 
-    subgraph ENGINE["REA Engine extensions"]
+    subgraph ENGINE["RE-Agent extensions"]
         D["Evidence-led discovery"]
         T["Owned Frida trace correlation"]
         A["Bounded affine recovery"]
@@ -118,7 +188,7 @@ For implementation details, see the [investigation controller](src/application/a
 
 ### What differs from upstream REA
 
-| Area                           | Reverse Engineering Engine addition                                                                                           | Source / reproducible evidence                                                                                                                          |
+| Area                           | Reverse Engineering Agent addition                                                                                            | Source / reproducible evidence                                                                                                                          |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Autonomous reconstruction      | Persistent checkpoints, bounded build/test/repair, rollback, mismatch regression inputs                                       | [Controller](src/application/autonomy/AutonomousInvestigation.ts), [25/25 fixture report](docs/verification/rea-extended/fixture-report.json)           |
 | Unknown function investigation | Existing static providers feed runtime hypotheses and independent bounded affine reconstruction                               | [Discovery](src/composition/autonomousDiscovery.ts), [recovery](src/application/autonomy/AffineRecovery.ts)                                             |
@@ -173,7 +243,9 @@ These are actual `Form.DrawToBitmap` renders after the same button-handler seque
 
 ### Installed tools versus distributed tools
 
-Development health checks confirmed Frida 17.23.3, LIEF 1.0.0, Z3 5.1.0.0, Capstone 5.0.9 and Pillow 12.3.0. Ghidra/radare2 and native compilers are reused locally. **Bundled now:** the signature-verified ILSpy package and the built X11 libgdiplus library with source and licenses. The [preview release](https://github.com/heaven-hm/re-agent/releases/tag/engine-preview-2026-10-13) also carries the checksum-verified, unmodified Ghidra 12.1.2 archive; see its [manifest](third_party/ghidra/manifest.json). **A clone does not contain every installed external tool binary.** The installer and offline bundle builder are shipped in source; generated local bundles are not a license-approved public distribution. Frida/LIEF native dependency source and license coverage require further audit. Optional licensed tools and Apple Calculator are not redistributed. See [tool profiles and limitations](docs/autonomy-tool-bootstrap.md).
+A 2026-10-13 validation host reported Frida 17.23.3, LIEF 1.0.0, Z3 5.1.0.0, Capstone 5.0.9 and Pillow 12.3.0; tool presence varies by host (Frida/LIEF absent on some checkouts — verify with the autonomy tools probe before relying on them). Ghidra/radare2 and native compilers are reused locally. **Bundled now:** the signature-verified ILSpy package and the built X11 libgdiplus library with source and licenses. The [preview release](https://github.com/heaven-hm/re-agent/releases/tag/engine-preview-2026-10-13) also carries the checksum-verified, unmodified Ghidra 12.1.2 archive; see its [manifest](third_party/ghidra/manifest.json). **A clone does not contain every installed external tool binary.** The installer and offline bundle builder are shipped in source; generated local bundles are not a license-approved public distribution. Frida/LIEF native dependency source and license coverage require further audit. Optional licensed tools and Apple Calculator are not redistributed. See [tool profiles and limitations](docs/autonomy-tool-bootstrap.md).
+
+See the [reverse-engineering tool coverage matrix](docs/reverse-engineering-tool-coverage.md) for a clearer separation between supported RE-Agent operations, host-installed tools, incomplete adapters, and the evidence required before a tool counts as integrated.
 
 # Professional maintenance fixtures (utilities and RE tooling)
 
@@ -288,7 +360,9 @@ node scripts/print-mcp-config.mjs /absolute/path/to/target --local
 node scripts/rea.mjs --help
 ```
 
-Use the printed local MCP configuration with your host coding agent and the built packaged skill. A published upstream npm package is not this fork. The implementation retains compatible command names while the product identity is Reverse Engineering Engine.
+Use the printed local MCP configuration with your host coding agent and the built packaged skill. A published upstream npm package is not this fork. The implementation retains compatible command names while the product identity is Reverse Engineering Agent.
+
+Setup supports [configured coding agents](docs/installation.md#supported-agents). Other MCP clients can use the [manual MCP registry instructions](docs/installation.md#mcp-registry).
 
 Setup supports [configured coding agents](docs/installation.md#supported-agents). Other MCP clients can use the [manual MCP registry instructions](docs/installation.md#mcp-registry).
 

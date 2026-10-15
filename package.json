@@ -1,16 +1,16 @@
 {
-  "name": "rea-engine",
-  "mcpName": "io.github.heaven-hm/rea-engine",
+  "name": "re-agent",
+  "mcpName": "io.github.heaven-hm/re-agent",
   "version": "6.4.0",
-  "description": "Reverse Engineering Engine: static/runtime investigation, evidence-backed reconstruction and differential repair for coding agents.",
+  "description": "Reverse Engineering Agent for authorized legacy software maintenance, compatibility repair, evidence-backed porting and modular coding-agent skills.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/heaven-hm/rea-engine.git"
+    "url": "git+https://github.com/heaven-hm/re-agent.git"
   },
-  "homepage": "https://github.com/heaven-hm/rea-engine#readme",
+  "homepage": "https://github.com/heaven-hm/re-agent#readme",
   "bugs": {
-    "url": "https://github.com/heaven-hm/rea-engine/issues"
+    "url": "https://github.com/heaven-hm/re-agent/issues"
   },
   "keywords": [
     "reverse-engineering",
@@ -24,7 +24,11 @@
     "disassembler",
     "decompiler",
     "mcp",
-    "hopper"
+    "hopper",
+    "legacy-software",
+    "software-preservation",
+    "compatibility",
+    "re-agent"
   ],
   "publishConfig": {
     "access": "public"
@@ -34,6 +38,7 @@
     "#javascript-analysis-worker": "./dist/composition/javascriptAnalysisWorkerProcess.js"
   },
   "bin": {
+    "re-agent": "scripts/rea.mjs",
     "rea": "scripts/rea.mjs",
     "rea-agents": "scripts/rea.mjs",
     "rea-extended": "scripts/rea.mjs",
@@ -65,6 +70,7 @@
     "bridge/mitmproxy/capture.py",
     "scripts/rea.mjs",
     "scripts/verify-autonomous-reconstruction.mjs",
+    "scripts/verify-legacy-maintenance.mjs",
     "scripts/verify-calculator-reconstruction.mjs",
     "scripts/calculator",
     "scripts/install-autonomy-analysis-tools.mjs",
@@ -116,7 +122,13 @@
     "scripts/recover-tictactoe-replica.mjs",
     "scripts/verify-managed-benchmarks.mjs",
     "scripts/lib/managed-benchmark-command.mjs",
-    "third_party/ghidra"
+    "third_party/ghidra",
+    "maintenance-skills",
+    "docs/legacy-maintenance.md",
+    "docs/re-agent-maintenance-validation.md",
+    "docs/community-skills.md",
+    "docs/cheat-agent-integration.md",
+    "USAGE_POLICY.md"
   ],
   "scripts": {
     "verify:autonomy": "npm run build:cached && node scripts/verify-autonomous-reconstruction.mjs",

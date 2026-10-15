@@ -1,0 +1,20 @@
+{
+  "repository": "https://github.com/heaven-hm/cheat-agent",
+  "revision": "87b56e38b72aa4a98b62c4210ec751dfa6c213df",
+  "license": "MIT",
+  "included": "Read-only buffer-pattern search algorithm, adapted in TypeScript with strict parser and explicit coverage",
+  "files": [
+    {
+      "path": "native/src/pattern_scanner.cpp",
+      "sha256": "779ade0817df50c737aa3ac45712368db3184c12752eb8131ff8bd45d448056e"
+    },
+    {
+      "path": "native/include/pattern_scanner.hpp",
+      "sha256": "9beb254b6b12bbe84c8a3d37e2b21680d72d467f21aac03d30c7b26092df7b4e"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "c220e9ad7d50dae6fdac59b39536a1dc15affc424beb25a6d56957c14dc6231c"
+    }
+  ]
+}

@@ -4,12 +4,12 @@
  * the npm package or executable exposed in package.json.
  */
 export const PRODUCT_IDENTITY = {
-  displayName: "REA",
+  displayName: "RE-Agent — Reverse Engineering Agent",
   packageName: PACKAGE_METADATA.name,
   packageSpecifier: `${PACKAGE_METADATA.name}@latest`,
   registrationPackageSpecifier: `${PACKAGE_METADATA.name}@${PACKAGE_METADATA.version}`,
   packageVersion: PACKAGE_METADATA.version,
-  cliBinary: "rea",
+  cliBinary: "re-agent",
   mcpCommand: `npx -y ${PACKAGE_METADATA.name}@${PACKAGE_METADATA.version} mcp`,
   mcpServerKey: "rea",
   skillName: "reverse-engineer-anything",

@@ -1,3 +1,10 @@
+# RE-Agent unreleased changes
+
+- Introduced RE-Agent (Reverse Engineering Agent) as the legacy-maintenance identity, preserving existing CLI aliases, MCP registration key, configuration and upstream attribution.
+- Added six modular hosted-agent skills, validated local community discovery and scoped maintenance preparation with target/request hashes.
+- Adapted the MIT read-only buffer scanner from cheat-agent; excluded trainer generation, write backends and unsupported verifier success claims.
+- Documented scoped port verification, unsupported target authority and responsible-use boundaries. These additions do not establish universal reconstruction or cross-platform byte equivalence.
+
 # Changelog
 
 ## [6.4.0](https://github.com/morluto/rea/compare/rea-agents-6.3.0...rea-agents-6.4.0) (2026-10-11)

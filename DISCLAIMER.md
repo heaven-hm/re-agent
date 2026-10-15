@@ -2,12 +2,9 @@
 
 ## Responsible use
 
-REA is built for lawful analysis: security research, malware and incident
-analysis, vulnerability research and coordinated disclosure, CTFs and education,
-interoperability, software preservation, and debugging or auditing software you
-own or are authorized to examine.
+RE-Agent is built for authorized preservation, compatibility repair, maintenance and independent porting of discontinued or unsupported software and games. Controlled fixtures support platform development. See [Supported use](USAGE_POLICY.md); end of support does not establish permission or asset redistribution rights.
 
-The REA project does not support, and will not help with:
+The RE-Agent project does not support, and will not help with:
 
 - circumventing DRM, license checks, anti-cheat systems or other technical
   protection measures;

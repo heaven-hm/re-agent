@@ -2,6 +2,7 @@ import { registerCaptureCommands } from "./cli/captureCommands.js";
 import { registerSignalCommands } from "./cli/signalCommands.js";
 import { registerWasmCommands } from "./cli/wasmCommands.js";
 import { registerAutonomyCommands } from "./cli/autonomyCommands.js";
+import { registerMaintenanceCommands } from "./cli/maintenanceCommands.js";
 import { snapshotEnvironment } from "./process/snapshotEnvironment.js";
 import { createDirectAnalysis } from "./composition/directAnalysis.js";
 import { registerEvmCommands } from "./cli/evmCommands.js";
@@ -85,7 +86,8 @@ export const createCli = (
   );
   const cli = Cli.create(PRODUCT_IDENTITY.cliBinary, {
     version: PRODUCT_IDENTITY.packageVersion,
-    description: "Reverse engineer anything from your terminal or agent.",
+    description:
+      "Maintain and port authorized legacy software with evidence-backed analysis and modular agent skills.",
     mcp: {
       command: npxRegistrationCommand().join(" "),
       instructions:
@@ -130,6 +132,7 @@ export const createCli = (
   registerJavaScriptRuntimeObservationCommands(cli, logger);
   registerApplicationCommands(cli, logger);
   registerAutonomyCommands(cli, environment);
+  registerMaintenanceCommands(cli, environment);
   presentOmittableDefaults(cli);
   if (resultOutput !== undefined) streamCliCommandResults(cli, resultOutput);
   return cli;
