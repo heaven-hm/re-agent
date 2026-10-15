@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { runOwnedCommand } from "../../process/OwnedCommand.js";
 
@@ -52,7 +52,13 @@ export const executeBitvectorObligation = async (
   const directory = resolve(outputDirectory);
   await mkdir(directory, { recursive: true });
   const queryPath = join(directory, sha256 + ".smt2");
-  await writeFile(queryPath, query, { flag: "wx", mode: 0o600 });
+  try {
+    await writeFile(queryPath, query, { flag: "wx", mode: 0o600 });
+  } catch (cause) {
+    if ((cause as NodeJS.ErrnoException).code !== "EEXIST") throw cause;
+    const previous = await readFile(queryPath, "utf8");
+    if (previous !== query) throw new Error("Existing SMT obligation differs from expected query");
+  }
   const version = await runOwnedCommand(
     { command: solver, arguments: ["-version"], runId: "bitvector-version-" + sha256.slice(0, 16) },
     { timeoutMs: 10_000, diagnosticBytes: 4096 },
