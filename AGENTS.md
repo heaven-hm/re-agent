@@ -90,3 +90,14 @@ Read `docs/README.md` inside that installed package first, then read the relevan
 
 This block is written and re-added by `turbo` before repository-scoped commands when an AI agent is detected. In the Turborepo source repository, its template is defined in `crates/turborepo-cli/src/cli/agent_guidance.rs`. Removing the managed block while updates are enabled means a later qualifying invocation will add it again. Set `"agentGuidance": false` in the root `turbo.json` or `turbo.jsonc` to opt out; this does not remove an existing block. Keep the block committed with your work to avoid an uncommitted change on the next agent invocation.
 <!-- END:turborepo-agent-rules -->
+
+<!-- openqodex:start -->
+
+## Review with OpenQodex before you push
+
+- Before any `git push`, run `npx -y openqodex@0.12.0 review` from the repository root. It takes one to three minutes: allow it up to ten minutes, or run it in the background and wait for it to exit.
+- Show the developer the receipt it prints: the verdict, one line per finding and the absolute path of `report.html`. Ask: "Fix all, or tell me which?" Fix only the findings they name (`npx -y openqodex@0.12.0 findings 1,3` prints them in full), then review again and show the new receipt. OpenQodex starts its own reviewer process: the agent that wrote the code does not judge its own work.
+- Do not push on a blocked verdict unless the developer says so after seeing the findings.
+- The report is in `.openqodex/reviews/`.
+
+<!-- openqodex:end -->

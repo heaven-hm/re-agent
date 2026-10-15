@@ -341,7 +341,8 @@
     "verify:autonomy:luhn": "npm run build:cached && node scripts/verify-luhn-reconstruction.mjs",
     "verify:autonomy:game": "npm run build:cached && node scripts/verify-tictactoe-reconstruction.mjs",
     "verify:autonomy:managed": "npm run build:cached && node scripts/verify-managed-benchmarks.mjs",
-    "benchmarks:build": "node scripts/build-benchmarks.mjs"
+    "benchmarks:build": "node scripts/build-benchmarks.mjs",
+    "test:e2e": "e2e run"
   },
   "lint-staged": {
     "*.{cjs,cts,js,jsx,mjs,mts,ts,tsx}": [
@@ -395,6 +396,7 @@
     }
   },
   "devDependencies": {
+    "@e2e-dev/web": "0.15.0",
     "@fast-check/vitest": "0.5.0",
     "@types/cross-spawn": "6.0.6",
     "@types/node": "26.6.4",
@@ -402,6 +404,7 @@
     "@types/write-file-atomic": "4.0.3",
     "@types/ws": "8.18.1",
     "@vitest/coverage-v8": "5.0.3",
+    "e2e": "0.21.0",
     "husky": "9.1.7",
     "jscpd": "5.0.12",
     "knip": "6.39.0",

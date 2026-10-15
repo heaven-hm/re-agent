@@ -1,1 +1,2 @@
 npm run check:fast
+npx -y openqodex@0.12.0 hook pre-push "$@" || [ $? -ne 1 ]
