@@ -130,7 +130,7 @@ export const SESSION_TOOL_CONTRACTS = [
   ),
   session(
     "schedule_reconstruction_functions",
-    "Schedule analyzed functions callee-first from artifact-bound Evidence. Recursive strongly connected components are atomic, missing dossiers and incomplete call coverage stay visible, and the function budget never marks a dependent function scheduled when an observed in-scope dependency was deferred.",
+    "Produce an advisory, planning-only reconstruction order from authenticated session-owned analyze_function Evidence. Recursive components are atomic; missing callees, exhausted retries, insufficient function evidence, and budget-deferred prerequisites are reported as blockers. Caller-supplied attempt counts are advisory and do not authorize execution or replace durable controller checkpoints.",
     reconstructionScheduleInputSchema,
   ),
   session(
