@@ -13,6 +13,29 @@ export interface MemoryLifetime {
   writes: readonly { sequence: number; offset: bigint; bytes: number }[];
 }
 
+export interface MemoryCaptureContext {
+  readonly processId: number;
+  readonly binarySha256: string;
+  readonly addressSpaceId: string;
+  readonly complete: boolean;
+  readonly droppedEvents: number;
+}
+
+/** Lossy captures cannot justify definitive lifetime conclusions. */
+export const reconstructMemoryCapture = (
+  events: readonly MemoryEvent[],
+  context: MemoryCaptureContext,
+  maxEvents = 100_000,
+) => {
+  if (!Number.isSafeInteger(context.processId) || context.processId <= 0 ||
+      !/^[a-f0-9]{64}$/u.test(context.binarySha256) || !context.addressSpaceId ||
+      !Number.isSafeInteger(context.droppedEvents) || context.droppedEvents < 0)
+    throw new Error("Invalid memory capture provenance");
+  if (!context.complete || context.droppedEvents !== 0)
+    return { status: "INCOMPLETE" as const, reason: "Partial or dropped memory observations", lifetimes: [] as MemoryLifetime[], context };
+  return { status: "COMPLETE" as const, lifetimes: reconstructMemoryLifetimes(events, maxEvents), context };
+};
+
 export const reconstructMemoryLifetimes = (
   events: readonly MemoryEvent[],
   maxEvents = 100_000,
