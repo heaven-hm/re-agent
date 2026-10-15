@@ -11,6 +11,7 @@ export const minimizeDifferentialInput = async (
   initial: Uint8Array,
   observe: (input: Uint8Array) => Promise<{ reference: Uint8Array; candidate: Uint8Array }>,
   maxExecutions = 256,
+  preserve: (initial: DifferentialCounterexample, attempt: DifferentialCounterexample) => boolean = (initial, attempt) => differs(attempt.reference, attempt.candidate),
 ): Promise<{ counterexample: DifferentialCounterexample; executions: number; exhausted: boolean }> => {
   if (!Number.isSafeInteger(maxExecutions) || maxExecutions < 1)
     throw new Error("Invalid execution budget");
@@ -25,6 +26,7 @@ export const minimizeDifferentialInput = async (
   let current = await evaluate(initial);
   if (!differs(current.reference, current.candidate))
     throw new Error("Initial input is not a differential counterexample");
+  const baseline = {input: current.input.slice(), reference: current.reference.slice(), candidate: current.candidate.slice()};
   let granularity = 2;
   while (current.input.length > 0 && executions < maxExecutions) {
     const chunk = Math.ceil(current.input.length / granularity);
@@ -34,7 +36,7 @@ export const minimizeDifferentialInput = async (
       smaller.set(current.input.subarray(0, start));
       smaller.set(current.input.subarray(start + chunk), start);
       const attempt = await evaluate(smaller);
-      if (differs(attempt.reference, attempt.candidate)) {
+      if (differs(attempt.reference, attempt.candidate) && preserve(baseline, attempt)) {
         current = attempt; granularity = Math.max(2, granularity - 1); changed = true; break;
       }
     }
