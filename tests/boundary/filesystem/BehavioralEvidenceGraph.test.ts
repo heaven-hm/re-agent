@@ -27,3 +27,9 @@ it("canonicalizes edge evidence order across graph merges", () => {
   expect(mergeBehavioralGraphs(left, right).edges).toHaveLength(1);
   expect(() => mergeBehavioralGraphs(left, {...right, edges: [{...right.edges[0]!, confidence: "inferred"}]})).toThrow(/Conflicting behavioral edge confidence/u);
 });
+
+it("permits duplicate local IDs across distinct binaries without inventing cross-binary edges", () => {
+  const a = {schemaVersion:1,nodes:[node("same")],edges:[]};
+  const b = {schemaVersion:1,nodes:[node("same", "c".repeat(64))],edges:[]};
+  expect(mergeBehavioralGraphs(a,b).nodes).toHaveLength(2);
+});
