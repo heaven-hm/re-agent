@@ -43,7 +43,9 @@ export const applicationSourcesFromEvidence = (
     if (!operations.has(record.operation)) continue;
     const parsed = parseApplicationGraphEvidence(record);
     if (!parsed.ok)
-      throw new Error("Application graph Evidence failed authentication");
+      throw new Error(
+        `Application graph Evidence ${record.evidence_id} failed authentication: ${JSON.stringify(parsed)}`,
+      );
     if (parsed.value.rootArtifactSha256 === targetSha256)
       sources.push(parsed.value);
   }
