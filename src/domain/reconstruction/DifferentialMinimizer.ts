@@ -27,7 +27,17 @@ export const minimizeDifferentialInput = async (
     if (executions + repeats > maxExecutions) throw new Error("Insufficient replay budget");
     const evaluateOnce = async () => {
       executions++;
-      const result = await observe(input.slice());
+      const run = observe(input.slice());
+      let timeout: ReturnType<typeof setTimeout> | undefined;
+      const deadline = options.timeoutMs === undefined ? run : Promise.race([
+        run,
+        new Promise<never>((_, reject) => {
+          timeout = setTimeout(() => reject(new Error("Differential observation timeout")), options.timeoutMs);
+        }),
+      ]);
+      let result: Awaited<ReturnType<typeof observe>>;
+      try { result = await deadline; } finally { if (timeout !== undefined) clearTimeout(timeout); }
+      if (options.signal?.aborted) throw new Error("Differential observation aborted");
       if (!(result.reference instanceof Uint8Array) || !(result.candidate instanceof Uint8Array))
         throw new Error("Invalid differential observation");
       return result;
