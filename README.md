@@ -1,8 +1,13 @@
-# RE-Agent — Reverse Engineering Agent
+<div align="center">
+  <img src="docs/images/re-agent-mark.png" alt="RE-Agent logo: software inspection, evidence, and verification" width="160" />
+  <h1>RE-Agent</h1>
+  <p><strong>Reverse Engineering Agent</strong></p>
+  <p>Investigate, maintain, and verify software that no longer has dependable support.</p>
+</div>
 
-A modular coding-agent toolkit for **authorized maintenance, compatibility repair and independent porting of discontinued or unsupported software and games**. It extends the existing REA codebase with hosted investigation, evidence, checkpointing and bounded build/test/repair. The user or community can add focused skills without creating another platform.
+RE-Agent is a local-first toolkit for **authorized maintenance, compatibility repair, and independent porting of discontinued software and games**. A connected coding agent combines focused skills with RE-Agent’s existing static/runtime analysis, evidence, checkpoints, and bounded build/test/repair workflows. Maintainers can add modular skills without creating a separate platform.
 
-The repository is [heaven-hm/re-agent](https://github.com/heaven-hm/re-agent), renamed from `rea-engine`. The source package identity is `re-agent`; registry metadata alone does not mean the renamed npm/MCP package is published or available. Existing `rea`, `rea-engine`, `rea-extended` and `rea-agents` command aliases, `rea` MCP registrations and `rea.json` configuration remain compatible.
+The repository is [heaven-hm/re-agent](https://github.com/heaven-hm/re-agent), renamed from `rea-engine`. The source package identity is `re-agent`; a renamed npm release is not yet published. Existing `rea`, `rea-engine`, `rea-extended`, and `rea-agents` commands and MCP configuration remain available for compatibility.
 
 ## Legacy maintenance and modular skills
 
@@ -13,6 +18,55 @@ The repository is [heaven-hm/re-agent](https://github.com/heaven-hm/re-agent), r
 - The host coding agent follows selected skills to reproduce issues, collect static/runtime evidence, repair an isolated replica, build, compare and retain regressions using existing tools. A prepared plan is not a completed scan or repair; arbitrary closed-source reconstruction is not guaranteed.
 
 See [workflow and verification](docs/legacy-maintenance.md), [community skill format](docs/community-skills.md), [audited cheat-agent integration](docs/cheat-agent-integration.md) and [supported-use policy](USAGE_POLICY.md). Six bundled modules cover triage, static diagnosis, runtime/memory observation, repair/port, verification and release review. Discovery never executes community code. See the [macOS validation record and reproduction command](docs/re-agent-maintenance-validation.md).
+
+### 🧭 What RE-Agent is for
+
+RE-Agent is a **reverse engineering agent for maintaining software and games**. A connected coding agent uses its CLI/MCP operations and selected skills to investigate an authorized target, preserve evidence, and implement or verify a scoped change. It is useful for:
+
+- Finding reproducible bugs in discontinued desktop software and games.
+- Diagnosing compatibility failures, crashes, missing dependencies, file-format problems, and operating-system assumptions.
+- Recovering behavior needed to keep an unsupported application working or to build an independent port.
+- Examining suspicious binaries defensively in an isolated, authorized environment, documenting observed behavior, and recommending remediation or removal.
+- Verifying repairs with regression tests and explicit evidence, while keeping unknown behavior marked as unknown.
+
+For defensive malware analysis, use an isolated lab and focus on identification, behavior documentation, and protecting or repairing the affected software. RE-Agent does not provide malware deployment, persistence, credential theft, evasion, exploitation, cheat/trainer creation, or unauthorized process modification. See the [supported-use policy](USAGE_POLICY.md).
+
+### 🧩 Recommended skills
+
+The six bundled maintenance modules are the default skill set. A coding agent should select only the modules needed for the investigation; each module supplies focused instructions and required RE-Agent operations.
+
+| Skill                                                                            | Use it to                                                                                                                           |
+| -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| [legacy-triage](maintenance-skills/legacy-triage/SKILL.md)                       | Bind an authorized target, record its hash and support status, reproduce the reported issue, and create an evidence-backed backlog. |
+| [legacy-static-diagnosis](maintenance-skills/legacy-static-diagnosis/SKILL.md)   | Inspect functions, callers, imports, strings, data structures, and platform assumptions in the selected static-analysis provider.   |
+| [legacy-runtime-memory](maintenance-skills/legacy-runtime-memory/SKILL.md)       | Capture authorized process behavior and inspect caller-provided memory snapshots without modifying the original binary.             |
+| [legacy-repair-port](maintenance-skills/legacy-repair-port/SKILL.md)             | Make a scoped repair or independent port in a separate workspace, with evidence linked to the change.                               |
+| [legacy-port-verification](maintenance-skills/legacy-port-verification/SKILL.md) | Compare original and candidate behavior, preserve mismatches as regressions, and state the exact test scope.                        |
+| [legacy-release-review](maintenance-skills/legacy-release-review/SKILL.md)       | Review evidence, known limitations, licensing, packaging, and whether release claims match the results.                             |
+
+The host agent may also route to installed specialist skills such as Ghidra or radare2 analysis, binary diffing, code audit, supply-chain review, and defensive malware analysis. Those are **optional host-agent skills**, not additional RE-Agent bundled modules; their availability and tools must be checked in the connected agent before use. Community modules can be added in the documented format, but discovery does not execute them.
+
+```mermaid
+flowchart LR
+    TARGET["Authorized legacy app or game<br/>or isolated suspicious binary"] --> SCOPE["Target identity · permission ·<br/>support status · task limits"]
+    SCOPE --> SKILLS["Selected maintenance skills<br/>triage · static · runtime/memory<br/>repair · verification · release"]
+    SKILLS --> TOOLS["Existing RE-Agent / REA tools<br/>static analysis · runtime evidence<br/>memory snapshots · comparison"]
+    TOOLS --> EVIDENCE["Evidence-backed findings<br/>functions · traces · failures<br/>mismatches · uncertainty"]
+    EVIDENCE --> AGENT["Host coding agent<br/>investigate · repair · port"]
+    AGENT --> BUILD["Isolated candidate<br/>build · execute · regressions"]
+    BUILD --> VERIFY["Scoped verification<br/>results · limits · release review"]
+    VERIFY -->|"new mismatch"| EVIDENCE
+    VERIFY -->|"documented outcome"| REPORT["Report and preserved evidence"]
+
+    classDef target fill:#fff7ed,stroke:#c2410c,color:#7c2d12
+    classDef gate fill:#fef3c7,stroke:#b45309,color:#78350f
+    classDef work fill:#eff6ff,stroke:#2563eb,color:#1e3a8a
+    classDef proof fill:#ecfdf5,stroke:#059669,color:#064e3b
+    class TARGET target
+    class SCOPE gate
+    class SKILLS,TOOLS,AGENT,BUILD work
+    class EVIDENCE,VERIFY,REPORT proof
+```
 
 ## Verification claims and licensing
 
