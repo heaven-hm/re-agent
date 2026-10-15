@@ -7,7 +7,7 @@
 
 RE-Agent is a local-first toolkit for **authorized maintenance, compatibility repair, and independent porting of discontinued software and games**. A connected coding agent combines focused skills with RE-Agent’s existing static/runtime analysis, evidence, checkpoints, and bounded build/test/repair workflows. Maintainers can add modular skills without creating a separate platform.
 
-The repository is [heaven-hm/re-agent](https://github.com/heaven-hm/re-agent), renamed from `rea-engine`. The source package identity is `re-agent`; a renamed npm release is not yet published. Existing `rea`, `rea-engine`, `rea-extended`, and `rea-agents` commands and MCP configuration remain available for compatibility.
+Source repository: [heaven-hm/re-agent](https://github.com/heaven-hm/re-agent). Package name: `re-agent`. See [installation](docs/installation.md) for supported CLI commands and MCP setup.
 
 **Legacy maintenance is the product goal; not every existing benchmark is a legacy-support case study.** The strongest binary-only example currently recorded in this repository is the Project IGI 2 GConv toolchain: the supplied 2003 Windows PE files now have a hash-bound static inventory, with a separately implemented QVM inspection tool. This is still a partial investigation: no vendor bug fix, full QVM engine, DLL ABI replacement, or complete game port has been verified. The currently retained Calculator, managed-game, and recent open-source samples validate narrower pipeline components; they do not demonstrate maintenance of a discontinued closed-source product. See [the GConv evidence and limits](benchmarks/native-windows-ports/gconv/README.md) and [rights-screened target catalog](docs/legacy-target-catalog.md).
 
