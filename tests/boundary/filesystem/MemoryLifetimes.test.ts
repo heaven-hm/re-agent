@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import { reconstructMemoryLifetimes } from "../../../src/domain/reconstruction/MemoryLifetimes.js";
+import { reconstructMemoryLifetimes, reconstructMemoryCapture } from "../../../src/domain/reconstruction/MemoryLifetimes.js";
 
 it("models allocation/write/free and address reuse as distinct lifetimes", () => {
   const values = reconstructMemoryLifetimes([
@@ -26,4 +26,9 @@ it("handles a large single-allocation write history without quadratic copying", 
 it("rejects an unknown event kind at the runtime boundary", () => {
   const invalid = {kind:"corrupt",sequence:1,address:100n,allocationId:"x"};
   expect(() => reconstructMemoryLifetimes([invalid as never])).toThrow(/Unknown memory event kind/u);
+});
+
+it("reports dropped observations as incomplete rather than definitive lifetimes", () => {
+  const capture = {processId:1,binarySha256:"a".repeat(64),addressSpaceId:"main",complete:false,droppedEvents:2};
+  expect(reconstructMemoryCapture([],capture).status).toBe("INCOMPLETE");
 });
