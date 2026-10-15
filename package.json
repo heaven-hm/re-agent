@@ -1,16 +1,16 @@
 {
-  "name": "rea-engine",
-  "mcpName": "io.github.heaven-hm/rea-engine",
+  "name": "re-agent",
+  "mcpName": "io.github.heaven-hm/re-agent",
   "version": "6.4.0",
   "description": "Reverse Engineering Engine: static/runtime investigation, evidence-backed reconstruction and differential repair for coding agents.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/heaven-hm/rea-engine.git"
+    "url": "git+https://github.com/heaven-hm/re-agent.git"
   },
-  "homepage": "https://github.com/heaven-hm/rea-engine#readme",
+  "homepage": "https://github.com/heaven-hm/re-agent#readme",
   "bugs": {
-    "url": "https://github.com/heaven-hm/rea-engine/issues"
+    "url": "https://github.com/heaven-hm/re-agent/issues"
   },
   "keywords": [
     "reverse-engineering",
@@ -34,10 +34,10 @@
     "#javascript-analysis-worker": "./dist/composition/javascriptAnalysisWorkerProcess.js"
   },
   "bin": {
+    "re-agent": "scripts/rea.mjs",
     "rea": "scripts/rea.mjs",
     "rea-agents": "scripts/rea.mjs",
-    "rea-extended": "scripts/rea.mjs",
-    "rea-engine": "scripts/rea.mjs"
+    "rea-extended": "scripts/rea.mjs"
   },
   "engines": {
     "node": "^22.19.0 || ^24.11.0 || >=26.0.0"
