@@ -16,3 +16,9 @@ it("does not request an invalid model on UNSAT results", () => {
   const query = buildBitvectorEquivalenceQuery({width:8,signed:false,left:{multiplier:1n,offset:0n},right:{multiplier:1n,offset:0n}});
   expect(query).not.toContain("(get-model)");
 });
+
+it("does not misclassify malformed or diagnostic output as a proof", () => {
+  for (const output of ["", "error\nunsat", "success\nunsat", "satisfiable", "unsat-warning"]) {
+    expect(() => classifyBitvectorSolverResult(output)).toThrow();
+  }
+});
