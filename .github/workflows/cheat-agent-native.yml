@@ -27,7 +27,7 @@ jobs:
       - name: Build
         run: cmake --build build-cheat-agent --config Release
       - name: Native tests
-        run: ctest --test-dir build-cheat-agent --config Release --output-on-failure
+        run: ctest --test-dir build-cheat-agent -C Release --output-on-failure
       - name: Compile IGI example with GTLibCpp
         if: runner.os == 'Windows' && matrix.enabled == 'ON'
         run: |
