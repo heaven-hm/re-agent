@@ -27,6 +27,7 @@ export const investigationConfigSchema = z
     /** Application artifact digests explicitly declared part of this target. */
     applicationArtifactSha256s: z
       .array(z.string().regex(/^[a-f0-9]{64}$/u))
+      .max(32)
       .default([])
       .refine((digests) => new Set(digests).size === digests.length, {
         message: "Application artifact digests must be unique",
