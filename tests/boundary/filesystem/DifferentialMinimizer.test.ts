@@ -20,3 +20,10 @@ it("preserves a caller-defined differential failure class", async () => {
     candidate.reference[0] === initial.reference[0] && candidate.candidate[0] === initial.candidate[0]);
   expect([...result.counterexample.input]).toEqual([42]);
 });
+
+it("rejects nondeterministic observations rather than retaining flaky counterexamples", async () => {
+  let n = 0;
+  await expect(minimizeDifferentialInput(new Uint8Array([1]),async () => ({
+    reference:new Uint8Array([++n%2]),candidate:new Uint8Array([3]),
+  }))).rejects.toThrow(/Nondeterministic/u);
+});
