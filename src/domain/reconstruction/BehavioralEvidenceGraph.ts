@@ -29,7 +29,7 @@ export const validateBehavioralGraph = (input: unknown): BehavioralGraph => {
     if (nodes.has(node.id)) throw new Error("Duplicate behavioral node identity");
     nodes.set(node.id, node);
   }
-  const signatures = new Set<string>();
+  const signatures = new Map<string, string>();
   for (const edge of graph.edges) {
     const from = nodes.get(edge.from);
     const to = nodes.get(edge.to);
@@ -40,7 +40,7 @@ export const validateBehavioralGraph = (input: unknown): BehavioralGraph => {
       throw new Error("Duplicate supporting evidence");
     const signature = JSON.stringify([edge.from, edge.to, edge.kind, [...edge.evidenceIds].sort()]);
     if (signatures.has(signature)) throw new Error("Duplicate behavioral edge");
-    signatures.add(signature);
+    signatures.set(signature, edge.confidence);
   }
   return graph;
 };
@@ -57,10 +57,14 @@ export const mergeBehavioralGraphs = (left: unknown, right: unknown): Behavioral
     nodes.set(node.id, node);
   }
   const edges = [...a.edges];
-  const known = new Set(edges.map((edge) => JSON.stringify(edge)));
+  const edgeKey = (edge: (typeof edges)[number]) => JSON.stringify([edge.from, edge.to, edge.kind, [...edge.evidenceIds].sort()]);
+  const known = new Map(edges.map((edge) => [edgeKey(edge), edge.confidence]));
   for (const edge of b.edges) {
-    const key = JSON.stringify(edge);
-    if (!known.has(key)) { edges.push(edge); known.add(key); }
+    const key = edgeKey(edge);
+    const existing = known.get(key);
+    if (existing !== undefined && existing !== edge.confidence)
+      throw new Error("Conflicting behavioral edge confidence");
+    if (existing === undefined) { edges.push(edge); known.set(key, edge.confidence); }
   }
   return validateBehavioralGraph({schemaVersion: 1, nodes: [...nodes.values()], edges});
 };
