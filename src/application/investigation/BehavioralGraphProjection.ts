@@ -39,6 +39,7 @@ export const applicationSourcesFromEvidence = (
     "project_managed_application_graph",
   ]);
   const sources: ApplicationGraphEvidenceSource[] = [];
+  const knownEvidenceIds = new Set(records.map((record) => record.evidence_id));
   for (const record of records) {
     if (!operations.has(record.operation)) continue;
     const parsed = parseApplicationGraphEvidence(record);
@@ -46,8 +47,20 @@ export const applicationSourcesFromEvidence = (
       throw new Error(
         `Application graph Evidence ${record.evidence_id} failed authentication: ${JSON.stringify(parsed)}`,
       );
-    if (parsed.value.rootArtifactSha256 === targetSha256)
-      sources.push(parsed.value);
+    if (parsed.value.rootArtifactSha256 === targetSha256) {
+      // A managed graph envelope may be delivered without its linked source
+      // records. Keep the envelope as ordinary checkpoint Evidence until its
+      // provenance closure is available rather than failing the entire save.
+      const source = parsed.value;
+      const referenced = new Set<string>();
+      for (const node of source.graph.nodes)
+        for (const observation of node.observations)
+          for (const id of observation.evidence.evidence_ids) referenced.add(id);
+      for (const edge of source.graph.edges)
+        for (const id of edge.evidence.evidence_ids) referenced.add(id);
+      if ([...referenced].every((id) => knownEvidenceIds.has(id)))
+        sources.push(source);
+    }
   }
   return sources;
 };
