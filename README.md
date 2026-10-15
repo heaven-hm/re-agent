@@ -226,6 +226,8 @@ These are actual `Form.DrawToBitmap` renders after the same button-handler seque
 
 Development health checks confirmed Frida 17.23.3, LIEF 1.0.0, Z3 5.1.0.0, Capstone 5.0.9 and Pillow 12.3.0. Ghidra/radare2 and native compilers are reused locally. **Bundled now:** the signature-verified ILSpy package and the built X11 libgdiplus library with source and licenses. The [preview release](https://github.com/heaven-hm/re-agent/releases/tag/engine-preview-2026-10-13) also carries the checksum-verified, unmodified Ghidra 12.1.2 archive; see its [manifest](third_party/ghidra/manifest.json). **A clone does not contain every installed external tool binary.** The installer and offline bundle builder are shipped in source; generated local bundles are not a license-approved public distribution. Frida/LIEF native dependency source and license coverage require further audit. Optional licensed tools and Apple Calculator are not redistributed. See [tool profiles and limitations](docs/autonomy-tool-bootstrap.md).
 
+See the [reverse-engineering tool coverage matrix](docs/reverse-engineering-tool-coverage.md) for a clearer separation between supported RE-Agent operations, host-installed tools, incomplete adapters, and the evidence required before a tool counts as integrated.
+
 # Native Windows → macOS ports (Batch 1)
 
 Independent macOS reconstructions and one explicitly blocked investigation of
