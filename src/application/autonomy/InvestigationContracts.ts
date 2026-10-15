@@ -147,14 +147,27 @@ export const parseInvestigationState = (input: unknown): InvestigationState => {
     state.behavioralGraph = expectedGraph;
   } else {
     const storedGraph = validateBinaryBehavioralGraph(state.behavioralGraph);
-    if (
-      storedGraph.targetSha256 !== state.binarySha256 ||
-      JSON.stringify(storedGraph) !== JSON.stringify(expectedGraph)
-    )
+    if (storedGraph.targetSha256 !== state.binarySha256)
       throw new Error(
         "Original binary changed or checkpoint behavioral graph does not match its authenticated Evidence",
       );
-    state.behavioralGraph = storedGraph;
+    if (JSON.stringify(storedGraph) === JSON.stringify(expectedGraph)) {
+      state.behavioralGraph = storedGraph;
+    } else {
+      // PR #43 checkpoints projected app Evidence as generic observations.
+      // Accept only that exact prior projection and upgrade it in memory.
+      const priorGraph = projectEvidenceToBehavioralGraph(state.binarySha256, {
+        records: state.evidence,
+        nativeGraphs: [],
+        applicationSources: [],
+        nonTargetEvidence: "exclude-with-coverage",
+      });
+      if (JSON.stringify(storedGraph) !== JSON.stringify(priorGraph))
+        throw new Error(
+          "Original binary changed or checkpoint behavioral graph does not match its authenticated Evidence",
+        );
+      state.behavioralGraph = expectedGraph;
+    }
   }
   for (const item of state.results)
     authenticateComparisonClaim(state, item, records);

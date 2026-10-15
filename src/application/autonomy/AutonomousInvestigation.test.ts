@@ -257,6 +257,62 @@ describe("autonomous application graph checkpoint integration", () => {
   });
 });
 
+describe("autonomous application graph checkpoint compatibility", () => {
+  it("upgrades the generic graph projection written by pre-fix checkpoints", async () => {
+    const f = await fixture();
+    const applicationSource = join(f.root, "application");
+    await mkdir(applicationSource);
+    await writeFile(
+      join(applicationSource, "main.mjs"),
+      'import { helper } from "./helper.mjs";\nexport const value = helper();\n',
+    );
+    await writeFile(
+      join(applicationSource, "helper.mjs"),
+      "export const helper = () => 7;\n",
+    );
+    const applicationPath = join(f.root, "application.asar");
+    await createPackageWithOptions(applicationSource, applicationPath, {
+      unpack: "**/*.node",
+    });
+    const analysis = await analyzeJavaScriptApplication({
+      input_path: applicationPath,
+      format: "asar",
+    });
+    if (!analysis.ok) throw analysis.error;
+    const parsedSource = parseApplicationGraphEvidence(analysis.value);
+    if (!parsedSource.ok)
+      throw new Error("Application Evidence must authenticate");
+    const agent = await AutonomousInvestigation.create(f.checkpoint, {
+      ...f.config,
+      binaryPath: applicationPath,
+      original: { command: applicationPath, arguments: [] },
+    });
+    const legacyGraph = graphProjection.projectEvidenceToBehavioralGraph(
+      agent.state.binarySha256,
+      {
+        records: [parsedSource.value.evidence],
+        nativeGraphs: [],
+        applicationSources: [],
+        nonTargetEvidence: "exclude-with-coverage",
+      },
+    );
+    const legacyCheckpoint = JSON.parse(
+      JSON.stringify({
+        ...agent.state,
+        evidence: [parsedSource.value.evidence],
+        behavioralGraph: legacyGraph,
+      }),
+    );
+
+    const reopened = parseInvestigationState(legacyCheckpoint);
+    expect(reopened.behavioralGraph?.edges).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ relation: "imports" }),
+      ]),
+    );
+  });
+});
+
 describe("autonomous behavioral graph checkpoint binding", () => {
   it("projects a discovery batch once before saving its authenticated checkpoint", async () => {
     const f = await fixture();
