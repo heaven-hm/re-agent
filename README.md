@@ -122,7 +122,19 @@ For implementation details, see the [investigation controller](src/application/a
 
 These are additions to the upstream tool ecosystem. Ghidra, native UI, browser analysis and general Frida capabilities already exist upstream and are not claimed as inventions of this fork.
 
-### Software and game: exact measured comparisons
+### Binary-only legacy case study: IGI 2 GConv
+
+The [GConv record](benchmarks/native-windows-ports/gconv/README.md) starts from locally supplied 2003 Windows PE32 binaries, not vendor source. A fresh offline radare2 6.2.0 scan hash-bound `gconv.exe`, `gconvapi.dll`, and `vqdll.dll`; it recorded 487 heuristic function entries in the EXE, enumerated the DLL's `gc*` exports and the codec's `VqCalc` export, and retained raw function/import/export records. That scan used radare2 directly. The current CLI deep-analysis selector still rejects `--provider radare2` (it offers Ghidra, Hopper, and IDA); RE-Agent's new radare2 MCP operations have not yet been exercised end to end on this target. This is a concrete integration gap to close. The binary evidence points to a useful next behavior slice: connect one exported API/native call to an independently implemented test, while keeping unknown semantics unresolved.
+
+**Status: partial static analysis; no confirmed vendor bug or repair yet.** The checkout also retains a 120-script error-parity receipt, but the private original corpus and a replay harness are not present, so this turn did not reproduce that historical result. Full QVM execution, native-call semantics, DLL ABI/codec compatibility, a Windows runtime trace, and a full game port remain unverified. The supplied Windows files are not committed; their SHA-256 values and local-only status are documented. A supported release scope is also unresolved: the target catalog records why public modification/redistribution is not currently cleared.
+
+Current genuine evidence is the machine-readable [radare2 function inventory](benchmarks/native-windows-ports/gconv/analysis/gconv-functions-radare2.json), [static analysis note](benchmarks/native-windows-ports/gconv/analysis/static-analysis.md), retained [imports/exports](benchmarks/native-windows-ports/gconv/analysis/), and [existing differential receipt](benchmarks/native-windows-ports/gconv/gconv-diff.txt). GConv is a console tool, and no runtime screenshot is claimed. The documented terminal records are the appropriate evidence until a reproducible runtime capture is added.
+
+### Engineering validation fixtures (not legacy-support case studies)
+
+The following earlier comparisons help validate specific analysis and comparison plumbing, but are weak evidence for maintenance of unsupported proprietary applications: the Calculator is an actively supported Apple app; TicTacToe and Luhn are managed examples; and the Batch 1/Batch 2 native samples are open-source projects. They remain in the repository as transparent engineering fixtures and their original reports are preserved. Do not present them as proof that RE-Agent found and repaired a defect in closed-source legacy software.
+
+#### Software and game: exact measured fixture comparisons
 
 | Target                                                                             | Result                                                                                                     | Proof                                                                                                                                                                                                                                                                                     |
 | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -155,7 +167,7 @@ These are actual `Form.DrawToBitmap` renders after the same button-handler seque
 
 Development health checks confirmed Frida 17.23.3, LIEF 1.0.0, Z3 5.1.0.0, Capstone 5.0.9 and Pillow 12.3.0. Ghidra/radare2 and native compilers are reused locally. **Bundled now:** the signature-verified ILSpy package and the built X11 libgdiplus library with source and licenses. The [preview release](https://github.com/heaven-hm/rea-engine/releases/tag/engine-preview-2026-10-13) also carries the checksum-verified, unmodified Ghidra 12.1.2 archive; see its [manifest](third_party/ghidra/manifest.json). **A clone does not contain every installed external tool binary.** The installer and offline bundle builder are shipped in source; generated local bundles are not a license-approved public distribution. Frida/LIEF native dependency source and license coverage require further audit. Optional licensed tools and Apple Calculator are not redistributed. See [tool profiles and limitations](docs/autonomy-tool-bootstrap.md).
 
-# Native Windows → macOS ports (Batch 1)
+# Binary-first port fixtures (Batch 1; not closed-source legacy case studies)
 
 Independent macOS reconstructions and one explicitly blocked investigation of
 six MIT-licensed native Windows targets, recovered binary-first with REA (no
@@ -163,14 +175,14 @@ original source consulted). Five Windows originals and the available macOS
 replicas are committed under
 `benchmarks/native-windows-ports/` with manifests, goldens and reports.
 
-| Target                | Original (Windows x64)                                           | macOS port                                     | Status                             |
-| --------------------- | ---------------------------------------------------------------- | ---------------------------------------------- | ---------------------------------- |
-| Snake v1.1.0          | `original-binaries/snake-windows-x86_64.exe` (55KB)              | `snake/replica/snakemac` (C, terminal)         | Structural frame parity            |
-| PixelTetris v1.0.0    | `original-binaries/Pixeltetris.exe` (1.1MB, SDL2)                | `pixeltetris/replica/pixelmac` (C, SDL2)       | Menu+gameplay; shots pending       |
-| Tetris v1.0.0         | `original-binaries/Tetris.exe` (2.2MB, SDL2)                     | `tetris/replica/tetrismac` (C, SDL2)           | Menu screenshot verified           |
-| legacy-notepad v1.2.1 | `original-binaries/legacy-notepad-x64.exe` (263KB, Win32)        | `notepad/replica/notepadmac` (Swift, AppKit)   | Unicode window verified            |
-| Clipjar v1.2.0        | `original-binaries/clipjar.exe` (5.3MB, Rust)                    | `clipjar/replica/clipjarmac` (Swift, menu-bar) | SQLite capture/persist/dedupe PASS |
-| imgview v0.3          | `original-binaries/imgview64.exe` (UPX stub, unpacked upx 5.2.1) | `imgview/replica/imgviewmac` (Swift, AppKit)   | PNG render verified                |
+| Target                | Original (Windows x64)                                           | macOS port                                     | Status                                         |
+| --------------------- | ---------------------------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- |
+| Snake v1.1.0          | `original-binaries/snake-windows-x86_64.exe` (55KB)              | `snake/replica/snakemac` (C, terminal)         | Structural frame parity                        |
+| PixelTetris v1.0.0    | `original-binaries/Pixeltetris.exe` (1.1MB, SDL2)                | `pixeltetris/replica/pixelmac` (C, SDL2)       | Menu corrected to near-identity; gameplay live |
+| Tetris v1.0.0         | `original-binaries/Tetris.exe` (2.2MB, SDL2)                     | `tetris/replica/tetrismac` (C, SDL2)           | Menu + gameplay screenshots verified           |
+| legacy-notepad v1.2.1 | `original-binaries/legacy-notepad-x64.exe` (263KB, Win32)        | `notepad/replica/notepadmac` (Swift, AppKit)   | Unicode window + save-bytes verified           |
+| Clipjar v1.2.0        | `original-binaries/clipjar.exe` (5.3MB, Rust)                    | `clipjar/replica/clipjarmac` (Swift, menu-bar) | SQLite capture/persist/dedupe PASS             |
+| imgview v0.3          | `original-binaries/imgview64.exe` (UPX stub, unpacked upx 5.2.1) | `imgview/replica/imgviewmac` (Swift, AppKit)   | PNG render verified                            |
 
 ## Port evidence
 
@@ -197,6 +209,11 @@ analysis, functional results, limitations). Whole-executable identity is
 not claimed; unverified items are listed per target, not hidden.
 
 ## Native Binary Reconstruction — Benchmark Batch 2
+
+Batch 2 also uses published compiled binaries, but its targets are openly
+licensed projects. They are useful pipeline benchmarks, not evidence of
+maintaining closed-source legacy products. Their results below remain scoped
+to the listed features.
 
 The complete app/game inventory across managed examples, Batch 1 and Batch 2 is in the [package-checked benchmark catalog](benchmarks/catalog.json), with per-target implementation and evidence links in the [benchmark index](benchmarks/README.md).
 
@@ -272,6 +289,8 @@ node scripts/rea.mjs --help
 
 Use the printed local MCP configuration with your host coding agent and the built packaged skill. A published upstream npm package is not this fork. The implementation retains compatible command names while the product identity is Reverse Engineering Engine.
 
+Setup supports [configured coding agents](docs/installation.md#supported-agents). Other MCP clients can use the [manual MCP registry instructions](docs/installation.md#mcp-registry).
+
 ## Documentation
 
 - [Autonomous reconstruction and host-agent workflow](docs/autonomous-reconstruction.md)
@@ -281,6 +300,7 @@ Use the printed local MCP configuration with your host coding agent and the buil
 - [Ghidra provider](docs/ghidra-provider.md)
 - [Managed .NET analysis](docs/managed-code-analysis.md)
 - [MCP contracts](docs/mcp-contracts.md)
+- [Generated MCP tool catalog](docs/mcp-contracts.md#generated-catalog)
 - [Licensing](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md)
 
 Report issues and contribute at [heaven-hm/rea-engine](https://github.com/heaven-hm/rea-engine).
