@@ -43,6 +43,8 @@ export const reconstructMemoryLifetimes = (
       live.set(event.allocationId, item);
       continue;
     }
+    if (event.kind !== "free" && event.kind !== "write")
+      throw new Error("Unknown memory event kind");
     const item = live.get(event.allocationId);
     if (!item) throw new Error("Unknown or freed allocation");
     if (event.kind === "free") {
