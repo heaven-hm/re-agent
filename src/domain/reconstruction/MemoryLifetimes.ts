@@ -26,10 +26,10 @@ export const reconstructMemoryLifetimes = (
     if (!Number.isSafeInteger(event.sequence) || event.sequence <= previous)
       throw new Error("Memory trace must have strictly increasing sequence numbers");
     previous = event.sequence;
-    if (!event.allocationId || event.address < 0n)
+    if (typeof event.allocationId !== "string" || !event.allocationId || typeof event.address !== "bigint" || event.address < 0n)
       throw new Error("Invalid allocation identity or address");
     if (event.kind === "alloc") {
-      if (event.size <= 0n || byId.has(event.allocationId))
+      if (typeof event.size !== "bigint" || event.size <= 0n || byId.has(event.allocationId))
         throw new Error("Invalid or reused allocation identity");
       const end = event.address + event.size;
       for (const current of live.values())
@@ -49,13 +49,15 @@ export const reconstructMemoryLifetimes = (
       if (event.address !== item.address) throw new Error("Free address mismatch");
       item.freedAt = event.sequence;
       live.delete(event.allocationId);
-    } else {
+    } else if (event.kind === "write") {
       if (!Number.isSafeInteger(event.bytes) || event.bytes <= 0 ||
           event.address < item.address || event.address + BigInt(event.bytes) > item.address + item.size)
         throw new Error("Out-of-bounds allocation write");
-      item.writes = [...item.writes, {
+      (item.writes as { sequence: number; offset: bigint; bytes: number }[]).push({
         sequence: event.sequence, offset: event.address - item.address, bytes: event.bytes,
-      }];
+      });
+    } else {
+      throw new Error("Unknown memory event kind");
     }
   }
   return [...byId.values()];
