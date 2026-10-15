@@ -1,0 +1,18 @@
+[package]
+name = "cheat-agent-mcp"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+cheat-agent-core = { path = "../cheat-agent-core" }
+cheat-agent-ffi = { path = "../cheat-agent-ffi" }
+cheat-agent-generators = { path = "../cheat-agent-generators" }
+cheat-agent-verifier = { path = "../cheat-agent-verifier" }
+cheat-agent-storage = { path = "../cheat-agent-storage" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }

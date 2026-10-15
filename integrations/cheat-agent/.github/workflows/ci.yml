@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  native-and-rust:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            name: Linux x64
+          - os: macos-latest
+            name: macOS Apple Silicon
+          - os: windows-latest
+            name: Windows x64
+
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Setup CMake
+        uses: jwlawson/actions-setup-cmake@v2
+
+      - name: Configure CMake Native Engine
+        run: cmake -B build -S .
+
+      - name: Build Native Engine & Test Game
+        run: cmake --build build --config Release
+
+      - name: Compile GTLibCpp-backed Project IGI trainer (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          cmake -B build -S . -DCHEAT_AGENT_BUILD_IGI_EXAMPLE=ON
+          cmake --build build --config Release --target igi_trainer
+
+      - name: Run Native Unit Tests
+        run: ctest --test-dir build --output-on-failure -C Release
+
+      - name: Build & Test Rust Workspace
+        run: cargo test --workspace --verbose
+
+      - name: Verify Test Game Status Execution
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            ./build/examples/test-game/Release/cheat_agent_test_game.exe --status
+          else
+            ./build/examples/test-game/cheat_agent_test_game --status
+          fi
+
+      - name: Assert incomplete verification fails closed and trainer generation runs
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            set +e
+            cargo run -p cheat-agent-cli -- verify --cheat examples/test-game/test_cheat.json --target-command "./build/examples/test-game/Release/cheat_agent_test_game.exe --daemon"
+            status=$?
+          else
+            set +e
+            cargo run -p cheat-agent-cli -- verify --cheat examples/test-game/test_cheat.json --target-command "./build/examples/test-game/cheat_agent_test_game --daemon"
+            status=$?
+          fi
+          set -e
+          if [ "$status" -ne 2 ]; then
+            echo "Expected explicit UNVERIFIED exit status 2, got $status"
+            exit 1
+          fi
+          cargo run -p cheat-agent-cli -- generate --cheat examples/test-game/test_cheat.json --lang cpp
+          cargo run -p cheat-agent-cli -- generate --cheat examples/test-game/test_cheat.json --lang rust
+          cargo run -p cheat-agent-cli -- generate --cheat examples/test-game/test_cheat.json --lang ct

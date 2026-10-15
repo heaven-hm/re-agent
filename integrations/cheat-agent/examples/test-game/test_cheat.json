@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "name": "Infinite Ammo",
+  "description": "Enforces 999 ammunition in test game across launches",
+  "target": {
+    "name": "cheat_agent_test_game",
+    "architecture": "arm64"
+  },
+  "value": {
+    "type": "uint32",
+    "desired": 999,
+    "freeze": true,
+    "freeze_interval_ms": 50
+  },
+  "resolution": {
+    "method": "static_address",
+    "static_address": "0x1000"
+  },
+  "verification": {
+    "status": "unverified",
+    "restart_count": 0,
+    "evidence": []
+  }
+}

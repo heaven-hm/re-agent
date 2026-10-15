@@ -1,0 +1,44 @@
+# Build directories
+target/
+build/
+bin/
+out/
+CMakeFiles/
+CMakeCache.txt
+compile_commands.json
+
+# Binaries & libraries
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
+*.pdb
+*_bin
+
+# Rust
+**/*.rs.bk
+Cargo.lock
+
+# SQLite & Logs
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+*.log
+
+# OS & IDE
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment secrets
+.env
+.env.*
+!.env.example

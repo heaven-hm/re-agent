@@ -1,0 +1,31 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/cheat-agent-core",
+    "crates/cheat-agent-ffi",
+    "crates/cheat-agent-storage",
+    "crates/cheat-agent-generators",
+    "crates/cheat-agent-verifier",
+    "crates/cheat-agent-providers",
+    "crates/cheat-agent-mcp",
+    "crates/cheat-agent-cli",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["Haseeb Mir <haseeb_heaven@yahoo.com>"]
+license = "MIT"
+repository = "https://github.com/heaven-hm/cheat-agent"
+
+[workspace.dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "1.0"
+tokio = { version = "1.38", features = ["full"] }
+tracing = "0.1"
+tracing-subscriber = "0.3"
+rusqlite = { version = "0.31", features = ["bundled"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+clap = { version = "4.5", features = ["derive"] }
+async-trait = "0.1"

@@ -1,0 +1,69 @@
+{
+  "target": {
+    "title": "Project IGI: I'm Going In",
+    "version": "1.0 / Retail",
+    "executable": "igi.exe",
+    "architecture": "x86",
+    "pe_format": "PE32 executable (GUI) Intel 80386, for MS Windows",
+    "md5_reference": "Retail v1.0 English"
+  },
+  "verified_functions": {
+    "Gun_Tick": {
+      "address": "0x00478640",
+      "purpose": "Per-frame firearm state evaluation and firing interval clock",
+      "calling_convention": "__thiscall"
+    },
+    "Gun_Fire": {
+      "address": "0x00478BA0",
+      "purpose": "Weapon firing routine; decrements magazine ammo count",
+      "calling_convention": "__thiscall",
+      "original_bytes": "55 8B EC 83 EC 18 53 56 57 8B F9",
+      "infinite_ammo_nop_patch": {
+        "address": "0x00478BB2",
+        "original": "FF 4E 08",
+        "description": "dec dword ptr [esi+08] (magazine ammo decrement)",
+        "nop_bytes": "90 90 90"
+      }
+    },
+    "Reload_MagFill": {
+      "address": "0x004798C0",
+      "purpose": "Transfers reserve ammo into active magazine",
+      "calling_convention": "__thiscall"
+    },
+    "Player_Hit_Override": {
+      "address": "0x00412440",
+      "purpose": "Player-specific damage mitigation and armor calculation",
+      "calling_convention": "__thiscall"
+    },
+    "Human_Hit": {
+      "address": "0x0045F930",
+      "purpose": "Entity hit dispatch and bullet impact handler",
+      "calling_convention": "__thiscall"
+    },
+    "Health_Fraction": {
+      "address": "0x00460400",
+      "purpose": "Returns current health as floating-point ratio [0.0 - 1.0]",
+      "calling_convention": "__thiscall"
+    },
+    "Hit_Zone_Table": {
+      "address": "0x005412A4",
+      "purpose": "Damage multiplier lookup per bone (head, torso, limbs)"
+    }
+  },
+  "memory_pointers": {
+    "player_base_chain": {
+      "module": "igi.exe",
+      "base_offset": "0x00142A18",
+      "offsets": ["0x28", "0x14", "0x08"],
+      "type": "float",
+      "description": "Jones (Player) health percentage (100.0f = full)"
+    },
+    "active_weapon_ammo": {
+      "module": "igi.exe",
+      "base_offset": "0x00142A18",
+      "offsets": ["0x28", "0x54", "0x08"],
+      "type": "int32",
+      "description": "Current loaded clip ammo count"
+    }
+  }
+}

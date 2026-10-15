@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CheatDefinition",
+  "type": "object",
+  "required": ["schema_version", "name", "target", "value", "resolution", "verification"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0"]
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "target": {
+      "type": "object",
+      "required": ["name", "architecture"],
+      "properties": {
+        "name": { "type": "string" },
+        "architecture": { "type": "string", "enum": ["x86", "x64", "arm64"] },
+        "image_sha256": { "type": "string" }
+      }
+    },
+    "value": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["int8", "uint8", "int16", "uint16", "int32", "uint32", "int64", "uint64", "float", "double", "byte_array", "string"]
+        },
+        "desired": {
+          "type": ["number", "string", "integer"]
+        },
+        "freeze": {
+          "type": "boolean"
+        },
+        "freeze_interval_ms": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "resolution": {
+      "type": "object",
+      "required": ["method"],
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": ["static_address", "module_pointer_chain", "aob_signature"]
+        },
+        "static_address": { "type": "string" },
+        "module": { "type": "string" },
+        "base_offset": { "type": "string" },
+        "offsets": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "aob_pattern": { "type": "string" }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "required": ["status", "restart_count"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["unverified", "memory_write_verified", "game_behavior_verified", "restart_verified", "fully_verified"]
+        },
+        "restart_count": { "type": "integer", "minimum": 0 },
+        "evidence": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

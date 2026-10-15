@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "name": "Project IGI - Infinite Ammo & God Mode",
+  "description": "Freezes weapon magazine ammo and reinforces health for Project IGI (v1.0)",
+  "target": {
+    "name": "Project IGI: I'm Going In",
+    "architecture": "x86",
+    "image_sha256": null
+  },
+  "value": {
+    "type": "int32",
+    "desired": 99,
+    "freeze": true,
+    "freeze_interval_ms": 50
+  },
+  "resolution": {
+    "method": "module_pointer_chain",
+    "static_address": null,
+    "module": "igi.exe",
+    "base_offset": "0x00142A18",
+    "offsets": [
+      "0x28",
+      "0x54",
+      "0x08"
+    ],
+    "aob_pattern": "55 8B EC 83 EC 18 53 56 57 8B F9"
+  },
+  "verification": {
+    "status": "candidate",
+    "restart_count": 0,
+    "evidence": [
+      "Cross-referenced with Ghidra decomp.function at 0x00478BA0 (Gun_Fire)",
+      "AOB pattern verified against retail IGI.exe x86 text section"
+    ]
+  }
+}

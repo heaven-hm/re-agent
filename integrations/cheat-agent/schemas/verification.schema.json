@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VerificationReport",
+  "type": "object",
+  "required": ["cheat_name", "overall_status", "stages", "restart_runs"],
+  "properties": {
+    "cheat_name": { "type": "string" },
+    "target_pid": { "type": "integer" },
+    "overall_status": {
+      "type": "string",
+      "enum": ["PASSED", "FAILED", "PARTIAL", "UNVERIFIED"]
+    },
+    "stages": {
+      "type": "object",
+      "properties": {
+        "memory_write": { "type": "boolean" },
+        "game_behavior": { "type": "boolean" },
+        "restart_persistence": { "type": "boolean" },
+        "trainer_compilation": { "type": "boolean" },
+        "trainer_execution": { "type": "boolean" }
+      }
+    },
+    "restart_runs": { "type": "integer", "minimum": 0 },
+    "evidence_log": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

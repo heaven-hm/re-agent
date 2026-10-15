@@ -1,0 +1,30 @@
+[package]
+name = "cheat-agent-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[[bin]]
+name = "cheat-agent"
+path = "src/main.rs"
+
+[lib]
+name = "cheat_agent_cli"
+path = "src/lib.rs"
+
+[dependencies]
+cheat-agent-core = { path = "../cheat-agent-core" }
+cheat-agent-ffi = { path = "../cheat-agent-ffi" }
+cheat-agent-storage = { path = "../cheat-agent-storage" }
+cheat-agent-generators = { path = "../cheat-agent-generators" }
+cheat-agent-verifier = { path = "../cheat-agent-verifier" }
+cheat-agent-providers = { path = "../cheat-agent-providers" }
+cheat-agent-mcp = { path = "../cheat-agent-mcp" }
+clap = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+thiserror = { workspace = true }

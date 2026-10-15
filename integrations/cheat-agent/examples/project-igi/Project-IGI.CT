@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>1</ID>
+      <Description>"Project IGI - Infinite Ammo (NOP Decrement)"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+// IGI.exe+78BB2: dec [esi+08]
+00478BB2:
+  nop
+  nop
+  nop
+
+[DISABLE]
+00478BB2:
+  dec [esi+08]
+      </AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>2</ID>
+      <Description>"Project IGI - God Mode (Player Hit Override)"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+// IGI.exe+12440: ret 0004
+00412440:
+  ret 0004
+
+[DISABLE]
+00412440:
+  push ebp
+  mov ebp,esp
+      </AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>3</ID>
+      <Description>"Player Health Value (Float: 100.0f)"</Description>
+      <VariableType>Float</VariableType>
+      <Address>"igi.exe"+00142A18</Address>
+      <Offsets>
+        <Offset>08</Offset>
+        <Offset>14</Offset>
+        <Offset>28</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>4</ID>
+      <Description>"Active Magazine Ammo (4 Bytes)"</Description>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"igi.exe"+00142A18</Address>
+      <Offsets>
+        <Offset>08</Offset>
+        <Offset>54</Offset>
+        <Offset>28</Offset>
+      </Offsets>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+</CheatTable>
