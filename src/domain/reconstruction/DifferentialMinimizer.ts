@@ -11,14 +11,33 @@ export const minimizeDifferentialInput = async (
   initial: Uint8Array,
   observe: (input: Uint8Array) => Promise<{ reference: Uint8Array; candidate: Uint8Array }>,
   maxExecutions = 256,
-  preserve: (initial: DifferentialCounterexample, attempt: DifferentialCounterexample) => boolean = (initial, attempt) => differs(attempt.reference, attempt.candidate),
+  preserve: (initial: DifferentialCounterexample, attempt: DifferentialCounterexample) => boolean = (_initial, attempt) => differs(attempt.reference, attempt.candidate),
+  options: { readonly signal?: AbortSignal; readonly timeoutMs?: number; readonly repeatCount?: number } = {},
 ): Promise<{ counterexample: DifferentialCounterexample; executions: number; exhausted: boolean }> => {
   if (!Number.isSafeInteger(maxExecutions) || maxExecutions < 1)
     throw new Error("Invalid execution budget");
+  if (options.timeoutMs !== undefined && (!Number.isSafeInteger(options.timeoutMs) || options.timeoutMs < 1))
+    throw new Error("Invalid observation timeout");
+  const repeats = options.repeatCount ?? 2;
+  if (!Number.isSafeInteger(repeats) || repeats < 2 || repeats > 10)
+    throw new Error("Reproducibility requires 2..10 repetitions");
   let executions = 0;
   const evaluate = async (input: Uint8Array) => {
-    executions++;
-    const result = await observe(input.slice());
+    if (options.signal?.aborted) throw new Error("Differential observation aborted");
+    if (executions + repeats > maxExecutions) throw new Error("Insufficient replay budget");
+    const evaluateOnce = async () => {
+      executions++;
+      const result = await observe(input.slice());
+      if (!(result.reference instanceof Uint8Array) || !(result.candidate instanceof Uint8Array))
+        throw new Error("Invalid differential observation");
+      return result;
+    };
+    const result = await evaluateOnce();
+    for (let repetition = 1; repetition < repeats; repetition++) {
+      const replay = await evaluateOnce();
+      if (differs(result.reference, replay.reference) || differs(result.candidate, replay.candidate))
+        throw new Error("Nondeterministic differential observation");
+    }
     if (!(result.reference instanceof Uint8Array) || !(result.candidate instanceof Uint8Array))
       throw new Error("Invalid differential observation");
     return {input: input.slice(), reference: result.reference.slice(), candidate: result.candidate.slice()};
@@ -28,10 +47,10 @@ export const minimizeDifferentialInput = async (
     throw new Error("Initial input is not a differential counterexample");
   const baseline = {input: current.input.slice(), reference: current.reference.slice(), candidate: current.candidate.slice()};
   let granularity = 2;
-  while (current.input.length > 0 && executions < maxExecutions) {
+  while (current.input.length > 0 && executions + repeats <= maxExecutions) {
     const chunk = Math.ceil(current.input.length / granularity);
     let changed = false;
-    for (let start = 0; start < current.input.length && executions < maxExecutions; start += chunk) {
+    for (let start = 0; start < current.input.length && executions + repeats <= maxExecutions; start += chunk) {
       const smaller = new Uint8Array(current.input.length - Math.min(chunk, current.input.length - start));
       smaller.set(current.input.subarray(0, start));
       smaller.set(current.input.subarray(start + chunk), start);
@@ -45,5 +64,5 @@ export const minimizeDifferentialInput = async (
       granularity = Math.min(current.input.length, granularity * 2);
     }
   }
-  return {counterexample: current, executions, exhausted: executions >= maxExecutions};
+  return {counterexample: current, executions, exhausted: executions + repeats > maxExecutions};
 };
