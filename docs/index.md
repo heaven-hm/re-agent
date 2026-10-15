@@ -40,9 +40,11 @@ Configure the [CLI and MCP host](./installation.md). For maintenance planning an
 
 ## Documented investigation
 
-**Project I.G.I. 2 GConv / QVM (Windows PE32)** — [static binary inventory, independent QVM tooling and measured limitations](../benchmarks/native-windows-ports/gconv/README.md). This is a partial investigation, **not** a verified complete application or game port.
+**Project I.G.I. 2 GConv / QVM (Windows PE32)** — [static binary inventory, independent QVM tooling and measured limitations](https://github.com/heaven-hm/re-agent/tree/develop/benchmarks/native-windows-ports/gconv). This is a partial investigation, **not** a verified complete application or game port.
 
-The [benchmark archive](../benchmarks/README.md) contains small validation fixtures, managed examples and partial open-source reconstructions. They are engineering tests and must not be described as completed preservation projects.
+The [benchmark archive](https://github.com/heaven-hm/re-agent/tree/develop/benchmarks) contains small validation fixtures, managed examples and partial open-source reconstructions. They are engineering tests and must not be described as completed preservation projects.
+
+See [the case-study evidence standard](./legacy-case-study-standard.md) before presenting new project results.
 
 ## Engineering references
 
