@@ -54,15 +54,21 @@ export const minimizeDifferentialInput = async (
           activeObservers--;
         }
       })();
-      const deadline = options.timeoutMs === undefined ? run : Promise.race([
-        run,
-        new Promise<never>((_, reject) => {
-          timeout = setTimeout(() => {
-            controller.abort(new Error("Differential observation timeout"));
-            reject(new Error("Differential observation timeout"));
-          }, options.timeoutMs);
-        }),
-      ]);
+      // Parent cancellation must interrupt observation even without a timeout.
+      // The observer receives the abort signal and is expected to clean up.
+      let onObservationAbort: (() => void) | undefined;
+      const aborted = new Promise<never>((_, reject) => {
+        onObservationAbort = () =>
+          reject(controller.signal.reason ?? new Error("Differential observation aborted"));
+        controller.signal.addEventListener("abort", onObservationAbort, { once: true });
+        if (controller.signal.aborted) onObservationAbort();
+      });
+      const deadline = Promise.race([run, aborted]); 
+      if (options.timeoutMs !== undefined)
+        timeout = setTimeout(
+          () => controller.abort(new Error("Differential observation timeout")),
+          options.timeoutMs,
+        );
       let result: Awaited<typeof run>;
       try {
         result = await deadline;
@@ -77,6 +83,7 @@ export const minimizeDifferentialInput = async (
         throw err;
       } finally {
         if (timeout !== undefined) clearTimeout(timeout);
+        if (onObservationAbort) controller.signal.removeEventListener("abort", onObservationAbort);
         if (options.signal) options.signal.removeEventListener("abort", onParentAbort);
       }
       if (options.signal?.aborted) throw options.signal.reason ?? new Error("Differential observation aborted");
