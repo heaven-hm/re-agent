@@ -75,3 +75,24 @@ it("cancels running observer and awaits cleanup when external signal aborts", as
   expect(observerAborted).toBe(true);
   expect(observerCleanedUp).toBe(true);
 });
+
+it("external cancellation interrupts a stalled observer without a timeout", async () => {
+  const parent = new AbortController();
+  let invoked = 0;
+  let aborted = false;
+  const observer = (_input: Uint8Array, context?: { readonly signal: AbortSignal }) => {
+    invoked++;
+    return new Promise<{ reference: Uint8Array; candidate: Uint8Array }>((_resolve, reject) => {
+      context?.signal.addEventListener("abort", () => {
+        aborted = true;
+        reject(context.signal.reason);
+      }, { once: true });
+    });
+  };
+  const pending = minimizeDifferentialInput(new Uint8Array([42]), observer, 4,
+    undefined, { signal: parent.signal });
+  setTimeout(() => parent.abort(new Error("cancel test")), 10);
+  await expect(pending).rejects.toThrow(/cancel test/u);
+  expect(aborted).toBe(true);
+  expect(invoked).toBe(1);
+});
