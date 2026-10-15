@@ -31,4 +31,4 @@ jobs:
       - name: Build generated catalogs
         run: npm run build
       - name: Run focused maintenance skill tests
-        run: npx vitest run --passWithNoTests tests/maintenance-skills tests/unit/maintenance-skills tests/skills
+        run: npx vitest run tests/boundary/filesystem/legacyMaintenance.test.ts
