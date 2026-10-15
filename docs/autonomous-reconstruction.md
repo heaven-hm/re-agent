@@ -53,8 +53,14 @@ Evidence access. Provider identity, version, profile, raw result, and limitation
 remain in the checkpoint's Evidence records. Graph updates are batched at
 checkpoint saves rather than rebuilding for every newly collected record.
 JavaScript application graph facts can be projected when their source Evidence
-and embedded Evidence IDs authenticate against the same target. The current
-native investigation graph uses descriptive metadata rather than immutable
+and embedded Evidence IDs authenticate against the same target. When the
+runnable target is a separate executable (as with Electron and `app.asar`),
+declare each related application artifact's SHA-256 in the plan's optional
+`investigation.applicationArtifactSha256s` list. This records the operator's
+target-scope choice; RE-Agent still checks the application Evidence against
+each declared digest, and does not infer the executable-to-application
+relationship from matching paths or filenames. The current native
+investigation graph uses descriptive metadata rather than immutable
 RE-Agent Evidence IDs; its facts are therefore reported as a coverage gap and
 are not asserted in the cross-domain graph.
 

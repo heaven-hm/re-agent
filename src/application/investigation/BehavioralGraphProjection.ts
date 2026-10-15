@@ -24,6 +24,8 @@ export interface BehavioralEvidenceProjectionInput {
   readonly records: readonly Evidence[];
   readonly nativeGraphs: readonly NativeInvestigationGraph[];
   readonly applicationSources: readonly ApplicationGraphEvidenceSource[];
+  /** Explicitly authorized app-layer digests associated with the target. */
+  readonly applicationArtifactSha256s?: readonly string[];
   /** Retain unrelated Evidence outside this graph with a coverage gap. */
   readonly nonTargetEvidence?: "reject" | "exclude-with-coverage";
 }
@@ -32,6 +34,7 @@ export interface BehavioralEvidenceProjectionInput {
 export const applicationSourcesFromEvidence = (
   records: readonly Evidence[],
   targetSha256: string,
+  applicationArtifactSha256s: readonly string[] = [],
 ): ApplicationGraphEvidenceSource[] => {
   const operations = new Set([
     "analyze_javascript_application",
@@ -47,7 +50,10 @@ export const applicationSourcesFromEvidence = (
       throw new Error(
         `Application graph Evidence ${record.evidence_id} failed authentication: ${JSON.stringify(parsed)}`,
       );
-    if (parsed.value.rootArtifactSha256 === targetSha256) {
+    if (
+      parsed.value.rootArtifactSha256 === targetSha256 ||
+      applicationArtifactSha256s.includes(parsed.value.rootArtifactSha256)
+    ) {
       // A managed graph envelope may be delivered without its linked source
       // records. Keep the envelope as ordinary checkpoint Evidence until its
       // provenance closure is available rather than failing the entire save.
@@ -55,7 +61,8 @@ export const applicationSourcesFromEvidence = (
       const referenced = new Set<string>();
       for (const node of source.graph.nodes)
         for (const observation of node.observations)
-          for (const id of observation.evidence.evidence_ids) referenced.add(id);
+          for (const id of observation.evidence.evidence_ids)
+            referenced.add(id);
       for (const edge of source.graph.edges)
         for (const id of edge.evidence.evidence_ids) referenced.add(id);
       if ([...referenced].every((id) => knownEvidenceIds.has(id)))
@@ -106,7 +113,10 @@ export const projectEvidenceToBehavioralGraph = (
       throw new Error("Application graph Evidence failed authentication");
     const owned = parsed.value;
     if (
-      owned.rootArtifactSha256 !== targetSha256 ||
+      (owned.rootArtifactSha256 !== targetSha256 &&
+        !input.applicationArtifactSha256s?.includes(
+          owned.rootArtifactSha256,
+        )) ||
       source.rootArtifactSha256 !== owned.rootArtifactSha256 ||
       source.kind !== owned.kind ||
       digestCanonicalValue(source.graph, "behavioral application graph") !==

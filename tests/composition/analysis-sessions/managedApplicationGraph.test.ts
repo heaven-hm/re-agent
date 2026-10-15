@@ -9,6 +9,10 @@ import { createEvidence, parseEvidence } from "../../../src/domain/evidence.js";
 import { parseJavaScriptApplicationGraph } from "../../../src/domain/javascript/javascriptApplicationGraph.js";
 import { managedApplicationGraphResultSchema } from "../../../src/domain/managed/managedApplicationGraph.js";
 import {
+  applicationSourcesFromEvidence,
+  projectEvidenceToBehavioralGraph,
+} from "../../../src/application/investigation/BehavioralGraphProjection.js";
+import {
   managedMemberInspectionSchema,
   managedNativeBoundaryInspectionSchema,
 } from "../../../src/domain/managed/managedArtifact.js";
@@ -185,6 +189,39 @@ describe("managed application graph projection", () => {
       source_evidence_id: parsed.evidence_id,
       summary: { matched_seeds: 1 },
     });
+  });
+});
+
+describe("managed application checkpoint provenance", () => {
+  it("defers envelope projection when its source Evidence closure is absent", () => {
+    const { artifactEvidence, memberEvidence, boundaryEvidence } =
+      createManagedInteropEvidence();
+    const projected = projectManagedApplicationGraphEvidence({
+      managed_artifact: artifactEvidence,
+      managed_members: memberEvidence,
+      managed_native_boundaries: boundaryEvidence,
+    });
+    if (!projected.ok) throw projected.error;
+    const envelope = parseEvidence(projected.value);
+    const rootSha256 = managedApplicationGraphResultSchema.parse(
+      envelope.normalized_result,
+    ).root_artifact_sha256;
+
+    expect(applicationSourcesFromEvidence([envelope], rootSha256)).toEqual([]);
+    expect(() =>
+      projectEvidenceToBehavioralGraph(rootSha256, {
+        records: [envelope],
+        nativeGraphs: [],
+        applicationSources: [],
+        nonTargetEvidence: "exclude-with-coverage",
+      }),
+    ).not.toThrow();
+    expect(
+      applicationSourcesFromEvidence(
+        [envelope, artifactEvidence, memberEvidence, boundaryEvidence],
+        rootSha256,
+      ),
+    ).toHaveLength(1);
   });
 });
 

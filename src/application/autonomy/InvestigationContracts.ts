@@ -24,6 +24,13 @@ export const commandSchema = z.strictObject({
 export const investigationConfigSchema = z
   .strictObject({
     binaryPath: z.string().min(1),
+    /** Application artifact digests explicitly declared part of this target. */
+    applicationArtifactSha256s: z
+      .array(z.string().regex(/^[a-f0-9]{64}$/u))
+      .default([])
+      .refine((digests) => new Set(digests).size === digests.length, {
+        message: "Application artifact digests must be unique",
+      }),
     workspace: z.string().min(1),
     original: commandSchema,
     replica: commandSchema,
@@ -140,7 +147,9 @@ export const parseInvestigationState = (input: unknown): InvestigationState => {
     applicationSources: applicationSourcesFromEvidence(
       state.evidence,
       state.binarySha256,
+      state.config.applicationArtifactSha256s,
     ),
+    applicationArtifactSha256s: state.config.applicationArtifactSha256s,
     nonTargetEvidence: "exclude-with-coverage",
   });
   if (state.behavioralGraph === undefined) {

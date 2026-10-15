@@ -580,7 +580,10 @@ export class AutonomousInvestigation {
           applicationSources: applicationSourcesFromEvidence(
             this.state.evidence,
             this.state.binarySha256,
+            this.state.config.applicationArtifactSha256s,
           ),
+          applicationArtifactSha256s:
+            this.state.config.applicationArtifactSha256s,
           nonTargetEvidence: "exclude-with-coverage",
         },
       );
