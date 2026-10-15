@@ -1,437 +1,130 @@
 <div align="center">
-  <img src="docs/images/re-agent-mark.png" alt="RE-Agent logo: software inspection, evidence, and verification" width="160" />
+  <img src="docs/images/re-agent-mark.png" alt="RE-Agent" width="144" />
   <h1>RE-Agent</h1>
-  <p><strong>Reverse Engineering Agent</strong></p>
-  <p>Investigate, maintain, and verify software that no longer has dependable support.</p>
+  <p><strong>Reverse Engineering Agent for Legacy Software Maintenance</strong></p>
+  <p>Investigate unsupported software. Recover documented behavior. Verify repairs and independent ports.</p>
 </div>
 
-RE-Agent is a local-first toolkit for **authorized maintenance, compatibility repair, and independent porting of discontinued software and games**. A connected coding agent combines focused skills with RE-Agent’s existing static/runtime analysis, evidence, checkpoints, and bounded build/test/repair workflows. Maintainers can add modular skills without creating a separate platform.
+RE-Agent is a **local-first, evidence-driven reverse-engineering toolkit** for maintainers of authorized legacy **desktop applications, command-line software, and games**. It connects coding agents to static analysis, controlled runtime observation, memory evidence, and bounded reconstruction/verification workflows through existing CLI and MCP interfaces.
 
-Source repository: [heaven-hm/re-agent](https://github.com/heaven-hm/re-agent). Package name: `re-agent`. See [installation](docs/installation.md) for supported CLI commands and MCP setup.
+**Status:** Active development. RE-Agent does **not** automatically recreate arbitrary applications or prove whole-program equivalence. Scope, platform support, execution permissions, and available observations determine what can be verified.
 
-**Legacy maintenance is the product goal; not every existing benchmark is a legacy-support case study.** The strongest binary-only example currently recorded in this repository is the Project IGI 2 GConv toolchain: the supplied 2003 Windows PE files now have a hash-bound static inventory, with a separately implemented QVM inspection tool. This is still a partial investigation: no vendor bug fix, full QVM engine, DLL ABI replacement, or complete game port has been verified. The currently retained Calculator, managed-game, and recent open-source samples validate narrower pipeline components; they do not demonstrate maintenance of a discontinued closed-source product. See [the GConv evidence and limits](benchmarks/native-windows-ports/gconv/README.md) and [rights-screened target catalog](docs/legacy-target-catalog.md).
+## What it is built for
 
-[![MCP tool catalog](https://img.shields.io/badge/MCP-tool_catalog-5c4ee5?style=flat-square)](docs/mcp-contracts.md#generated-catalog)
+| Workstream | Intended outcome | Evidence required |
+| --- | --- | --- |
+| **Legacy maintenance** | Reproduce a failure, identify dependencies and platform assumptions, repair an authorized implementation | Original binary identity, reproducer, before/after regression |
+| **Native software analysis** | Investigate PE/ELF/Mach-O code paths and binary interfaces | Function inventory, call references, provider identity and limitations |
+| **Runtime and memory investigation** | Correlate observed behavior with static hypotheses | Authorized process/trace identity, bounded capture, reproducible conditions |
+| **Independent application porting** | Reimplement a declared behavior slice on a new platform | Matching original/replica scenarios and explicit unsupported behavior |
+| **Game preservation engineering** | Examine script formats, asset pipelines, engine interactions and gameplay behavior | File-format evidence, state/input traces, asset and frame comparisons where applicable |
+| **Verification** | Detect regressions and expose unknown behavior | Raw original/candidate observations, explicit comparison rules and coverage |
 
-## Legacy maintenance and modular skills
+## Real-world investigation record
 
-- Discover built-in and local community skills: `node scripts/rea.mjs maintenance-skills`.
-- Bind a supported-scope target and prepare a hosted workflow: `node scripts/rea.mjs maintenance-plan request.json`.
-- Execute a caller-supplied bounded comparison/repair plan: `node scripts/rea.mjs maintenance-run request.json controller-plan.json checkpoint.json` (supports `--resume`).
-- Scan captured memory bytes without attaching or writing: `node scripts/rea.mjs memory-snapshot-pattern snapshot.bin "48 8B ?? 90"`.
-- The host coding agent follows selected skills to reproduce issues, collect static/runtime evidence, repair an isolated replica, build, compare and retain regressions using existing tools. A prepared plan is not a completed scan or repair; arbitrary closed-source reconstruction is not guaranteed.
+### Project I.G.I. 2 — GConv / QVM tooling (2003 Windows PE32)
 
-See [workflow and verification](docs/legacy-maintenance.md), [community skill format](docs/community-skills.md), [audited cheat-agent integration](docs/cheat-agent-integration.md) and [supported-use policy](USAGE_POLICY.md). Nine bundled modules cover rights/provenance, triage, static diagnosis, runtime/memory observation, same-platform issue repair, independent cross-platform porting, verification and release review. Discovery never executes community code. The rights-aware binary target catalog is maintained in `docs/legacy-target-catalog.md`. See the [macOS validation record and reproduction command](docs/re-agent-maintenance-validation.md).
+This is the project's **primary documented legacy investigation**, not a completed legacy-game port.
 
-### 🧭 What RE-Agent is for
+| Component | Evidence and result | Remaining work |
+| --- | --- | --- |
+| Executable and DLL inventory | Hash-bound examination of `gconv.exe`, `gconvapi.dll` and `vqdll.dll`; function/import/export records | Link native exports and calls to verified runtime semantics |
+| QVM format work | Header/strings and partial instruction-format recovery; independently implemented `qvmtool` | Full QVM execution, native registration and error/edge semantics |
+| Behavioral comparison | Historical 120-script error-message comparison receipt | Reproducible replay corpus and fresh verification on supported worker |
+| Porting / compatibility | Analysis and limited independent tooling | Full DLL ABI, codec compatibility, app/game port and release rights not verified |
 
-RE-Agent is a **reverse engineering agent for maintaining software and games**. A connected coding agent uses its CLI/MCP operations and selected skills to investigate an authorized target, preserve evidence, and implement or verify a scoped change. It is useful for:
+**Evidence:** [GConv case study](benchmarks/native-windows-ports/gconv/README.md) · [static inventory](benchmarks/native-windows-ports/gconv/analysis/gconv-functions-radare2.json) · [rights-screened target catalog](docs/legacy-target-catalog.md)
 
-- Finding reproducible bugs in discontinued desktop software and games.
-- Diagnosing compatibility failures, crashes, missing dependencies, file-format problems, and operating-system assumptions.
-- Recovering behavior needed to keep an unsupported application working or to build an independent port.
-- Examining suspicious binaries defensively in an isolated, authorized environment, documenting observed behavior, and recommending remediation or removal.
-- Verifying repairs with regression tests and explicit evidence, while keeping unknown behavior marked as unknown.
+**Do not infer:** a repaired original application, full IGI engine recreation, complete QVM execution, or unrestricted rights to original binaries/assets.
 
-For defensive malware analysis, use an isolated lab and focus on identification, behavior documentation, and protecting or repairing the affected software. RE-Agent does not provide malware deployment, persistence, credential theft, evasion, exploitation, cheat/trainer creation, or unauthorized process modification. See the [supported-use policy](USAGE_POLICY.md).
+### Evidence gallery
 
-### 🧩 Recommended skills
+Screenshots are shown only when their provenance and capture scope are documented. An identical screenshot alone does not prove input replay or state equivalence.
 
-The nine bundled maintenance modules are the default skill set. A coding agent should select only the modules needed for the investigation; each module supplies focused instructions and required RE-Agent operations.
+- [Retained native/game capture evidence and limitations](docs/verification/rea-engine/) — contains captured images and manifests; several images are fixture comparisons rather than legacy-port proofs.
+- [Game behavior verification contract](docs/game-behavior-verification.md) — outlines state, input and frame requirements.
+- [Complete experimental benchmark inventory](benchmarks/README.md) — contains development fixtures and partial reconstructions, clearly separated from actual legacy-maintenance case studies.
 
-| Skill                                                                                | Use it to                                                                                                                           |
-| ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
-| [legacy-rights-provenance](maintenance-skills/legacy-rights-provenance/SKILL.md)     | Record artifact identity and separate analysis, modification, patch, and redistribution permissions.                                |
-| [legacy-triage](maintenance-skills/legacy-triage/SKILL.md)                           | Bind an authorized target, record its hash and support status, reproduce the reported issue, and create an evidence-backed backlog. |
-| [legacy-static-diagnosis](maintenance-skills/legacy-static-diagnosis/SKILL.md)       | Inspect functions, callers, imports, strings, data structures, and platform assumptions in the selected static-analysis provider.   |
-| [legacy-runtime-memory](maintenance-skills/legacy-runtime-memory/SKILL.md)           | Capture authorized process behavior and inspect caller-provided memory snapshots without modifying the original binary.             |
-| [legacy-repair-port](maintenance-skills/legacy-repair-port/SKILL.md)                 | Make a scoped repair or independent port in a separate workspace, with evidence linked to the change.                               |
-| [legacy-bug-repair](maintenance-skills/legacy-bug-repair/SKILL.md)                   | Reproduce a real defect in an authorized legacy build, repair the supported branch, and preserve a regression test.                 |
-| [legacy-cross-platform-port](maintenance-skills/legacy-cross-platform-port/SKILL.md) | Reconstruct a declared behavior from binary/runtime evidence and implement it for a new OS with explicit asset and API boundaries.  |
-| [legacy-port-verification](maintenance-skills/legacy-port-verification/SKILL.md)     | Compare original and candidate behavior, preserve mismatches as regressions, and state the exact test scope.                        |
-| [legacy-release-review](maintenance-skills/legacy-release-review/SKILL.md)           | Review evidence, known limitations, licensing, packaging, and whether release claims match the results.                             |
+**No verified end-to-end legacy application port with a complete original-versus-replica screenshot series is currently documented.** That is an engineering gap, not something to cover with illustrative screenshots.
 
-The bundled `legacy-rights-provenance` module checks target provenance and separates analysis, modification, publication, patch and redistribution permissions. `legacy-repair-port` remains as a compatibility workflow; the two focused skills clarify same-platform repair versus cross-platform porting. The host agent may also route to installed specialist skills such as Ghidra or radare2 analysis, binary diffing, code audit, supply-chain review, and defensive malware analysis. Those are **optional host-agent skills**, not additional RE-Agent bundled modules; their availability and tools must be checked in the connected agent before use. Community modules can be added in the documented format, but discovery does not execute them.
+## Analysis and reconstruction architecture
 
 ```mermaid
 flowchart LR
-    TARGET["Authorized legacy app or game<br/>or isolated suspicious binary"] --> SCOPE["Target identity · permission ·<br/>support status · task limits"]
-    SCOPE --> SKILLS["Selected maintenance skills<br/>triage · static · runtime/memory<br/>repair · verification · release"]
-    SKILLS --> TOOLS["Existing RE-Agent / REA tools<br/>static analysis · runtime evidence<br/>memory snapshots · comparison"]
-    TOOLS --> EVIDENCE["Evidence-backed findings<br/>functions · traces · failures<br/>mismatches · uncertainty"]
-    EVIDENCE --> AGENT["Host coding agent<br/>investigate · repair · port"]
-    AGENT --> BUILD["Isolated candidate<br/>build · execute · regressions"]
-    BUILD --> VERIFY["Scoped verification<br/>results · limits · release review"]
-    VERIFY -->|"new mismatch"| EVIDENCE
-    VERIFY -->|"documented outcome"| REPORT["Report and preserved evidence"]
-
-    classDef target fill:#fff7ed,stroke:#c2410c,color:#7c2d12
-    classDef gate fill:#fef3c7,stroke:#b45309,color:#78350f
-    classDef work fill:#eff6ff,stroke:#2563eb,color:#1e3a8a
-    classDef proof fill:#ecfdf5,stroke:#059669,color:#064e3b
-    class TARGET target
-    class SCOPE gate
-    class SKILLS,TOOLS,AGENT,BUILD work
-    class EVIDENCE,VERIFY,REPORT proof
+  T[Authorized original binary and assets] --> S[Static investigation]
+  T --> R[Controlled runtime and memory evidence]
+  S --> E[Canonical evidence and bounded hypotheses]
+  R --> E
+  E --> A[Host coding agent and reconstruction workspace]
+  A --> C[Candidate build]
+  C --> V[Independent differential verification]
+  T --> V
+  V -->|Mismatch and counterexample| E
+  V --> O[Scoped report: pass, mismatch, unknown]
 ```
 
-## Verification claims and licensing
+**Existing foundations:** Ghidra/IDA/Hopper providers and other artifact workflows; Frida/LLDB/process observations; authenticated Evidence records; persistent investigation checkpoints; bounded build/test/repair loops; selected conditional Z3 expression proofs.
 
-Byte-identical artifacts require exact byte comparisons. A native port across OS/CPU architectures normally has different executable bytes; matching a declared finite suite establishes that suite's observations only. Missing evidence stays unverified. Existing benchmark sections below retain their original limited scope and do not prove universal application/game equivalence.
+**Important limits:** Semantic heap recovery, generalized algorithm reconstruction, broad differential fuzzing, universal binary equivalence, and complete native Windows/GUI-worker acceptance are not established. Tools discovered on disk are not necessarily installed, integrated, or verified for a target.
 
-RE-Agent's code remains [MIT](LICENSE), with upstream REA attribution and selected cheat-agent MIT notices preserved. The project supports beneficial, authorized legacy maintenance, not cheats, sabotage or unauthorized changes. The use policy does not rewrite the MIT license. Original applications/assets and optional third-party tools retain their own licenses and redistribution requirements.
+Read [architecture and autonomous reconstruction](docs/autonomous-reconstruction.md), [runtime observation](docs/frida-instrumentation.md), [verification scope](docs/autonomous-reconstruction-benchmark.md), and [open engineering issues](https://github.com/heaven-hm/re-agent/issues).
 
-[![MCP tool catalog](https://img.shields.io/badge/MCP-tool_catalog-5c4ee5?style=flat-square)](docs/mcp-contracts.md#generated-catalog)
+## Maintenance workflow
 
-Setup supports the [supported agents](docs/installation.md#supported-agents). The upstream [MCP registry entry](docs/installation.md#mcp-registry) belongs to `morluto/rea`; this checkout is not registered there. See the [generated MCP tool catalog](docs/mcp-contracts.md#generated-catalog).
+1. **Authorize and bind the target.** Record original hashes, rights and support status. Preserve originals.
+2. **Reproduce the defect or behavior.** Capture inputs, dependencies, environment and failures.
+3. **Correlate static and runtime evidence.** Separate observed facts from inferred hypotheses.
+4. **Repair or port in a separate workspace.** Do not modify the original binary by default.
+5. **Compare independently.** Preserve mismatches as regression inputs.
+6. **Report scope and limitations.** A passing finite suite proves only its declared observations.
 
-## Architecture at a glance
+The nine documented maintenance modules cover provenance, triage, static diagnosis, runtime/memory observation, repair, porting, verification and release review. For the current branch's *actual installed* catalog, run:
 
-RE-Agent extends the existing [REA](https://github.com/morluto/rea) analysis ecosystem with a bounded investigation and reconstruction layer. The diagrams below distinguish inherited providers from engine-specific orchestration. They describe supported workflows, **not** a promise of fully automatic reconstruction for arbitrary binaries.
-
-```mermaid
-flowchart TB
-    U["Developer / coding agent"] --> I["CLI · MCP · local dashboard"]
-    I --> C["Autonomous investigation controller"]
-    C --> S["Durable workspace · checkpoints · stop/resume"]
-
-    subgraph EXISTING["Existing REA analysis capabilities"]
-        P["Static analysis providers<br/>Ghidra · managed assemblies · artifacts"]
-        R["Runtime and process evidence<br/>capture · instrumentation"]
-    end
-
-    subgraph ENGINE["RE-Agent extensions"]
-        D["Evidence-led discovery"]
-        T["Owned Frida trace correlation"]
-        A["Bounded affine recovery"]
-        V["Conditional Z3 equivalence checks"]
-        B["Build · test · bounded repair"]
-    end
-
-    C --> D
-    D --> P
-    D --> R
-    R --> T
-    P --> A
-    T --> A
-    A --> V
-    V --> B
-    B --> S
-    B --> O["Scoped evidence · reports · benchmark results"]
-    O --> I
-
-    classDef entry fill:#1e293b,stroke:#64748b,color:#ffffff
-    classDef control fill:#1d4ed8,stroke:#60a5fa,color:#ffffff
-    classDef upstream fill:#f1f5f9,stroke:#94a3b8,color:#0f172a
-    classDef extension fill:#ecfeff,stroke:#0891b2,color:#164e63
-    classDef output fill:#ecfdf5,stroke:#059669,color:#065f46
-    class U,I entry
-    class C,S control
-    class P,R upstream
-    class D,T,A,V,B extension
-    class O output
+```bash
+node scripts/rea.mjs maintenance-skills
 ```
 
-### Bounded investigation and repair workflow
+The module additions are tracked separately in [PR #23](https://github.com/heaven-hm/re-agent/pull/23); the catalog on `develop` may contain fewer modules until those changes merge. Community skill discovery reads metadata and instructions; it does not execute discovered code.
 
-Each iteration works from collected evidence and explicit constraints. Verification is conditional and target-dependent; an unsupported recovery or exhausted budget produces a recorded result rather than an equivalence claim.
+See [maintenance workflow](docs/legacy-maintenance.md) and [community skill format](docs/community-skills.md).
 
-```mermaid
-flowchart TD
-    START["Select authorized target and investigation plan"] --> BASE["Collect baseline static/runtime evidence"]
-    BASE --> H["Form a candidate hypothesis"]
-    H --> REC["Recover or implement a bounded candidate"]
-    REC --> TEST["Build and execute declared tests"]
-    TEST --> MATCH{"Declared checks pass?"}
-    MATCH -- "Yes" --> VERIFY["Run applicable independent / Z3 checks"]
-    VERIFY --> OUT{"Evidence supports claim?"}
-    OUT -- "Yes" --> DONE["Record scoped result and artifacts"]
-    OUT -- "No" --> LIMIT{"Repair budget available?"}
-    MATCH -- "No" --> LIMIT
-    LIMIT -- "Yes" --> REPAIR["Record mismatch · checkpoint · repair or roll back"]
-    REPAIR --> TEST
-    LIMIT -- "No" --> STOP["Stop with limitations and preserved evidence"]
-    classDef start fill:#1e293b,stroke:#64748b,color:#ffffff
-    classDef step fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
-    classDef decision fill:#fef3c7,stroke:#d97706,color:#78350f
-    classDef success fill:#dcfce7,stroke:#16a34a,color:#14532d
-    classDef stopped fill:#fee2e2,stroke:#dc2626,color:#7f1d1d
-    class START start
-    class BASE,H,REC,TEST,VERIFY,REPAIR step
-    class MATCH,OUT,LIMIT decision
-    class DONE success
-    class STOP stopped
-```
+## Build and connect a coding agent
 
+Requires a supported Node.js release and appropriate external analyzers for the target.
 
-### Embedded memory-analysis components
-
-RE-Agent contains a [Cheat Agent source integration](integrations/cheat-agent)
-and a pinned [GTLibCpp submodule](integrations/gtlibcpp) for typed process
-memory access. Clone with `--recurse-submodules` and follow the
-[embedded engines build guide](docs/embedded-memory-engines.md). The
-Cheat Agent source snapshot is not yet synchronized automatically, and a
-working end-to-end RE-Agent MCP provider is still tracked separately.
-GTLibCpp retains its own restrictive license; it is not relicensed under
-RE-Agent's MIT terms.
-
-### Extension boundary and provenance
-
-```mermaid
-flowchart LR
-    subgraph UP["Upstream morluto/rea"]
-        REA["CLI / MCP and agent workflows"]
-        PROVIDERS["Ghidra · Frida · native / managed / web analysis"]
-    end
-    subgraph EXT["heaven-hm/re-agent additions"]
-        AUTO["Persistent autonomy controller"]
-        PROOF["Affine recovery · constrained verification"]
-        TOOL["Verified tool bootstrap · offline bundle builder"]
-        UI["Investigation dashboard · reconstruction evidence"]
-    end
-    REA --> AUTO
-    PROVIDERS --> AUTO
-    AUTO --> PROOF
-    AUTO --> UI
-    TOOL -. "Optional local dependencies" .-> PROVIDERS
-    classDef inherited fill:#f1f5f9,stroke:#64748b,color:#0f172a
-    classDef added fill:#eff6ff,stroke:#2563eb,color:#1e40af
-    class REA,PROVIDERS inherited
-    class AUTO,PROOF,TOOL,UI added
-```
-
-For implementation details, see the [investigation controller](src/application/autonomy/AutonomousInvestigation.ts), [autonomous discovery](src/composition/autonomousDiscovery.ts), [Frida correlation adapter](src/native/FridaAutonomyTrace.ts), [affine recovery](src/application/autonomy/AffineRecovery.ts), [conditional proof implementation](src/application/autonomy/AffineEquivalenceProof.ts), and [dependency packaging limits](docs/autonomy-tool-bootstrap.md).
-
-### What differs from upstream REA
-
-| Area                           | Reverse Engineering Agent addition                                                                                            | Source / reproducible evidence                                                                                                                          |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Autonomous reconstruction      | Persistent checkpoints, bounded build/test/repair, rollback, mismatch regression inputs                                       | [Controller](src/application/autonomy/AutonomousInvestigation.ts), [25/25 fixture report](docs/verification/rea-extended/fixture-report.json)           |
-| Unknown function investigation | Existing static providers feed runtime hypotheses and independent bounded affine reconstruction                               | [Discovery](src/composition/autonomousDiscovery.ts), [recovery](src/application/autonomy/AffineRecovery.ts)                                             |
-| Runtime/static correlation     | Owned Frida Gadget profile checks binary identity, ASLR and instruction prefix, records arguments/returns and cleanup         | [Adapter](src/native/FridaAutonomyTrace.ts), [five-call report](docs/verification/rea-extended/frida-report.json)                                       |
-| Conditional verification       | Z3 checks extracted scalar expressions under explicit assumptions                                                             | [Proof implementation](src/application/autonomy/AffineEquivalenceProof.ts), [verification guide](docs/autonomous-reconstruction-benchmark.md)           |
-| Tool installation and bundles  | Reuse installed tools; pinned official downloads, hashes, health checks, offline wheel/source bundle builder                  | [Bootstrap and license limits](docs/autonomy-tool-bootstrap.md)                                                                                         |
-| Coding-agent integration       | Existing CLI/MCP plus autonomous investigation operations and packaged skill instructions; host Codex/Claude can operate them | [Agent workflow](.agents/skills/reverse-engineer-anything/references/autonomous-reconstruction.md), [workflow guide](docs/autonomous-reconstruction.md) |
-| Interface                      | Local evidence/status dashboard with pause/resume/stop                                                                        | [Dashboard](src/composition/autonomyDashboard.ts)                                                                                                       |
-
-These are additions to the upstream tool ecosystem. Ghidra, native UI, browser analysis and general Frida capabilities already exist upstream and are not claimed as inventions of this fork.
-
-### Binary-only legacy case study: IGI 2 GConv
-
-The [GConv record](benchmarks/native-windows-ports/gconv/README.md) starts from locally supplied 2003 Windows PE32 binaries, not vendor source. A fresh offline radare2 6.2.0 scan hash-bound `gconv.exe`, `gconvapi.dll`, and `vqdll.dll`; it recorded 487 heuristic function entries in the EXE, enumerated the DLL's `gc*` exports and the codec's `VqCalc` export, and retained raw function/import/export records. That scan used radare2 directly. The current CLI deep-analysis selector still rejects `--provider radare2` (it offers Ghidra, Hopper, and IDA); RE-Agent's new radare2 MCP operations have not yet been exercised end to end on this target. This is a concrete integration gap to close. The binary evidence points to a useful next behavior slice: connect one exported API/native call to an independently implemented test, while keeping unknown semantics unresolved.
-
-**Status: partial static analysis; no confirmed vendor bug or repair yet.** The checkout also retains a 120-script error-parity receipt, but the private original corpus and a replay harness are not present, so this turn did not reproduce that historical result. Full QVM execution, native-call semantics, DLL ABI/codec compatibility, a Windows runtime trace, and a full game port remain unverified. The supplied Windows files are not committed; their SHA-256 values and local-only status are documented. A supported release scope is also unresolved: the target catalog records why public modification/redistribution is not currently cleared.
-
-Current genuine evidence is the machine-readable [radare2 function inventory](benchmarks/native-windows-ports/gconv/analysis/gconv-functions-radare2.json), [static analysis note](benchmarks/native-windows-ports/gconv/analysis/static-analysis.md), retained [imports/exports](benchmarks/native-windows-ports/gconv/analysis/), and [existing differential receipt](benchmarks/native-windows-ports/gconv/gconv-diff.txt). GConv is a console tool, and no runtime screenshot is claimed. The documented terminal records are the appropriate evidence until a reproducible runtime capture is added.
-
-### Engineering validation fixtures (not legacy-support case studies)
-
-The following earlier comparisons help validate specific analysis and comparison plumbing, but are weak evidence for maintenance of unsupported proprietary applications: the Calculator is an actively supported Apple app; TicTacToe and Luhn are managed examples; and the Batch 1/Batch 2 native samples are open-source projects. They remain in the repository as transparent engineering fixtures and their original reports are preserved. Do not present them as proof that RE-Agent found and repaired a defect in closed-source legacy software.
-
-#### Software and game: exact measured fixture comparisons
-
-| Target                                                                             | Result                                                                                                     | Proof                                                                                                                                                                                                                                                                                     |
-| ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| LTRData Luhn utility, reconstructed from its published .NET binary                 | **5/5 suites: identical terminal bytes**, 230 numeric/Unicode lines plus mode, usage and termination cases | [Report](docs/verification/re-agent/luhn-report.json), [complete execution evidence](docs/verification/re-agent/software-execution-evidence.zip), [reconstructed executable](benchmarks/luhn/replica/Replica.dll)                                                                     |
-| Published TicTacToe-AI Windows managed game, rebuilt from recovered code/resources | **19,683/19,683 board configurations: identical observed state bytes; 6/6 frames: identical PNG bytes**    | [Report](docs/verification/re-agent/game-report.json), [complete execution evidence](docs/verification/re-agent/game-execution-evidence.zip), [original executable](benchmarks/tictactoe/original/TicTacToe.exe), [rebuilt executable and source](benchmarks/tictactoe/reconstructed) |
-| Native branch validation fixture                                                   | 25/25 declared cases after repair                                                                          | [Report](docs/verification/rea-extended/fixture-report.json)                                                                                                                                                                                                                              |
-| Installed Apple Calculator                                                         | 10/10 final numeric-display comparisons in the recorded smaller suite                                      | [Report](docs/verification/rea-extended/calculator-report.json); complete UI and expanded suite remain unverified                                                                                                                                                                         |
-
-**These results prove exact equality of the listed captured bytes, not byte-identical executable files or universal equivalence.** Every original/replica executable hash differs. The game comparison exhausts the defined board input space for its win/draw function; AI, RNG, all menus, timing and whole-game behavior remain unverified. The Windows managed artifacts ran on macOS .NET/Mono; this is not proof of native Windows OS execution or native AppKit port fidelity.
-
-The analysis used REA's `inspect-managed-members`, `import-managed-reconstruction` and `capture-process` workflows, with ILSpy recovery and real compilation. The host coding agent operated the engine; no model API key was required. Game source was recovered from the binary, not consulted from the original repository. A pinned original source archive was subsequently retained solely for GPL redistribution obligations. The independent software implementation preserves a recovered quirk: checksum parity counts UTF-16 string length, including punctuation.
-
-#### Software capture proof viewer
-
-This is an actual screenshot of the engine's proof viewer, captured through REA's owned browser scenario after recomputing the supplied terminal-file hashes. It shows recorded original/replica CLI output; it is not an original-app GUI screenshot. [Browser evidence and verified cleanup](docs/verification/re-agent/proof-browser-evidence.json).
-
-![Engine software byte-comparison proof viewer](docs/verification/re-agent/software-proof-view.png)
-
-#### Actual original and rebuilt game renders
-
-These are actual `Form.DrawToBitmap` renders after the same button-handler sequence on the same Mono/X11 runtime. They are not Windows desktop screenshots. Their PNG SHA-256 is identical: `67673e4f3536084732a35c6da809ea5a69ea89afb0f336c3870a9b0baaa855be`.
-
-| Original compiled game                                                          | Rebuilt game                                                                  |
-| ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| ![Original game rendered frame](docs/verification/re-agent/game-original.png) | ![Rebuilt game rendered frame](docs/verification/re-agent/game-replica.png) |
-
-[Interactive proof report](docs/verification/re-agent/index.html) · [Reproduction and scope](benchmarks/README.md) · [artifact SHA-256 inventory](docs/verification/re-agent/manifest.json)
-
-### Installed tools versus distributed tools
-
-A 2026-10-13 validation host reported Frida 17.23.3, LIEF 1.0.0, Z3 5.1.0.0, Capstone 5.0.9 and Pillow 12.3.0; tool presence varies by host (Frida/LIEF absent on some checkouts — verify with the autonomy tools probe before relying on them). Ghidra/radare2 and native compilers are reused locally. **Bundled now:** the signature-verified ILSpy package and the built X11 libgdiplus library with source and licenses. The [preview release](https://github.com/heaven-hm/re-agent/releases/tag/engine-preview-2026-10-13) also carries the checksum-verified, unmodified Ghidra 12.1.2 archive; see its [manifest](third_party/ghidra/manifest.json). **A clone does not contain every installed external tool binary.** The installer and offline bundle builder are shipped in source; generated local bundles are not a license-approved public distribution. Frida/LIEF native dependency source and license coverage require further audit. Optional licensed tools and Apple Calculator are not redistributed. See [tool profiles and limitations](docs/autonomy-tool-bootstrap.md).
-Development health checks confirmed Frida 17.23.3, LIEF 1.0.0, Z3 5.1.0.0, Capstone 5.0.9 and Pillow 12.3.0. Ghidra/radare2 and native compilers are reused locally. This checkout contains local ILSpy and ARM64 libgdiplus artifacts, but the npm package contains only their metadata, licenses and notices; the tool binaries are excluded while redistribution review is incomplete. The local ILSpy package hash matches its manifest, but NuGet signature verification did not succeed on this host, so it is not described as signature-verified. The [preview release](https://github.com/heaven-hm/re-agent/releases/tag/engine-preview-2026-10-13) carries the checksum-recorded Ghidra 12.1.2 archive as an external release asset; see its [manifest](third_party/ghidra/manifest.json). **A clone does not contain every installed external tool binary.** The installer and offline bundle builder are shipped in source; generated local bundles are not an approved public distribution. Frida/LIEF native dependency source and license coverage require further audit. Optional licensed tools and Apple Calculator are not redistributed. See [tool profiles and limitations](docs/autonomy-tool-bootstrap.md).
-
-See the [reverse-engineering tool coverage matrix](docs/reverse-engineering-tool-coverage.md) for a clearer separation between supported RE-Agent operations, host-installed tools, incomplete adapters, and the evidence required before a tool counts as integrated.
-
-# Professional maintenance fixtures (utilities and RE tooling)
-
-Independent macOS reconstructions of MIT-licensed native Windows
-productivity tools, recovered binary-first with REA (no original source
-consulted). Game ports were removed from this showcase: this repository
-demonstrates serious legacy-software support — defect finding, maintenance
-engineering, and cross-platform porting — not game cloning. Windows
-originals and macOS replicas are committed under
-`benchmarks/native-windows-ports/` with manifests, goldens and reports.
-
-| Target                | Original (Windows x64)                                           | macOS port                                     | Status                               |
-| --------------------- | ---------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------ |
-| legacy-notepad v1.2.1 | `original-binaries/legacy-notepad-x64.exe` (263KB, Win32)        | `notepad/replica/notepadmac` (Swift, AppKit)   | Unicode window + save-bytes verified |
-| Clipjar v1.2.0        | `original-binaries/clipjar.exe` (5.3MB, Rust)                    | `clipjar/replica/clipjarmac` (Swift, menu-bar) | SQLite capture/persist/dedupe PASS   |
-| imgview v0.3          | `original-binaries/imgview64.exe` (UPX stub, unpacked upx 5.2.1) | `imgview/replica/imgviewmac` (Swift, AppKit)   | PNG render verified                  |
-| PuTTY plink 0.85      | official w64 binary (MIT, 1MB)                                   | `benchmarks/plink/replica/plinkmac` (C, CLI)   | help/pgpfp/noargs byte-identical     |
-| IGI2 QVM toolchain    | 2003 PE32 toolchain (user-supplied, unmodified)                  | `gconv/replica/qvmtool` (C, CLI)               | 120/120 error-behavior parity        |
-## Game behavior comparison
-REA includes a frame-sequence comparison command for exact PNG pixel checks:
-```sh
-npm run --silent compare:game-frames -- ./original-frames ./replica-frames
-```
-It emits a hash-bound JSON receipt and fails on missing or changed frames.
-This verifies only the captured visual frames; matched input replay, internal
-game-state oracles, and full gameplay equivalence remain separate requirements.
-See the [game verification guide](docs/game-behavior-verification.md) for the
-method, FFmpeg metrics, graphics-trace tool limits, and evidence requirements.
-Independent macOS reconstructions and one partial image-viewer investigation of
-six MIT-licensed native Windows targets, recovered binary-first with REA (no
-original source consulted). Six Windows originals and the available macOS
-replicas are committed under
-| Target                | Original (Windows x64)                                           | macOS port                                     | Status                                                   |
-| --------------------- | ---------------------------------------------------------------- | ---------------------------------------------- | -------------------------------------------------------- |
-| Snake v1.1.0          | `original-binaries/snake-windows-x86_64.exe` (55KB)              | `snake/replica/snakemac` (C, terminal)         | Replica builds; parity unverified (no paired transcript) |
-| PixelTetris v1.0.0    | `original-binaries/Pixeltetris.exe` (1.1MB, SDL2)                | `pixeltetris/replica/pixelmac` (C, SDL2)       | Replica menu/gameplay screenshots; parity unverified     |
-| Tetris v1.0.0         | `original-binaries/Tetris.exe` (2.2MB, SDL2)                     | `tetris/replica/tetrismac` (C, SDL2)           | Replica menu/gameplay screenshots; parity unverified     |
-| legacy-notepad v1.2.1 | `original-binaries/legacy-notepad-x64.exe` (263KB, Win32)        | `notepad/replica/notepadmac` (Swift, AppKit)   | Unicode window verified                                  |
-| Clipjar v1.2.0        | `original-binaries/clipjar.exe` (5.3MB, Rust)                    | `clipjar/replica/clipjarmac` (Swift, menu-bar) | SQLite capture/persist/dedupe PASS                       |
-| imgview v0.3          | `original-binaries/imgview64.exe` (UPX stub, unpacked upx 5.2.1) | `imgview/replica/imgviewmac` (Swift, AppKit)   | PNG render verified                                      |
-
-## Maintenance evidence
-
-Notepad macOS port, live Unicode window:
-
-![notepadmac window](benchmarks/native-windows-ports/screenshots/notepadmac-hello.png)
-
-Found defect example: the PixelTetris original crashes with a null-deref
-page fault when its font asset is missing (`Could not load font!` then
-`wine: Unhandled page fault`), instead of exiting cleanly — root-caused
-to a missing early return in `FUN_140019080` and recorded in
-`pixeltetris/DEFECT-missing-font-crash.md`.
-imgview macOS port, displaying a PNG with its image status bar:
-
-![imgviewmac window](benchmarks/native-windows-ports/screenshots/imgviewmac-app.png)
-
-PixelTetris macOS replica, live menu + gameplay windows (replica captures only; no original-side visual comparison):
-
-![pixelmac menu](benchmarks/native-windows-ports/screenshots/pixelmac-menu4.png)
-![pixelmac gameplay](benchmarks/native-windows-ports/screenshots/pixelmac-play.png)
-
-Snake: one original terminal transcript is retained, but the paired replica
-transcript needed to reproduce the former parity claim is absent. Clipjar:
-synthetic capture → SHA-256 row,
-restart persistence and hash-dedupe verified against live SQLite.
-
-See `benchmarks/native-windows-ports/reports/` (license audit, binary
-analysis, functional results, limitations). Whole-executable identity is
-not claimed; unverified items are listed per target, not hidden.
-
-## Native Binary Reconstruction — Benchmark Batch 2
-
-Batch 2 also uses published compiled binaries, but its targets are openly
-licensed projects. They are useful pipeline benchmarks, not evidence of
-maintaining closed-source legacy products. Their results below remain scoped
-to the listed features.
-
-The complete app/game inventory across managed examples, Batch 1 and Batch 2 is in the [package-checked benchmark catalog](benchmarks/catalog.json), with per-target implementation and evidence links in the [benchmark index](benchmarks/README.md).
-
-**Current result: incomplete.** The bat native CLI replica has 8/8 fresh,
-run-bound stdout/stderr/exit cases passing. ripgrep has 8/8 run-bound cases
-passing, with six requiring a documented relative-path separator normalization.
-The whole applications remain
-PARTIAL; no target has whole-application equivalence evidence.
-All six requested official Windows assets were downloaded, publisher SHA-256
-verified, and actual native x64 PE executables inventoried. No upstream
-implementation source was used. Originals and runtime assets stay private.
-
-| Target                    | Windows release and binary                                                                                                                 | macOS reconstruction                                                                                                                            | Functional comparison                              |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
-| OpenLieroX — C++ game     | [20260912.1 ZIP](https://github.com/openlierox/openlierox/releases/download/20260912.1/openlierox-20260912.1-windows.zip)                  | Unimplemented                                                                                                                                   | UNVERIFIED                                         |
-| SuperTux — C++ game       | [v0.7.0 portable ZIP](https://github.com/SuperTux/supertux/releases/download/v0.7.0/SuperTux-v0.7.0-win64-portable.zip)                    | Unimplemented                                                                                                                                   | UNVERIFIED                                         |
-| The Powder Toy — C++ game | [v100.1.400 EXE](https://github.com/The-Powder-Toy/The-Powder-Toy/releases/download/v100.1.400/powder-v100.1.400-x86_64-windows-mingw.exe) | Unimplemented                                                                                                                                   | UNVERIFIED                                         |
-| ripgrep — Rust utility    | [15.2.0 ZIP](https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15.2.0-x86_64-pc-windows-msvc.zip)                     | Independent C++17 subset; 8/8 run-bound cases pass (six after narrow path normalization)                                                        | PARTIAL                                            |
-| fd — Rust utility         | [v10.5.0 ZIP](https://github.com/sharkdp/fd/releases/download/v10.5.0/fd-v10.5.0-x86_64-pc-windows-msvc.zip)                               | Independent C++ ARM64 candidate; 14/15 declared cases match exact bytes against the CrossOver observations; full fd behavior remains unverified | PARTIAL                                            |
-| bat — Rust utility        | [v0.26.1 ZIP](https://github.com/sharkdp/bat/releases/download/v0.26.1/bat-v0.26.1-x86_64-pc-windows-msvc.zip)                             | C++ ARM64 replica; 8/8 declared stdout/stderr/exit cases pass with joined run IDs and fixture binding                                           | PASS for declared cases; whole application PARTIAL |
-
-Original executable SHA-256 values, distinct from release archive hashes:
-
-| Target         | Original PE SHA-256                                                |
-| -------------- | ------------------------------------------------------------------ |
-| OpenLieroX     | `0f79c968ab9aabd8cb99e173500fa241e883846fd3e0c9ca2f7f0bf3771fa5c1` |
-| SuperTux       | `6249f25a6ac1cc3d27955ca09852b8368618ce58ad9c13e0c5084051c2c02b43` |
-| The Powder Toy | `df32b616b31dabae10b82028731ebdfd6867c872198b81f29d418cbafbf460c3` |
-| ripgrep        | `14231169855ec5205cf5a1b6f1db358ff4aed4247c86b69ce8aae647c77f6680` |
-| fd             | `d67d27a8e375ed7e9bca2b506a9dd5082bc24547aeba908b863f6f8b8ab0c3b9` |
-| bat            | `9ea9f7ab1c27aa5c9390e91543f9f47c6bd17bc53f3e30ac9db762f28f55c4fd` |
-
-**Actual capabilities used:** existing REA MCP/Ghidra workflows and PE resource
-Evidence, installed compilers, tool health inventory, owned process supervision,
-and the existing autonomous controller's checkpoint creation/reopening. Deep
-analysis timed out or was cancelled under host memory/disk pressure. No Batch 2
-native function recovery is verified. Some bounded utility cases completed
-through CrossOver, as detailed in the per-target reports; actual Windows OS
-behavior remains unverified. The controller also
-rejected a compatibility launcher that differed from its hash-bound target.
-
-**New extension:** a reusable bounded file differential benchmark runner compares
-exact output-file bytes, diagnostics and exit outcomes in independent workdirs.
-Its infrastructure tests use actual child processes; they are separate from
-application fidelity tests. Windows workers, complete native recovery, FLOSS/capa
-integration and game reconstruction remain future work.
-
-The latest projection contains **31 run-bound cases: 30 passing, 1 differing,
-and 0 unverified**. This includes 8/8 raw-byte bat cases, 8/8 ripgrep cases
-(six search outputs pass only after path-separator normalization), and 14/15 fd
-cases; fd `--help` remains different. Original executions are CrossOver
-compatibility observations on macOS, not Windows OS results. The three Batch 2
-game targets remain analysis-only. See the [receipt-derived Batch 2 summary](benchmarks/native-batch-2/README.md)
-and [target reports](benchmarks/native-batch-2/reports/).
-
-[Full Batch 2 report](benchmarks/native-batch-2/reports/batch-2-overview.md) ·
-[binary/import inventory](benchmarks/native-batch-2/reports/binary-inventory.json) ·
-[license audit](benchmarks/native-batch-2/reports/license-audit.md) ·
-[native build/execution results](benchmarks/native-batch-2/reports/macos-build-results.md) ·
-[functional cases](benchmarks/native-batch-2/reports/functional-tests.json) ·
-[measured metrics](benchmarks/native-batch-2/reports/performance-results.json) ·
-[visual evidence status](benchmarks/native-batch-2/reports/visual-comparisons.md) ·
-[known blockers](benchmarks/native-batch-2/reports/known-limitations.md)
-
-## Build and use this repository
-
-```sh
+```bash
 git clone https://github.com/heaven-hm/re-agent.git
 cd re-agent
 npm ci
 npm run build:cached
-node scripts/print-mcp-config.mjs /absolute/path/to/target --local
 node scripts/rea.mjs --help
+node scripts/print-mcp-config.mjs /absolute/path/to/target --local
 ```
 
-Use the printed local MCP configuration with your host coding agent and the built packaged skill. A published upstream npm package is not this fork. The implementation retains compatible command names while the product identity is Reverse Engineering Agent.
+Use the generated MCP configuration with a supported host. Consult [installation](docs/installation.md), [CLI](docs/cli.md), and [MCP contracts](docs/mcp-contracts.md). The npm identity is `re-agent`; legacy command names exist for compatibility. Do not assume an upstream `rea` release contains fork-specific code.
 
-Setup supports [configured coding agents](docs/installation.md#supported-agents). Other MCP clients can use the [manual MCP registry instructions](docs/installation.md#mcp-registry).
+## Validation and development fixtures
 
-Setup supports [configured coding agents](docs/installation.md#supported-agents). Other MCP clients can use the [manual MCP registry instructions](docs/installation.md#mcp-registry).
+The repository retains arithmetic, UI, managed-program, and small open-source application/game benchmarks because they test specific components and regressions. **They are not showcased as professional legacy-support deliverables.** Their scoped results, unverified cases, capture files, and test commands remain in [benchmarks](benchmarks/README.md) and [validation reports](docs/re-agent-maintenance-validation.md).
 
-## Documentation
+A serious preservation case study should provide: independently identified original artifact; rights and environment; real reproducer; static/runtime evidence; candidate implementation and build instructions; replayable original/candidate comparisons; failure samples; platform matrix; and visual evidence where relevant. Until these exist, mark the target **PARTIAL** or **UNVERIFIED**.
 
-- [Autonomous reconstruction and host-agent workflow](docs/autonomous-reconstruction.md)
-- [Executed benchmarks and reproduction](docs/autonomous-reconstruction-benchmark.md)
-- [Static/runtime tool bootstrap and offline bundles](docs/autonomy-tool-bootstrap.md)
-- [CLI and evidence](docs/cli.md)
-- [Ghidra provider](docs/ghidra-provider.md)
-- [Managed .NET analysis](docs/managed-code-analysis.md)
-- [MCP contracts](docs/mcp-contracts.md)
-- [Generated MCP tool catalog](docs/mcp-contracts.md#generated-catalog)
-- [Licensing](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md)
+## Project map
 
-Report issues and contribute at [heaven-hm/re-agent](https://github.com/heaven-hm/re-agent).
+| Location | Purpose |
+| --- | --- |
+| `src/` | Providers, runtime capture, Evidence, maintenance and autonomy implementations |
+| `maintenance-skills/` | Modular, bounded agent workflows |
+| `bridge/` | Native/tool-specific bridges |
+| `scripts/` | CLI entrypoints, build and verification scripts |
+| `tests/` | Automated regression and contract testing |
+| `benchmarks/` | Engineering fixtures, source-hidden experiments, case-study artifacts |
+| `docs/` | Architecture, provider contracts, investigations and platform guides |
 
-Latest validation: the complete managed benchmark command passed again with verified owned-display cleanup. The focused autonomy regression batch passed 37 tests with 2 skipped; type and lint checks passed. [Execution logs and checksum inventory](docs/verification/re-agent/manifest.json). These are scoped development checks, not certification of all REA capabilities.
+## Documentation and governance
+
+[Legacy maintenance](docs/legacy-maintenance.md) · [Native investigation](docs/native-investigation.md) · [Ghidra provider](docs/ghidra-provider.md) · [Agent workflow](docs/autonomous-reconstruction.md) · [Evidence and MCP](docs/mcp-contracts.md) · [Testing](docs/testing.md) · [Roadmap](docs/roadmap.md)
+
+Use RE-Agent only for authorized analysis, maintenance, preservation and independent porting. Software, assets, and optional tools keep their respective licenses. See [usage policy](USAGE_POLICY.md), [license](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md).
+
+**Contribution standard:** reproducible original/candidate evidence and truthful limits are more important than screenshots, target counts, or claimed reconstruction percentages.
