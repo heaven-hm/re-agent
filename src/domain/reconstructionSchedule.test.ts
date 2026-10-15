@@ -9,6 +9,7 @@ const observe = (
   address: string,
   callees: readonly string[],
   callers: readonly string[] = [],
+  providerName = "Test provider",
 ): Evidence =>
   createEvidence(
     {
@@ -17,7 +18,7 @@ const observe = (
       format: "elf",
       architecture: "x86_64",
     },
-    { id: "test-provider", name: "Test provider", version: "1" },
+    { id: "test-provider", name: providerName, version: "1" },
     {
       operation: "analyze_function",
       parameters: { procedure: address },
@@ -177,6 +178,16 @@ describe("Evidence-backed reconstruction scheduling", () => {
     expect(() =>
       buildReconstructionSchedule({
         functions: [observe("0x100", []), other],
+        maxFunctions: 2,
+        maxAttempts: 1,
+      }),
+    ).toThrow("share artifact and provider identity");
+    expect(() =>
+      buildReconstructionSchedule({
+        functions: [
+          observe("0x100", []),
+          observe("0x200", [], [], "Other provider name"),
+        ],
         maxFunctions: 2,
         maxAttempts: 1,
       }),

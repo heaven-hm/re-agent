@@ -159,6 +159,7 @@ const assertSharedIdentity = (
       snapshot.subject.format === first.subject.format &&
       snapshot.subject.architecture === first.subject.architecture &&
       snapshot.evidence.provider.id === first.evidence.provider.id &&
+      snapshot.evidence.provider.name === first.evidence.provider.name &&
       snapshot.evidence.provider.version === first.evidence.provider.version,
   );
   if (!compatible)
