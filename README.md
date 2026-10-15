@@ -203,6 +203,11 @@ PixelTetris macOS port, live menu + gameplay windows:
 Snake: 26-line terminal frames byte-identical modulo RNG cells
 (`snake/original-run0.txt`); Clipjar: synthetic capture → SHA-256 row,
 restart persistence and hash-dedupe verified against live SQLite.
+Found defect example: the PixelTetris original crashes with a null-deref
+page fault when its font asset is missing (`Could not load font!` then
+`wine: Unhandled page fault`), instead of exiting cleanly — recorded in
+`pixeltetris/manifest.json`; the port prints the missing asset and exits
+nonzero without crashing.
 
 See `benchmarks/native-windows-ports/reports/` (license audit, binary
 analysis, functional results, limitations). Whole-executable identity is
