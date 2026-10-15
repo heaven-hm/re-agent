@@ -27,6 +27,8 @@ import {
 } from "./InvestigationIdentity.js";
 import { InvestigationWorkspace } from "./InvestigationWorkspace.js";
 import { InvestigationProcessEvidence } from "./InvestigationProcessEvidence.js";
+import { createEmptyBehavioralGraph } from "../../domain/reconstruction/BehavioralEvidenceGraph.js";
+import { projectEvidenceToBehavioralGraph } from "../investigation/BehavioralGraphProjection.js";
 
 export {
   investigationConfigSchema,
@@ -106,15 +108,17 @@ export class AutonomousInvestigation {
           throw cause;
       }
     }
+    const binarySha256 = await hashFile(config.binaryPath);
     const instance = new AutonomousInvestigation(resolve(storePath), {
       version: 1,
       id: randomUUID(),
-      binarySha256: await hashFile(config.binaryPath),
+      binarySha256,
       originalArgumentSha256,
       config,
       status: "ready",
       iteration: 0,
       evidence: [],
+      behavioralGraph: createEmptyBehavioralGraph(binarySha256),
       regressions: [],
       functions: [],
       history: [],
@@ -502,8 +506,20 @@ export class AutonomousInvestigation {
       !this.state.evidence.some(
         (item) => item.evidence_id === evidence.evidence_id,
       )
-    )
-      this.state.evidence.push(evidence);
+    ) {
+      const nextEvidence = [...this.state.evidence, evidence];
+      const nextGraph = projectEvidenceToBehavioralGraph(
+        this.state.binarySha256,
+        {
+          records: nextEvidence,
+          nativeGraphs: [],
+          applicationSources: [],
+          nonTargetEvidence: "exclude-with-coverage",
+        },
+      );
+      this.state.evidence = nextEvidence;
+      this.state.behavioralGraph = nextGraph;
+    }
     if (evidence.operation === "search_procedures") {
       const names = functionSearchResultSchema.parse(
         evidence.normalized_result,

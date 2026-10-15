@@ -22,6 +22,45 @@ rea autonomy-ui /absolute/path/plan.json /absolute/path/checkpoint.json
 
 The MCP operation is `autonomous_investigation`. Its actions are `start`, `resume`, `status`, `pause`, `stop`, `tools` and `prove-affine`; start and resume require local `plan` and `checkpoint` paths. Proof additionally requires source, output directory and range. Other investigation actions require `checkpoint`; tools needs neither.
 
+## Behavioral evidence graph in checkpoints
+
+Each checkpoint now includes a versioned `behavioralGraph` projection bound to
+the checkpoint's exact `binarySha256`. The projection keeps the original
+Evidence records in the checkpoint and refers to them by immutable Evidence
+ID. It does not copy provider payloads into a second Evidence store. On resume,
+the graph is validated against the authenticated Evidence list; legacy
+checkpoints without the graph are deterministically upgraded in memory and
+persisted on their next save. Unsupported graph versions, wrong target hashes,
+and dangling graph Evidence references fail closed.
+
+The graph has a 100,000 node cap and a 250,000 edge cap. Repeated imports merge
+provenance deterministically. Conflicting assertions are rejected during merge
+or remain separate when they have distinct source identities. Unresolved and
+ambiguous links remain explicit. Evidence outside the target binary identity
+is retained in the checkpoint but excluded from that binary's graph with
+partial coverage; missing identity is never treated as a match.
+
+`autonomy-status` includes a compact `behavioral_graph` summary with the graph
+SHA-256, node/edge/Evidence counts and coverage counts. The existing MCP
+`autonomous_investigation` status action returns the validated checkpoint,
+including the complete graph. Provider identity, version, profile, raw result,
+and limitations remain available through the referenced Evidence records.
+JavaScript application graph facts can be projected when their source Evidence
+and embedded Evidence IDs authenticate against the same target. The current
+native investigation graph uses descriptive metadata rather than immutable
+RE-Agent Evidence IDs; its facts are therefore reported as a coverage gap and
+are not asserted in the cross-domain graph.
+
+This projection does not infer runtime-to-static address correspondence or
+claim behavioral equivalence. The existing process acceptance scenario runs a
+local Node script through the real process-capture path. Capture Evidence joins
+the Node-binary graph only when the sealed capture manifest reports the exact
+same executable SHA-256; linked capture comparisons are admitted only when
+both source captures authenticate that identity. Other targetless Evidence
+remains outside the graph with partial coverage. This is not a static/runtime
+native fixture join. That provider-backed native graph acceptance remains
+**BLOCKED — NOT EXECUTED** when a compatible static provider is unavailable.
+
 ```json
 {
   "action": "start",

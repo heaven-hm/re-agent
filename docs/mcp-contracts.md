@@ -8,6 +8,15 @@ when a cold provider exceeds the client's wait.
 
 ## Tool results
 
+The existing `autonomous_investigation` tool's `status` action returns the
+authenticated checkpoint, including its `behavioralGraph`. The graph is bound
+to `binarySha256` and references canonical Evidence IDs already present in the
+checkpoint. Do not read an absent graph field in a legacy checkpoint as proof
+that behavior was absent: opening and saving that checkpoint reconstructs the
+versioned graph from its validated Evidence. The CLI status command returns a
+compact graph digest/count summary; MCP status retains the full validated graph
+and its Evidence references.
+
 Evidence-producing tools return the complete canonical Evidence record in both
 text and structured content. Read `structuredContent.normalized_result` for the
 operation result and `structuredContent.evidence_id` for its identity.

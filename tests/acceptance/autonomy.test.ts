@@ -39,6 +39,13 @@ cliTest(
       status: "suite-passed",
       iteration: 1,
       results: [{ caseId: "negative", status: "pass" }],
+      behavioral_graph: expect.objectContaining({
+        schema_version: 1,
+        target_sha256: expect.any(String),
+        graph_sha256: expect.any(String),
+        node_count: expect.any(Number),
+        edge_count: expect.any(Number),
+      }),
     });
     const resumed = await cli.run({
       arguments: ["autonomy-run", plan, checkpoint, "--resume", "--json"],
@@ -74,12 +81,37 @@ cliTest(
         evidence: expect.arrayContaining([
           expect.objectContaining({ operation: "compare_process_captures" }),
         ]),
+        behavioralGraph: expect.objectContaining({
+          schemaVersion: 1,
+          targetSha256: expect.any(String),
+          evidenceIds: expect.any(Array),
+        }),
       },
     });
     const saved = JSON.parse(await readFile(checkpoint, "utf8")) as {
       evidence: unknown[];
+      behavioralGraph: {
+        evidenceIds: string[];
+        targetSha256: string;
+        coverage: Array<{ facet: string; status: string; omitted: number }>;
+      };
     };
     expect(saved.evidence.length).toBeGreaterThanOrEqual(3);
+    expect(saved.behavioralGraph.evidenceIds.length).toBeGreaterThan(0);
+    expect(saved.behavioralGraph.targetSha256).toMatch(/^[a-f0-9]{64}$/u);
+    expect(saved.behavioralGraph.coverage).toContainEqual(
+      expect.objectContaining({
+        facet: "evidence:non-target",
+        status: "partial",
+      }),
+    );
+    expect(
+      saved.behavioralGraph.evidenceIds.every((id) =>
+        (saved.evidence as Array<{ evidence_id: string }>).some(
+          (item) => item.evidence_id === id,
+        ),
+      ),
+    ).toBe(true);
   },
   120_000,
 );
