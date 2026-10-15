@@ -19,12 +19,19 @@ behavior, and complete CI evidence before merging.
 | `npm run test:boundary`           | Boundary, CLI boundary, MCP boundary, process boundary, and process-global projects                                     |
 | `npm run test:mcp`                | MCP boundary project                                                                                                    |
 | `npm run test:acceptance`         | Complete compiled CLI and MCP acceptance workflows                                                                      |
+| `npm run test:e2e`                | Browser smoke test for the autonomous reconstruction guide using the E2E runner                                         |
 | `npm run test:python`             | LLDB producer retention and launch contracts with a fake LLDB API; no native debugger required                          |
 | `npm run test:watch`              | Dirty source tests in watch mode, without build                                                                         |
 | `npm run test:watch:all`          | Changed tests from every project; builds at startup, so rebuild after production edits before relying on compiled tests |
 | `npm run check:changed`           | Cached typecheck/lint and branch-related source feedback                                                                |
 | `npm run check:pr`                | Opt-in complete local deterministic gate and generated-file checks                                                      |
 | `npm run docs:check`              | Generated-document validation and fresh onboarding example consistency checks                                           |
+
+`npm run test:e2e` starts the VitePress documentation server and checks the
+autonomous reconstruction guide in Chromium. It uses deterministic browser
+assertions and makes no model calls. Playwright downloads its headless browser
+on the first run. Set `E2E_TELEMETRY_DISABLED=1` to disable the E2E runner's
+anonymous usage telemetry.
 
 For example:
 
