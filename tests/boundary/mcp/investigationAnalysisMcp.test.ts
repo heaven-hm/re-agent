@@ -120,7 +120,7 @@ it("builds exact-address paths with qualified callees and dossier citations", as
 
 it("schedules reconstruction functions through artifact-bound Evidence", async () => {
   const { session, server, client } = await connected();
-  const dossier = FUNCTION_COMPARISON_EXAMPLE.left;
+  const dossier = dossierWithCallees([]);
   expect(session.recordEvidence(dossier).ok).toBe(true);
   try {
     const response = await client.callTool({
@@ -142,12 +142,44 @@ it("schedules reconstruction functions through artifact-bound Evidence", async (
             address: "0x1000",
             disposition: "scheduled",
             evidence_links: [dossier.evidence_id],
+            blocking_dependencies: [],
+            evidence_gaps: [],
           },
         ],
+        planning_only: true,
+        retry_counts: "caller_supplied_advisory",
       },
       evidence_links: [dossier.evidence_id],
     });
     expect(session.hasEvidence(evidence.evidence_id)).toBe(true);
+  } finally {
+    await close(session, server, client);
+  }
+}, 10_000);
+
+it("rejects tampered Evidence even when its stored id is supplied", async () => {
+  const { session, server, client } = await connected();
+  const dossier = dossierWithCallees([]);
+  expect(session.recordEvidence(dossier).ok).toBe(true);
+  const before = session.exportEvidenceBundle().records.length;
+  try {
+    const tampered = {
+      ...dossier,
+      normalized_result: {
+        ...jsonObjectSchema.parse(dossier.normalized_result),
+        pseudocode: "return 999;",
+      },
+    };
+    const response = await client.callTool({
+      name: "schedule_reconstruction_functions",
+      arguments: {
+        functions: [tampered],
+        max_functions: 1,
+        max_attempts: 1,
+      },
+    });
+    expect(response.isError).toBe(true);
+    expect(session.exportEvidenceBundle().records).toHaveLength(before);
   } finally {
     await close(session, server, client);
   }
@@ -172,6 +204,20 @@ const dossierWithCallees = (addresses: readonly string[]) => {
       parameters: base.parameters,
       result: jsonValueSchema.parse({
         ...jsonObjectSchema.parse(base.normalized_result),
+        procedure: {
+          ...jsonObjectSchema.parse(
+            jsonObjectSchema.parse(base.normalized_result).procedure,
+          ),
+          body: {
+            available: true,
+            provenance: "fixture body extents",
+            ranges: [{ start: "0x1000", end: "0x1001" }],
+            total_bytes: 2,
+            span_bytes: 2,
+            non_contiguous: false,
+            contains_entry: true,
+          },
+        },
         callees: addresses.map((address) => ({
           address,
           name: "next",
