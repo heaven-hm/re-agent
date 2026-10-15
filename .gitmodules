@@ -13,3 +13,7 @@
 [submodule "third_party/wakaru"]
 	path = third_party/wakaru
 	url = https://github.com/pionxzh/wakaru.git
+
+[submodule "integrations/gtlibcpp"]
+	path = integrations/gtlibcpp
+	url = https://github.com/heaven-hm/gtlibcpp.git
