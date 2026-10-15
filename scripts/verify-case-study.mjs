@@ -1,6 +1,6 @@
 import { readFile, lstat } from "node:fs/promises";
 import { createHash } from "node:crypto";
-import { resolve, dirname, relative, isAbsolute, sep } from "node:path";
+import { resolve, dirname, relative, isAbsolute, sep, parse } from "node:path";
 
 const fail = (message) => { throw new Error(message); };
 const hex = (value) => typeof value === "string" && /^[a-f0-9]{64}$/.test(value);
@@ -12,6 +12,12 @@ async function checkArtifact(root, item, label) {
   const rel = relative(root, path);
   if (rel === ".." || rel.startsWith(".." + sep) || isAbsolute(rel))
     fail(`${label} escapes case study root`);
+  let ancestor = dirname(path);
+  while (ancestor !== parse(ancestor).root && ancestor !== root) {
+    const parent = await lstat(ancestor);
+    if (parent.isSymbolicLink()) fail(`${label} traverses a symbolic directory`);
+    ancestor = dirname(ancestor);
+  }
   const st = await lstat(path);
   if (!st.isFile() || st.isSymbolicLink()) fail(`${label} must be regular file`);
   const bytes = await readFile(path);
@@ -21,7 +27,7 @@ async function checkArtifact(root, item, label) {
   if (label.includes("screenshot") && !(bytes.length >= 8 &&
       bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))))
     fail(`${label} is not a PNG`);
-  return { path, bytes: bytes.length };
+  return { path, bytes };
 }
 export async function verifyCaseStudy(manifestPath) {
   const root = dirname(resolve(manifestPath));
@@ -39,6 +45,7 @@ export async function verifyCaseStudy(manifestPath) {
     requiredString(scenario.id, "scenario.id");
     if (!hex(scenario.input_sha256)) fail("Input SHA-256 invalid");
     const a = scenario.original, b = scenario.candidate;
+    const captures = [];
     for (const [kind, entry] of [["original", a], ["candidate", b]]) {
       requiredString(entry?.run_id, `${kind}.run_id`);
       if (runIds.has(entry.run_id)) fail("Execution run IDs must be distinct");
@@ -46,7 +53,7 @@ export async function verifyCaseStudy(manifestPath) {
       requiredString(entry?.platform, `${kind}.platform`);
       if (entry.binary_sha256 !== doc[kind].sha256)
         fail(`${kind} run binary mismatch`);
-      await checkArtifact(root, entry.capture, `${kind}.capture`);
+      captures.push(await checkArtifact(root, entry.capture, `${kind}.capture`));
     }
     if (a.screenshot || b.screenshot) {
       if (!a.screenshot || !b.screenshot) fail("Screenshot evidence must be paired");
@@ -56,8 +63,12 @@ export async function verifyCaseStudy(manifestPath) {
     }
     if (!["PASS", "FAIL", "INCONCLUSIVE"].includes(scenario.status))
       fail("Invalid status");
-    if (scenario.status === "PASS" && !scenario.comparison_rules)
-      fail("PASS requires comparison_rules");
+    if (scenario.status === "PASS") {
+      if (scenario.comparison_rules !== "exact")
+        fail("PASS requires supported exact comparison_rules");
+      if (!captures[0].bytes.equals(captures[1].bytes))
+        fail("PASS contradicts independently hashed original/candidate captures");
+    }
   }
   return { valid: true, scenarios: doc.scenarios.length, screenshot_pairs: screenshotPairs };
 }
