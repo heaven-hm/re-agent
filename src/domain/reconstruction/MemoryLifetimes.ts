@@ -44,6 +44,10 @@ export const reconstructMemoryLifetimes = (
     throw new Error("Memory trace exceeds event budget");
   const byId = new Map<string, MemoryLifetime>();
   const live = new Map<string, MemoryLifetime>();
+  // Limit concurrently live intervals so insertion/lookup work is bounded.
+  // The sorted index permits O(log n) overlap checks at neighboring intervals.
+  const MAX_LIVE_ALLOCATIONS = 2048;
+  const liveSorted: MemoryLifetime[] = [];
   let previous = -1;
   for (const event of events) {
     if (!Number.isSafeInteger(event.sequence) || event.sequence <= previous)
@@ -54,16 +58,27 @@ export const reconstructMemoryLifetimes = (
     if (event.kind === "alloc") {
       if (typeof event.size !== "bigint" || event.size <= 0n || byId.has(event.allocationId))
         throw new Error("Invalid or reused allocation identity");
+      if (liveSorted.length >= MAX_LIVE_ALLOCATIONS)
+        throw new Error("Memory trace exceeds live allocation budget");
       const end = event.address + event.size;
-      for (const current of live.values())
-        if (event.address < current.address + current.size && current.address < end)
-          throw new Error("Overlapping live allocations");
+      let low = 0, high = liveSorted.length;
+      while (low < high) {
+        const middle = (low + high) >>> 1;
+        if (liveSorted[middle]!.address < event.address) low = middle + 1;
+        else high = middle;
+      }
+      const prior = liveSorted[low - 1];
+      const following = liveSorted[low];
+      if ((prior && prior.address + prior.size > event.address) ||
+          (following && end > following.address))
+        throw new Error("Overlapping live allocations");
       const item: MemoryLifetime = {
         allocationId: event.allocationId, address: event.address, size: event.size,
         allocatedAt: event.sequence, writes: [],
       };
       byId.set(event.allocationId, item);
       live.set(event.allocationId, item);
+      liveSorted.splice(low, 0, item);
       continue;
     }
     if (event.kind !== "free" && event.kind !== "write")
@@ -74,6 +89,9 @@ export const reconstructMemoryLifetimes = (
       if (event.address !== item.address) throw new Error("Free address mismatch");
       item.freedAt = event.sequence;
       live.delete(event.allocationId);
+      const position = liveSorted.indexOf(item);
+      if (position < 0) throw new Error("Live allocation index inconsistent");
+      liveSorted.splice(position, 1);
     } else if (event.kind === "write") {
       if (!Number.isSafeInteger(event.bytes) || event.bytes <= 0 ||
           event.address < item.address || event.address + BigInt(event.bytes) > item.address + item.size)
