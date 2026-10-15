@@ -91,6 +91,39 @@ it("prepares all maintenance stages from shipped skills and hashes the actual ta
   ).toThrow(/repair budget/u);
 });
 
+it("ships the documented nine maintenance skills with valid manifests and covered stages", async () => {
+  const catalog = await discoverMaintenanceSkills([bundled]);
+  expect(catalog.status).toBe("VALID");
+  expect(catalog.rejected).toEqual([]);
+  expect(catalog.executes_skill_code).toBe(false);
+  expect(catalog.skills.map((skill) => skill.id).sort()).toEqual([
+    "legacy-bug-repair",
+    "legacy-cross-platform-port",
+    "legacy-port-verification",
+    "legacy-release-review",
+    "legacy-repair-port",
+    "legacy-rights-provenance",
+    "legacy-runtime-memory",
+    "legacy-static-diagnosis",
+    "legacy-triage",
+  ]);
+  for (const stage of [
+    "triage",
+    "static-analysis",
+    "runtime-analysis",
+    "memory-analysis",
+    "repair-and-port",
+    "verification",
+    "release",
+  ]) {
+    expect(catalog.skills.some((skill) => skill.stages.includes(stage as (typeof catalog.skills)[number]["stages"][number]))).toBe(true);
+  }
+  for (const skill of catalog.skills) {
+    expect(skill.manifest_sha256).toMatch(/^[a-f0-9]{64}$/u);
+    expect(skill.instructions_sha256).toMatch(/^[a-f0-9]{64}$/u);
+  }
+});
+
 it("discovers an added skill without registration and rejects executable manifest fields", async () => {
   const root = await temporary();
   const base = JSON.parse(

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "id": "legacy-rights-provenance",
+  "version": "1.0.0",
+  "description": "Check target identity, authority, redistribution boundaries, and original artifact provenance.",
+  "license": "MIT",
+  "targets": [
+    "software",
+    "game"
+  ],
+  "platforms": [
+    "windows",
+    "linux",
+    "macos"
+  ],
+  "stages": [
+    "triage"
+  ],
+  "tools": [
+    "open_binary",
+    "inspect_artifact"
+  ]
+}
