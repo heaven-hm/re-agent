@@ -7,7 +7,7 @@
 
 RE-Agent is a local-first toolkit for **authorized maintenance, compatibility repair, and independent porting of discontinued software and games**. A connected coding agent combines focused skills with RE-Agent’s existing static/runtime analysis, evidence, checkpoints, and bounded build/test/repair workflows. Maintainers can add modular skills without creating a separate platform.
 
-The repository is [heaven-hm/re-agent](https://github.com/heaven-hm/re-agent), renamed from `rea-engine`. The source package identity is `re-agent`; a renamed npm release is not yet published. Existing `rea`, `rea-engine`, `rea-extended`, and `rea-agents` commands and MCP configuration remain available for compatibility.
+Source repository: [heaven-hm/re-agent](https://github.com/heaven-hm/re-agent). Package name: `re-agent`. See [installation](docs/installation.md) for supported CLI commands and MCP setup.
 
 **Legacy maintenance is the product goal; not every existing benchmark is a legacy-support case study.** The strongest binary-only example currently recorded in this repository is the Project IGI 2 GConv toolchain: the supplied 2003 Windows PE files now have a hash-bound static inventory, with a separately implemented QVM inspection tool. This is still a partial investigation: no vendor bug fix, full QVM engine, DLL ABI replacement, or complete game port has been verified. The currently retained Calculator, managed-game, and recent open-source samples validate narrower pipeline components; they do not demonstrate maintenance of a discontinued closed-source product. See [the GConv evidence and limits](benchmarks/native-windows-ports/gconv/README.md) and [rights-screened target catalog](docs/legacy-target-catalog.md).
 
@@ -99,7 +99,7 @@ flowchart LR
         REA["CLI / MCP and agent workflows"]
         PROVIDERS["Ghidra · Frida · native / managed / web analysis"]
     end
-    subgraph EXT["heaven-hm/rea-engine additions"]
+    subgraph EXT["heaven-hm/re-agent additions"]
         AUTO["Persistent autonomy controller"]
         PROOF["Affine recovery · constrained verification"]
         TOOL["Verified tool bootstrap · offline bundle builder"]
@@ -175,7 +175,7 @@ These are actual `Form.DrawToBitmap` renders after the same button-handler seque
 
 ### Installed tools versus distributed tools
 
-Development health checks confirmed Frida 17.23.3, LIEF 1.0.0, Z3 5.1.0.0, Capstone 5.0.9 and Pillow 12.3.0. Ghidra/radare2 and native compilers are reused locally. **Bundled now:** the signature-verified ILSpy package and the built X11 libgdiplus library with source and licenses. The [preview release](https://github.com/heaven-hm/rea-engine/releases/tag/engine-preview-2026-10-13) also carries the checksum-verified, unmodified Ghidra 12.1.2 archive; see its [manifest](third_party/ghidra/manifest.json). **A clone does not contain every installed external tool binary.** The installer and offline bundle builder are shipped in source; generated local bundles are not a license-approved public distribution. Frida/LIEF native dependency source and license coverage require further audit. Optional licensed tools and Apple Calculator are not redistributed. See [tool profiles and limitations](docs/autonomy-tool-bootstrap.md).
+Development health checks confirmed Frida 17.23.3, LIEF 1.0.0, Z3 5.1.0.0, Capstone 5.0.9 and Pillow 12.3.0. Ghidra/radare2 and native compilers are reused locally. **Bundled now:** the signature-verified ILSpy package and the built X11 libgdiplus library with source and licenses. The [preview release](https://github.com/heaven-hm/re-agent/releases/tag/engine-preview-2026-10-13) also carries the checksum-verified, unmodified Ghidra 12.1.2 archive; see its [manifest](third_party/ghidra/manifest.json). **A clone does not contain every installed external tool binary.** The installer and offline bundle builder are shipped in source; generated local bundles are not a license-approved public distribution. Frida/LIEF native dependency source and license coverage require further audit. Optional licensed tools and Apple Calculator are not redistributed. See [tool profiles and limitations](docs/autonomy-tool-bootstrap.md).
 
 # Professional maintenance fixtures (utilities and RE tooling)
 
@@ -282,8 +282,8 @@ and formal proofs remain unavailable. See the
 ## Build and use this repository
 
 ```sh
-git clone https://github.com/heaven-hm/rea-engine.git
-cd rea-engine
+git clone https://github.com/heaven-hm/re-agent.git
+cd re-agent
 npm ci
 npm run build:cached
 node scripts/print-mcp-config.mjs /absolute/path/to/target --local
@@ -306,6 +306,6 @@ Setup supports [configured coding agents](docs/installation.md#supported-agents)
 - [Generated MCP tool catalog](docs/mcp-contracts.md#generated-catalog)
 - [Licensing](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md)
 
-Report issues and contribute at [heaven-hm/rea-engine](https://github.com/heaven-hm/rea-engine).
+Report issues and contribute at [heaven-hm/rea-engine](https://github.com/heaven-hm/re-agent).
 
 Latest validation: the complete managed benchmark command passed again with verified owned-display cleanup. The focused autonomy regression batch passed 37 tests with 2 skipped; type and lint checks passed. [Execution logs and checksum inventory](docs/verification/rea-engine/manifest.json). These are scoped development checks, not certification of all REA capabilities.
