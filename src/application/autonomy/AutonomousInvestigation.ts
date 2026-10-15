@@ -28,7 +28,10 @@ import {
 import { InvestigationWorkspace } from "./InvestigationWorkspace.js";
 import { InvestigationProcessEvidence } from "./InvestigationProcessEvidence.js";
 import { createEmptyBehavioralGraph } from "../../domain/reconstruction/BehavioralEvidenceGraph.js";
-import { projectEvidenceToBehavioralGraph } from "../investigation/BehavioralGraphProjection.js";
+import {
+  applicationSourcesFromEvidence,
+  projectEvidenceToBehavioralGraph,
+} from "../investigation/BehavioralGraphProjection.js";
 
 export {
   investigationConfigSchema,
@@ -574,7 +577,10 @@ export class AutonomousInvestigation {
         {
           records: this.state.evidence,
           nativeGraphs: [],
-          applicationSources: [],
+          applicationSources: applicationSourcesFromEvidence(
+            this.state.evidence,
+            this.state.binarySha256,
+          ),
           nonTargetEvidence: "exclude-with-coverage",
         },
       );

@@ -5,7 +5,10 @@ import {
   binaryBehavioralGraphSchema,
   validateBinaryBehavioralGraph,
 } from "../../domain/reconstruction/BehavioralEvidenceGraph.js";
-import { projectEvidenceToBehavioralGraph } from "../investigation/BehavioralGraphProjection.js";
+import {
+  applicationSourcesFromEvidence,
+  projectEvidenceToBehavioralGraph,
+} from "../investigation/BehavioralGraphProjection.js";
 import { parseProcessCapture } from "../../domain/process/processCaptureParsing.js";
 import { compareProcessExitOutcomes } from "../../domain/process/processExitOutcome.js";
 import {
@@ -134,7 +137,10 @@ export const parseInvestigationState = (input: unknown): InvestigationState => {
   const expectedGraph = projectEvidenceToBehavioralGraph(state.binarySha256, {
     records: state.evidence,
     nativeGraphs: [],
-    applicationSources: [],
+    applicationSources: applicationSourcesFromEvidence(
+      state.evidence,
+      state.binarySha256,
+    ),
     nonTargetEvidence: "exclude-with-coverage",
   });
   if (state.behavioralGraph === undefined) {

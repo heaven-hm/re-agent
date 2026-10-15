@@ -28,6 +28,28 @@ export interface BehavioralEvidenceProjectionInput {
   readonly nonTargetEvidence?: "reject" | "exclude-with-coverage";
 }
 
+/** Recover authenticated application graph projections from checkpoint Evidence. */
+export const applicationSourcesFromEvidence = (
+  records: readonly Evidence[],
+  targetSha256: string,
+): ApplicationGraphEvidenceSource[] => {
+  const operations = new Set([
+    "analyze_javascript_application",
+    "reconcile_javascript_runtime",
+    "project_managed_application_graph",
+  ]);
+  const sources: ApplicationGraphEvidenceSource[] = [];
+  for (const record of records) {
+    if (!operations.has(record.operation)) continue;
+    const parsed = parseApplicationGraphEvidence(record);
+    if (!parsed.ok)
+      throw new Error("Application graph Evidence failed authentication");
+    if (parsed.value.rootArtifactSha256 === targetSha256)
+      sources.push(parsed.value);
+  }
+  return sources;
+};
+
 /** Project only authenticated claims; the ledger retains complete source values. */
 export const projectEvidenceToBehavioralGraph = (
   targetSha256: string,

@@ -1,5 +1,6 @@
 import {
   link,
+  mkdir,
   mkdtemp,
   readFile,
   rm,
@@ -11,6 +12,9 @@ import { join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import * as graphProjection from "../investigation/BehavioralGraphProjection.js";
 import { createEvidence } from "../../domain/evidence.js";
+import { parseApplicationGraphEvidence } from "../javascript/JavaScriptApplicationEvidenceGraph.js";
+import { analyzeJavaScriptApplication } from "../../../tests/support/javascriptApplicationScope.js";
+import { createPackageWithOptions } from "@electron/asar";
 import {
   AutonomousInvestigation,
   investigationConfigSchema,
@@ -188,6 +192,67 @@ describe("autonomous reconstruction checkpoint and workspace safety", () => {
     await writeFile(f.original, "console.log('changed original')");
     await expect(AutonomousInvestigation.open(f.checkpoint)).rejects.toThrow(
       "argument artifact changed",
+    );
+  });
+});
+
+describe("autonomous application graph checkpoint integration", () => {
+  it("persists authenticated application nodes and relationships through checkpoint reload", async () => {
+    const f = await fixture();
+    const applicationSource = join(f.root, "application");
+    await mkdir(applicationSource);
+    await writeFile(
+      join(applicationSource, "main.mjs"),
+      'import { helper } from "./helper.mjs";\nexport const value = helper();\n',
+    );
+    await writeFile(
+      join(applicationSource, "helper.mjs"),
+      "export const helper = () => 7;\n",
+    );
+    const applicationPath = join(f.root, "application.asar");
+    await createPackageWithOptions(applicationSource, applicationPath, {
+      unpack: "**/*.node",
+    });
+    const analysis = await analyzeJavaScriptApplication({
+      input_path: applicationPath,
+      format: "asar",
+    });
+    if (!analysis.ok) throw analysis.error;
+    const parsedSource = parseApplicationGraphEvidence(analysis.value);
+    if (!parsedSource.ok)
+      throw new Error("Application Evidence must authenticate");
+    expect(parsedSource.value.graph.edges.length).toBeGreaterThan(0);
+
+    const agent = await AutonomousInvestigation.create(f.checkpoint, {
+      ...f.config,
+      binaryPath: applicationPath,
+      original: { command: applicationPath, arguments: [] },
+    });
+    await expect(
+      agent.run({
+        discover: async () => [parsedSource.value.evidence],
+        reconstruct: async (state) => {
+          expect(state.behavioralGraph?.nodes.length).toBeGreaterThan(
+            parsedSource.value.graph.nodes.length,
+          );
+          expect(state.behavioralGraph?.edges).toEqual(
+            expect.arrayContaining([
+              expect.objectContaining({ relation: "imports" }),
+            ]),
+          );
+          throw new Error("stop after checking checkpoint graph");
+        },
+      }),
+    ).rejects.toThrow("stop after checking checkpoint graph");
+
+    const reopened = await AutonomousInvestigation.open(f.checkpoint);
+    expect(reopened.state.behavioralGraph?.edges).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ relation: "imports" }),
+      ]),
+    );
+    expect(reopened.state.behavioralGraph?.nodes.length).toBeGreaterThan(
+      parsedSource.value.graph.nodes.length,
     );
   });
 });
