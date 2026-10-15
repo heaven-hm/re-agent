@@ -228,6 +228,7 @@ export const MCP_TOOLS_WITHOUT_DEDICATED_CLI = Object.freeze([
   "compare_functions",
   "find_changed_behavior",
   "build_call_path",
+  "schedule_reconstruction_functions",
   "correlate_static_and_runtime",
   "verify_reconstruction",
   "list_unknowns",

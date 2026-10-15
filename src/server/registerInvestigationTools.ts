@@ -3,6 +3,7 @@ import type { EvidenceMcpServer } from "./EvidenceMcpServer.js";
 import type { BinarySessionPort } from "../application/binary/BinarySessionPort.js";
 import { toolContract } from "../contracts/toolContracts.js";
 import { buildCallPath } from "../domain/callPath.js";
+import { buildReconstructionSchedule } from "../domain/reconstructionSchedule.js";
 import { findChangedBehavior } from "../domain/changedBehavior.js";
 import { createEvidence } from "../domain/evidence.js";
 import { jsonValueSchema } from "../domain/jsonValue.js";
@@ -19,6 +20,7 @@ import {
   CALL_PATH_PROVIDER,
   CHANGED_BEHAVIOR_PROVIDER,
   RECONSTRUCTION_PROVIDER,
+  RECONSTRUCTION_SCHEDULE_PROVIDER,
   STATIC_RUNTIME_PROVIDER,
 } from "../application/InvestigationProviders.js";
 import {
@@ -38,6 +40,11 @@ export const registerInvestigationTools = (
     toolContract("find_changed_behavior"),
   );
   registerCallPath(server, session, toolContract("build_call_path"));
+  registerReconstructionSchedule(
+    server,
+    session,
+    toolContract("schedule_reconstruction_functions"),
+  );
   registerStaticRuntime(
     server,
     session,
@@ -47,6 +54,79 @@ export const registerInvestigationTools = (
     server,
     session,
     toolContract("verify_reconstruction"),
+  );
+};
+
+const registerReconstructionSchedule = (
+  server: EvidenceMcpServer,
+  session: BinarySessionPort,
+  contract: ReturnType<
+    typeof toolContract<"schedule_reconstruction_functions">
+  >,
+): void => {
+  server.registerTool(
+    contract.name,
+    toolRegistrationOptions(contract),
+    async (input, context) => {
+      const closure = evidenceClosure(
+        session,
+        functionEvidenceIds(input.functions),
+      );
+      if (!closure.ok)
+        return server.delivery.toCallToolResult(closure, contract);
+      const computed = await runDerivedOperation(context, contract.name, () =>
+        buildReconstructionSchedule({
+          functions: input.functions,
+          maxFunctions: input.max_functions,
+          maxAttempts: input.max_attempts,
+          attempts: input.attempts,
+        }),
+      );
+      if (!computed.ok)
+        return server.delivery.toCallToolResult(computed, contract);
+      const result = computed.value;
+      const evidence = createEvidence(
+        undefined,
+        RECONSTRUCTION_SCHEDULE_PROVIDER,
+        {
+          predicateType: "rea.reconstruction-schedule",
+          operation: contract.name,
+          parameters: {
+            max_functions: input.max_functions,
+            max_attempts: input.max_attempts,
+            attempts: input.attempts,
+          },
+          result: jsonValueSchema.parse(result),
+          confidence: "derived",
+          authority: "analyst-inference",
+          limitations: result.limitations,
+          evidenceLinks: closure.value,
+        },
+      );
+      const recorded = recordWorkflowEvidence(
+        session,
+        evidence,
+        result.limitations.length > 0 ||
+          result.items.some(
+            ({ missing_dossiers }) => missing_dossiers.length > 0,
+          ),
+        {
+          question:
+            "Are the selected function dependencies sufficiently covered to plan reconstruction?",
+          domain: "reconstruction-schedule",
+          requiredAuthority: "shipped-artifact",
+          requiredConfidence: "derived",
+          probes: [
+            {
+              operation: "analyze_function",
+              rationale:
+                "Collect missing function dossiers and improve callee relationship coverage before relying on the schedule.",
+            },
+          ],
+        },
+      );
+      return server.delivery.toEvidenceToolResult(evidence, contract, recorded);
+    },
   );
 };
 

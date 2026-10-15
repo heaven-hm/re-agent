@@ -62,6 +62,7 @@ import { functionComparisonResultSchema } from "../domain/functionComparisonSche
 import { bundleComparisonResultSchema } from "../domain/bundleComparison.js";
 import { changedBehaviorResultSchema } from "../domain/changedBehavior.js";
 import { callPathResultSchema } from "../domain/callPathSchemas.js";
+import { reconstructionScheduleResultSchema } from "../domain/reconstructionSchedule.js";
 import { staticRuntimeCorrelationResultSchema } from "../domain/staticRuntimeCorrelation.js";
 import { reconstructionVerificationResultSchema } from "../domain/reconstructionVerificationSchemas.js";
 import { analysisErrorProjectionSchema } from "./errorSchemas.js";
@@ -549,6 +550,9 @@ export const sessionOutputSchemas = {
   compare_bundles: evidenceResultOf(bundleComparisonResultSchema),
   find_changed_behavior: evidenceResultOf(changedBehaviorResultSchema),
   build_call_path: evidenceResultOf(callPathResultSchema),
+  schedule_reconstruction_functions: evidenceResultOf(
+    reconstructionScheduleResultSchema,
+  ),
   correlate_static_and_runtime: evidenceResultOf(
     staticRuntimeCorrelationResultSchema,
   ),

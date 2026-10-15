@@ -651,6 +651,7 @@ export const TOOL_EFFECTS: Readonly<Record<string, ToolEffects>> = {
   compare_bundles: effects({ mutatesSession: true }),
   find_changed_behavior: sessionEvidence,
   build_call_path: sessionEvidence,
+  schedule_reconstruction_functions: sessionEvidence,
   correlate_static_and_runtime: sessionEvidence,
   verify_reconstruction: sessionEvidence,
   list_unknowns: effects(),
