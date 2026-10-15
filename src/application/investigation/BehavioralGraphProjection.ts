@@ -42,6 +42,7 @@ export const applicationSourcesFromEvidence = (
     "project_managed_application_graph",
   ]);
   const sources: ApplicationGraphEvidenceSource[] = [];
+  const authorizedApplicationDigests = new Set(applicationArtifactSha256s);
   const knownEvidenceIds = new Set(records.map((record) => record.evidence_id));
   for (const record of records) {
     if (!operations.has(record.operation)) continue;
@@ -52,7 +53,7 @@ export const applicationSourcesFromEvidence = (
       );
     if (
       parsed.value.rootArtifactSha256 === targetSha256 ||
-      applicationArtifactSha256s.includes(parsed.value.rootArtifactSha256)
+      authorizedApplicationDigests.has(parsed.value.rootArtifactSha256)
     ) {
       // A managed graph envelope may be delivered without its linked source
       // records. Keep the envelope as ordinary checkpoint Evidence until its
@@ -107,6 +108,9 @@ export const projectEvidenceToBehavioralGraph = (
     const record = parseEvidence(raw);
     allEvidence.set(record.evidence_id, record);
   }
+  const authorizedApplicationDigests = new Set(
+    input.applicationArtifactSha256s ?? [],
+  );
   const sources = input.applicationSources.map((source) => {
     const parsed = parseApplicationGraphEvidence(source.evidence);
     if (!parsed.ok)
@@ -114,9 +118,7 @@ export const projectEvidenceToBehavioralGraph = (
     const owned = parsed.value;
     if (
       (owned.rootArtifactSha256 !== targetSha256 &&
-        !input.applicationArtifactSha256s?.includes(
-          owned.rootArtifactSha256,
-        )) ||
+        !authorizedApplicationDigests.has(owned.rootArtifactSha256)) ||
       source.rootArtifactSha256 !== owned.rootArtifactSha256 ||
       source.kind !== owned.kind ||
       digestCanonicalValue(source.graph, "behavioral application graph") !==
