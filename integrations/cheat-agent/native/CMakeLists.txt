@@ -24,7 +24,7 @@ if(CHEAT_AGENT_ENABLE_GTLIBCPP)
         FetchContent_Declare(
             gtlibcpp
             GIT_REPOSITORY https://github.com/heaven-hm/gtlibcpp.git
-            GIT_TAG ad67ead3a617840e68d6586de0ec0e61877fe0b3
+            GIT_TAG 9bdd768574628004160694143cb4ef44e63bff46
         )
         FetchContent_MakeAvailable(gtlibcpp)
     endif()
