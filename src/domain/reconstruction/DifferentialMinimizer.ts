@@ -7,9 +7,14 @@ export interface DifferentialCounterexample {
 export const differs = (a: Uint8Array, b: Uint8Array): boolean =>
   a.length !== b.length || a.some((value, index) => value !== b[index]);
 
+export type DifferentialObserver = (
+  input: Uint8Array,
+  context?: { readonly signal: AbortSignal },
+) => Promise<{ reference: Uint8Array; candidate: Uint8Array }>;
+
 export const minimizeDifferentialInput = async (
   initial: Uint8Array,
-  observe: (input: Uint8Array) => Promise<{ reference: Uint8Array; candidate: Uint8Array }>,
+  observe: DifferentialObserver,
   maxExecutions = 256,
   preserve: (initial: DifferentialCounterexample, attempt: DifferentialCounterexample) => boolean = (_initial, attempt) => differs(attempt.reference, attempt.candidate),
   options: { readonly signal?: AbortSignal; readonly timeoutMs?: number; readonly repeatCount?: number } = {},
@@ -22,22 +27,59 @@ export const minimizeDifferentialInput = async (
   if (!Number.isSafeInteger(repeats) || repeats < 2 || repeats > 10)
     throw new Error("Reproducibility requires 2..10 repetitions");
   let executions = 0;
+  let activeObservers = 0;
   const evaluate = async (input: Uint8Array) => {
-    if (options.signal?.aborted) throw new Error("Differential observation aborted");
+    if (options.signal?.aborted) throw options.signal.reason ?? new Error("Differential observation aborted");
     if (executions + repeats > maxExecutions) throw new Error("Insufficient replay budget");
     const evaluateOnce = async () => {
       executions++;
-      const run = observe(input.slice());
+      const controller = new AbortController();
+      const onParentAbort = () => {
+        controller.abort(options.signal?.reason ?? new Error("Differential observation aborted"));
+      };
+      if (options.signal) {
+        if (options.signal.aborted) {
+          throw options.signal.reason ?? new Error("Differential observation aborted");
+        }
+        options.signal.addEventListener("abort", onParentAbort, { once: true });
+      }
       let timeout: ReturnType<typeof setTimeout> | undefined;
+      activeObservers++;
+      let runFinished = false;
+      const run = (async () => {
+        try {
+          return await observe(input.slice(), { signal: controller.signal });
+        } finally {
+          runFinished = true;
+          activeObservers--;
+        }
+      })();
       const deadline = options.timeoutMs === undefined ? run : Promise.race([
         run,
         new Promise<never>((_, reject) => {
-          timeout = setTimeout(() => reject(new Error("Differential observation timeout")), options.timeoutMs);
+          timeout = setTimeout(() => {
+            controller.abort(new Error("Differential observation timeout"));
+            reject(new Error("Differential observation timeout"));
+          }, options.timeoutMs);
         }),
       ]);
-      let result: Awaited<ReturnType<typeof observe>>;
-      try { result = await deadline; } finally { if (timeout !== undefined) clearTimeout(timeout); }
-      if (options.signal?.aborted) throw new Error("Differential observation aborted");
+      let result: Awaited<typeof run>;
+      try {
+        result = await deadline;
+      } catch (err) {
+        controller.abort(err instanceof Error ? err : new Error(String(err)));
+        if (!runFinished) {
+          await Promise.race([
+            run.catch(() => {}),
+            new Promise((resolve) => setTimeout(resolve, 50)),
+          ]);
+        }
+        throw err;
+      } finally {
+        if (timeout !== undefined) clearTimeout(timeout);
+        if (options.signal) options.signal.removeEventListener("abort", onParentAbort);
+      }
+      if (options.signal?.aborted) throw options.signal.reason ?? new Error("Differential observation aborted");
       if (!(result.reference instanceof Uint8Array) || !(result.candidate instanceof Uint8Array))
         throw new Error("Invalid differential observation");
       return result;
