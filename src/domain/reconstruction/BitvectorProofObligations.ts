@@ -2,6 +2,7 @@ export interface BitvectorObligation {
   width: 8 | 16 | 32 | 64;
   left: { multiplier: bigint; offset: bigint };
   right: { multiplier: bigint; offset: bigint };
+  /** Input interpretation only. Equality of affine wraparound expressions is identical for signed and unsigned bit patterns. */
   signed: boolean;
 }
 /** Valid QF_BV obligation for wraparound machine arithmetic, not full executable equivalence. */
@@ -20,13 +21,14 @@ export const buildBitvectorEquivalenceQuery = (input: BitvectorObligation): stri
     `; ${signed ? "signed" : "unsigned"} input interpretation; arithmetic wraps modulo 2^${width}`,
     `(assert (not (= ${expression(left)} ${expression(right)})))`,
     "(check-sat)",
-    "(get-model)",
     "",
   ].join("\n");
 };
 export const classifyBitvectorSolverResult = (output: string):
   "PROVEN_UNDER_ASSUMPTIONS" | "COUNTEREXAMPLE_EXISTS" | "UNKNOWN" => {
-  const first = output.trimStart().split(/\s+/u)[0];
+  const first = output.trim().split(/\s+/u)[0];
+  // A proof verdict must be the first solver token; comments, errors and empty output fail closed.
+  if (!first || !/^(unsat|sat|unknown)$/u.test(first)) throw new Error("Invalid SMT solver result");
   if (first === "unsat") return "PROVEN_UNDER_ASSUMPTIONS";
   if (first === "sat") return "COUNTEREXAMPLE_EXISTS";
   if (first === "unknown") return "UNKNOWN";
