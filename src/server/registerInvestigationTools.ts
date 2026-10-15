@@ -5,8 +5,10 @@ import { toolContract } from "../contracts/toolContracts.js";
 import { buildCallPath } from "../domain/callPath.js";
 import { buildReconstructionSchedule } from "../domain/reconstructionSchedule.js";
 import { findChangedBehavior } from "../domain/changedBehavior.js";
-import { createEvidence } from "../domain/evidence.js";
+import { createEvidence, parseEvidence } from "../domain/evidence.js";
+import { EvidenceIntegrityError } from "../domain/evidenceErrors.js";
 import { jsonValueSchema } from "../domain/jsonValue.js";
+import { err } from "../domain/result.js";
 import { correlateStaticAndRuntime } from "../domain/staticRuntimeCorrelation.js";
 import {
   comparisonClosure,
@@ -74,14 +76,28 @@ const registerReconstructionSchedule = (
       );
       if (!closure.ok)
         return server.delivery.toCallToolResult(closure, contract);
-      const computed = await runDerivedOperation(context, contract.name, () =>
-        buildReconstructionSchedule({
-          functions: input.functions,
+      const functions = input.functions.flatMap(({ evidence_id }) => {
+        const stored = session.evidenceById(evidence_id);
+        return stored === undefined ? [] : [stored];
+      });
+      if (functions.length !== input.functions.length)
+        return server.delivery.toCallToolResult(
+          err(
+            new EvidenceIntegrityError(
+              "Reconstruction schedule Evidence disappeared from the session",
+            ),
+          ),
+          contract,
+        );
+      const computed = await runDerivedOperation(context, contract.name, () => {
+        input.functions.forEach((evidence) => parseEvidence(evidence));
+        return buildReconstructionSchedule({
+          functions,
           maxFunctions: input.max_functions,
           maxAttempts: input.max_attempts,
           attempts: input.attempts,
-        }),
-      );
+        });
+      });
       if (!computed.ok)
         return server.delivery.toCallToolResult(computed, contract);
       const result = computed.value;
