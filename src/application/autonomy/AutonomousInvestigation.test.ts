@@ -695,6 +695,12 @@ describe("autonomous reconstruction differential controller", () => {
         applicationArtifactSha256s: ["not-a-digest"],
       }),
     ).toThrow();
+    expect(() =>
+      investigationConfigSchema.parse({
+        ...f.config,
+        applicationArtifactSha256s: Array.from({ length: 33 }, () => "a".repeat(64)),
+      }),
+    ).toThrow();
     await AutonomousInvestigation.create(f.checkpoint, f.config);
     await expect(
       AutonomousInvestigation.create(f.checkpoint, f.config),
