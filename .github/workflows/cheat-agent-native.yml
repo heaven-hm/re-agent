@@ -24,8 +24,10 @@ jobs:
         enabled: ['ON', 'OFF']
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: true
+      - name: Initialize GTLibCpp submodule only
+        if: matrix.enabled == 'ON'
+        shell: bash
+        run: git submodule update --init --depth 1 integrations/gtlibcpp
       - name: Verify pinned GTLibCpp checkout
         if: matrix.enabled == 'ON'
         shell: bash
