@@ -9,7 +9,7 @@ const sha = x => createHash("sha256").update(x).digest("hex");
 const png = Buffer.from([137,80,78,71,13,10,26,10,0,0,0,0]);
 async function fixture(change = x => x) {
   const root = await mkdtemp(join(tmpdir(), "re-agent-case-"));
-  const a = Buffer.from("original output"), b = Buffer.from("candidate output");
+  const a = Buffer.from("identical output"), b = Buffer.from("identical output");
   await writeFile(join(root, "a.out"), a);
   await writeFile(join(root, "b.out"), b);
   await writeFile(join(root, "a.png"), png);
@@ -55,4 +55,20 @@ test("rejects traversal", async t => {
   const {root,path} = await fixture(d => d.scenarios[0].candidate.capture.path="../secret");
   t.after(() => rm(root,{recursive:true,force:true}));
   await assert.rejects(verifyCaseStudy(path),/escapes/);
+});
+
+test("rejects false PASS claims with mismatched original and candidate observations", async t => {
+  const {root,path} = await fixture();
+  t.after(() => rm(root,{recursive:true,force:true}));
+  const different = Buffer.from("different candidate output");
+  await writeFile(join(root, "b.out"), different);
+  const data = JSON.parse(await (await import("node:fs/promises")).readFile(path, "utf8"));
+  data.scenarios[0].candidate.capture.sha256 = sha(different);
+  await writeFile(path, JSON.stringify(data));
+  await assert.rejects(verifyCaseStudy(path), /PASS contradicts/u);
+});
+test("rejects unsupported PASS comparison semantics", async t => {
+  const {root,path} = await fixture(d => d.scenarios[0].comparison_rules = "semantic");
+  t.after(() => rm(root,{recursive:true,force:true}));
+  await assert.rejects(verifyCaseStudy(path), /supported exact/u);
 });
