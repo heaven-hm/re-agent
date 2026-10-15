@@ -1,3 +1,8 @@
+import { createHash } from "node:crypto";
+import { mkdir, writeFile } from "node:fs/promises";
+import { join, resolve } from "node:path";
+import { runOwnedCommand } from "../../process/OwnedCommand.js";
+
 export interface BitvectorObligation {
   width: 8 | 16 | 32 | 64;
   left: { multiplier: bigint; offset: bigint };
@@ -33,4 +38,40 @@ export const classifyBitvectorSolverResult = (output: string):
   if (first === "sat") return "COUNTEREXAMPLE_EXISTS";
   if (first === "unknown") return "UNKNOWN";
   throw new Error("Invalid SMT solver result");
+};
+
+/** Execute the exact obligation using RE-Agent owned-process supervision. */
+export const executeBitvectorObligation = async (
+  obligation: BitvectorObligation,
+  outputDirectory: string,
+  solver = "z3",
+  signal?: AbortSignal,
+) => {
+  const query = buildBitvectorEquivalenceQuery(obligation);
+  const sha256 = createHash("sha256").update(query).digest("hex");
+  const directory = resolve(outputDirectory);
+  await mkdir(directory, { recursive: true });
+  const queryPath = join(directory, sha256 + ".smt2");
+  await writeFile(queryPath, query, { flag: "wx", mode: 0o600 });
+  const version = await runOwnedCommand(
+    { command: solver, arguments: ["-version"], runId: "bitvector-version-" + sha256.slice(0, 16) },
+    { timeoutMs: 10_000, diagnosticBytes: 4096 },
+    signal === undefined ? {} : { signal },
+  );
+  const execution = await runOwnedCommand(
+    { command: solver, arguments: ["-smt2", queryPath], runId: "bitvector-proof-" + sha256.slice(0, 16) },
+    { timeoutMs: 10_000, diagnosticBytes: 64 * 1024 },
+    signal === undefined ? {} : { signal },
+  );
+  if (execution.stderr.text.trim() !== "")
+    throw new Error("SMT solver returned diagnostics");
+  const verdict = classifyBitvectorSolverResult(execution.stdout.text);
+  return {
+    verdict,
+    querySha256: sha256,
+    queryPath,
+    solver,
+    solverVersion: version.stdout.text.trim(),
+    scope: "Modulo-affine equality over bounded-width bitvectors; not native binary equivalence",
+  };
 };
