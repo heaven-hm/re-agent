@@ -42,9 +42,11 @@ partial coverage; missing identity is never treated as a match.
 
 `autonomy-status` includes a compact `behavioral_graph` summary with the graph
 SHA-256, node/edge/Evidence counts and coverage counts. The existing MCP
-`autonomous_investigation` status action returns the validated checkpoint,
-including the complete graph. Provider identity, version, profile, raw result,
-and limitations remain available through the referenced Evidence records.
+`autonomous_investigation` status/start/resume actions return bounded progress
+counts and the graph summary, with a `checkpoint` path for complete graph and
+Evidence access. Provider identity, version, profile, raw result, and limitations
+remain in the checkpoint's Evidence records. Graph updates are batched at
+checkpoint saves rather than rebuilding for every newly collected record.
 JavaScript application graph facts can be projected when their source Evidence
 and embedded Evidence IDs authenticate against the same target. The current
 native investigation graph uses descriptive metadata rather than immutable

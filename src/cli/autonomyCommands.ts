@@ -11,8 +11,7 @@ import { startAutonomyDashboard } from "../composition/autonomyDashboard.js";
 import { CLI_COMMANDS } from "../cliCommandNames.js";
 import { withCommandCancellation } from "./commandCancellation.js";
 import { resolveAutonomyEnvironment } from "../composition/autonomyEnvironment.js";
-import { digestCanonicalValue } from "../domain/canonicalDigest.js";
-import type { InvestigationState } from "../application/autonomy/InvestigationContracts.js";
+import { summarizeInvestigation as summarize } from "../application/autonomy/InvestigationSummary.js";
 import { proveAffineExpressions } from "../application/autonomy/AffineEquivalenceProof.js";
 import {
   installAutonomyTools,
@@ -148,62 +147,4 @@ export const registerAutonomyCommands = (
         },
       },
     );
-};
-
-export const summarize = (
-  state: Awaited<ReturnType<typeof readAutonomousStatus>>,
-): {
-  id: string;
-  status: string;
-  iteration: number;
-  binary_sha256: string;
-  functions: InvestigationState["functions"];
-  results: InvestigationState["results"];
-  regressions: string[];
-  evidence_ids: string[];
-  behavioral_graph: null | {
-    schema_version: number;
-    target_sha256: string;
-    graph_sha256: string;
-    node_count: number;
-    edge_count: number;
-    unresolved_edge_count: number;
-    evidence_count: number;
-    coverage_counts: Record<string, number>;
-  };
-  limitations: string[];
-} => {
-  const graph = state.behavioralGraph;
-  const coverageCounts: Record<string, number> = {};
-  for (const entry of graph?.coverage ?? [])
-    coverageCounts[entry.status] = (coverageCounts[entry.status] ?? 0) + 1;
-  return {
-    id: state.id,
-    status: state.status,
-    iteration: state.iteration,
-    binary_sha256: state.binarySha256,
-    functions: state.functions,
-    results: state.results,
-    regressions: state.regressions,
-    evidence_ids: state.evidence.map((item) => item.evidence_id),
-    behavioral_graph:
-      graph === undefined
-        ? null
-        : {
-            schema_version: graph.schemaVersion,
-            target_sha256: graph.targetSha256,
-            graph_sha256: digestCanonicalValue(
-              graph,
-              "behavioral graph status",
-            ),
-            node_count: graph.nodes.length,
-            edge_count: graph.edges.length,
-            unresolved_edge_count: graph.edges.filter(
-              (edge) => edge.resolution !== "resolved",
-            ).length,
-            evidence_count: graph.evidenceIds.length,
-            coverage_counts: coverageCounts,
-          },
-    limitations: state.limitations,
-  };
 };

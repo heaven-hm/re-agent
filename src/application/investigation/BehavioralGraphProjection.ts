@@ -6,7 +6,6 @@ import {
   behavioralNodeId,
   BEHAVIORAL_GRAPH_MAX_EDGES,
   BEHAVIORAL_GRAPH_MAX_NODES,
-  createEmptyBehavioralGraph,
   validateBehavioralGraph,
   type BehavioralGraph,
   type BehavioralGraphCoverage,
@@ -17,6 +16,7 @@ import {
   nativeInvestigationGraphSchema,
   type NativeInvestigationGraph,
 } from "../../domain/native/nativeInvestigationGraph.js";
+import type { ApplicationGraphEvidence } from "../../domain/javascript/javascriptApplicationEvidenceSchemas.js";
 import type { ApplicationGraphEvidenceSource } from "../javascript/JavaScriptApplicationEvidenceGraph.js";
 import { parseApplicationGraphEvidence } from "../javascript/JavaScriptApplicationEvidenceGraph.js";
 
@@ -24,75 +24,166 @@ export interface BehavioralEvidenceProjectionInput {
   readonly records: readonly Evidence[];
   readonly nativeGraphs: readonly NativeInvestigationGraph[];
   readonly applicationSources: readonly ApplicationGraphEvidenceSource[];
-  /** Controller-only migration path: retain unrelated Evidence outside this graph with a coverage gap. */
+  /** Retain unrelated Evidence outside this graph with a coverage gap. */
   readonly nonTargetEvidence?: "reject" | "exclude-with-coverage";
 }
 
-/**
- * Build a deterministic view over authenticated Evidence and specialized graph
- * records. The Evidence payloads remain in their original ledger/checkpoint.
- */
+/** Project only authenticated claims; the ledger retains complete source values. */
 export const projectEvidenceToBehavioralGraph = (
   targetSha256: string,
   input: BehavioralEvidenceProjectionInput,
 ): BehavioralGraph => {
-  const projectedNodeUpperBound =
+  const nodeBound =
     input.records.length +
     input.applicationSources.reduce(
-      (total, source) => total + source.graph.nodes.length,
+      (total, source) => total + source.graph.nodes.length + 1,
       0,
     );
-  const projectedEdgeUpperBound =
+  const edgeBound =
     input.records.reduce(
       (total, record) => total + record.evidence_links.length,
       0,
     ) +
     input.applicationSources.reduce(
-      (total, source) => total + source.graph.edges.length,
+      (total, source) =>
+        total +
+        source.graph.edges.length +
+        source.evidence.evidence_links.length,
       0,
     );
-  if (projectedNodeUpperBound > BEHAVIORAL_GRAPH_MAX_NODES)
+  if (nodeBound > BEHAVIORAL_GRAPH_MAX_NODES)
     throw new Error("Behavioral graph node budget exceeded");
-  if (projectedEdgeUpperBound > BEHAVIORAL_GRAPH_MAX_EDGES)
+  if (edgeBound > BEHAVIORAL_GRAPH_MAX_EDGES)
     throw new Error("Behavioral graph edge budget exceeded");
-  const graph = createEmptyBehavioralGraph(targetSha256);
-  const allEvidenceById = new Map<string, Evidence>();
-  let excludedEvidence = 0;
+
+  const allEvidence = new Map<string, Evidence>();
+  // parseEvidence authenticates the semantic ID, which intentionally excludes
+  // display subject names and local paths. Rebinding those is not a conflict.
   for (const raw of input.records) {
-    const evidence = parseEvidence(raw);
-    const previous = allEvidenceById.get(evidence.evidence_id);
+    const record = parseEvidence(raw);
+    allEvidence.set(record.evidence_id, record);
+  }
+  const sources = input.applicationSources.map((source) => {
+    const parsed = parseApplicationGraphEvidence(source.evidence);
+    if (!parsed.ok)
+      throw new Error("Application graph Evidence failed authentication");
+    const owned = parsed.value;
     if (
-      previous !== undefined &&
-      digestCanonicalValue(previous, "behavioral Evidence duplicate") !==
-        digestCanonicalValue(evidence, "behavioral Evidence duplicate")
+      owned.rootArtifactSha256 !== targetSha256 ||
+      source.rootArtifactSha256 !== owned.rootArtifactSha256 ||
+      source.kind !== owned.kind ||
+      digestCanonicalValue(source.graph, "behavioral application graph") !==
+        digestCanonicalValue(owned.graph, "behavioral application graph")
     )
       throw new Error(
-        `Conflicting duplicate Evidence ID: ${evidence.evidence_id}`,
+        "Application graph source does not match its authenticated Evidence target hash or graph",
       );
-    allEvidenceById.set(evidence.evidence_id, evidence);
-  }
-  const evidenceById = new Map<string, Evidence>();
-  for (const evidence of allEvidenceById.values()) {
-    if (evidenceIsBoundToTarget(evidence, targetSha256, allEvidenceById)) {
-      evidenceById.set(evidence.evidence_id, evidence);
-      continue;
+    allEvidence.set(owned.evidence.evidence_id, owned.evidence);
+    return owned;
+  });
+  const envelopes = new Set(
+    sources.map((source) => source.evidence.evidence_id),
+  );
+  const sourceProvenance = new Set(
+    sources.flatMap((source) => source.evidence.evidence_links),
+  );
+  const boundEvidence = new Map<string, Evidence>();
+  let excludedEvidence = 0;
+  for (const record of allEvidence.values()) {
+    if (
+      envelopes.has(record.evidence_id) ||
+      evidenceIsBoundToTarget(record, targetSha256, allEvidence)
+    )
+      boundEvidence.set(record.evidence_id, record);
+    else if (!sourceProvenance.has(record.evidence_id)) {
+      if (input.nonTargetEvidence !== "exclude-with-coverage")
+        throw new Error(
+          "Evidence target hash does not match behavioral graph target hash",
+        );
+      excludedEvidence++;
     }
-    if (input.nonTargetEvidence !== "exclude-with-coverage")
-      throw new Error(
-        "Evidence target hash does not match behavioral graph target hash",
-      );
-    excludedEvidence++;
   }
 
-  const nodes: BehavioralGraphNode[] = [];
-  const edges: BehavioralGraphEdge[] = [];
+  const nodes = new Map<string, BehavioralGraphNode>();
+  const edges = new Map<string, BehavioralGraphEdge>();
+  const graphEvidenceIds = new Set(boundEvidence.keys());
   const coverage: BehavioralGraphCoverage[] = [];
   const limitations = new Set<string>();
+  const addCoverage = (entry: BehavioralGraphCoverage): void => {
+    if (coverage.length >= BEHAVIORAL_GRAPH_MAX_NODES)
+      throw new Error("Behavioral graph coverage budget exceeded");
+    coverage.push(entry);
+  };
+  const text = (value: string): string => {
+    if (value.length <= 4096) return value;
+    limitations.add(
+      "Projection text was truncated to 4096 characters; complete values remain in the source Evidence or specialized graph.",
+    );
+    const marker = "… [truncated; see source]";
+    return value.slice(0, 4096 - marker.length) + marker;
+  };
+  const addLimitations = (values: readonly string[]): void => {
+    for (const value of values) {
+      if (value.length > 0) limitations.add(text(value));
+      if (limitations.size > 10_000)
+        throw new Error("Behavioral graph limitation budget exceeded");
+    }
+  };
+  const addNode = (node: BehavioralGraphNode): void => {
+    const previous = nodes.get(node.id);
+    if (previous === undefined) {
+      if (nodes.size >= BEHAVIORAL_GRAPH_MAX_NODES)
+        throw new Error("Behavioral graph node budget exceeded");
+      nodes.set(node.id, node);
+      return;
+    }
+    if (
+      previous.kind !== node.kind ||
+      previous.label !== node.label ||
+      previous.confidence !== node.confidence ||
+      previous.assertion !== node.assertion
+    )
+      throw new Error(`Conflicting application node assertion: ${node.id}`);
+    nodes.set(node.id, {
+      ...previous,
+      evidenceIds: [...new Set([...previous.evidenceIds, ...node.evidenceIds])],
+      locations: [
+        ...new Map(
+          [...previous.locations, ...node.locations].map((value) => [
+            JSON.stringify(value),
+            value,
+          ]),
+        ).values(),
+      ],
+    });
+  };
+  const addEdge = (edge: BehavioralGraphEdge): void => {
+    const previous = edges.get(edge.id);
+    if (previous === undefined) {
+      if (edges.size >= BEHAVIORAL_GRAPH_MAX_EDGES)
+        throw new Error("Behavioral graph edge budget exceeded");
+      edges.set(edge.id, edge);
+      return;
+    }
+    if (
+      previous.from !== edge.from ||
+      previous.to !== edge.to ||
+      previous.relation !== edge.relation ||
+      previous.assertion !== edge.assertion ||
+      previous.confidence !== edge.confidence
+    )
+      throw new Error(`Conflicting application edge assertion: ${edge.id}`);
+    edges.set(edge.id, {
+      ...previous,
+      evidenceIds: [...new Set([...previous.evidenceIds, ...edge.evidenceIds])],
+    });
+  };
+  const observationIds = new Map<string, string>();
   if (excludedEvidence > 0) {
-    coverage.push({
+    addCoverage({
       facet: "evidence:non-target",
       status: "partial",
-      examined: input.records.length,
+      examined: allEvidence.size,
       omitted: excludedEvidence,
       reason:
         "Evidence without the exact target SHA-256 remains in the Evidence ledger but is excluded from this binary-bound graph",
@@ -101,154 +192,164 @@ export const projectEvidenceToBehavioralGraph = (
       "Some checkpoint Evidence could not be bound to the graph target and is not represented as a graph assertion.",
     );
   }
-  const observationNodeIds = new Map<string, string>();
-  for (const evidence of evidenceById.values()) {
+  for (const record of boundEvidence.values()) {
     const id = behavioralNodeId(targetSha256, {
       kind: "evidence-observation",
-      evidenceId: evidence.evidence_id,
+      evidenceId: record.evidence_id,
     });
-    observationNodeIds.set(evidence.evidence_id, id);
-    nodes.push({
+    observationIds.set(record.evidence_id, id);
+    addNode({
       id,
       binarySha256: targetSha256,
       kind: "observation",
-      label: `${evidence.predicate_type}:${evidence.operation}`,
-      evidenceIds: [evidence.evidence_id],
-      confidence: evidence.confidence,
+      label: text(`${record.predicate_type}:${record.operation}`),
+      evidenceIds: [record.evidence_id],
+      confidence: record.confidence,
       assertion: "unknown",
-      locations: evidence.locations,
+      locations: record.locations.slice(0, 10_000),
     });
-    for (const limitation of evidence.limitations) limitations.add(limitation);
-    if (evidence.relationship_coverage !== null)
-      coverage.push({
-        facet: `evidence:${evidence.evidence_id}:relationships`,
-        status:
-          evidence.relationship_coverage.status === "unknown"
-            ? "partial"
-            : evidence.relationship_coverage.status,
-        examined: 0,
-        omitted: 0,
+    if (record.locations.length > 10_000)
+      addCoverage({
+        facet: `evidence:${record.evidence_id}:locations`,
+        status: "partial",
+        examined: record.locations.length,
+        omitted: record.locations.length - 10_000,
         reason:
-          evidence.relationship_coverage.status === "complete"
+          "Graph location budget reached; complete locations remain in source Evidence",
+      });
+    addLimitations(record.limitations);
+    const relationships = record.relationship_coverage;
+    if (relationships !== null)
+      addCoverage({
+        facet: `evidence:${record.evidence_id}:relationships`,
+        status:
+          relationships.status === "unknown" ? "partial" : relationships.status,
+        examined: 0,
+        omitted: relationships.status === "complete" ? 0 : null,
+        reason:
+          relationships.status === "complete"
             ? null
-            : "limitations" in evidence.relationship_coverage
-              ? evidence.relationship_coverage.limitations.join("; ")
-              : evidence.relationship_coverage.reason,
+            : text(
+                "limitations" in relationships
+                  ? relationships.limitations.join("; ")
+                  : relationships.reason,
+              ),
       });
   }
-
-  for (const evidence of evidenceById.values()) {
-    const from = observationNodeIds.get(evidence.evidence_id);
-    if (from === undefined) continue;
-    for (const linkedId of evidence.evidence_links) {
-      const linked = evidenceById.get(linkedId);
-      const linkedNode = observationNodeIds.get(linkedId);
-      const resolved = linked !== undefined && linkedNode !== undefined;
-      const common: Omit<BehavioralGraphEdge, "to" | "resolution" | "reason"> =
-        {
-          id: behavioralNodeId(targetSha256, {
-            relation: "evidence-links",
-            sourceEvidenceId: evidence.evidence_id,
-            linkedEvidenceId: linkedId,
-          }),
-          from,
+  for (const record of boundEvidence.values()) {
+    const from = observationIds.get(record.evidence_id)!;
+    for (const linkedId of record.evidence_links) {
+      const to = observationIds.get(linkedId);
+      const common = {
+        id: behavioralNodeId(targetSha256, {
           relation: "evidence-links",
-          evidenceIds: [evidence.evidence_id],
-          confidence: evidence.confidence,
-          assertion: "unknown",
-        };
-      edges.push(
-        resolved
-          ? { ...common, to: linkedNode, resolution: "resolved", reason: null }
-          : {
+          sourceEvidenceId: record.evidence_id,
+          linkedEvidenceId: linkedId,
+        }),
+        from,
+        relation: "evidence-links" as const,
+        evidenceIds: [record.evidence_id],
+        confidence: record.confidence,
+        assertion: "unknown" as const,
+      };
+      addEdge(
+        to === undefined
+          ? {
               ...common,
               to: null,
               resolution: "unresolved",
-              reason: `Linked Evidence ${linkedId} was not included`,
-            },
+              reason: `Linked Evidence ${linkedId} was not included as a binary-bound observation`,
+            }
+          : { ...common, to, resolution: "resolved", reason: null },
       );
     }
   }
-
-  for (const source of input.applicationSources) {
-    if (
-      source.rootArtifactSha256 !== targetSha256 ||
-      source.evidence.subject?.digest.sha256 !== targetSha256
-    )
-      throw new Error(
-        "Application graph target hash does not match behavioral graph target hash",
+  for (const source of sources) {
+    const factEvidence = (facts: readonly ApplicationGraphEvidence[]) => {
+      const ids = new Set([source.evidence.evidence_id]);
+      for (const fact of facts)
+        for (const id of fact.evidence_ids) {
+          if (
+            !allEvidence.has(id) ||
+            (!boundEvidence.has(id) &&
+              !source.evidence.evidence_links.includes(id))
+          )
+            throw new Error(
+              `Application graph Evidence reference is missing or not authenticated by its envelope: ${id}`,
+            );
+          ids.add(id);
+          graphEvidenceIds.add(id);
+        }
+      const uncertain = facts.some(
+        (fact) => fact.state === "unknown" || fact.state === "unavailable",
       );
-    const evidence = parseEvidence(source.evidence);
-    const authenticatedSource = parseApplicationGraphEvidence(evidence);
-    if (!authenticatedSource.ok)
-      throw new Error("Application graph Evidence failed authentication");
-    if (
-      authenticatedSource.value.kind !== source.kind ||
-      authenticatedSource.value.rootArtifactSha256 !==
-        source.rootArtifactSha256 ||
-      authenticatedSource.value.graph.graph_id !== source.graph.graph_id ||
-      digestCanonicalValue(
-        authenticatedSource.value.graph,
-        "behavioral application graph",
-      ) !== digestCanonicalValue(source.graph, "behavioral application graph")
-    )
-      throw new Error(
-        "Application graph source does not match its authenticated Evidence",
-      );
-    if (!evidenceById.has(evidence.evidence_id)) {
-      evidenceById.set(evidence.evidence_id, evidence);
-      const id = behavioralNodeId(targetSha256, {
-        kind: "evidence-observation",
-        evidenceId: evidence.evidence_id,
-      });
-      observationNodeIds.set(evidence.evidence_id, id);
-      nodes.push({
-        id,
-        binarySha256: targetSha256,
-        kind: "observation",
-        label: `${evidence.predicate_type}:${evidence.operation}`,
-        evidenceIds: [evidence.evidence_id],
-        confidence: evidence.confidence,
-        assertion: "unknown",
-        locations: evidence.locations,
-      });
-    }
-    const fallbackEvidenceId = evidence.evidence_id;
+      return {
+        ids: [...ids].sort(),
+        assertion: uncertain ? ("unknown" as const) : ("supports" as const),
+        confidence: facts.some((fact) => fact.state === "inferred")
+          ? ("inferred" as const)
+          : uncertain
+            ? ("derived" as const)
+            : ("observed" as const),
+      };
+    };
+    const factCoverage = (
+      fact: ApplicationGraphEvidence,
+      facet: string,
+    ): void => {
+      addLimitations(fact.limitations);
+      if (
+        fact.state === "unknown" ||
+        fact.state === "unavailable" ||
+        fact.coverage.status !== "complete"
+      )
+        addCoverage({
+          facet,
+          status: fact.state === "unavailable" ? "unsupported" : "partial",
+          examined: 0,
+          omitted: fact.coverage.omitted_count,
+          reason: text(
+            fact.limitations.join("; ") ||
+              `Fact state ${fact.state}; coverage ${fact.coverage.status}`,
+          ),
+        });
+      if (
+        fact.location.available &&
+        !["artifact-path", "native-address", "file-offset-range"].includes(
+          fact.location.value.kind,
+        )
+      )
+        addCoverage({
+          facet: `${facet}:location`,
+          status: "partial",
+          examined: 1,
+          omitted: 1,
+          reason: `Application location kind ${fact.location.value.kind} remains in source Evidence; the behavioral location model cannot represent it`,
+        });
+    };
     const appNodeIds = new Map<string, string>();
     for (const appNode of source.graph.nodes) {
+      // Observation identities distinguish conflicting/partial descriptions of
+      // one semantic entity; carried-forward identical observations merge.
       const id = behavioralNodeId(targetSha256, {
         kind: "application-node",
         graphNodeId: appNode.node_id,
+        observations: appNode.observations
+          .map((item) => item.observation_id)
+          .sort(),
       });
       appNodeIds.set(appNode.node_id, id);
-      const factEvidence = mergeFactEvidence(
-        appNode.observations.map((item) => item.evidence.evidence_ids),
-        fallbackEvidenceId,
-        evidenceById,
+      const fact = factEvidence(
+        appNode.observations.map((item) => item.evidence),
       );
-      appNode.observations.forEach((item, index) => {
-        for (const limitation of item.evidence.limitations)
-          limitations.add(limitation);
-        if (
-          item.evidence.state === "unknown" ||
-          item.evidence.state === "unavailable" ||
-          item.evidence.coverage.status !== "complete"
-        )
-          coverage.push({
-            facet: `application:${source.kind}:${appNode.node_id}:observation:${index}`,
-            status:
-              item.evidence.state === "unavailable" ? "unsupported" : "partial",
-            examined: 0,
-            omitted: 1,
-            reason:
-              item.evidence.limitations.join("; ") ||
-              `Fact state ${item.evidence.state}; coverage ${item.evidence.coverage.status}`,
-          });
-      });
       const locations: BehavioralGraphNode["locations"] = [];
-      for (const item of appNode.observations) {
+      appNode.observations.forEach((item, index) => {
+        factCoverage(
+          item.evidence,
+          `application:${source.kind}:${appNode.node_id}:observation:${index}`,
+        );
         const location = item.evidence.location;
-        if (!location.available) continue;
+        if (!location.available) return;
         switch (location.value.kind) {
           case "artifact-path":
             locations.push({
@@ -269,20 +370,19 @@ export const projectEvidenceToBehavioralGraph = (
               end: location.value.end,
             });
             break;
-          default:
-            break;
         }
-      }
-      nodes.push({
+      });
+      addNode({
         id,
         binarySha256: targetSha256,
         kind: "observation",
-        label:
+        label: text(
           appNode.observations.find(({ label }) => label !== null)?.label ??
-          `${appNode.kind}:${JSON.stringify(appNode.identity)}`,
-        evidenceIds: factEvidence.ids,
-        confidence: factEvidence.confidence,
-        assertion: factEvidence.assertion,
+            `${appNode.kind}:${JSON.stringify(appNode.identity)}`,
+        ),
+        evidenceIds: fact.ids,
+        confidence: fact.confidence,
+        assertion: fact.assertion,
         locations,
       });
     }
@@ -291,198 +391,137 @@ export const projectEvidenceToBehavioralGraph = (
       const to = appNodeIds.get(appEdge.target_node_id);
       if (from === undefined || to === undefined)
         throw new Error("Application graph contains a dangling relationship");
-      const factEvidence = mergeFactEvidence(
-        [appEdge.evidence.evidence_ids],
-        fallbackEvidenceId,
-        evidenceById,
+      const fact = factEvidence([appEdge.evidence]);
+      factCoverage(
+        appEdge.evidence,
+        `application:${source.kind}:${appEdge.edge_id}`,
       );
-      for (const limitation of appEdge.evidence.limitations)
-        limitations.add(limitation);
-      if (
-        appEdge.evidence.state === "unknown" ||
-        appEdge.evidence.state === "unavailable" ||
-        appEdge.evidence.coverage.status !== "complete"
-      )
-        coverage.push({
-          facet: `application:${source.kind}:${appEdge.edge_id}`,
-          status:
-            appEdge.evidence.state === "unavailable"
-              ? "unsupported"
-              : "partial",
-          examined: 0,
-          omitted: 1,
-          reason:
-            appEdge.evidence.limitations.join("; ") ||
-            `Fact state ${appEdge.evidence.state}; coverage ${appEdge.evidence.coverage.status}`,
-        });
-      const edge: BehavioralGraphEdge = {
+      addEdge({
         id: behavioralNodeId(targetSha256, {
           kind: "application-edge",
           graphEdgeId: appEdge.edge_id,
+          from,
+          to,
         }),
         from,
         to,
-        relation: applicationRelation(appEdge.relation),
+        relation: appEdge.relation,
         resolution: "resolved",
         reason: null,
-        evidenceIds: factEvidence.ids,
-        confidence: factEvidence.confidence,
-        assertion: factEvidence.assertion,
-      };
-      edges.push(edge);
+        evidenceIds: fact.ids,
+        confidence: fact.confidence,
+        assertion: fact.assertion,
+      });
     }
-    coverage.push({
+    addCoverage({
       facet: `application:${source.kind}`,
       status:
         source.graph.coverage.status === "complete" ||
         source.graph.coverage.status === "partial"
           ? source.graph.coverage.status
-          : "partial",
+          : source.graph.coverage.status === "unavailable"
+            ? "unsupported"
+            : "partial",
       examined: source.graph.nodes.length + source.graph.edges.length,
-      omitted: source.graph.coverage.omitted_count ?? 0,
+      omitted: source.graph.coverage.omitted_count,
       reason:
         source.graph.coverage.status === "complete"
           ? null
-          : `Specialized application graph reports ${source.graph.coverage.status} coverage`,
+          : `Specialized application graph reports ${source.graph.coverage.status} coverage; truncated=${source.graph.coverage.truncated}`,
     });
-    for (const limitation of source.graph.limitations)
-      limitations.add(limitation);
+    addLimitations(source.graph.limitations);
   }
-
-  for (const rawSource of input.nativeGraphs) {
-    const source = nativeInvestigationGraphSchema.parse(rawSource);
+  for (const raw of input.nativeGraphs) {
+    const source = nativeInvestigationGraphSchema.parse(raw);
     if (source.target_sha256 !== targetSha256)
       throw new Error(
         "Native graph target hash does not match behavioral graph target hash",
       );
-    const hasEvidenceLinks = source.nodes.some(
-      (node) => node.evidence.length > 0,
-    );
-    coverage.push({
+    addCoverage({
       facet: `native:${source.provider.id}`,
       status: "partial",
       examined: 0,
       omitted: source.nodes.length + source.edges.length,
-      reason: hasEvidenceLinks
-        ? "Native graph provenance is descriptive metadata, not immutable RE-Agent Evidence IDs; assertions were not imported"
-        : "Native graph assertions have no immutable RE-Agent Evidence ID provenance; assertions were not imported",
+      reason:
+        "Native graph provenance is descriptive metadata, not immutable RE-Agent Evidence IDs; assertions were not imported",
     });
+    for (const entry of source.coverage)
+      addCoverage({
+        ...entry,
+        facet: `native:${source.provider.id}:${entry.facet}`,
+        reason: entry.reason === null ? null : text(entry.reason),
+      });
+    if (source.truncated)
+      addCoverage({
+        facet: `native:${source.provider.id}:truncation`,
+        status: "partial",
+        examined: source.nodes.length + source.edges.length,
+        omitted: null,
+        reason:
+          "Native provider reports a truncated graph; the number of missing facts is unknown",
+      });
     limitations.add(
       "Native investigation graph facts without immutable Evidence IDs are retained only as an explicit coverage gap.",
     );
   }
-
   return validateBehavioralGraph({
-    ...graph,
-    nodes,
-    edges,
-    evidenceIds: [...evidenceById.keys()].sort(),
+    schemaVersion: 1,
+    targetSha256,
+    nodes: [...nodes.values()],
+    edges: [...edges.values()],
+    evidenceIds: [...graphEvidenceIds].sort(),
     coverage,
     limitations: [...limitations].sort(),
   });
 };
 
-const mergeFactEvidence = (
-  references: readonly (readonly string[])[],
-  fallbackId: string,
-  known: ReadonlyMap<string, Evidence>,
-): {
-  readonly ids: string[];
-  readonly assertion: "supports" | "unknown";
-  readonly confidence: "observed" | "derived" | "inferred";
-} => {
-  const ids = new Set<string>([fallbackId]);
-  for (const group of references)
-    for (const id of group) {
-      if (!known.has(id))
-        throw new Error(
-          `Application graph Evidence reference is missing: ${id}`,
-        );
-      ids.add(id);
-    }
-  const sources = [...ids]
-    .map((id) => known.get(id))
-    .filter((item): item is Evidence => item !== undefined);
-  const assertion = sources.some((item) => item.confidence === "observed")
-    ? "supports"
-    : "unknown";
-  const confidence = sources.some((item) => item.confidence === "inferred")
-    ? "inferred"
-    : sources.some((item) => item.confidence === "derived")
-      ? "derived"
-      : "observed";
-  return { ids: [...ids].sort(), assertion, confidence };
-};
-
-const applicationRelation = (
-  relation: string,
-): BehavioralGraphEdge["relation"] => {
-  switch (relation) {
-    case "contains":
-      return "contains";
-    case "calls":
-    case "invokes":
-      return "calls";
-    case "loads":
-    case "imports":
-    case "maps_to":
-      return "flows-to";
-    case "sends":
-      return "causes";
-    case "handles":
-      return "transitions-to";
-    case "persists_to":
-      return "writes";
-    case "exposes":
-    case "observed_as":
-    case "changed_from":
-      return "evidence-links";
-    default:
-      return "evidence-links";
-  }
-};
-
-/** Authenticate runtime target identity from the process provider's sealed execution manifest. */
+/** Process-provider identity always comes from its sealed capture manifests. */
 const evidenceIsBoundToTarget = (
   evidence: Evidence,
   targetSha256: string,
   available: ReadonlyMap<string, Evidence>,
 ): boolean => {
-  if (evidence.subject !== null)
-    return evidence.subject.digest.sha256 === targetSha256;
-  if (
-    !isProcessEvidenceProvider(evidence.provider) ||
-    evidence.predicate_type !== "rea.process-capture"
-  )
-    return false;
-  if (evidence.operation === "capture_process_scenario") {
-    try {
-      return (
-        parseProcessCapture(evidence.normalized_result).manifest
-          .executable_sha256 === targetSha256
-      );
-    } catch {
+  if (isProcessEvidenceProvider(evidence.provider)) {
+    if (evidence.predicate_type !== "rea.process-capture") return false;
+    if (
+      evidence.subject !== null &&
+      evidence.subject.digest.sha256 !== targetSha256
+    )
       return false;
+    if (evidence.operation === "capture_process_scenario") {
+      try {
+        return (
+          parseProcessCapture(evidence.normalized_result).manifest
+            .executable_sha256 === targetSha256
+        );
+      } catch {
+        return false;
+      }
     }
+    if (evidence.operation !== "compare_process_captures") return false;
+    const { left_evidence_id: leftId, right_evidence_id: rightId } =
+      evidence.parameters;
+    if (
+      typeof leftId !== "string" ||
+      typeof rightId !== "string" ||
+      !evidence.evidence_links.includes(leftId) ||
+      !evidence.evidence_links.includes(rightId)
+    )
+      return false;
+    const left = available.get(leftId);
+    const right = available.get(rightId);
+    return (
+      left !== undefined &&
+      right !== undefined &&
+      left.operation === "capture_process_scenario" &&
+      right.operation === "capture_process_scenario" &&
+      isProcessEvidenceProvider(left.provider) &&
+      isProcessEvidenceProvider(right.provider) &&
+      left.predicate_type === "rea.process-capture" &&
+      right.predicate_type === "rea.process-capture" &&
+      evidenceIsBoundToTarget(left, targetSha256, available) &&
+      evidenceIsBoundToTarget(right, targetSha256, available)
+    );
   }
-  if (evidence.operation !== "compare_process_captures") return false;
-  const parameters = evidence.parameters;
-  const leftId = parameters.left_evidence_id;
-  const rightId = parameters.right_evidence_id;
-  if (typeof leftId !== "string" || typeof rightId !== "string") return false;
-  if (
-    !evidence.evidence_links.includes(leftId) ||
-    !evidence.evidence_links.includes(rightId)
-  )
-    return false;
-  const left = available.get(leftId);
-  const right = available.get(rightId);
-  return (
-    left !== undefined &&
-    right !== undefined &&
-    left.operation === "capture_process_scenario" &&
-    right.operation === "capture_process_scenario" &&
-    evidenceIsBoundToTarget(left, targetSha256, available) &&
-    evidenceIsBoundToTarget(right, targetSha256, available)
-  );
+  return evidence.subject?.digest.sha256 === targetSha256;
 };

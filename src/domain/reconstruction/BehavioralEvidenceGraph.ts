@@ -38,6 +38,16 @@ export const behavioralRelationSchema = z.enum([
   "implements",
   "verified-by",
   "evidence-links",
+  "loads",
+  "imports",
+  "maps_to",
+  "exposes",
+  "sends",
+  "invokes",
+  "handles",
+  "persists_to",
+  "observed_as",
+  "changed_from",
 ]);
 
 const nodeSchema = z.strictObject({
@@ -61,8 +71,17 @@ const edgeBaseSchema = z.strictObject({
 export const behavioralGraphEdgeSchema = z.discriminatedUnion("resolution", [
   edgeBaseSchema.extend({
     to: z.string().min(1).max(4096),
-    resolution: z.enum(["resolved", "ambiguous"]),
+    resolution: z.literal("resolved"),
     reason: z.string().max(4096).nullable(),
+  }),
+  edgeBaseSchema.extend({
+    to: z.string().min(1).max(4096),
+    resolution: z.literal("ambiguous"),
+    reason: z
+      .string()
+      .min(1)
+      .max(4096)
+      .refine((value) => value.trim().length > 0),
   }),
   edgeBaseSchema.extend({
     to: z.null(),
@@ -74,7 +93,7 @@ const coverageSchema = z.strictObject({
   facet: z.string().min(1).max(4096),
   status: z.enum(["complete", "partial", "unsupported", "not_requested"]),
   examined: z.number().int().nonnegative(),
-  omitted: z.number().int().nonnegative(),
+  omitted: z.number().int().nonnegative().nullable(),
   reason: z.string().max(4096).nullable(),
 });
 export const behavioralGraphSchema = z.strictObject({

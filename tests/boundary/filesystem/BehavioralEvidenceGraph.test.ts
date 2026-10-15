@@ -100,6 +100,18 @@ describe("behavioral evidence graph", () => {
     ).toThrow();
   });
 
+  it.each([null, "", " "])(
+    "requires a meaningful reason for an ambiguous edge (%s)",
+    (reason) => {
+      expect(() =>
+        validateBehavioralGraph({
+          ...graph,
+          edges: [edge({ resolution: "ambiguous", reason })],
+        }),
+      ).toThrow();
+    },
+  );
+
   it("keeps supporting and contradicting evidence separate in node queries", () => {
     const result = queryBehavioralEvidence(graph, "node-1");
     expect(result.supportingEvidenceIds).toEqual([ev1]);

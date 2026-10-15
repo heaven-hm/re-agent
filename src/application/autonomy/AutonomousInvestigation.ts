@@ -51,6 +51,7 @@ export {
 export class AutonomousInvestigation {
   #controller = new AbortController();
   #active = false;
+  #graphDirty = false;
   #controlPoll: Promise<void> = Promise.resolve();
   #writes: Promise<void> = Promise.resolve();
   readonly #workspace: InvestigationWorkspace;
@@ -507,18 +508,8 @@ export class AutonomousInvestigation {
         (item) => item.evidence_id === evidence.evidence_id,
       )
     ) {
-      const nextEvidence = [...this.state.evidence, evidence];
-      const nextGraph = projectEvidenceToBehavioralGraph(
-        this.state.binarySha256,
-        {
-          records: nextEvidence,
-          nativeGraphs: [],
-          applicationSources: [],
-          nonTargetEvidence: "exclude-with-coverage",
-        },
-      );
-      this.state.evidence = nextEvidence;
-      this.state.behavioralGraph = nextGraph;
+      this.state.evidence.push(evidence);
+      this.#graphDirty = true;
     }
     if (evidence.operation === "search_procedures") {
       const names = functionSearchResultSchema.parse(
@@ -577,6 +568,18 @@ export class AutonomousInvestigation {
     await this.#workspace.rollback();
   }
   async #save(event: string, detail: string): Promise<void> {
+    if (this.#graphDirty) {
+      this.state.behavioralGraph = projectEvidenceToBehavioralGraph(
+        this.state.binarySha256,
+        {
+          records: this.state.evidence,
+          nativeGraphs: [],
+          applicationSources: [],
+          nonTargetEvidence: "exclude-with-coverage",
+        },
+      );
+      this.#graphDirty = false;
+    }
     this.state.history.push({ at: new Date().toISOString(), event, detail });
     const snapshot = JSON.stringify(
       investigationStateSchema.parse(this.state),
