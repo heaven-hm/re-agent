@@ -34,8 +34,10 @@ export const validateBehavioralGraph = (input: unknown): BehavioralGraph => {
     const candidates = (id: string) => graph.nodes.filter((node) => node.id === id);
     const fromMatches = candidates(edge.from);
     const toMatches = candidates(edge.to);
+    if (fromMatches.length === 0 || toMatches.length === 0)
+      throw new Error("Dangling behavioral edge");
     if (fromMatches.length !== 1 || toMatches.length !== 1)
-      throw new Error("Ambiguous or dangling behavioral edge endpoint");
+      throw new Error("Ambiguous behavioral edge endpoint");
     const from = fromMatches[0];
     const to = toMatches[0];
     if (!from || !to) throw new Error("Dangling behavioral edge");
