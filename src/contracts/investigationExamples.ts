@@ -94,6 +94,12 @@ export const INVESTIGATION_EXAMPLES = {
     start: { address: "0x1000" },
     goal: { address: "0x1000" },
   },
+  schedule_reconstruction_functions: {
+    functions: [FUNCTION_COMPARISON_EXAMPLE.left],
+    max_functions: 10,
+    max_attempts: 3,
+    attempts: {},
+  },
   correlate_static_and_runtime: {
     static_comparisons: [FUNCTION_COMPARISON_EVIDENCE],
     runtime_comparisons: [PROCESS_COMPARISON_EVIDENCE],

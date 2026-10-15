@@ -11,14 +11,14 @@ RE-Agent is a **local-first, evidence-driven reverse-engineering toolkit** for m
 
 ## What it is built for
 
-| Workstream | Intended outcome | Evidence required |
-| --- | --- | --- |
-| **Legacy maintenance** | Reproduce a failure, identify dependencies and platform assumptions, repair an authorized implementation | Original binary identity, reproducer, before/after regression |
-| **Native software analysis** | Investigate PE/ELF/Mach-O code paths and binary interfaces | Function inventory, call references, provider identity and limitations |
-| **Runtime and memory investigation** | Correlate observed behavior with static hypotheses | Authorized process/trace identity, bounded capture, reproducible conditions |
-| **Independent application porting** | Reimplement a declared behavior slice on a new platform | Matching original/replica scenarios and explicit unsupported behavior |
-| **Game preservation engineering** | Examine script formats, asset pipelines, engine interactions and gameplay behavior | File-format evidence, state/input traces, asset and frame comparisons where applicable |
-| **Verification** | Detect regressions and expose unknown behavior | Raw original/candidate observations, explicit comparison rules and coverage |
+| Workstream                           | Intended outcome                                                                                         | Evidence required                                                                      |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| **Legacy maintenance**               | Reproduce a failure, identify dependencies and platform assumptions, repair an authorized implementation | Original binary identity, reproducer, before/after regression                          |
+| **Native software analysis**         | Investigate PE/ELF/Mach-O code paths and binary interfaces                                               | Function inventory, call references, provider identity and limitations                 |
+| **Runtime and memory investigation** | Correlate observed behavior with static hypotheses                                                       | Authorized process/trace identity, bounded capture, reproducible conditions            |
+| **Independent application porting**  | Reimplement a declared behavior slice on a new platform                                                  | Matching original/replica scenarios and explicit unsupported behavior                  |
+| **Game preservation engineering**    | Examine script formats, asset pipelines, engine interactions and gameplay behavior                       | File-format evidence, state/input traces, asset and frame comparisons where applicable |
+| **Verification**                     | Detect regressions and expose unknown behavior                                                           | Raw original/candidate observations, explicit comparison rules and coverage            |
 
 ## Real-world investigation record
 
@@ -26,12 +26,12 @@ RE-Agent is a **local-first, evidence-driven reverse-engineering toolkit** for m
 
 This is the project's **primary documented legacy investigation**, not a completed legacy-game port.
 
-| Component | Evidence and result | Remaining work |
-| --- | --- | --- |
-| Executable and DLL inventory | Hash-bound examination of `gconv.exe`, `gconvapi.dll` and `vqdll.dll`; function/import/export records | Link native exports and calls to verified runtime semantics |
-| QVM format work | Header/strings and partial instruction-format recovery; independently implemented `qvmtool` | Full QVM execution, native registration and error/edge semantics |
-| Behavioral comparison | Historical 120-script error-message comparison receipt | Reproducible replay corpus and fresh verification on supported worker |
-| Porting / compatibility | Analysis and limited independent tooling | Full DLL ABI, codec compatibility, app/game port and release rights not verified |
+| Component                    | Evidence and result                                                                                   | Remaining work                                                                   |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| Executable and DLL inventory | Hash-bound examination of `gconv.exe`, `gconvapi.dll` and `vqdll.dll`; function/import/export records | Link native exports and calls to verified runtime semantics                      |
+| QVM format work              | Header/strings and partial instruction-format recovery; independently implemented `qvmtool`           | Full QVM execution, native registration and error/edge semantics                 |
+| Behavioral comparison        | Historical 120-script error-message comparison receipt                                                | Reproducible replay corpus and fresh verification on supported worker            |
+| Porting / compatibility      | Analysis and limited independent tooling                                                              | Full DLL ABI, codec compatibility, app/game port and release rights not verified |
 
 **Evidence:** [GConv case study](benchmarks/native-windows-ports/gconv/README.md) · [static inventory](benchmarks/native-windows-ports/gconv/analysis/gconv-functions-radare2.json) · [rights-screened target catalog](docs/legacy-target-catalog.md)
 
@@ -78,7 +78,7 @@ Read [architecture and autonomous reconstruction](docs/autonomous-reconstruction
 5. **Compare independently.** Preserve mismatches as regression inputs.
 6. **Report scope and limitations.** A passing finite suite proves only its declared observations.
 
-The nine documented maintenance modules cover provenance, triage, static diagnosis, runtime/memory observation, repair, porting, verification and release review. For the current branch's *actual installed* catalog, run:
+The nine documented maintenance modules cover provenance, triage, static diagnosis, runtime/memory observation, repair, porting, verification and release review. For the current branch's _actual installed_ catalog, run:
 
 ```bash
 node scripts/rea.mjs maintenance-skills
@@ -103,6 +103,8 @@ node scripts/print-mcp-config.mjs /absolute/path/to/target --local
 
 Use the generated MCP configuration with a supported host. Consult [installation](docs/installation.md), [CLI](docs/cli.md), and [MCP contracts](docs/mcp-contracts.md). The npm identity is `re-agent`; legacy command names exist for compatibility. Do not assume an upstream `rea` release contains fork-specific code.
 
+See the [MCP-tool_catalog](docs/mcp-contracts.md#generated-catalog), [supported agents](docs/installation.md#supported-agents), and [MCP registry](docs/installation.md#mcp-registry) references for current integration details.
+
 ## Validation and development fixtures
 
 The repository retains arithmetic, UI, managed-program, and small open-source application/game benchmarks because they test specific components and regressions. **They are not showcased as professional legacy-support deliverables.** Their scoped results, unverified cases, capture files, and test commands remain in [benchmarks](benchmarks/README.md) and [validation reports](docs/re-agent-maintenance-validation.md).
@@ -111,15 +113,15 @@ A serious preservation case study should provide: independently identified origi
 
 ## Project map
 
-| Location | Purpose |
-| --- | --- |
-| `src/` | Providers, runtime capture, Evidence, maintenance and autonomy implementations |
-| `maintenance-skills/` | Modular, bounded agent workflows |
-| `bridge/` | Native/tool-specific bridges |
-| `scripts/` | CLI entrypoints, build and verification scripts |
-| `tests/` | Automated regression and contract testing |
-| `benchmarks/` | Engineering fixtures, source-hidden experiments, case-study artifacts |
-| `docs/` | Architecture, provider contracts, investigations and platform guides |
+| Location              | Purpose                                                                        |
+| --------------------- | ------------------------------------------------------------------------------ |
+| `src/`                | Providers, runtime capture, Evidence, maintenance and autonomy implementations |
+| `maintenance-skills/` | Modular, bounded agent workflows                                               |
+| `bridge/`             | Native/tool-specific bridges                                                   |
+| `scripts/`            | CLI entrypoints, build and verification scripts                                |
+| `tests/`              | Automated regression and contract testing                                      |
+| `benchmarks/`         | Engineering fixtures, source-hidden experiments, case-study artifacts          |
+| `docs/`               | Architecture, provider contracts, investigations and platform guides           |
 
 ## Documentation and governance
 
@@ -128,3 +130,7 @@ A serious preservation case study should provide: independently identified origi
 Use RE-Agent only for authorized analysis, maintenance, preservation and independent porting. Software, assets, and optional tools keep their respective licenses. See [usage policy](USAGE_POLICY.md), [license](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md).
 
 **Contribution standard:** reproducible original/candidate evidence and truthful limits are more important than screenshots, target counts, or claimed reconstruction percentages.
+
+## Acknowledgments
+
+RE-Agent builds on the original REA project. Dryxio/ReAgent informed the dependency-aware reconstruction scheduling design; no Dryxio source code was incorporated. See [the integration review](docs/third-party/dryxio-integration.md) and [third-party notices](THIRD_PARTY_NOTICES.md).

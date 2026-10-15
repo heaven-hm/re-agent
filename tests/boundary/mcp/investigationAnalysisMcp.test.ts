@@ -118,6 +118,41 @@ it("builds exact-address paths with qualified callees and dossier citations", as
   }
 });
 
+it("schedules reconstruction functions through artifact-bound Evidence", async () => {
+  const { session, server, client } = await connected();
+  const dossier = FUNCTION_COMPARISON_EXAMPLE.left;
+  expect(session.recordEvidence(dossier).ok).toBe(true);
+  try {
+    const response = await client.callTool({
+      name: "schedule_reconstruction_functions",
+      arguments: {
+        functions: [dossier],
+        max_functions: 1,
+        max_attempts: 2,
+      },
+    });
+    expect(response.isError, JSON.stringify(response)).not.toBe(true);
+    const evidence = inlineEvidence(response.structuredContent);
+    expect(evidence).toMatchObject({
+      provider: { id: "rea-reconstruction-schedule" },
+      operation: "schedule_reconstruction_functions",
+      normalized_result: {
+        items: [
+          {
+            address: "0x1000",
+            disposition: "scheduled",
+            evidence_links: [dossier.evidence_id],
+          },
+        ],
+      },
+      evidence_links: [dossier.evidence_id],
+    });
+    expect(session.hasEvidence(evidence.evidence_id)).toBe(true);
+  } finally {
+    await close(session, server, client);
+  }
+}, 10_000);
+
 const dossierWithCallees = (addresses: readonly string[]) => {
   const base = FUNCTION_COMPARISON_EXAMPLE.left;
   if (base.subject === null) throw new Error("missing dossier subject");

@@ -5,6 +5,7 @@ import { localPathStringSchema } from "../domain/localPath.js";
 import { artifactComparisonInputSchema } from "../domain/artifactComparison.js";
 import { bundleComparisonInputSchema } from "../domain/bundleComparison.js";
 import { callPathInputSchema } from "../domain/callPathSchemas.js";
+import { reconstructionScheduleInputSchema } from "../domain/reconstructionSchedule.js";
 import { changedBehaviorInputSchema } from "../domain/changedBehavior.js";
 import { functionComparisonInputSchema } from "../domain/functionComparisonSchemas.js";
 import { processScenarioSchema } from "../domain/process/processScenario.js";
@@ -126,6 +127,11 @@ export const SESSION_TOOL_CONTRACTS = [
     "build_call_path",
     "Build every shortest direct-callee path inline from complete analyze_function Evidence records using exact canonical addresses. Missing dossiers and provider mixing remain unknown; every node and edge cites source Evidence.",
     callPathInputSchema,
+  ),
+  session(
+    "schedule_reconstruction_functions",
+    "Schedule analyzed functions callee-first from artifact-bound Evidence. Recursive strongly connected components are atomic, missing dossiers and incomplete call coverage stay visible, and the function budget never marks a dependent function scheduled when an observed in-scope dependency was deferred.",
+    reconstructionScheduleInputSchema,
   ),
   session(
     "correlate_static_and_runtime",
