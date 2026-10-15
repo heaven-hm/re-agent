@@ -32,3 +32,17 @@ it("reports dropped observations as incomplete rather than definitive lifetimes"
   const capture = {processId:1,binarySha256:"a".repeat(64),addressSpaceId:"main",complete:false,droppedEvents:2};
   expect(reconstructMemoryCapture([],capture).status).toBe("INCOMPLETE");
 });
+
+it("bounds concurrent allocations and detects indexed overlap", () => {
+  const events = Array.from({length:2048}, (_, i) => ({
+    kind:"alloc" as const, sequence:i+1, address:BigInt(i)*16n,
+    size:8n, allocationId:"a"+i,
+  }));
+  expect(reconstructMemoryLifetimes(events)).toHaveLength(2048);
+  expect(() => reconstructMemoryLifetimes([...events,
+    {kind:"alloc",sequence:2049,address:50000n,size:8n,allocationId:"overflow"}
+  ])).toThrow(/live allocation budget/u);
+  expect(() => reconstructMemoryLifetimes([...events.slice(0,10),
+    {kind:"alloc",sequence:11,address:16n,size:8n,allocationId:"overlap"}
+  ])).toThrow(/Overlapping/u);
+});
