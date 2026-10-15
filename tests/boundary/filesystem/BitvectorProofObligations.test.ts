@@ -11,3 +11,8 @@ it("fails closed for solver errors and classifies unknown distinctly", () => {
   expect(classifyBitvectorSolverResult("unknown")).toBe("UNKNOWN");
   expect(() => classifyBitvectorSolverResult("timeout")).toThrow();
 });
+
+it("does not request an invalid model on UNSAT results", () => {
+  const query = buildBitvectorEquivalenceQuery({width:8,signed:false,left:{multiplier:1n,offset:0n},right:{multiplier:1n,offset:0n}});
+  expect(query).not.toContain("(get-model)");
+});
