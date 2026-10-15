@@ -26,13 +26,18 @@ export const validateBehavioralGraph = (input: unknown): BehavioralGraph => {
   const graph = behavioralGraphSchema.parse(input);
   const nodes = new Map<string, (typeof graph.nodes)[number]>();
   for (const node of graph.nodes) {
-    if (nodes.has(node.id)) throw new Error("Duplicate behavioral node identity");
-    nodes.set(node.id, node);
+    if (nodes.has(node.binarySha256 + ":" + node.id)) throw new Error("Duplicate behavioral node identity");
+    nodes.set(node.binarySha256 + ":" + node.id, node);
   }
   const signatures = new Map<string, string>();
   for (const edge of graph.edges) {
-    const from = nodes.get(edge.from);
-    const to = nodes.get(edge.to);
+    const candidates = (id: string) => graph.nodes.filter((node) => node.id === id);
+    const fromMatches = candidates(edge.from);
+    const toMatches = candidates(edge.to);
+    if (fromMatches.length !== 1 || toMatches.length !== 1)
+      throw new Error("Ambiguous or dangling behavioral edge endpoint");
+    const from = fromMatches[0];
+    const to = toMatches[0];
     if (!from || !to) throw new Error("Dangling behavioral edge");
     if (from.binarySha256 !== to.binarySha256)
       throw new Error("Cross-binary behavioral edges require explicit correspondence");
@@ -49,12 +54,13 @@ export const validateBehavioralGraph = (input: unknown): BehavioralGraph => {
 export const mergeBehavioralGraphs = (left: unknown, right: unknown): BehavioralGraph => {
   const a = validateBehavioralGraph(left);
   const b = validateBehavioralGraph(right);
-  const nodes = new Map(a.nodes.map((node) => [node.id, node]));
+  const nodes = new Map(a.nodes.map((node) => [node.binarySha256 + ":" + node.id, node]));
   for (const node of b.nodes) {
-    const old = nodes.get(node.id);
+    const key = node.binarySha256 + ":" + node.id;
+    const old = nodes.get(key);
     if (old && JSON.stringify(old) !== JSON.stringify(node))
       throw new Error("Conflicting behavioral node identity");
-    nodes.set(node.id, node);
+    nodes.set(key, node);
   }
   const edges = [...a.edges];
   const edgeKey = (edge: (typeof edges)[number]) => JSON.stringify([edge.from, edge.to, edge.kind, [...edge.evidenceIds].sort()]);
